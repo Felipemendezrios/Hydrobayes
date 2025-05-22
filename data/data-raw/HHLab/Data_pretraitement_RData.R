@@ -6,8 +6,8 @@ library(dplyr)
 
 cas <- "smooth_bed" # rough_bed smooth_bed
 
-path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/data/data-raw/HHLab", cas)
-path_results <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/data/processed_data/HHLab", cas)
+path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/HHLab/", cas)
+path_results <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/", cas)
 
 cases <- list.files(path)[str_detect(list.files(path), "case")]
 
@@ -66,6 +66,11 @@ for (i in cases) {
 
     data_WS_profile$z_mean <- data_WS_profile$z_riverbed + data_WS_profile$h_mean
 
+    model <- lm(formula = z_mean ~ x, data = data_WS_profile)
+    residuals <- resid(model) # or model$residuals
+    sd_residuals <- sd(residuals)
+
+    data_WS_profile$Yu <- sd_residuals
     WS_profiles[[j]] <- data_WS_profile
 
     names(WS_profiles)[j] <- i
