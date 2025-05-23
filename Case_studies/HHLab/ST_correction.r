@@ -27,7 +27,7 @@ fin_line <- c(rep("999.9990", 3))
 b <- c(0, 2)
 z_paroi <- 1
 
-file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab//MAGE_PaMHYR2/_PAMHYR_/smooth_bed/default-mage/net/Reach_002.ST"
+file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/model_mage/net/Reach_002.ST"
 
 con <- file(file_path, open = "w")
 
