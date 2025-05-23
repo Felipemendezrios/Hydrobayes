@@ -6,11 +6,11 @@ library(dplyr)
 library(stringr)
 library(tidyr)
 
-workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/"
+workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab"
 setwd(workspace)
 
 path_results <- "Calibration_water_surface_profiles"
-path_model_mage <- file.path(path_results, "model_mage")
+path_model_mage_global <- "model_mage"
 path_data <- "data_smooth_bed"
 
 # General setting options:
@@ -30,7 +30,7 @@ Mage_extraire_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage
 ############################
 
 # Input_CaseStudy
-FilesNames <- list.files(path_model_mage, recursive = T)
+FilesNames <- list.files(path_model_mage_global, recursive = T)
 dir_REPFile <- FilesNames[grep(FilesNames, pattern = ".REP")]
 # Define the fixed-width format for each line : Result of Fortran coding format
 col_widths <- c(1, 3, 6, 10, 10, 10, 10)
@@ -41,25 +41,14 @@ load(file.path(
     "data_HHLab_all_cases.RData"
 ))
 
-# Standard deviation :
-for (i in 1:length(WS_profiles)) {
-    modulo <- lm(z_mean ~ x, data = WS_profiles[[i]])
-    residus <- residuals(modulo)
-    WS_profiles[[i]]$uh <- sd(residus)
-}
-
-
 # User input:
 ## Give the information to use during calibration
 all_data_calibration <- list(WS_profiles = WS_profiles)
 
-# u_h_obs <- 0.2 / 1000 # ultrasonic sensor manufactured by Baumer (UNDK 20IG903/S35A), with a standard measurement error of approximately 0.2 mm.
-
-
 # Total number of discretization points required for Legendre polynomial calculations
 total_points <- 200
 doInterpolation <- TRUE
-# Create a sequence of numbers
+# Create a sequence of numbers: time fixed to extract simulation
 sequence <- seq(0.95, 3.95, by = 1)
 
 # Find the maximum number of decimal places
@@ -73,7 +62,6 @@ sequence_all <- sort(round(sequence_all, max_decimals))
 
 # Mage extraire arguments
 mage_extraire_args <- lapply(sequence_all, function(x) paste0("ZdX 1 h", trimws(format(x, nsmall = max_decimals))))
-
 
 # Time to introduce calibration data (in hours)
 # Time mapping between cases with constant discharge (id_case) and simulation time (time_fixed) for extraction, all consistent with the MAGE model!!
@@ -129,7 +117,6 @@ id_fixed <- data.frame(
     )
 )
 time_mapping <- merge(id_fixed, time_mapping_temp2, by = NULL)
-
 
 # Number of output variables : defined in mage_extraire_args
 nY <- length(mage_extraire_args)
@@ -188,13 +175,13 @@ nY <- length(mage_extraire_args)
 #                            NET FILE :                     #
 #-----------------------------------------------------------#
 
-REPFile <- read.table(file.path(path_model_mage, dir_REPFile),
+REPFile <- read.table(file.path(path_model_mage_global, dir_REPFile),
     comment.char = "*"
 )
 
 dir.NETFile <- REPFile["NET", ]
 
-NETFile <- read.table(file.path(path_model_mage, dir.NETFile),
+NETFile <- read.table(file.path(path_model_mage_global, dir.NETFile),
     comment.char = "*"
 )
 
@@ -204,7 +191,7 @@ dir.STFiles <- NETFile[, 4]
 Cross_sections_by_reach <- rep(list(0), nrow(NETFile))
 
 for (j in 1:length(dir.STFiles)) {
-    STFile <- readLines(file.path(path_model_mage, dir.STFiles[j]))
+    STFile <- readLines(file.path(path_model_mage_global, dir.STFiles[j]))
 
     # Collect the KP of the ST file
     KP_elements <- c()
@@ -235,7 +222,7 @@ for (j in 1:length(dir.STFiles)) {
 
 # When a single reach is analyzed, the code run.
 # However, if it is a multiple reach case, we need to think how to handle it
-if (length(Cross_sections_by_reach) > 1) stop("Must be configurate for multiple reaches cases, at the moment only a single reach case is avalaible")
+if (length(Cross_sections_by_reach) > 1) stop("Must be set for multiple reaches cases, at the moment only a single reach case is available")
 
 X <- data.frame(id_order = Cross_sections_by_reach[[1]])
 
@@ -297,12 +284,10 @@ if (logical_WS_Calibration) {
     ####################################
     # 1. Prepare `data_obs_calibration` for merging
 
-    ########
-    # Corriger!!! tableau maintenant z (cote) + u_z (incertitude)
-    ########
-    data_obs_calibration_merged_wide_all <- data.frame(data_obs_calibration %>%
-        select(id_fixed, z_mean, id_position, uh) %>%
-        pivot_wider(names_from = id_position, values_from = c(z_mean, uh)))
+    data_obs_calibration_merged_wide_all <-
+        data.frame(data_obs_calibration %>%
+            select(id_fixed, z_mean, id_position, Yu) %>%
+            pivot_wider(names_from = id_position, values_from = c(z_mean, Yu)))
 
     data_obs_calibration_merged_wide <- data_obs_calibration_merged_wide_all[, c(1:(nY + 1))]
 
@@ -312,7 +297,7 @@ if (logical_WS_Calibration) {
 
     u_data_obs_calibration_merged_wide <- data_obs_calibration_merged_wide_all[, c(1, (nY + 2):ncol(data_obs_calibration_merged_wide_all))]
 
-    clean_names_u_data <- sub("^uh_", "", colnames(data_obs_calibration_merged_wide)[-1])
+    clean_names_u_data <- sub("^Yu_", "", colnames(data_obs_calibration_merged_wide)[-1])
 
     colnames(u_data_obs_calibration_merged_wide)[-1] <- clean_names_u_data
 
@@ -346,6 +331,7 @@ if (logical_WS_Calibration) {
         Y <- data.frame(Y)
         colnames(Y) <- colnames(CalData)[2]
     }
+    colnames(Y) <- paste0("Y_", colnames(Y))
 
     Yu <- data.frame(matrix(NA, nrow = nrow(X), ncol = nY))
     colnames(Yu) <- colnames(Y)
@@ -353,17 +339,10 @@ if (logical_WS_Calibration) {
     id_column <- which(colnames(u_data_obs_calibration_merged_wide)[-1] %in% colnames(CalData)[-1])
     id_replace <- which(CalData[, 1] %in% u_data_obs_calibration_merged_wide[, 1])
     Yu[id_replace, id_column] <- u_data_obs_calibration_merged_wide[, -1]
-
-
-    # Yu[which(!is.na(Y[, 1])), ] <- u_h_obs
-    colnames(Yu) <- paste0("u_", colnames(Y))
+    colnames(Yu) <- paste0("Yu_", colnames(Y))
     # X <- data.frame(time_hours = CalData[, 1])
-    # dataset object
-    data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(getwd(), path_results))
 }
 ####
-
-
 #-----------------------------------------------------------#
 #                            RUG FILE :                     #
 #-----------------------------------------------------------#
@@ -376,7 +355,7 @@ read_fortran_data <- function(file_path, col_widths, skip = 0) {
 
 Read_RUGFile <- read_fortran_data(
     file_path = file.path(
-        path_model_mage,
+        path_model_mage_global,
         FilesNames[grep(FilesNames, pattern = ".RUG")]
     ),
     col_widths = col_widths,
@@ -527,285 +506,388 @@ grid_covariant_meshed_Model <- get_covariant_meshed(
     specific_points_Model = specific_points_Model
 )
 
-# #-----------------------------#
-# Write RUG file:
-RUG_id_reach <- vector(mode = "numeric", length = (length(grid_covariant_meshed_Model) - 1))
-
-for (i in 1:nrow(specific_points_Model)) {
-    RUG_id_reach[dplyr::between(
-        grid_covariant_meshed_Model[-1], # Remove the first data, because RUG file is given by intervals, so n-1 number of intervals where n is the number of points of positions
-        specific_points_Model$KP_start[i], specific_points_Model$KP_end[i]
-    )] <- specific_points_Model$reach[i]
-}
-
-RUG_KP_start <- grid_covariant_meshed_Model[-length(grid_covariant_meshed_Model)]
-RUG_KP_end <- grid_covariant_meshed_Model[-1]
-######################################################
-# Estimation of the prior on the friction coefficient
-######################################################
-Ks_glass_quantiles <- c(77, 111)
-
-# Estimate standard deviation
-prior_log_u_ks_mage <- (log(Ks_glass_quantiles[2]) - log(Ks_glass_quantiles[1])) / (2 * qnorm(0.975))
-
-# Estimate mean
-prior_ks_mage <- (Ks_glass_quantiles[2] + Ks_glass_quantiles[1]) / 2
-
-RUG_Kmin <- prior_ks_mage
-RUG_Kmoy <- 10
-
-RUG_path <- file.path(
-    path_model_mage,
-    FilesNames[grep(FilesNames, pattern = ".RUG")]
-)
-# Function to write RUG file
-write_RUGFile <- function(RUG_path,
-                          RUG_id_reach,
-                          RUG_KP_start,
-                          RUG_KP_end,
-                          RUG_Kmin,
-                          RUG_Kmoy,
-                          RUG_format) {
-    # Open a .RUG file for writing
-    fileConn <- file(RUG_path, "w")
-    # Write the first line as a comment
-    writeLines("* This file is generated by PAMHYR, please don't modify", fileConn)
-    # Loop to write each line in Fortran format
-    for (i in 1:length(RUG_KP_start)) {
-        # Format the line according to Fortran style
-        line <- sprintf(
-            "%1s%3d      %10.3f%10.3f%10.2f%10.2f",
-            "K",
-            RUG_id_reach[i],
-            RUG_KP_start[i],
-            RUG_KP_end[i],
-            RUG_Kmin,
-            RUG_Kmoy
-        )
-        # Write to file
-        writeLines(line, fileConn)
-    }
-    # Close the file
-    close(fileConn)
-}
-
-write_RUGFile(
-    RUG_path = RUG_path,
-    RUG_id_reach = RUG_id_reach,
-    RUG_KP_start = RUG_KP_start,
-    RUG_KP_end = RUG_KP_end,
-    RUG_Kmin = RUG_Kmin,
-    RUG_Kmoy = RUG_Kmoy,
-    RUG_format = "%1s%3d      %10.0f%10.0f%10.2f%10.2f"
-)
-
 ##############################################
-#####  Polynome de legendre
+#####  Polynomial de legendre
 ##############################################
 
 ###############################
 # n iteration : methodology
 ###############################
-n_degree <- 0
-# Polynomial degree i
-path_polynomial <- file.path(path_results, paste0("n_", n_degree))
-if (!dir.exists(path_polynomial)) {
-    dir.create(path_polynomial)
-}
+n_degree_max <- 4
+n_degree_seq <- seq(0, n_degree_max, 1)
 
-# Polynomial degree 0 :
-# Set Z file : cov_bar for the legendre polynomials
-min_cov_legendre <- min(grid_covariant_discretized)
-max_cov_legendre <- max(grid_covariant_discretized)
-cov_bar_legendre <- 2 * (grid_covariant_discretized - min_cov_legendre) / (max_cov_legendre - min_cov_legendre) - 1
-# Write Legendre vector:
-write.table(
-    data.frame(
-        KP_original = grid_covariant_discretized,
-        KP_normalized = cov_bar_legendre
-    ),
-    file = file.path(path_results, "vector_legendre.txt"), row.names = F
-)
-# Write co variant matrix for main channel
-# Create an empty data frame and fill it with polynomial values
-legendre_df <- data.frame(x = cov_bar_legendre) # Start with x values
-########
-# Generate files
-########
-getlegendre <- function(degree, normalized_values) {
-    if (degree < 0) stop("Degree must be positive")
-    if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normaized_values should be between [-1,1]")
-
-    if (degree == 0) {
-        return(rep(1, length(normalized_values)))
-    }
-    if (degree == 1) {
-        return(normalized_values)
+for (n_degree in n_degree_seq) {
+    # Polynomial degree i
+    path_polynomial <- file.path(path_results, paste0("n_", n_degree))
+    if (!dir.exists(path_polynomial)) {
+        dir.create(path_polynomial)
     }
 
-    # P_0(normalized_values) = 1
-    Pn_1 <- rep(1, length(normalized_values))
-    # P_1(normalized_values) = normalized_values
-    Pn <- normalized_values
+    # Get model mage files
+    files_model_mage <- list.files(path_model_mage_global, full.names = TRUE, recursive = TRUE)
+    # Copy files for modify at each polynomial degree
+    # Loop through each file path
+    for (i in seq_along(files_model_mage)) {
+        from <- files_model_mage[i]
+        to <- file.path(path_polynomial, files_model_mage[i])
 
-    for (k in 1:(degree - 1)) {
-        P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
-        Pn_1 <- Pn
-        Pn <- P_next
+        # Create destination directory if needed
+        dir.create(dirname(to), recursive = TRUE, showWarnings = FALSE)
+
+        # Copy file
+        success <- file.copy(from = from, to = to, overwrite = TRUE)
     }
-    return(Pn)
-}
 
-for (n in 0:n_degree) {
-    legendre_df[[paste0("P", n)]] <- getlegendre(
-        degree = n,
-        normalized_values = cov_bar_legendre
+    path_model_mage <- file.path(path_polynomial, path_model_mage_global)
+
+    # dataset object
+    data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(workspace, path_polynomial))
+
+    # #-----------------------------#
+    # Write RUG file:
+    RUG_id_reach <- vector(mode = "numeric", length = (length(grid_covariant_meshed_Model) - 1))
+
+    for (i in 1:nrow(specific_points_Model)) {
+        RUG_id_reach[dplyr::between(
+            grid_covariant_meshed_Model[-1], # Remove the first data, because RUG file is given by intervals, so n-1 number of intervals where n is the number of points of positions
+            specific_points_Model$KP_start[i], specific_points_Model$KP_end[i]
+        )] <- specific_points_Model$reach[i]
+    }
+
+    RUG_KP_start <- grid_covariant_meshed_Model[-length(grid_covariant_meshed_Model)]
+    RUG_KP_end <- grid_covariant_meshed_Model[-1]
+    ######################################################
+    # Estimation of the prior on the friction coefficient
+    ######################################################
+    # ref : https://www.hec.usace.army.mil/confluence/rasdocs/ras1dtechref/6.1/modeling-culverts/culvert-data-and-coefficients/manning-s-roughness-coefficient
+
+    Ks_glass_quantiles <- c(1 / 0.013, 1 / 0.009)
+
+    # Estimate standard deviation
+    prior_log_u_ks_mage <- (log(Ks_glass_quantiles[2]) - log(Ks_glass_quantiles[1])) / (2 * qnorm(0.975))
+
+    # Estimate mean
+    prior_ks_mage <- 1 / 0.010
+
+    RUG_Kmin <- prior_ks_mage
+    RUG_Kmoy <- 10
+
+    RUG_path <- file.path(
+        path_model_mage,
+        FilesNames[grep(FilesNames, pattern = ".RUG")]
     )
-}
+    # Function to write RUG file
+    write_RUGFile <- function(RUG_path,
+                              RUG_id_reach,
+                              RUG_KP_start,
+                              RUG_KP_end,
+                              RUG_Kmin,
+                              RUG_Kmoy,
+                              RUG_format) {
+        # Open a .RUG file for writing
+        fileConn <- file(RUG_path, "w")
+        # Write the first line as a comment
+        writeLines("* This file is generated by PAMHYR, please don't modify", fileConn)
+        # Loop to write each line in Fortran format
+        for (i in 1:length(RUG_KP_start)) {
+            # Format the line according to Fortran style
+            line <- sprintf(
+                "%1s%3d      %10.3f%10.3f%10.2f%10.2f",
+                "K",
+                RUG_id_reach[i],
+                RUG_KP_start[i],
+                RUG_KP_end[i],
+                RUG_Kmin,
+                RUG_Kmoy
+            )
+            # Write to file
+            writeLines(line, fileConn)
+        }
+        # Close the file
+        close(fileConn)
+    }
 
-zFileKmin <- file.path(getwd(), path_results, "Zfile_Kmin.txt")
-zFileKmoy <- file.path(getwd(), path_results, "Zfile_Kflood.txt")
-
-if (ncol(legendre_df) == 2) { # if n degree is equal to 0
-    matrix_zFileKmin <- legendre_df["P0"]
-} else {
-    matrix_zFileKmin <- legendre_df[, -1]
-}
-matrix_zFileKmoy <- legendre_df["P0"]
-
-#######################
-# Fin legendre
-########################
-
-##########################
-#### BaM!
-###########################
-param_theta <- list(
-    Kmin.init = prior_ks_mage,
-    kmin.distri = "LogNormal",
-    # Kmin.prior.par = c(log(prior_ks_mage), prior_log_u_ks_mage),
-    Kmin.prior.par = c(log(prior_ks_mage), 0.03),
-    Kmoy.init = 10,
-    kmoy.distri = "FIX"
-)
-
-hist(rlnorm(10000, log(prior_ks_mage), 0.03))
-# hist(rlnorm(10000, log(prior_ks_mage), prior_log_u_ks_mage))
-
-
-param_error_model <- list(
-    ## Stage model error prior information (variation in time)
-    z.ini = 0.01,
-    z.prior.dist = "Uniform",
-    z.prior.par = c(0, 1)
-)
-
-prior_setting <- list(
-    param_theta = param_theta,
-    param_error_model = param_error_model
-)
-
-# Input
-remant_error <- list(
-    remnantErrorModel(
-        fname = "Config_RemnantSigma.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = param_error_model$z.ini,
-            prior.dist = param_error_model$z.prior.dist,
-            prior.par = param_error_model$z.prior.par
-        ))
+    write_RUGFile(
+        RUG_path = RUG_path,
+        RUG_id_reach = RUG_id_reach,
+        RUG_KP_start = RUG_KP_start,
+        RUG_KP_end = RUG_KP_end,
+        RUG_Kmin = RUG_Kmin,
+        RUG_Kmoy = RUG_Kmoy,
+        RUG_format = "%1s%3d      %10.0f%10.0f%10.2f%10.2f"
     )
-)
 
-# Defining theta parameter list
-n_Covariates_flood <- 1
-n_Covariates_min <- (n_degree + 1)
-theta_param <- vector(
-    mode = "list",
-    length = n_Covariates_min + n_Covariates_flood
-)
+    # Polynomial degree 0 :
+    # Set Z file : cov_bar for the legendre polynomials
+    min_cov_legendre <- min(grid_covariant_discretized)
+    max_cov_legendre <- max(grid_covariant_discretized)
+    cov_bar_legendre <- 2 * (grid_covariant_discretized - min_cov_legendre) / (max_cov_legendre - min_cov_legendre) - 1
+    # Write Legendre vector:
+    write.table(
+        data.frame(
+            KP_original = grid_covariant_discretized,
+            KP_normalized = cov_bar_legendre
+        ),
+        file = file.path(path_polynomial, "vector_legendre.txt"), row.names = F
+    )
+    # Write co variant matrix for main channel
+    # Create an empty data frame and fill it with polynomial values
+    legendre_df <- data.frame(x = cov_bar_legendre) # Start with x values
+    ########
+    # Generate files
+    ########
+    getlegendre <- function(degree, normalized_values) {
+        if (degree < 0) stop("Degree must be positive")
+        if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normaized_values should be between [-1,1]")
 
-for (i in 1:n_Covariates_min) {
-    if (i == 1) {
-        Param_min <- RBaM::parameter(
-            name = paste0("a", i - 1, "_min"),
-            init = param_theta$Kmin.init,
-            prior.dist = param_theta$kmin.distri,
-            prior.par = param_theta$Kmin.prior.par
+        if (degree == 0) {
+            return(rep(1, length(normalized_values)))
+        }
+        if (degree == 1) {
+            return(normalized_values)
+        }
+
+        # P_0(normalized_values) = 1
+        Pn_1 <- rep(1, length(normalized_values))
+        # P_1(normalized_values) = normalized_values
+        Pn <- normalized_values
+
+        for (k in 1:(degree - 1)) {
+            P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
+            Pn_1 <- Pn
+            Pn <- P_next
+        }
+        return(Pn)
+    }
+
+    for (n in 0:n_degree) {
+        legendre_df[[paste0("P", n)]] <- getlegendre(
+            degree = n,
+            normalized_values = cov_bar_legendre
         )
+    }
+
+    zFileKmin <- file.path(workspace, path_polynomial, "Zfile_Kmin.txt")
+    zFileKmoy <- file.path(workspace, path_polynomial, "Zfile_Kflood.txt")
+
+    if (ncol(legendre_df) == 2) { # if n degree is equal to 0
+        matrix_zFileKmin <- legendre_df["P0"]
     } else {
-        Param_min <- RBaM::parameter(
-            name = paste0("a", i - 1, "_min"),
-            init = 0.5,
-            prior.dist = "FlatPrior+"
+        matrix_zFileKmin <- legendre_df[, -1]
+    }
+    matrix_zFileKmoy <- legendre_df["P0"]
+
+    #######################
+    # Fin legendre
+    ########################
+
+    ##########################
+    #### BaM!
+    ###########################
+    param_theta <- list(
+        Kmin.init = prior_ks_mage,
+        kmin.distri = "FlatPrior+",
+        # kmin.distri = "LogNormal",
+        # Kmin.prior.par = c(log(prior_ks_mage), prior_log_u_ks_mage),
+        Kmoy.init = 10,
+        kmoy.distri = "FIX"
+    )
+
+    # hist(rlnorm(10000, log(prior_ks_mage), prior_log_u_ks_mage))
+
+    param_error_model <- list(
+        ## Stage model error prior information (variation in time)
+        z.ini = 0.1,
+        z.prior.dist = "FlatPrior"
+        # z.prior.dist = "Uniform",
+        # z.prior.par = c(0, 1)
+    )
+
+    # prior_setting <- list(
+    #     param_theta = param_theta,
+    #     param_error_model = param_error_model
+    # )
+
+    # Input
+    remant_error <- list(
+        remnantErrorModel(
+            fname = "Config_RemnantSigma.txt",
+            funk = "Constant",
+            par = list(parameter(
+                name = "intercept",
+                init = param_error_model$z.ini,
+                prior.dist = param_error_model$z.prior.dist,
+                prior.par = param_error_model$z.prior.par
+            ))
+        )
+    )
+
+    remant_error_list <- rep(remant_error, nY)
+
+    # Defining theta parameter list
+    n_Covariates_flood <- 1
+    n_Covariates_min <- (n_degree + 1)
+    theta_param <- vector(
+        mode = "list",
+        length = n_Covariates_min + n_Covariates_flood
+    )
+
+    for (i in 1:n_Covariates_min) {
+        if (i == 1) {
+            Param_min <- RBaM::parameter(
+                name = paste0("a", i - 1, "_min"),
+                init = param_theta$Kmin.init,
+                prior.dist = param_theta$kmin.distri,
+                prior.par = param_theta$Kmin.prior.par
+            )
+        } else {
+            Param_min <- RBaM::parameter(
+                name = paste0("a", i - 1, "_min"),
+                init = 0,
+                prior.dist = "FlatPrior+"
+            )
+        }
+        theta_param[[i]] <- Param_min
+    }
+
+    for (i in 1:n_Covariates_flood) {
+        Param_flood <- RBaM::parameter(
+            name = paste0("a", i - 1, "_flood"),
+            init = param_theta$Kmoy.init,
+            prior.dist = param_theta$kmoy.distri
+        )
+        theta_param[[n_Covariates_min + i]] <- Param_flood
+    }
+
+    ID <- "MAGE_TEMP"
+    MageVersion <- "8"
+
+    xtra <- xtraModelInfo(
+        fname = "Config_setup.txt",
+        object = list(
+            exeFile = MAGE_executable,
+            version = MageVersion,
+            mageDir = file.path(workspace, paste0(path_model_mage), ""),
+            repFile = dir_REPFile,
+            zKmin = matrix_zFileKmin,
+            zFileKmin = zFileKmin,
+            doExpKmin = FALSE,
+            zKmoy = matrix_zFileKmoy,
+            zFileKmoy = zFileKmoy,
+            doExpKmoy = FALSE,
+            mage_extraire_file = Mage_extraire_executable,
+            mage_extraire_args = unlist(mage_extraire_args)
+        )
+    )
+    mod <- model(
+        ID = ID,
+        nX = 1,
+        nY = nY,
+        par = theta_param,
+        xtra = xtra
+    )
+
+    dir_exe_BaM <- file.path(find.package("RBaM"), "bin")
+
+    # Define MCMC options:
+    # Main idea, replace default value for MCMC jump exploration
+    # In fact when init prior of a parameter or a error model parameter is equal 0, jump is defined as 0.1 * (init prior), so jump is so small
+    # To improve this, we need to pass to manual mode for assigning jumps individually for all parameters (theta and gamma)
+
+    # Function to get prior of the parameters
+    get_init_prior <- function(parameter) {
+        # Identify if parameter is remnantErrorModel class
+        logical_test <- class(parameter[[1]]) == "remnantErrorModel"
+        if (logical_test) { # if remnantErrorModel, a list is needed
+            init_priors <- list()
+        } else { # if not a vector is needed
+            init_priors <- numeric(0)
+        }
+
+        counter_gamma <- 1
+        for (i in parameter) {
+            # Handle if parameters is remnantErrorModel
+            if (logical_test) {
+                param <- i$par
+                number_var_error_model <- seq_along(param)
+
+                for (local_counter in number_var_error_model) {
+                    if (param[[local_counter]]$prior$dist != "FIX") {
+                        init_priors[[counter_gamma]] <- param[[local_counter]]$init
+                        counter_gamma <- counter_gamma + 1
+                    }
+                }
+            } else {
+                # Handle if parameters comes from theta
+                param <- i
+                if (param$prior$dist != "FIX") {
+                    init_priors <- c(init_priors, param$init)
+                }
+            }
+        }
+        return(init_priors)
+    }
+
+    prior_error_model <- get_init_prior(remant_error_list)
+    prior_theta_param <- get_init_prior(theta_param)
+
+    jump_MCMC_theta_param_user <- 10
+    jump_MCMC_error_model_user <- 1
+
+    jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
+        (prior_theta_param != 0) * 0.1,
+        jump_MCMC_theta_param_user
+    )
+
+    jump_MCMC_error_model <- list()
+    for (ind in 1:length(prior_error_model)) {
+        jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > 0.5,
+            (prior_error_model[[ind]] != 0) * 0.1,
+            jump_MCMC_error_model_user
         )
     }
-    theta_param[[i]] <- Param_min
-}
 
-for (i in 1:n_Covariates_flood) {
-    Param_flood <- RBaM::parameter(
-        name = paste0("a", i - 1, "_flood"),
-        init = param_theta$Kmoy.init,
-        prior.dist = param_theta$kmoy.distri
+
+    mcmcOptions_user <- mcmcOptions(
+        nCycles = nCycles,
+        manualMode = TRUE,
+        thetaStd = jump_MCMC_theta_param,
+        gammaStd = jump_MCMC_error_model
     )
-    theta_param[[n_Covariates_min + i]] <- Param_flood
-}
-
-ID <- "MAGE_TEMP"
-MageVersion <- "8"
-
-xtra <- xtraModelInfo(
-    fname = "Config_setup.txt",
-    object = list(
-        exeFile = MAGE_executable,
-        version = MageVersion,
-        mageDir = file.path(getwd(), paste0(path_model_mage), ""),
-        repFile = dir_REPFile,
-        zKmin = matrix_zFileKmin,
-        zFileKmin = zFileKmin,
-        doExpKmin = FALSE,
-        zKmoy = matrix_zFileKmoy,
-        zFileKmoy = zFileKmoy,
-        doExpKmoy = FALSE,
-        mage_extraire_file = Mage_extraire_executable,
-        mage_extraire_args = unlist(mage_extraire_args)
+    # Write the file but not run BaM exe
+    BaM(
+        mod = mod,
+        data = data,
+        remnant = remant_error_list,
+        mcmc = mcmcOptions_user,
+        cook = mcmcCooking(
+            burn = burn,
+            nSlim = nSlim
+        ),
+        summary = mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
+        residuals = residualOptions(),
+        pred = NULL,
+        doCalib = TRUE,
+        doPred = FALSE,
+        na.value = -9999,
+        run = FALSE,
+        preClean = FALSE,
+        workspace = file.path(workspace, path_polynomial),
+        dir.exe = dir_exe_BaM,
+        name.exe = "BaM",
+        predMaster_fname = "Config_Pred_Master.txt"
     )
-)
-mod <- model(
-    ID = ID,
-    nX = 1,
-    nY = nY,
-    par = theta_param,
-    xtra = xtra
-)
 
-BaM(
-    mod = mod,
-    data = data,
-    remnant = rep(remant_error, mod$nY),
-    mcmc = mcmcOptions(nCycles = nCycles),
-    cook = mcmcCooking(
-        burn = burn,
-        nSlim = nSlim
-    ),
-    summary = mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
-    residuals = residualOptions(),
-    pred = NULL,
-    doCalib = TRUE,
-    doPred = FALSE,
-    na.value = -9999,
-    run = TRUE,
-    preClean = FALSE,
-    workspace = file.path(getwd(), path_results),
-    # workspace = path_results,
-    dir.exe = file.path(find.package("RBaM"), "bin"),
-    name.exe = "BaM",
-    predMaster_fname = "Config_Pred_Master.txt"
-)
+    # Move Config_BaM.txt file to the result folder
+    dir_cf <- file.path(dir_exe_BaM, "Config_BaM.txt")
+    file.copy(from = dir_cf, to = path_polynomial, overwrite = TRUE)
 
+    system2(
+        command = file.path(dir_exe_BaM, "BaM"),
+        args = c("-cf", file.path(workspace, path_results, paste0("n_", n_degree, "/Config_BaM.txt"))),
+        wait = FALSE
+    )
+}
 MCMC <- readMCMC(file.path(path_results, "Results_MCMC.txt"))
 plots <- tracePlot(MCMC)
 gridExtra::grid.arrange(grobs = plots, ncol = 3)
@@ -816,143 +898,113 @@ gridExtra::grid.arrange(grobs = plots, ncol = 3)
 
 residuals <- read.table(file.path(path_results, "Results_Residuals.txt"), header = TRUE)
 
-library(ggplot2)
 
 
-residuals_extraction <- residuals[, c(1, 3:6, 11:19)]
-for (i in 1:ncol(residuals_extraction)) {
-    residuals_extraction[which(residuals_extraction[, i] == -9999), i] <- NA
-}
-
-col_names <- paste0("Y", 1:ncol(Y))
-position_labels <- paste("Time:", sequence_all)
-
-# Create named vector to use in recoding
-name_map <- setNames(position_labels, col_names)
-
-# Step 1: Gather observed and simulated values into long format
-res_long <- residuals_extraction %>%
-    pivot_longer(
-        cols = starts_with("Y"),
-        names_to = c("variable", "type"),
-        names_pattern = "(Y\\d+)_(obs|sim)",
-        values_to = "value"
-    ) %>%
-    drop_na() %>%
-    mutate(
-        variable = recode(variable, !!!name_map),
-        variable = factor(variable, levels = position_labels), # enforce order
-        value = value * 1000
-    )
-
-# Step 2: Plot
-ggplot(res_long, aes(x = X1_obs, y = value, color = type)) +
-    geom_point(size = 2) +
-    facet_wrap(~variable, scales = "free_y") +
-    theme_bw() +
-    labs(
-        x = "Position (m)", y = "WS profile (m)",
-        title = "Comparison of simulation and observation at each time used during calibration "
-    ) +
-    theme(
-        strip.text = element_text(size = 12),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5)
-    )
-
-# Residuals
-residuals_long <- residuals_extraction %>%
-    pivot_longer(
-        cols = starts_with("Y"),
-        names_to = c("variable", "type"),
-        names_pattern = "(Y\\d+)_(res)",
-        values_to = "value"
-    ) %>%
-    drop_na() %>%
-    mutate(
-        variable = recode(variable, !!!name_map),
-        variable = factor(variable, levels = position_labels), # enforce order
-        value = value * 1000
-    )
-
-# Step 2: Plot
-ggplot(residuals_long, aes(x = X1_obs, y = value, color = type)) +
-    geom_point() +
-    geom_hline(yintercept = 0, linetype = "dashed", col = "black") +
-    facet_wrap(~variable, scales = "free_y") +
-    theme_bw() +
-    labs(
-        x = "Position (m)", y = "Residuals (m)",
-        title = "Residual at each time used during calibration"
-    ) +
-    theme(
-        strip.text = element_text(size = 12),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5)
-    )
 
 
-# Friction coefficient simulation with the MaxPost
-summary_data <- read.table(file.path(path_results, "Results_Summary.txt"), header = TRUE)
 
-param_matrix <- as.numeric(summary_data["MaxPost", 1:(n_degree + 1)])
-
-k_estimated <- as.matrix(matrix_zFileKmin) %*% param_matrix
-
-position <- read.table(file.path(path_results, "vector_legendre.txt"), header = TRUE)
-
-df <- data.frame(
-    x = position[, 1],
-    y = k_estimated,
-    id = "MaxPost"
-)
-
-ggplot(df, aes(x = x, y = y, color = id)) +
-    geom_point() +
-    theme_bw() +
-    labs(
-        x = "Lengthwise position (meters)",
-        y = expression("Friction coefficient (m"^
-            {
-                1 / 3
-            } * "/s)"),
-    )
-
-files_created_temp <- list.files(path_results, full.names = TRUE)
-files_created <- files_created_temp[!grepl(path_model_mage, files_created_temp)]
-cleaned_files <- sub(paste0("^", path_results, "/"), "", files_created)
-
-files_to_move <- cleaned_files[!grepl("n_", cleaned_files)]
+# library(ggplot2)
 
 
-# Loop to move each file
-for (file in files_to_move) {
-    # Construct the full path for source and destination
-    source_file <- file.path(getwd(), path_results, file)
-    destination_file <- file.path(getwd(), path_polynomial, file)
+# residuals_extraction <- residuals[, c(1, 3:6, 11:19)]
+# for (i in 1:ncol(residuals_extraction)) {
+#     residuals_extraction[which(residuals_extraction[, i] == -9999), i] <- NA
+# }
 
-    # Create the destination directory if it doesn't exist
-    dir.create(dirname(destination_file), recursive = TRUE, showWarnings = FALSE)
+# col_names <- paste0("Y", 1:ncol(Y))
+# position_labels <- paste("Time:", sequence_all)
 
-    # Move the file
-    success <- file.rename(source_file, destination_file)
-}
+# # Create named vector to use in recoding
+# name_map <- setNames(position_labels, col_names)
 
-files_created_temp2 <- list.files(path_model_mage, full.names = TRUE, recursive = TRUE)
+# # Step 1: Gather observed and simulated values into long format
+# res_long <- residuals_extraction %>%
+#     pivot_longer(
+#         cols = starts_with("Y"),
+#         names_to = c("variable", "type"),
+#         names_pattern = "(Y\\d+)_(obs|sim)",
+#         values_to = "value"
+#     ) %>%
+#     drop_na() %>%
+#     mutate(
+#         variable = recode(variable, !!!name_map),
+#         variable = factor(variable, levels = position_labels), # enforce order
+#         value = value * 1000
+#     )
 
-relative_paths <- sub(paste0("^", path_results, "/"), "", files_created_temp2)
+# # Step 2: Plot
+# ggplot(res_long, aes(x = X1_obs, y = value, color = type)) +
+#     geom_point(size = 2) +
+#     facet_wrap(~variable, scales = "free_y") +
+#     theme_bw() +
+#     labs(
+#         x = "Position (m)", y = "WS profile (m)",
+#         title = "Comparison of simulation and observation at each time used during calibration "
+#     ) +
+#     theme(
+#         strip.text = element_text(size = 12),
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         plot.title = element_text(hjust = 0.5)
+#     )
 
-# Loop through each file path
-for (i in seq_along(files_created_temp2)) {
-    from <- files_created_temp2[i]
-    to <- file.path(path_polynomial, relative_paths[i])
+# # Residuals
+# residuals_long <- residuals_extraction %>%
+#     pivot_longer(
+#         cols = starts_with("Y"),
+#         names_to = c("variable", "type"),
+#         names_pattern = "(Y\\d+)_(res)",
+#         values_to = "value"
+#     ) %>%
+#     drop_na() %>%
+#     mutate(
+#         variable = recode(variable, !!!name_map),
+#         variable = factor(variable, levels = position_labels), # enforce order
+#         value = value * 1000
+#     )
 
-    # Create destination directory if needed
-    dir.create(dirname(to), recursive = TRUE, showWarnings = FALSE)
+# # Step 2: Plot
+# ggplot(residuals_long, aes(x = X1_obs, y = value, color = type)) +
+#     geom_point() +
+#     geom_hline(yintercept = 0, linetype = "dashed", col = "black") +
+#     facet_wrap(~variable, scales = "free_y") +
+#     theme_bw() +
+#     labs(
+#         x = "Position (m)", y = "Residuals (m)",
+#         title = "Residual at each time used during calibration"
+#     ) +
+#     theme(
+#         strip.text = element_text(size = 12),
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         plot.title = element_text(hjust = 0.5)
+#     )
 
-    # Copy file
-    success <- file.copy(from = from, to = to, overwrite = TRUE)
-}
+
+# # Friction coefficient simulation with the MaxPost
+# summary_data <- read.table(file.path(path_results, "Results_Summary.txt"), header = TRUE)
+
+# param_matrix <- as.numeric(summary_data["MaxPost", 1:(n_degree + 1)])
+
+# k_estimated <- as.matrix(matrix_zFileKmin) %*% param_matrix
+
+# position <- read.table(file.path(path_results, "vector_legendre.txt"), header = TRUE)
+
+# df <- data.frame(
+#     x = position[, 1],
+#     y = k_estimated,
+#     id = "MaxPost"
+# )
+
+# ggplot(df, aes(x = x, y = y, color = id)) +
+#     geom_point() +
+#     theme_bw() +
+#     labs(
+#         x = "Lengthwise position (meters)",
+#         y = expression("Friction coefficient (m"^
+#             {
+#                 1 / 3
+#             } * "/s)"),
+#     )
+
 
 # # PREDICTION :
 
