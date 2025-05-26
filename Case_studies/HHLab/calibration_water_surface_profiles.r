@@ -19,7 +19,7 @@ nSlim_ZData <- 1
 
 # BaM! model
 nCycles <- 10 # Number of cycles
-burn <- 0.25 # Percentage of data burned
+burn <- 0.5 # Percentage of data burned
 nSlim <- 5 # Slim factor: after burning, only one iteration each Nslim is kept.
 
 # Define Mage executable path, hard to define because depending on the machine. Avoid blank spaces!
@@ -699,7 +699,7 @@ for (n_degree in n_degree_seq) {
 
     param_error_model <- list(
         ## Stage model error prior information (variation in time)
-        z.ini = 0.1,
+        z.ini = 0.001,
         z.prior.dist = "FlatPrior"
         # z.prior.dist = "Uniform",
         # z.prior.par = c(0, 1)
@@ -832,7 +832,7 @@ for (n_degree in n_degree_seq) {
     prior_theta_param <- get_init_prior(theta_param)
 
     jump_MCMC_theta_param_user <- 10
-    jump_MCMC_error_model_user <- 0.05
+    jump_MCMC_error_model_user <- 0.005
 
     jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
         prior_theta_param[(prior_theta_param != 0)] * 0.1,
