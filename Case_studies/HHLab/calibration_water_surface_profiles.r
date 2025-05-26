@@ -18,7 +18,7 @@ path_data <- "data_smooth_bed"
 nSlim_ZData <- 1
 
 # BaM! model
-nCycles <- 1 # Number of cycles
+nCycles <- 10 # Number of cycles
 burn <- 0.25 # Percentage of data burned
 nSlim <- 5 # Slim factor: after burning, only one iteration each Nslim is kept.
 
@@ -516,6 +516,8 @@ grid_covariant_meshed_Model <- get_covariant_meshed(
 n_degree_max <- 4
 n_degree_seq <- seq(0, n_degree_max, 1)
 
+dir_exe_BaM <- file.path(find.package("RBaM"), "bin")
+dir_cf <- file.path(dir_exe_BaM, "Config_BaM.txt")
 for (n_degree in n_degree_seq) {
     # Polynomial degree i
     path_polynomial <- file.path(path_results, paste0("n_", n_degree))
@@ -787,8 +789,6 @@ for (n_degree in n_degree_seq) {
         xtra = xtra
     )
 
-    dir_exe_BaM <- file.path(find.package("RBaM"), "bin")
-
     # Define MCMC options:
     # Main idea, replace default value for MCMC jump exploration
     # In fact when init prior of a parameter or a error model parameter is equal 0, jump is defined as 0.1 * (init prior), so jump is so small
@@ -832,17 +832,17 @@ for (n_degree in n_degree_seq) {
     prior_theta_param <- get_init_prior(theta_param)
 
     jump_MCMC_theta_param_user <- 10
-    jump_MCMC_error_model_user <- 1
+    jump_MCMC_error_model_user <- 0.05
 
     jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
-        (prior_theta_param != 0) * 0.1,
+        prior_theta_param[(prior_theta_param != 0)] * 0.1,
         jump_MCMC_theta_param_user
     )
 
     jump_MCMC_error_model <- list()
     for (ind in 1:length(prior_error_model)) {
         jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > 0.5,
-            (prior_error_model[[ind]] != 0) * 0.1,
+            prior_error_model[[ind]][(prior_error_model[[ind]] != 0)] * 0.1,
             jump_MCMC_error_model_user
         )
     }
@@ -879,7 +879,6 @@ for (n_degree in n_degree_seq) {
     )
 
     # Move Config_BaM.txt file to the result folder
-    dir_cf <- file.path(dir_exe_BaM, "Config_BaM.txt")
     file.copy(from = dir_cf, to = path_polynomial, overwrite = TRUE)
 
     system2(
@@ -888,122 +887,236 @@ for (n_degree in n_degree_seq) {
         wait = FALSE
     )
 }
-MCMC <- readMCMC(file.path(path_results, "Results_MCMC.txt"))
-plots <- tracePlot(MCMC)
-gridExtra::grid.arrange(grobs = plots, ncol = 3)
 
-# Density plot for each parameter
-plots <- densityPlot(MCMC)
-gridExtra::grid.arrange(grobs = plots, ncol = 3)
+# Plots:
+library(ggplot2)
 
-residuals <- read.table(file.path(path_results, "Results_Residuals.txt"), header = TRUE)
+for (n_degree in n_degree_seq) {
+    path_polynomial <- file.path(path_results, paste0("n_", n_degree))
+    path_post_traitement <- file.path(path_polynomial, "post_traitement")
+    path_post_traitement_data <- file.path(path_post_traitement, "RData")
 
+    if (!dir.exists(path_post_traitement)) {
+        dir.create(path_post_traitement)
+    }
 
+    if (!dir.exists(path_post_traitement_data)) {
+        dir.create(path_post_traitement_data)
+    }
+    MCMC <- readMCMC(file.path(path_polynomial, "Results_MCMC.txt"))
 
+    png(
+        filename = file.path(path_post_traitement, "MCMC_tracePlot.png"),
+        res = 180, width = 1000, height = 1000
+    )
+    plots <- tracePlot(MCMC)
+    gridExtra::grid.arrange(grobs = plots, ncol = 3)
+    dev.off()
 
+    png(
+        filename = file.path(path_post_traitement, "MCMC_densityPlot.png"),
+        res = 180, width = 1000, height = 1000
+    )
+    # Density plot for each parameter
+    plots <- densityPlot(MCMC)
+    gridExtra::grid.arrange(grobs = plots, ncol = 3)
+    dev.off()
 
+    # Friction coefficient estimation:
+    # Get position from the real geometry
+    position <- read.table(file.path(path_polynomial, "vector_legendre.txt"), header = TRUE)
 
-# library(ggplot2)
+    # Get MAP simulation
+    summary_data <- read.table(file.path(path_polynomial, "Results_Summary.txt"), header = TRUE)
+    matrix_zFileKmin <- read.table(file.path(path_polynomial, "Zfile_Kmin.txt"), header = TRUE)
+    param_matrix <- as.numeric(summary_data["MaxPost", 1:(n_degree + 1)])
+    k_estimated_MAP <- as.matrix(matrix_zFileKmin) %*% param_matrix
 
+    df_MAP <- data.frame(
+        KP = position[, 1],
+        Value = k_estimated_MAP,
+        ID = "MAP"
+    )
 
-# residuals_extraction <- residuals[, c(1, 3:6, 11:19)]
-# for (i in 1:ncol(residuals_extraction)) {
-#     residuals_extraction[which(residuals_extraction[, i] == -9999), i] <- NA
-# }
+    # Get all MCMC sampling for creating the envelope
+    results_MCMC_cooked_read <- read.table(file.path(path_polynomial, "Results_Cooking.txt"), header = TRUE, )
+    results_MCMC_cooked <- results_MCMC_cooked_read[, 1:(n_degree + 1)]
 
-# col_names <- paste0("Y", 1:ncol(Y))
-# position_labels <- paste("Time:", sequence_all)
+    k_estimated_all <- as.data.frame(as.matrix(matrix_zFileKmin) %*% as.matrix(t(results_MCMC_cooked)))
 
-# # Create named vector to use in recoding
-# name_map <- setNames(position_labels, col_names)
+    k_estimated_all$KP <- position[, 1]
 
-# # Step 1: Gather observed and simulated values into long format
-# res_long <- residuals_extraction %>%
-#     pivot_longer(
-#         cols = starts_with("Y"),
-#         names_to = c("variable", "type"),
-#         names_pattern = "(Y\\d+)_(obs|sim)",
-#         values_to = "value"
-#     ) %>%
-#     drop_na() %>%
-#     mutate(
-#         variable = recode(variable, !!!name_map),
-#         variable = factor(variable, levels = position_labels), # enforce order
-#         value = value * 1000
-#     )
+    # Convert to long format
+    df_MCMC_sampling <- pivot_longer(
+        k_estimated_all,
+        cols = -KP,
+        values_to = "Value"
+    ) %>%
+        select(KP, Value) %>%
+        mutate(ID = "MCMC Sampling")
+    # Get the min and max for envelope curve : create ribbon data from MCMC
+    df_envelope <- df_MCMC_sampling %>%
+        filter(ID == "MCMC Sampling") %>%
+        group_by(KP) %>%
+        summarise(
+            ymin = min(Value, na.rm = TRUE),
+            ymax = max(Value, na.rm = TRUE),
+            ID = "Parametric\nuncertainty", # so we can map to fill
+            .groups = "drop"
+        )
 
-# # Step 2: Plot
-# ggplot(res_long, aes(x = X1_obs, y = value, color = type)) +
-#     geom_point(size = 2) +
-#     facet_wrap(~variable, scales = "free_y") +
-#     theme_bw() +
-#     labs(
-#         x = "Position (m)", y = "WS profile (m)",
-#         title = "Comparison of simulation and observation at each time used during calibration "
-#     ) +
-#     theme(
-#         strip.text = element_text(size = 12),
-#         axis.text.x = element_text(angle = 45, hjust = 1),
-#         plot.title = element_text(hjust = 0.5)
-#     )
+    plot_spatial_friction <- ggplot() +
+        geom_ribbon(
+            data = df_envelope,
+            aes(x = KP, ymin = ymin, ymax = ymax, fill = ID)
+        ) +
+        geom_line(
+            data = df_MAP,
+            aes(x = KP, y = Value, color = ID)
+        ) +
+        scale_fill_manual(values = c("Parametric\nuncertainty" = "pink")) +
+        scale_color_manual(values = c("MAP" = "black")) +
+        labs(
+            title = "Friction coefficient estimation with parametric uncertainty",
+            x = "Lengthwise position (meters)",
+            y = expression("Friction coefficient (m"^
+                {
+                    1 / 3
+                } * "/s)"),
+            fill = NULL,
+            color = NULL
+        ) +
+        theme_bw() +
+        theme(
+            plot.title = element_text(hjust = 0.5)
+        )
+    # Save plot and data
+    ggsave(
+        filename = file.path(path_post_traitement, "friction_estimation.png"),
+        plot = plot_spatial_friction,
+        dpi = 200, width = 1300, height = 750,
+        units = "px"
+    )
+    save(plot_spatial_friction,
+        file = file.path(path_post_traitement_data, "friction_estimation_plot.RData")
+    )
 
-# # Residuals
-# residuals_long <- residuals_extraction %>%
-#     pivot_longer(
-#         cols = starts_with("Y"),
-#         names_to = c("variable", "type"),
-#         names_pattern = "(Y\\d+)_(res)",
-#         values_to = "value"
-#     ) %>%
-#     drop_na() %>%
-#     mutate(
-#         variable = recode(variable, !!!name_map),
-#         variable = factor(variable, levels = position_labels), # enforce order
-#         value = value * 1000
-#     )
+    ls_spatial_friction <- list(
+        df_envelope = df_envelope,
+        df_MAP = df_MAP
+    )
+    save(ls_spatial_friction,
+        file = file.path(path_post_traitement_data, "friction_estimation_data.RData")
+    )
 
-# # Step 2: Plot
-# ggplot(residuals_long, aes(x = X1_obs, y = value, color = type)) +
-#     geom_point() +
-#     geom_hline(yintercept = 0, linetype = "dashed", col = "black") +
-#     facet_wrap(~variable, scales = "free_y") +
-#     theme_bw() +
-#     labs(
-#         x = "Position (m)", y = "Residuals (m)",
-#         title = "Residual at each time used during calibration"
-#     ) +
-#     theme(
-#         strip.text = element_text(size = 12),
-#         axis.text.x = element_text(angle = 45, hjust = 1),
-#         plot.title = element_text(hjust = 0.5)
-#     )
+    # Residuals simulatation vs observations
+    residuals <- read.table(file.path(path_polynomial, "Results_Residuals.txt"), header = TRUE)
 
+    residuals_extraction <- residuals[, c(1, 3:(2 + nY), (nY * 2 + 2 + 1):(nY * 4 + 2))]
+    for (i in 1:ncol(residuals_extraction)) {
+        residuals_extraction[which(residuals_extraction[, i] == -9999), i] <- NA
+    }
 
-# # Friction coefficient simulation with the MaxPost
-# summary_data <- read.table(file.path(path_results, "Results_Summary.txt"), header = TRUE)
+    col_names <- paste0("Y", 1:nY)
+    position_labels <- paste("Time:", sequence_all)
 
-# param_matrix <- as.numeric(summary_data["MaxPost", 1:(n_degree + 1)])
+    # Create named vector to use in recoding
+    name_map <- setNames(position_labels, col_names)
 
-# k_estimated <- as.matrix(matrix_zFileKmin) %*% param_matrix
+    # Step 1: Gather observed and simulated values into long format
+    sim_obs_output_variable_long <- residuals_extraction %>%
+        pivot_longer(
+            cols = starts_with("Y"),
+            names_to = c("variable", "type"),
+            names_pattern = "(Y\\d+)_(obs|sim)",
+            values_to = "value"
+        ) %>%
+        drop_na() %>%
+        mutate(
+            value = value * 1000,
+            variable = recode(variable, !!!name_map),
+            variable = factor(variable, levels = position_labels) # enforce order
+        )
 
-# position <- read.table(file.path(path_results, "vector_legendre.txt"), header = TRUE)
+    # Step 2: Plot
+    plot_sim_obs_cal_WS_profiles <- ggplot(
+        sim_obs_output_variable_long,
+        aes(x = X1_obs, y = value, color = type, alpha = type)
+    ) +
+        geom_point(size = 2) +
+        facet_wrap(~variable, scales = "free_y") +
+        theme_bw() +
+        labs(
+            x = "Lengthwise position (meters)",
+            y = "Stage (mm)",
+            title = "Comparison of simulated and observed water surface profiles \nCalibration : water surface profiles "
+        ) +
+        theme(
+            strip.text = element_text(size = 12),
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            plot.title = element_text(hjust = 0.5)
+        ) +
+        scale_alpha_manual(values = c(sim = 0.4, obs = 1))
+    # Save plot and data
+    ggsave(
+        filename = file.path(path_post_traitement, "output_var_comparison.png"),
+        plot = plot_sim_obs_cal_WS_profiles,
+        dpi = 200, width = 1500, height = 1000,
+        units = "px"
+    )
+    save(plot_sim_obs_cal_WS_profiles,
+        file = file.path(path_post_traitement_data, "output_var_comparison_plot.RData")
+    )
 
-# df <- data.frame(
-#     x = position[, 1],
-#     y = k_estimated,
-#     id = "MaxPost"
-# )
+    save(sim_obs_output_variable_long,
+        file = file.path(path_post_traitement_data, "output_var_comparison_data.RData")
+    )
+    # Residuals
+    resdiuals_sim_obs_output_variable_long <- residuals_extraction %>%
+        pivot_longer(
+            cols = starts_with("Y"),
+            names_to = c("variable", "type"),
+            names_pattern = "(Y\\d+)_(res)",
+            values_to = "value"
+        ) %>%
+        drop_na() %>%
+        mutate(
+            value = value * 1000,
+            variable = recode(variable, !!!name_map),
+            variable = factor(variable, levels = position_labels) # enforce order
+        )
 
-# ggplot(df, aes(x = x, y = y, color = id)) +
-#     geom_point() +
-#     theme_bw() +
-#     labs(
-#         x = "Lengthwise position (meters)",
-#         y = expression("Friction coefficient (m"^
-#             {
-#                 1 / 3
-#             } * "/s)"),
-#     )
+    # Step 2: Plot
+    plot_res_cal_WS_profiles <- ggplot(resdiuals_sim_obs_output_variable_long, aes(x = X1_obs, y = value, color = type)) +
+        geom_point() +
+        geom_hline(yintercept = 0, linetype = "dashed", col = "black") +
+        facet_wrap(~variable, scales = "fixed") +
+        theme_bw() +
+        labs(
+            x = "Lengthwise position (meters)",
+            y = "Residuals (mm)",
+            title = "Residuals water surface profiles \nCalibration : water surface profiles"
+        ) +
+        theme(
+            strip.text = element_text(size = 12),
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            plot.title = element_text(hjust = 0.5)
+        )
+    # Save plot and data
+    ggsave(
+        filename = file.path(path_post_traitement, "residual_output_var_comparison.png"),
+        plot = plot_res_cal_WS_profiles,
+        dpi = 200, width = 1500, height = 1000,
+        units = "px"
+    )
+    save(plot_res_cal_WS_profiles,
+        file = file.path(path_post_traitement_data, "residual_output_var_comparison_plot.RData")
+    )
+
+    save(resdiuals_sim_obs_output_variable_long,
+        file = file.path(path_post_traitement_data, "residual_output_var_comparison_data.RData")
+    )
+}
 
 
 # # PREDICTION :
