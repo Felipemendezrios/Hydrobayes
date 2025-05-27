@@ -17,10 +17,11 @@ setwd(workspace)
 # 'Calibration_water_surface_profiles'
 path_results <- "Calibration_time_series"
 path_model_mage_global <- "model_mage"
-check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
 final_results <- TRUE
 n_degree_max <- 4
 
+# Check
+check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
 # Create a sequence of numbers: time fixed to extract simulation
 if (check_cal_WS_profiles) {
     sequence <- seq(0.95, 3.95, by = 1)
