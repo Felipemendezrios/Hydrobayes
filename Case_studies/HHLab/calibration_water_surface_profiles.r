@@ -22,6 +22,8 @@ nCycles <- 10 # Number of cycles
 burn <- 0.5 # Percentage of data burned
 nSlim <- 5 # Slim factor: after burning, only one iteration each Nslim is kept.
 
+do_calibration <- FALSE
+
 # Define Mage executable path, hard to define because depending on the machine. Avoid blank spaces!
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
 Mage_extraire_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage_extraire"
@@ -541,7 +543,13 @@ for (n_degree in n_degree_seq) {
     }
 
     path_model_mage <- file.path(path_polynomial, path_model_mage_global)
+    path_BaM_object <- file.path(path_polynomial, "BaM_object_calibration")
 
+    if (!dir.exists(path_BaM_object)) {
+        dir.create(path_BaM_object)
+    } else {
+        file.remove(list.files(path_BaM_object, full.names = TRUE))
+    }
     # dataset object
     data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(workspace, path_polynomial))
 
@@ -854,17 +862,26 @@ for (n_degree in n_degree_seq) {
         thetaStd = jump_MCMC_theta_param,
         gammaStd = jump_MCMC_error_model
     )
+    mcmcCooking_user <- mcmcCooking(
+        burn = burn,
+        nSlim = nSlim
+    )
+    mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
+    workspace_user <- file.path(workspace, path_polynomial)
+    # Save all data used during calibration for prediction
+    save(mod, data, remant_error_list,
+        mcmcOptions_user, mcmcCooking_user,
+        mcmcSummary_user, workspace_user,
+        file = file.path(path_BaM_object, "BaM_objects.RData")
+    )
     # Write the file but not run BaM exe
     BaM(
         mod = mod,
         data = data,
         remnant = remant_error_list,
         mcmc = mcmcOptions_user,
-        cook = mcmcCooking(
-            burn = burn,
-            nSlim = nSlim
-        ),
-        summary = mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
+        cook = mcmcCooking_user,
+        summary = mcmcSummary_user,
         residuals = residualOptions(),
         pred = NULL,
         doCalib = TRUE,
@@ -872,7 +889,7 @@ for (n_degree in n_degree_seq) {
         na.value = -9999,
         run = FALSE,
         preClean = FALSE,
-        workspace = file.path(workspace, path_polynomial),
+        workspace = workspace_user,
         dir.exe = dir_exe_BaM,
         name.exe = "BaM",
         predMaster_fname = "Config_Pred_Master.txt"
@@ -881,11 +898,13 @@ for (n_degree in n_degree_seq) {
     # Move Config_BaM.txt file to the result folder
     file.copy(from = dir_cf, to = path_polynomial, overwrite = TRUE)
 
-    system2(
-        command = file.path(dir_exe_BaM, "BaM"),
-        args = c("-cf", file.path(workspace, path_results, paste0("n_", n_degree, "/Config_BaM.txt"))),
-        wait = FALSE
-    )
+    if (do_calibration) {
+        system2(
+            command = file.path(dir_exe_BaM, "BaM"),
+            args = c("-cf", file.path(workspace, path_results, paste0("n_", n_degree, "/Config_BaM.txt"))),
+            wait = FALSE
+        )
+    }
 }
 
 # # PREDICTION :
