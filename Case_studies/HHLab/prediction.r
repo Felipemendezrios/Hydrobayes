@@ -42,6 +42,13 @@ for (n_degree in n_degree_seq) {
     path_polynomial <- file.path(path_results, paste0("n_", n_degree))
     if (!dir.exists(path_polynomial)) stop(paste0("Polynomial degree ", n_degree, " is not performed yet. Please do the calibration"))
 
+    if (!file.exists(file.path(
+        path_polynomial,
+        "Results_Cooking.txt"
+    ))) {
+        stop("Calibration is not performed yet")
+    }
+
     # Load data and model used during calibration
     path_BaM_object <- file.path(path_polynomial, "BaM_object_calibration")
     load(file.path(path_BaM_object, "BaM_objects.RData"))
