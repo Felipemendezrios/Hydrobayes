@@ -9,7 +9,11 @@ library(tidyr)
 workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab"
 setwd(workspace)
 
-path_results <- "Calibration_water_surface_profiles"
+# Here, define calibration type
+# 'Calibration_time_series'
+# 'Calibration_water_surface_profiles'
+path_results <- "Calibration_time_series"
+
 path_model_mage_global <- "model_mage"
 path_data <- "data_smooth_bed"
 
@@ -19,10 +23,26 @@ nSlim_ZData <- 1
 
 # BaM! model
 nCycles <- 10 # Number of cycles
-burn <- 0.5 # Percentage of data burned
-nSlim <- 5 # Slim factor: after burning, only one iteration each Nslim is kept.
+burn <- 0.2 # Percentage of data burned
+nSlim <- 2 # Slim factor: after burning, only one iteration each Nslim is kept.
 
-do_calibration <- FALSE
+do_calibration <- TRUE
+n_degree_max <- 4
+
+# Prior on friction coefficients
+# ref : https://www.hec.usace.army.mil/confluence/rasdocs/ras1dtechref/6.1/modeling-culverts/culvert-data-and-coefficients/manning-s-roughness-coefficient
+
+Ks_glass_quantiles <- c(1 / 0.013, 1 / 0.009)
+# Estimate mean
+prior_ks_mage <- 1 / 0.010
+RUG_Kmoy <- 10
+
+## MCMC jump options:
+jump_MCMC_theta_param_user <- 10
+jump_MCMC_error_model_user <- 0.005
+# Threshold to assign jump MCMC user-defined to the error model.
+# If value = 0.5 (meters), it indicates that if initial guess for error model is higher than 0.5 m, the jump mcmc error model will be defined by the user rather than default value (0.1*initial guess)
+threshold_jump_MCMC_error_model <- 0.5
 
 # Define Mage executable path, hard to define because depending on the machine. Avoid blank spaces!
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
@@ -35,7 +55,7 @@ Mage_extraire_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage
 FilesNames <- list.files(path_model_mage_global, recursive = T)
 dir_REPFile <- FilesNames[grep(FilesNames, pattern = ".REP")]
 # Define the fixed-width format for each line : Result of Fortran coding format
-col_widths <- c(1, 3, 6, 10, 10, 10, 10)
+col_widths_RUGFile <- c(1, 3, 6, 10, 10, 10, 10)
 
 # Load calibration data:
 load(file.path(
@@ -50,63 +70,72 @@ all_data_calibration <- list(WS_profiles = WS_profiles)
 # Total number of discretization points required for Legendre polynomial calculations
 total_points <- 200
 doInterpolation <- TRUE
+#############################################
+# Check
+if (!any(path_results == "Calibration_water_surface_profiles" |
+    path_results == "Calibration_time_series")) {
+    stop("No valid calibration case defined. Choose either 'Calibration_water_surface_profiles' or 'Calibration_time_series'.")
+}
+
+check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
 # Create a sequence of numbers: time fixed to extract simulation
-sequence <- seq(0.95, 3.95, by = 1)
+if (check_cal_WS_profiles) {
+    # Create a sequence of numbers: time fixed to extract simulation (Y)
+    sequence <- seq(0.95, 3.95, by = 1)
 
-# Find the maximum number of decimal places
-max_decimals <- max(sapply(sequence, function(x) nchar(sub(".*\\.", "", as.character(x)))))
-
-sequence_all <- c(
-    sequence
-)
-
-sequence_all <- sort(round(sequence_all, max_decimals))
-
-# Mage extraire arguments
-mage_extraire_args <- lapply(sequence_all, function(x) paste0("ZdX 1 h", trimws(format(x, nsmall = max_decimals))))
-
-# Time to introduce calibration data (in hours)
-# Time mapping between cases with constant discharge (id_case) and simulation time (time_fixed) for extraction, all consistent with the MAGE model!!
-time_mapping_temp <- data.frame(
-    id_case = c(
-        "case_60_60",
-        "case_30_30",
-        "case_15_15",
-        "case_07_07"
+    sequence_all <- c(
+        sequence
     )
-    # ,
-    # time_fixed = c(
-    #     0.95,
-    #     1.95,
-    #     2.95,
-    #     3.95
-    # )
-)
 
-# Assign the number of output for WS profiles with the time fixed
-# Variable extraction
-first_char <- substr(unlist(mage_extraire_args), 1, 3)
 
-# Position or time extraction
-last_number <- stringr::str_extract(unlist(mage_extraire_args), "\\d+\\.\\d+$")
+    # Find the maximum number of decimal places
+    max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
 
-extraction_data_mage_extraire_args <- paste0(first_char, "_", last_number)
+    sequence_all <- sort(round(sequence_all, max_decimals))
 
-# Repeat and bind rows with extraction labels
-# time_mapping_temp2 <- do.call(rbind, lapply(extraction_data_mage_extraire_args, function(val) {
-#     df <- time_mapping_temp
-#     df$id_position <- val
-#     df
-# }))
+    # Mage extraire arguments
+    mage_extraire_args <- lapply(
+        sequence_all,
+        function(x) {
+            paste0(
+                "ZdX 1 h",
+                trimws(format(x,
+                    nsmall = max_decimals
+                ))
+            )
+        }
+    )
 
-time_mapping_temp2 <- cbind(time_mapping_temp,
-    id_position = extraction_data_mage_extraire_args
-)
+    # Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
+    # For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
+    time_mapping_temp <- data.frame(
+        # id from dataset order (flow steps configuration)
+        id_case = c(
+            "case_60_60",
+            "case_30_30",
+            "case_15_15",
+            "case_07_07"
+        )
+    )
 
-# Define the position to monitor the WS (observations)
-# id_fixed <- data.frame(id_fixed = unique(unlist(lapply(WS_profiles, function(df) df$x))))
-id_fixed <- data.frame(
-    id_fixed = c(
+    # Position to put the observed data in the grid
+    id_fixed <- data.frame(
+        id_fixed = c(
+            0.060,
+            0.650,
+            1.650,
+            3.650,
+            5.650,
+            7.650,
+            9.650,
+            11.650,
+            15.650
+        )
+    )
+} else {
+    # Create a sequence: position fixed to extract simulation (Y)
+    # If bug would detect, it could be the number of decimals imposed by mage ?
+    sequence_all <- c(
         0.060,
         0.650,
         1.650,
@@ -117,132 +146,191 @@ id_fixed <- data.frame(
         11.650,
         15.650
     )
-)
-time_mapping <- merge(id_fixed, time_mapping_temp2, by = NULL)
+    # Find the maximum number of decimal places
+    max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
+
+    sequence_all <- sort(round(sequence_all, max_decimals))
+
+    # Mage extraire arguments
+    mage_extraire_args <- lapply(
+        sequence_all,
+        function(x) {
+            paste(
+                "ZdT 1",
+                format(x, nsmall = max_decimals)
+            )
+        }
+    )
+
+    # Time to introduce calibration data (in hours)
+    # Time mapping between cases with constant discharge (id_case) and simulation time (id_fixed) for extraction, all consistent with the MAGE model!!
+    time_mapping_temp <- data.frame(
+        # id from dataset order (flow steps configuration)
+        id_case = c(
+            "case_60_60",
+            "case_30_30",
+            "case_15_15",
+            "case_07_07"
+        ),
+        # time to put the observed data in the grid
+        id_fixed = c(
+            0.95,
+            1.95,
+            2.95,
+            3.95
+        )
+    )
+}
 
 # Number of output variables : defined in mage_extraire_args
 nY <- length(mage_extraire_args)
 
-############################
-# Module mage
-############################
+# Assign the number of output for WS profiles with the time fixed
+# Variable extraction
+first_char <- substr(unlist(mage_extraire_args), 1, 3)
 
-#-----------------------------------------------------------#
-#                            PAR FILE :                     #
-#-----------------------------------------------------------#
-# Read time of simulation from MAGE model (.PAR)
-# SimulationTimeModel <- read.table(
-#     file = file.path(file.path(
-#         path_model_mage,
-#         FilesNames[grep(FilesNames, pattern = ".PAR")]
-#     )),
-#     sep = "",
-#     header = F,
-#     skip = 1,
-#     nrows = 3 # be careful timestep could be different to timestep_bin
-# )
-# SimulationTimeModelDF <- sapply(
-#     sapply(SimulationTimeModel[-3, 2],
-#         str_split,
-#         pattern = ":",
-#         simplify = TRUE
-#     ),
-#     as.numeric
-# )
-# # Get the simulation time in seconds
-# for (i in 1:ncol(SimulationTimeModelDF)) {
-#     sim_time_temp <- SimulationTimeModelDF[, i] * c(86400, 3600, 60, 1)
-#     if (i == 1) {
-#         start_run <- sum(sim_time_temp)
-#     } else {
-#         end_run <- sum(sim_time_temp)
-#     }
-# }
-# # Get time step of the simulation
-# TimeStep <- as.numeric(SimulationTimeModel[3, 2])
-# # Size of observation data
-# SizeObs <- (end_run - start_run) / TimeStep + 1
-# # Define input data for BaM! model
-# X <- data.frame(time_hours = round(
-#     seq(
-#         from = 0,
-#         by = TimeStep / 3600, # Get time in hours
-#         length.out = SizeObs
-#     ),
-#     2
-# ))
+# Position or time extraction
+last_number <- stringr::str_extract(unlist(mage_extraire_args), "\\d+\\.\\d+$")
 
-### Affect input variable for BaM!: spatial grid
-#-----------------------------------------------------------#
-#                            NET FILE :                     #
-#-----------------------------------------------------------#
+extraction_data_mage_extraire_args <- paste0(first_char, "_", last_number)
 
-REPFile <- read.table(file.path(path_model_mage_global, dir_REPFile),
-    comment.char = "*"
-)
+if (check_cal_WS_profiles) {
+    time_mapping_temp2 <- cbind(time_mapping_temp,
+        id_position = extraction_data_mage_extraire_args
+    )
 
-dir.NETFile <- REPFile["NET", ]
+    time_mapping <- merge(id_fixed, time_mapping_temp2, by = NULL)
 
-NETFile <- read.table(file.path(path_model_mage_global, dir.NETFile),
-    comment.char = "*"
-)
+    ############################
+    # Module mage
+    ############################
 
-# Read dir ST file
-dir.STFiles <- NETFile[, 4]
-# Initialize the size of the list depending on the number of reaches
-Cross_sections_by_reach <- rep(list(0), nrow(NETFile))
 
-for (j in 1:length(dir.STFiles)) {
-    STFile <- readLines(file.path(path_model_mage_global, dir.STFiles[j]))
+    ### Affect input variable for BaM!: spatial grid
+    #-----------------------------------------------------------#
+    #                            NET FILE :                     #
+    #-----------------------------------------------------------#
 
-    # Collect the KP of the ST file
-    KP_elements <- c()
+    REPFile <- read.table(file.path(path_model_mage_global, dir_REPFile),
+        comment.char = "*"
+    )
 
-    # Get the first line
-    first_line <- STFile[grep("^#", STFile, invert = TRUE)[1]]
-    # Split values
-    split_line <- strsplit(first_line, "\\s+")[[1]]
-    split_line <- split_line[split_line != ""]
+    dir.NETFile <- REPFile["NET", ]
 
-    KP_elements <- c(KP_elements, split_line[5])
+    NETFile <- read.table(file.path(path_model_mage_global, dir.NETFile),
+        comment.char = "*"
+    )
 
-    # Identify which lines contain "999.9990"
-    marker_lines <- grep("999\\.9990", STFile)
+    # Read dir ST file
+    dir.STFiles <- NETFile[, 4]
+    # Initialize the size of the list depending on the number of reaches
+    Cross_sections_by_reach <- rep(list(0), nrow(NETFile))
 
-    for (i in marker_lines) {
-        if (i + 1 <= length(STFile)) {
-            next_line <- STFile[i + 1]
-            split_line <- strsplit(next_line, "\\s+")[[1]]
-            split_line <- split_line[split_line != ""] # Remove empty entries
-            if (length(split_line) == 6 || length(split_line) == 5) {
-                KP_elements <- c(KP_elements, split_line[5])
+    for (j in 1:length(dir.STFiles)) {
+        STFile <- readLines(file.path(path_model_mage_global, dir.STFiles[j]))
+
+        # Collect the KP of the ST file
+        KP_elements <- c()
+
+        # Get the first line
+        first_line <- STFile[grep("^#", STFile, invert = TRUE)[1]]
+        # Split values
+        split_line <- strsplit(first_line, "\\s+")[[1]]
+        split_line <- split_line[split_line != ""]
+
+        KP_elements <- c(KP_elements, split_line[5])
+
+        # Identify which lines contain "999.9990"
+        marker_lines <- grep("999\\.9990", STFile)
+
+        for (i in marker_lines) {
+            if (i + 1 <= length(STFile)) {
+                next_line <- STFile[i + 1]
+                split_line <- strsplit(next_line, "\\s+")[[1]]
+                split_line <- split_line[split_line != ""] # Remove empty entries
+                if (length(split_line) == 6 || length(split_line) == 5) {
+                    KP_elements <- c(KP_elements, split_line[5])
+                }
             }
         }
+        Cross_sections_by_reach[[j]] <- as.numeric(KP_elements)
     }
-    Cross_sections_by_reach[[j]] <- as.numeric(KP_elements)
+
+    # When a single reach is analyzed, the code run.
+    # However, if it is a multiple reach case, we need to think how to handle it
+    if (length(Cross_sections_by_reach) > 1) stop("Must be set for multiple reaches cases, at the moment only a single reach case is available")
+
+    X <- data.frame(id_order = Cross_sections_by_reach[[1]])
+} else {
+    # Repeat and bind rows with extraction labels
+    time_mapping <- do.call(rbind, lapply(extraction_data_mage_extraire_args, function(val) {
+        df <- time_mapping_temp
+        df$id_position <- val
+        df
+    }))
+
+
+    ############################
+    # Module mage
+    ############################
+    #-----------------------------------------------------------#
+    #                            PAR FILE :                     #
+    #-----------------------------------------------------------#
+    # Read time of simulation from MAGE model (.PAR)
+    SimulationTimeModel <- read.table(
+        file = file.path(file.path(
+            path_model_mage_global,
+            FilesNames[grep(FilesNames, pattern = ".PAR")]
+        )),
+        sep = "",
+        header = F,
+        skip = 1,
+        nrows = 3 # be careful timestep could be different to timestep_bin
+    )
+    SimulationTimeModelDF <- sapply(
+        sapply(SimulationTimeModel[-3, 2],
+            str_split,
+            pattern = ":",
+            simplify = TRUE
+        ),
+        as.numeric
+    )
+    # Get the simulation time in seconds
+    for (i in 1:ncol(SimulationTimeModelDF)) {
+        sim_time_temp <- SimulationTimeModelDF[, i] * c(86400, 3600, 60, 1)
+        if (i == 1) {
+            start_run <- sum(sim_time_temp)
+        } else {
+            end_run <- sum(sim_time_temp)
+        }
+    }
+    # Get time step of the simulation
+    TimeStep <- as.numeric(SimulationTimeModel[3, 2])
+    # Size of observation data
+    SizeObs <- (end_run - start_run) / TimeStep + 1
+    # Define input data for BaM! model
+    X <- data.frame(time_hours = round(
+        seq(
+            from = 0,
+            by = TimeStep / 3600, # Get time in hours
+            length.out = SizeObs
+        ),
+        2
+    ))
+
+    Cross_section_calibration_dT <- sapply(mage_extraire_args, function(arg) {
+        if (grepl(arg, pattern = "dT")) {
+            split_text <- strsplit(arg, " ")[[1]]
+            return(as.numeric(split_text[length(split_text)]))
+        } else {
+            return(NA) # Retourne NA si le motif "dT" n'est pas trouvé
+        }
+    })
+    # Remove NA (dX detected)
+    Cross_section_calibration_dT <- Cross_section_calibration_dT[!is.na(Cross_section_calibration_dT)]
+    # Remove repeated positions and get specific points defined in mage_extraire_args
+    specific_points_CalStations <- unique(Cross_section_calibration_dT)
 }
-
-# When a single reach is analyzed, the code run.
-# However, if it is a multiple reach case, we need to think how to handle it
-if (length(Cross_sections_by_reach) > 1) stop("Must be set for multiple reaches cases, at the moment only a single reach case is available")
-
-X <- data.frame(id_order = Cross_sections_by_reach[[1]])
-
-# Cross_section_calibration_dT <- sapply(mage_extraire_args, function(arg) {
-#     if (grepl(arg, pattern = "dX")) {
-#         split_text <- strsplit(arg, " ")[[1]]
-#         return(as.numeric(split_text[length(split_text)]))
-#     } else {
-#         return(NA) # Retourne NA si le motif "dT" n'est pas trouvé
-#     }
-# })
-# # Remove NA (dX detected)
-# Cross_section_calibration_dT <- Cross_section_calibration_dT[!is.na(Cross_section_calibration_dT)]
-# # Remove repeated positions and get specific points defined in mage_extraire_args
-# specific_points_CalStations <- unique(Cross_section_calibration_dT)
-
-# specify the time to get observation during calibration
-# specific_points_CalStations = extraction_data_mage_extraire_args
 
 # Declaration of the variable
 Data_Measured <- setNames(vector("list", length(all_data_calibration)), names(all_data_calibration))
@@ -265,21 +353,24 @@ if (logical_WS_Calibration) {
         Data_Measured[[id_WS_calibration]] <- rbind(Data_Measured[[id_WS_calibration]], Data_Measured_temp)
     }
     ######
-    # Get the "X" or 'PK' of the model defined in mage_extraire_args (
-    # case WSL, need to be adapted for time series!)
-    data_obs_calibration_temp <- Data_Measured[[id_WS_calibration]] %>%
-        # filter(Data_Measured[[id_WS_calibration]]$x %in% specific_points_CalStations)
-        filter(Data_Measured[[id_WS_calibration]]$x %in% X[, 1])
+    # Get the "X" or 'PK' of the model defined in mage_extraire_args
+    if (check_cal_WS_profiles) {
+        data_obs_calibration_temp <- Data_Measured[[id_WS_calibration]] %>%
+            filter(Data_Measured[[id_WS_calibration]]$x %in% X[, 1])
 
-    # # Find the maximum number of decimal places
-    # max_decimals <- max(sapply(data_obs_calibration_temp$x, function(x) nchar(sub(".*\\.", "", as.character(x)))))
+        data_obs_calibration <- time_mapping %>%
+            left_join(data_obs_calibration_temp, by = c("id_case", "id_fixed" = "x"))
+    } else {
+        data_obs_calibration_temp <- Data_Measured[[id_WS_calibration]] %>%
+            filter(Data_Measured[[id_WS_calibration]]$x %in% specific_points_CalStations)
 
-    # Fusionner avec les données originales
-    # data_obs_calibration_temp <- data_obs_calibration_temp %>%
-    #     mutate(id_position = paste0("ZdX_", trimws(format(x, nsmall = max_decimals, scientific = FALSE))))
+        # Fusion with the original data
+        data_obs_calibration_temp <- data_obs_calibration_temp %>%
+            mutate(id_position = paste0(first_char[1], "_", trimws(format(x, nsmall = max_decimals, scientific = FALSE))))
 
-    data_obs_calibration <- time_mapping %>%
-        left_join(data_obs_calibration_temp, by = c("id_case", "id_fixed" = "x"))
+        data_obs_calibration <- time_mapping %>%
+            left_join(data_obs_calibration_temp, by = c("id_case", "id_position"))
+    }
 
     ####################################
     # Assign data
@@ -333,7 +424,7 @@ if (logical_WS_Calibration) {
         Y <- data.frame(Y)
         colnames(Y) <- colnames(CalData)[2]
     }
-    colnames(Y) <- paste0("Y_", colnames(Y))
+    # colnames(Y) <- paste0("Y_", colnames(Y))
 
     Yu <- data.frame(matrix(NA, nrow = nrow(X), ncol = nY))
     colnames(Yu) <- colnames(Y)
@@ -349,9 +440,9 @@ if (logical_WS_Calibration) {
 #                            RUG FILE :                     #
 #-----------------------------------------------------------#
 # Read RUG file
-read_fortran_data <- function(file_path, col_widths, skip = 0) {
+read_fortran_data <- function(file_path, col_widths_RUGFile, skip = 0) {
     # Read the file with the fixed-width format
-    data <- read.fwf(file_path, widths = col_widths, header = FALSE, skip = skip)
+    data <- read.fwf(file_path, widths = col_widths_RUGFile, header = FALSE, skip = skip)
     return(data)
 }
 
@@ -360,7 +451,7 @@ Read_RUGFile <- read_fortran_data(
         path_model_mage_global,
         FilesNames[grep(FilesNames, pattern = ".RUG")]
     ),
-    col_widths = col_widths,
+    col_widths_RUGFile = col_widths_RUGFile,
     skip = 1
 )
 
@@ -395,15 +486,21 @@ for (i in 1:length(Nb_reaches)) {
     }
 }
 
-specific_points <- unique(sort(c(
-    specific_points_Model$KP_start,
-    specific_points_Model$KP_end
-    # specific_points_CalStations
-)))
+if (check_cal_WS_profiles) {
+    specific_points <- unique(sort(c(
+        specific_points_Model$KP_start,
+        specific_points_Model$KP_end
+    )))
+} else {
+    specific_points <- unique(sort(c(
+        specific_points_Model$KP_start,
+        specific_points_Model$KP_end,
+        specific_points_CalStations
+    )))
+    specific_points_CalStations <- sort(specific_points_CalStations)
+}
 ##### Return module_mage
-
 all_specific_points <- specific_points
-# specific_points_CalStations <- sort(specific_points_CalStations)
 
 #######################################
 # Come back to the specific case module
@@ -511,11 +608,6 @@ grid_covariant_meshed_Model <- get_covariant_meshed(
 ##############################################
 #####  Polynomial de legendre
 ##############################################
-
-###############################
-# n iteration : methodology
-###############################
-n_degree_max <- 4
 n_degree_seq <- seq(0, n_degree_max, 1)
 
 dir_exe_BaM <- file.path(find.package("RBaM"), "bin")
@@ -525,6 +617,8 @@ for (n_degree in n_degree_seq) {
     path_polynomial <- file.path(path_results, paste0("n_", n_degree))
     if (!dir.exists(path_polynomial)) {
         dir.create(path_polynomial)
+    } else {
+        unlink(path_polynomial, recursive = TRUE)
     }
 
     # Get model mage files
@@ -569,18 +663,11 @@ for (n_degree in n_degree_seq) {
     ######################################################
     # Estimation of the prior on the friction coefficient
     ######################################################
-    # ref : https://www.hec.usace.army.mil/confluence/rasdocs/ras1dtechref/6.1/modeling-culverts/culvert-data-and-coefficients/manning-s-roughness-coefficient
-
-    Ks_glass_quantiles <- c(1 / 0.013, 1 / 0.009)
 
     # Estimate standard deviation
     prior_log_u_ks_mage <- (log(Ks_glass_quantiles[2]) - log(Ks_glass_quantiles[1])) / (2 * qnorm(0.975))
 
-    # Estimate mean
-    prior_ks_mage <- 1 / 0.010
-
     RUG_Kmin <- prior_ks_mage
-    RUG_Kmoy <- 10
 
     RUG_path <- file.path(
         path_model_mage,
@@ -627,7 +714,6 @@ for (n_degree in n_degree_seq) {
         RUG_format = "%1s%3d      %10.0f%10.0f%10.2f%10.2f"
     )
 
-    # Polynomial degree 0 :
     # Set Z file : cov_bar for the legendre polynomials
     min_cov_legendre <- min(grid_covariant_discretized)
     max_cov_legendre <- max(grid_covariant_discretized)
@@ -697,8 +783,6 @@ for (n_degree in n_degree_seq) {
     param_theta <- list(
         Kmin.init = prior_ks_mage,
         kmin.distri = "FlatPrior+",
-        # kmin.distri = "LogNormal",
-        # Kmin.prior.par = c(log(prior_ks_mage), prior_log_u_ks_mage),
         Kmoy.init = 10,
         kmoy.distri = "FIX"
     )
@@ -706,17 +790,10 @@ for (n_degree in n_degree_seq) {
     # hist(rlnorm(10000, log(prior_ks_mage), prior_log_u_ks_mage))
 
     param_error_model <- list(
-        ## Stage model error prior information (variation in time)
+        ## Stage model error prior information
         z.ini = 0.001,
         z.prior.dist = "FlatPrior"
-        # z.prior.dist = "Uniform",
-        # z.prior.par = c(0, 1)
     )
-
-    # prior_setting <- list(
-    #     param_theta = param_theta,
-    #     param_error_model = param_error_model
-    # )
 
     # Input
     remant_error <- list(
@@ -839,9 +916,6 @@ for (n_degree in n_degree_seq) {
     prior_error_model <- get_init_prior(remant_error_list)
     prior_theta_param <- get_init_prior(theta_param)
 
-    jump_MCMC_theta_param_user <- 10
-    jump_MCMC_error_model_user <- 0.005
-
     jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
         prior_theta_param[(prior_theta_param != 0)] * 0.1,
         jump_MCMC_theta_param_user
@@ -849,7 +923,7 @@ for (n_degree in n_degree_seq) {
 
     jump_MCMC_error_model <- list()
     for (ind in 1:length(prior_error_model)) {
-        jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > 0.5,
+        jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > threshold_jump_MCMC_error_model,
             prior_error_model[[ind]][(prior_error_model[[ind]] != 0)] * 0.1,
             jump_MCMC_error_model_user
         )
@@ -901,42 +975,8 @@ for (n_degree in n_degree_seq) {
     if (do_calibration) {
         system2(
             command = file.path(dir_exe_BaM, "BaM"),
-            args = c("-cf", file.path(workspace, path_results, paste0("n_", n_degree, "/Config_BaM.txt"))),
+            args = c("-cf", file.path(workspace_user, "/Config_BaM.txt")),
             wait = FALSE
         )
-        Sys.sleep(0.1)
     }
 }
-
-# # PREDICTION :
-
-# # Define the grid of stage values on which the rating curve will be computed
-# Tgrid <- data.frame(time = seq(0, 4, 0.05))
-# # Define a 'prediction' object for total predictive uncertainty
-# totalU <- prediction(
-#     X = Tgrid, # stage values
-#     spagFiles = "totalU.spag", # file where predictions are saved
-#     data.dir = file.path(getwd(), path_results), # a copy of data files will be saved here
-#     doParametric = TRUE, # propagate parametric uncertainty, i.e. MCMC samples?
-#     doStructural = TRUE
-# ) # propagate structural uncertainty ?
-# # Define a 'prediction' object for parametric uncertainty only - not the doStructural=FALSE
-# paramU <- prediction(
-#     X = Tgrid, spagFiles = "paramU.spag", data.dir = file.path(getwd(), path_results),
-#     doParametric = TRUE, doStructural = FALSE
-# )
-# # Define a 'prediction' object with no uncertainty - this corresponds to the 'maxpost' rating curve maximizing the posterior
-# maxpost <- prediction(
-#     X = Tgrid, spagFiles = "maxpost.spag", data.dir = file.path(getwd(), path_results),
-#     doParametric = FALSE, doStructural = FALSE
-# )
-# # Re-run BaM, but in prediction mode
-# BaM(
-#     mod = mod,
-#     data = data,
-#     remnant = rep(remant_error, mod$nY),
-#     pred = list(totalU, paramU, maxpost), # list of predictions,
-#     doCalib = FALSE,
-#     doPred = TRUE,
-#     workspace = file.path(getwd(), path_results)
-# )
