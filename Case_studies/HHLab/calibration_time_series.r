@@ -832,6 +832,7 @@ for (n_degree in n_degree_seq) {
             args = c("-cf", file.path(workspace, path_results, paste0("n_", n_degree, "/Config_BaM.txt"))),
             wait = FALSE
         )
+        Sys.sleep(0.1)
     }
 }
 
