@@ -74,7 +74,14 @@ dimensions_plot_sim_vs_obs <- if (check_cal_WS_profiles) {
         2000 # Height
     )
 }
-
+legend_name_col <- ifelse(check_cal_WS_profiles,
+    "Calibration : water surface profiles",
+    "Calibration : time series"
+)
+legend_wrap_name <- ifelse(check_cal_WS_profiles,
+    "Time: ",
+    "Position: "
+)
 
 
 # Do not touch
@@ -405,10 +412,12 @@ for (n_degree in n_degree_seq) {
     }
 
     col_names <- paste0("Y", 1:nY)
-    position_labels <- paste("Time:", sequence_all)
+    position_labels <- paste(legend_wrap_name, sequence_all)
 
     # Create named vector to use in recoding
     name_map <- setNames(position_labels, col_names)
+    # Save names of each wrap plot ordered
+    save(name_map, file = file.path(path_post_traitement_data, "names_plot_ordered.RData"))
 
     # Add uncertainty
     unc_CalData <- CalData_raw[, grep(colnames(CalData_raw), pattern = "Yu_")]
@@ -463,8 +472,6 @@ for (n_degree in n_degree_seq) {
             type = factor(type, levels = c("sim", "obs")),
             alpha_val = ifelse(type == "sim", 0.4, 1)
         )
-
-    legend_name_col <- ifelse(check_cal_WS_profiles, "Calibration : water surface profiles", "Calibration : time series")
 
     plot_sim_obs_cal_WS_profiles <-
         ggplot(
