@@ -65,8 +65,8 @@ dimensions_plot_friction <- c(
 )
 dimensions_plot_sim_vs_obs <- if (check_cal_WS_profiles) {
     c(
-        1500, # Width
-        1200 # Height
+        1600, # Width
+        1800 # Height
     )
 } else {
     c(
@@ -466,13 +466,13 @@ for (n_degree in n_degree_seq) {
 
     legend_name_col <- ifelse(check_cal_WS_profiles, "Calibration : water surface profiles", "Calibration : time series")
 
-    # plot_sim_obs_cal_WS_profiles <-
-    ggplot(
-        data = sim_obs_output_variable_long,
-        aes(
-            x = X1_obs, y = value, color = type
-        )
-    ) +
+    plot_sim_obs_cal_WS_profiles <-
+        ggplot(
+            data = sim_obs_output_variable_long,
+            aes(
+                x = X1_obs, y = value, color = type
+            )
+        ) +
         geom_line(
             data = filter(
                 sim_obs_output_variable_long,
@@ -500,13 +500,13 @@ for (n_degree in n_degree_seq) {
             na.rm = TRUE
         ) +
         scale_alpha_identity() +
-        facet_wrap(~ variable + value_unc, scales = "free_y") +
+        facet_wrap(~variable, scales = "free_y") +
         theme_bw() +
         labs(
             x = "Lengthwise position (meters)",
             y = "Stage (mm)",
             title = paste0("Comparison of simulated and observed \nwater surface profiles \n", legend_name_col),
-            col = "Data"
+            col = "Data (MAP)"
         ) +
         theme(
             strip.text = element_text(size = 12),
@@ -583,7 +583,7 @@ for (n_degree in n_degree_seq) {
             x = "Lengthwise position (meters)",
             y = "Residuals (mm)",
             title = paste0("Residuals water surface profiles \n", legend_name_col),
-            col = NULL
+            col = "Data (MAP)"
         ) +
         theme(
             strip.text = element_text(size = 12),
