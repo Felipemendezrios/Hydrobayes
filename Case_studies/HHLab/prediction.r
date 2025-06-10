@@ -11,7 +11,7 @@ setwd(workspace)
 # Here, define calibration type
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
-path_results <- "Calibration_water_surface_profiles"
+path_results <- "Calibration_time_series"
 n_degree_max <- 4
 do_prediction <- TRUE
 
@@ -26,7 +26,6 @@ dir_exe_BaM <- file.path(find.package("RBaM"), "bin")
 dir_cf <- file.path(dir_exe_BaM, "Config_BaM.txt")
 
 ###################################################
-path_results == "Calibration_water_surface_profiles"
 
 # Intitialization
 pred_confi_file_name <- c() # vector with setting prediction file name (Config_Pred_"type of prediction")
