@@ -16,7 +16,13 @@ setwd(workspace)
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
 path_results <- "Calibration_water_surface_profiles"
-path_model_mage_global <- "model_mage"
+
+# Logical to answer : calibration using all calibration data?
+cal_all_data_cal <- TRUE # if FALSE : Remove 14 LPS case
+
+# model_mage to consider Q=14 LPS or  model_mage_without_Q_14_LPS if Q=14 LPS will no be considered
+path_model_mage_global <- ifelse(cal_all_data_cal, "model_mage", "model_mage_without_Q_14_LPS")
+# path_model_mage_global <- "model_mage"
 final_results <- TRUE
 n_degree_max <- 4
 
@@ -24,8 +30,11 @@ n_degree_max <- 4
 check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
 # Create a sequence of numbers: time fixed to extract simulation
 if (check_cal_WS_profiles) {
-    sequence <- seq(0.95, 3.95, by = 1)
-
+    if (cal_all_data_cal) {
+        sequence <- seq(0.95, 3.95, by = 1)
+    } else {
+        sequence <- seq(0.95, 2.95, by = 1)
+    }
     sequence_all <- c(
         sequence
     )

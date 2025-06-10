@@ -12,9 +12,13 @@ setwd(workspace)
 # Here, define calibration type
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
-path_results <- "Calibration_water_surface_profiles"
+path_results <- "Calibration_time_series"
 
-path_model_mage_global <- "model_mage"
+# Logical to answer : calibration using all calibration data?
+cal_all_data_cal <- TRUE # if FALSE : Remove 14 LPS case
+
+# model_mage to consider Q=14 LPS or  model_mage_without_Q_14_LPS if Q=14 LPS will no be considered
+path_model_mage_global <- ifelse(cal_all_data_cal, "model_mage", "model_mage_without_Q_14_LPS")
 path_data <- "data_smooth_bed"
 
 # General setting options:
@@ -65,7 +69,13 @@ load(file.path(
 
 # User input:
 ## Give the information to use during calibration
-all_data_calibration <- list(WS_profiles = WS_profiles)
+if (cal_all_data_cal & path_model_mage_global != "model_mage") stop("if cal_all_data_cal = TRUE, path_model_mage_global must be model_mage")
+if (cal_all_data_cal) {
+    all_data_calibration <- list(WS_profiles = WS_profiles)
+} else {
+    WS_profiles[["case_07_07"]] <- NULL
+    all_data_calibration <- list(WS_profiles = WS_profiles)
+}
 
 # Total number of discretization points required for Legendre polynomial calculations
 total_points <- 200
@@ -81,7 +91,32 @@ check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
 # Create a sequence of numbers: time fixed to extract simulation
 if (check_cal_WS_profiles) {
     # Create a sequence of numbers: time fixed to extract simulation (Y)
-    sequence <- seq(0.95, 3.95, by = 1)
+    if (cal_all_data_cal) {
+        sequence <- seq(0.95, 3.95, by = 1)
+        # Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
+        # For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
+        time_mapping_temp <- data.frame(
+            # id from dataset order (flow steps configuration)
+            id_case = c(
+                "case_60_60",
+                "case_30_30",
+                "case_15_15",
+                "case_07_07"
+            )
+        )
+    } else {
+        sequence <- seq(0.95, 2.95, by = 1)
+        # Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
+        # For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
+        time_mapping_temp <- data.frame(
+            # id from dataset order (flow steps configuration)
+            id_case = c(
+                "case_60_60",
+                "case_30_30",
+                "case_15_15"
+            )
+        )
+    }
 
     sequence_all <- c(
         sequence
@@ -104,18 +139,6 @@ if (check_cal_WS_profiles) {
                 ))
             )
         }
-    )
-
-    # Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
-    # For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
-    time_mapping_temp <- data.frame(
-        # id from dataset order (flow steps configuration)
-        id_case = c(
-            "case_60_60",
-            "case_30_30",
-            "case_15_15",
-            "case_07_07"
-        )
     )
 
     # Position to put the observed data in the grid
@@ -160,24 +183,43 @@ if (check_cal_WS_profiles) {
         }
     )
 
-    # Time to introduce calibration data (in hours)
-    # Time mapping between cases with constant discharge (id_case) and simulation time (id_fixed) for extraction, all consistent with the MAGE model!!
-    time_mapping_temp <- data.frame(
-        # id from dataset order (flow steps configuration)
-        id_case = c(
-            "case_60_60",
-            "case_30_30",
-            "case_15_15",
-            "case_07_07"
-        ),
-        # time to put the observed data in the grid
-        id_fixed = c(
-            0.95,
-            1.95,
-            2.95,
-            3.95
+    if (cal_all_data_cal) {
+        # Time to introduce calibration data (in hours)
+        # Time mapping between cases with constant discharge (id_case) and simulation time (id_fixed) for extraction, all consistent with the MAGE model!!
+        time_mapping_temp <- data.frame(
+            # id from dataset order (flow steps configuration)
+            id_case = c(
+                "case_60_60",
+                "case_30_30",
+                "case_15_15",
+                "case_07_07"
+            ),
+            # time to put the observed data in the grid
+            id_fixed = c(
+                0.95,
+                1.95,
+                2.95,
+                3.95
+            )
         )
-    )
+    } else {
+        # Time to introduce calibration data (in hours)
+        # Time mapping between cases with constant discharge (id_case) and simulation time (id_fixed) for extraction, all consistent with the MAGE model!!
+        time_mapping_temp <- data.frame(
+            # id from dataset order (flow steps configuration)
+            id_case = c(
+                "case_60_60",
+                "case_30_30",
+                "case_15_15"
+            ),
+            # time to put the observed data in the grid
+            id_fixed = c(
+                0.95,
+                1.95,
+                2.95
+            )
+        )
+    }
 }
 
 # Number of output variables : defined in mage_extraire_args
