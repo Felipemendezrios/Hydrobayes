@@ -12,7 +12,7 @@ setwd(workspace)
 # Here, define calibration type
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
-path_results <- "Calibration_time_series"
+path_results <- "Calibration_water_surface_profiles"
 
 path_model_mage_global <- "model_mage"
 path_data <- "data_smooth_bed"
@@ -128,8 +128,7 @@ if (check_cal_WS_profiles) {
             5.650,
             7.650,
             9.650,
-            11.650,
-            15.650
+            11.650
         )
     )
 } else {
@@ -143,8 +142,7 @@ if (check_cal_WS_profiles) {
         5.650,
         7.650,
         9.650,
-        11.650,
-        15.650
+        11.650
     )
     # Find the maximum number of decimal places
     max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))

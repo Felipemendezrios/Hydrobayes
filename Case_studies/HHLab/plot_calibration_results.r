@@ -15,7 +15,7 @@ setwd(workspace)
 # Here, define calibration type
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
-path_results <- "Calibration_time_series"
+path_results <- "Calibration_water_surface_profiles"
 path_model_mage_global <- "model_mage"
 final_results <- TRUE
 n_degree_max <- 4
@@ -46,8 +46,7 @@ if (check_cal_WS_profiles) {
         5.650,
         7.650,
         9.650,
-        11.650,
-        15.650
+        11.650
     )
     # Find the maximum number of decimal places
     max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
@@ -82,7 +81,10 @@ legend_wrap_name <- ifelse(check_cal_WS_profiles,
     "Time: ",
     "Position: "
 )
-
+legend_x_name <- ifelse(check_cal_WS_profiles,
+    "Lengthwise position(meters)",
+    "Time (hours)"
+)
 
 # Do not touch
 n_degree_seq <- seq(0, n_degree_max, 1)
@@ -510,7 +512,7 @@ for (n_degree in n_degree_seq) {
         facet_wrap(~variable, scales = "free_y") +
         theme_bw() +
         labs(
-            x = "Lengthwise position (meters)",
+            x = legend_x_name,
             y = "Stage (mm)",
             title = paste0("Comparison of simulated and observed \nwater surface profiles \n", legend_name_col),
             col = "Data (MAP)"
@@ -587,7 +589,7 @@ for (n_degree in n_degree_seq) {
         facet_wrap(~variable, scales = "fixed") +
         theme_bw() +
         labs(
-            x = "Lengthwise position (meters)",
+            x = legend_x_name,
             y = "Residuals (mm)",
             title = paste0("Residuals water surface profiles \n", legend_name_col),
             col = "Data (MAP)"

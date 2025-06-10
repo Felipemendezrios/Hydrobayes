@@ -3,6 +3,8 @@ rm(list = ls())
 
 # Plots:
 library(ggplot2)
+library(dplyr)
+library(tidyr)
 
 workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab"
 setwd(workspace)
@@ -46,6 +48,7 @@ for (n_degree in n_degree_seq) {
     all_uncertainty_data <- c()
     # Polynomial degree i
     path_polynomial <- file.path(path_results, paste0("n_", n_degree))
+    if (!dir.exists(path_polynomial)) stop(paste0("Polynomial degree ", n_degree, " is not performed yet. Please do the calibration"))
     path_post_traitement <- file.path(path_polynomial, "post_traitement")
     path_post_traitement_data <- file.path(path_post_traitement, "RData")
     # Read observation
@@ -68,10 +71,14 @@ for (n_degree in n_degree_seq) {
 
     # Read grid
     grid <- read.table(file.path(path_polynomial, "X1.pred"), header = FALSE)$V1
-    if (!dir.exists(path_polynomial)) stop(paste0("Polynomial degree ", n_degree, " is not performed yet. Please do the calibration"))
+
     # Check
     check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
     legend_name_col <- ifelse(check_cal_WS_profiles, "Calibration : water surface profiles", "Calibration : time series")
+    legend_x_name <- ifelse(check_cal_WS_profiles,
+        "Lengthwise position(meters)",
+        "Time (hours)"
+    )
 
     for (prediction_case in all_prediction_case) {
         if (prediction_case == "Maxpost") {
@@ -153,6 +160,12 @@ for (n_degree in n_degree_seq) {
         all_uncertainty_data$id_prediction,
         levels = present_levels
     )
+    # order by position or time
+    all_uncertainty_data$id_case <- factor(
+        all_uncertainty_data$id_case,
+        levels = name_map
+    )
+
 
     # Set plot only with uncertainty data
     sim_obs_plot <- ggplot(data = filter(all_uncertainty_data, !id_prediction %in% c("Maxpost", "Prior")), aes(x = grid)) +
@@ -194,7 +207,7 @@ for (n_degree in n_degree_seq) {
         facet_wrap(~id_case, scales = "free_y") +
         theme_bw() +
         labs(
-            x = "Lengthwise position (meters)",
+            x = legend_x_name,
             y = "Stage (mm)",
             title = paste0("Comparison of simulated and observed \nwater surface profiles \n", legend_name_col),
             fill = "Uncertainties",
@@ -261,7 +274,7 @@ for (n_degree in n_degree_seq) {
             facet_wrap(~id_case, scales = "free_y") +
             theme_bw() +
             labs(
-                x = "Lengthwise position (meters)",
+                x = legend_x_name,
                 y = "Stage (mm)",
                 title = paste0("Comparison of prior simulation and observed \nwater surface profiles \n", legend_name_col),
                 fill = NULL,
@@ -405,7 +418,7 @@ for (n_degree in n_degree_seq) {
         ) +
         labs(
             title = paste0("Residuals water surface profiles with uncertainties \n", legend_name_col),
-            x = "Lengthwise position (meters)",
+            x = legend_x_name,
             y = "Residuals (mm)",
             fill = "Uncertainty",
             col = "Residuals \n(obs-sim)"
