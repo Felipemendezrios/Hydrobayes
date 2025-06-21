@@ -15,7 +15,7 @@ setwd(workspace)
 # Here, define calibration type
 # 'Calibration_time_series'
 # 'Calibration_water_surface_profiles'
-path_results <- "Calibration_water_surface_profiles"
+path_results <- "Calibration_time_series"
 
 # Logical to answer : calibration using all calibration data?
 cal_all_data_cal <- TRUE # if FALSE : Remove 14 LPS case
@@ -25,6 +25,11 @@ path_model_mage_global <- ifelse(cal_all_data_cal, "model_mage", "model_mage_wit
 # path_model_mage_global <- "model_mage"
 final_results <- TRUE
 n_degree_max <- 4
+
+# Ks literature:
+# ref : https://www.hec.usace.army.mil/confluence/rasdocs/ras1dtechref/6.1/modeling-culverts/culvert-data-and-coefficients/manning-s-roughness-coefficient
+
+ks_literature <- data.frame(min = 1 / 0.013, max = 1 / 0.009, mean = 1 / 0.010)
 
 # Check
 check_cal_WS_profiles <- path_results == "Calibration_water_surface_profiles"
@@ -206,7 +211,8 @@ for (n_degree in n_degree_seq) {
             .groups = "drop"
         )
 
-    plot_spatial_friction <- ggplot() +
+    plot_spatial_friction <-
+        ggplot() +
         geom_ribbon(
             data = df_envelope,
             aes(x = KP, ymin = ymin, ymax = ymax, fill = ID)
@@ -215,8 +221,16 @@ for (n_degree in n_degree_seq) {
             data = df_MAP,
             aes(x = KP, y = Value, color = ID)
         ) +
+        geom_hline(aes(yintercept = ks_literature$min, linetype = "ASCI (1980)"), color = "gray") +
+        geom_hline(aes(yintercept = ks_literature$max, linetype = "ASCI (1980)"), color = "gray") +
+        geom_hline(aes(yintercept = ks_literature$mean, linetype = "ASCI (1980)"), color = "gray") +
         scale_fill_manual(values = c("Parametric\nuncertainty" = "pink")) +
         scale_color_manual(values = c("MAP" = "black")) +
+        # Échelle de type de ligne
+        scale_linetype_manual(
+            name = "Reference\nvalues",
+            values = c("ASCI (1980)" = "dashed")
+        ) +
         labs(
             title = "Friction coefficient estimation \nwith parametric uncertainty",
             x = "Lengthwise position (meters)",
