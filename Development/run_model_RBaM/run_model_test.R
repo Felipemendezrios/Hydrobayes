@@ -1,13 +1,28 @@
 rm(list = ls())
 library(RBaM)
+library(stringr)
+library(reshape2)
+library(ggplot2)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Example of using function runModel() ----
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+calibration_type <- "Q" # 'WSE' or 'Q' (water surface elevation or discharge)
+
+path_calibration_data <- ifelse(calibration_type == "WSE",
+    "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Development/run_model_RBaM/Calibration_water_surface_profiles/BaM_Model/n_2",
+    "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Development/run_model_RBaM/Calibration_time_series/BaM_Model/n_2"
+)
+path_model_mage_global <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Development/run_model_RBaM/model_mage"
+
 # Define parameters - only name and initial value are needed, no need to specify priors
 n_degree <- 2
 
+if (n_degree != 2 | basename(path_calibration_data) != "n_2") {
+    stop("This example is only for n_2 case, please change the path_calibration_data to n_2")
+}
 param_theta <- list(
     Kmin.init = 1 / 0.010,
     kmin.distri = "FlatPrior+",
@@ -57,57 +72,135 @@ for (i in 1:n_Covariates_flood) {
 
 
 # Xtra config:
-sequence <- seq(0.95, 3.95, by = 1)
-# Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
-# For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
-time_mapping_temp <- data.frame(
-    # id from dataset order (flow steps configuration)
-    id_case = c(
-        "case_60_60",
-        "case_30_30",
-        "case_15_15",
-        "case_07_07"
-    )
-)
 
-
-sequence_all <- c(
-    sequence
-)
-
-
-# Find the maximum number of decimal places
-max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
-
-sequence_all <- sort(round(sequence_all, max_decimals))
-
-# Mage extraire arguments
-mage_extraire_args <- lapply(
-    sequence_all,
-    function(x) {
-        paste0(
-            "ZdX 1 h",
-            trimws(format(x,
-                nsmall = max_decimals
-            ))
+check_cal_WS_profiles <- calibration_type == "WSE"
+# Create a sequence of numbers: time fixed to extract simulation
+if (check_cal_WS_profiles) {
+    # Create a sequence of numbers: time fixed to extract simulation (Y)
+    sequence <- seq(0.95, 3.95, by = 1)
+    # Time mapping representing the order of constant discharge (id_case) simulation and the dataset used. All consistent with the MAGE model!!
+    # For example, 'case_60_60' means Q = 120 L/s in [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN)
+    time_mapping_temp <- data.frame(
+        # id from dataset order (flow steps configuration)
+        id_case = c(
+            "case_60_60",
+            "case_30_30",
+            "case_15_15",
+            "case_07_07"
         )
-    }
-)
+    )
 
-path_kmin <- "/home/famendezrios/Documents/These/Developpement/run_model_RBaM/Zfile_Kmin.txt"
+    sequence_all <- c(
+        sequence
+    )
 
-path_kflood <- "/home/famendezrios/Documents/These/Developpement/run_model_RBaM/Zfile_Kflood.txt"
+
+    # Find the maximum number of decimal places
+    max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
+
+    sequence_all <- sort(round(sequence_all, max_decimals))
+
+    # Mage extraire arguments
+    mage_extraire_args <- lapply(
+        sequence_all,
+        function(x) {
+            paste0(
+                "ZdX 1 h",
+                trimws(format(x,
+                    nsmall = max_decimals
+                ))
+            )
+        }
+    )
+
+    # Position to put the observed data in the grid
+    id_fixed <- data.frame(
+        id_fixed = c(
+            0.060,
+            0.650,
+            1.650,
+            3.650,
+            5.650,
+            7.650,
+            9.650,
+            11.650
+        )
+    )
+} else {
+    # Create a sequence: position fixed to extract simulation (Y)
+    # If bug would detect, it could be the number of decimals imposed by mage ?
+    sequence_all <- c(
+        0.060,
+        0.650,
+        1.650,
+        3.650,
+        5.650,
+        7.650,
+        9.650,
+        11.650
+    )
+    # Find the maximum number of decimal places
+    max_decimals <- max(sapply(sequence_all, function(x) nchar(sub(".*\\.", "", as.character(x)))))
+
+    sequence_all <- sort(round(sequence_all, max_decimals))
+
+    # Mage extraire arguments
+    mage_extraire_args <- lapply(
+        sequence_all,
+        function(x) {
+            paste(
+                "ZdT 1",
+                format(x, nsmall = max_decimals)
+            )
+        }
+    )
+
+
+    # Time to introduce calibration data (in hours)
+    # Time mapping between cases with constant discharge (id_case) and simulation time (id_fixed) for extraction, all consistent with the MAGE model!!
+    time_mapping_temp <- data.frame(
+        # id from dataset order (flow steps configuration)
+        id_case = c(
+            "case_60_60",
+            "case_30_30",
+            "case_15_15",
+            "case_07_07"
+        ),
+        # time to put the observed data in the grid
+        id_fixed = c(
+            0.95,
+            1.95,
+            2.95,
+            3.95
+        )
+    )
+}
+
+
+# Assign the number of output for WS profiles with the time fixed
+# Variable extraction
+first_char <- substr(unlist(mage_extraire_args), 1, 3)
+
+# Position or time extraction
+last_number <- stringr::str_extract(unlist(mage_extraire_args), "\\d+\\.\\d+$")
+
+extraction_data_mage_extraire_args <- paste0(first_char, "_", last_number)
+
+path_kmin <- file.path(path_calibration_data, "Zfile_Kmin.txt")
+path_kflood <- file.path(path_calibration_data, "Zfile_Kflood.txt")
 
 matrix_zFileKmin <- read.table(path_kmin, header = TRUE, stringsAsFactors = FALSE)
 matrix_zFileKmoy <- read.table(path_kflood, header = TRUE, stringsAsFactors = FALSE)
+FilesNames <- list.files(path_model_mage_global, recursive = T)
+dir_REPFile <- FilesNames[grep(FilesNames, pattern = ".REP")]
 
 xtra <- xtraModelInfo(
     fname = "Config_setup.txt",
     object = list(
         exeFile = "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage",
         version = "8",
-        mageDir = "/home/famendezrios/Documents/These/Developpement/run_model_RBaM/model_mage/",
-        repFile = "smooth_bed.REP",
+        mageDir = paste0(path_model_mage_global, "/"),
+        repFile = dir_REPFile,
         zKmin = matrix_zFileKmin,
         zFileKmin = path_kmin,
         doExpKmin = FALSE,
@@ -118,67 +211,161 @@ xtra <- xtraModelInfo(
         mage_extraire_args = unlist(mage_extraire_args)
     )
 )
+nY <- length(mage_extraire_args)
 
 # Assemble Model object
 mod <- model(
     ID = "MAGE_TEMP",
     nX = 1,
-    nY = 4,
+    nY = nY, ,
     par = theta_param,
     xtra = xtra
 )
 # Define input data frame
-path_model_mage_global <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/model_mage"
 REPFile <- read.table(file.path(path_model_mage_global, "smooth_bed.REP"),
     comment.char = "*"
 )
 
-dir.NETFile <- REPFile["NET", ]
+if (check_cal_WS_profiles) {
+    time_mapping_temp2 <- cbind(time_mapping_temp,
+        id_position = extraction_data_mage_extraire_args
+    )
 
-NETFile <- read.table(file.path(path_model_mage_global, dir.NETFile),
-    comment.char = "*"
-)
+    time_mapping <- merge(id_fixed, time_mapping_temp2, by = NULL)
 
-# Read dir ST file
-dir.STFiles <- NETFile[, 4]
-# Initialize the size of the list depending on the number of reaches
-Cross_sections_by_reach <- rep(list(0), nrow(NETFile))
+    ############################
+    # Module mage
+    ############################
 
-for (j in 1:length(dir.STFiles)) {
-    STFile <- readLines(file.path(path_model_mage_global, dir.STFiles[j]))
 
-    # Collect the KP of the ST file
-    KP_elements <- c()
+    ### Affect input variable for BaM!: spatial grid
+    #-----------------------------------------------------------#
+    #                            NET FILE :                     #
+    #-----------------------------------------------------------#
 
-    # Get the first line
-    first_line <- STFile[grep("^#", STFile, invert = TRUE)[1]]
-    # Split values
-    split_line <- strsplit(first_line, "\\s+")[[1]]
-    split_line <- split_line[split_line != ""]
+    REPFile <- read.table(file.path(path_model_mage_global, dir_REPFile),
+        comment.char = "*"
+    )
 
-    KP_elements <- c(KP_elements, split_line[5])
+    dir.NETFile <- REPFile["NET", ]
 
-    # Identify which lines contain "999.9990"
-    marker_lines <- grep("999\\.9990", STFile)
+    NETFile <- read.table(file.path(path_model_mage_global, dir.NETFile),
+        comment.char = "*"
+    )
 
-    for (i in marker_lines) {
-        if (i + 1 <= length(STFile)) {
-            next_line <- STFile[i + 1]
-            split_line <- strsplit(next_line, "\\s+")[[1]]
-            split_line <- split_line[split_line != ""] # Remove empty entries
-            if (length(split_line) == 6 || length(split_line) == 5) {
-                KP_elements <- c(KP_elements, split_line[5])
+    # Read dir ST file
+    dir.STFiles <- NETFile[, 4]
+    # Initialize the size of the list depending on the number of reaches
+    Cross_sections_by_reach <- rep(list(0), nrow(NETFile))
+
+    for (j in 1:length(dir.STFiles)) {
+        STFile <- readLines(file.path(path_model_mage_global, dir.STFiles[j]))
+
+        # Collect the KP of the ST file
+        KP_elements <- c()
+
+        # Get the first line
+        first_line <- STFile[grep("^#", STFile, invert = TRUE)[1]]
+        # Split values
+        split_line <- strsplit(first_line, "\\s+")[[1]]
+        split_line <- split_line[split_line != ""]
+
+        KP_elements <- c(KP_elements, split_line[5])
+
+        # Identify which lines contain "999.9990"
+        marker_lines <- grep("999\\.9990", STFile)
+
+        for (i in marker_lines) {
+            if (i + 1 <= length(STFile)) {
+                next_line <- STFile[i + 1]
+                split_line <- strsplit(next_line, "\\s+")[[1]]
+                split_line <- split_line[split_line != ""] # Remove empty entries
+                if (length(split_line) == 6 || length(split_line) == 5) {
+                    KP_elements <- c(KP_elements, split_line[5])
+                }
             }
         }
+        Cross_sections_by_reach[[j]] <- as.numeric(KP_elements)
     }
-    Cross_sections_by_reach[[j]] <- as.numeric(KP_elements)
+
+    # When a single reach is analyzed, the code run.
+    # However, if it is a multiple reach case, we need to think how to handle it
+    if (length(Cross_sections_by_reach) > 1) stop("Must be set for multiple reaches cases, at the moment only a single reach case is available")
+
+    X <- data.frame(id_order = Cross_sections_by_reach[[1]])
+} else {
+    # Repeat and bind rows with extraction labels
+    time_mapping <- do.call(rbind, lapply(extraction_data_mage_extraire_args, function(val) {
+        df <- time_mapping_temp
+        df$id_position <- val
+        df
+    }))
+
+
+    ############################
+    # Module mage
+    ############################
+    #-----------------------------------------------------------#
+    #                            PAR FILE :                     #
+    #-----------------------------------------------------------#
+    # Read time of simulation from MAGE model (.PAR)
+    SimulationTimeModel <- read.table(
+        file = file.path(file.path(
+            path_model_mage_global,
+            FilesNames[grep(FilesNames, pattern = ".PAR")]
+        )),
+        sep = "",
+        header = F,
+        skip = 1,
+        nrows = 3 # be careful timestep could be different to timestep_bin
+    )
+    SimulationTimeModelDF <- sapply(
+        sapply(SimulationTimeModel[-3, 2],
+            str_split,
+            pattern = ":",
+            simplify = TRUE
+        ),
+        as.numeric
+    )
+    # Get the simulation time in seconds
+    for (i in 1:ncol(SimulationTimeModelDF)) {
+        sim_time_temp <- SimulationTimeModelDF[, i] * c(86400, 3600, 60, 1)
+        if (i == 1) {
+            start_run <- sum(sim_time_temp)
+        } else {
+            end_run <- sum(sim_time_temp)
+        }
+    }
+    # Get time step of the simulation
+    TimeStep <- as.numeric(SimulationTimeModel[3, 2])
+    # Size of observation data
+    SizeObs <- (end_run - start_run) / TimeStep + 1
+    # Define input data for BaM! model
+    X <- data.frame(time_hours = round(
+        seq(
+            from = 0,
+            by = TimeStep / 3600, # Get time in hours
+            length.out = SizeObs
+        ),
+        2
+    ))
+
+    Cross_section_calibration_dT <- sapply(mage_extraire_args, function(arg) {
+        if (grepl(arg, pattern = "dT")) {
+            split_text <- strsplit(arg, " ")[[1]]
+            return(as.numeric(split_text[length(split_text)]))
+        } else {
+            return(NA) # Retourne NA si le motif "dT" n'est pas trouvé
+        }
+    })
+    # Remove NA (dX detected)
+    Cross_section_calibration_dT <- Cross_section_calibration_dT[!is.na(Cross_section_calibration_dT)]
+    # Remove repeated positions and get specific points defined in mage_extraire_args
+    specific_points_CalStations <- unique(Cross_section_calibration_dT)
 }
 
-# When a single reach is analyzed, the code run.
-# However, if it is a multiple reach case, we need to think how to handle it
-if (length(Cross_sections_by_reach) > 1) stop("Must be set for multiple reaches cases, at the moment only a single reach case is available")
 
-X <- data.frame(id_order = Cross_sections_by_reach[[1]])
+
 # Run model
 Ysim <- runModel(
     workspace = tempdir(),
@@ -186,13 +373,14 @@ Ysim <- runModel(
     X = X
     # stout = NULL
 )
-library(reshape2)
+
+###################################### CHECK OK UNTIL HERE ######################################
 Ysim_long <- reshape2::melt(Ysim, variable.name = "Ysim_id", value.name = "Ysim_value")
 Ysim_long$id_order <- rep(X$id_order, times = ncol(Ysim))
 
+
 results <- merge(X, Ysim_long, by = "id_order")
 
-library(ggplot2)
 
 ggplot(results, aes(x = id_order, y = Ysim_value, color = Ysim_id)) +
     geom_line() +
