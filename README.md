@@ -22,6 +22,7 @@ Repository for developing a methodology for the automatic calibration of 1D hydr
 - In multi-event case, some files are mandatory and must be equal to all the events in order to run model: `.RUG`, `.NET`. Some optional files are advised to be specified by event: `.HYD`,`.LIM`,`.PAR`,`.INIT`,
 - Time coordinates to specify in calibration data must be in seconds (Model requirement)
 - Parameters of structural error for all output variable must be specified, event if any calibration data is available. That's let avoid to accept all values of the parameters, which will tend to infinite value. Same for floodplain friction parameter.
+- Assign absolute values to the structural error model (gamma) 
 - For hydraulic flume, reduce the minimal water surface elevation in `.PAR` file, defining a default value of 10 cm.
 
 
