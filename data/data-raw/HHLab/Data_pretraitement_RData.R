@@ -17,6 +17,11 @@ string_parameters <- "_mixing_layer_mean_flow_parameters.csv"
 
 So <- 1.04e-3
 
+all_data_calibration <- list(
+    WSE = NA,
+    Discharge = NA,
+    Velocity = NA
+)
 WS_profiles <- list()
 j <- 1
 for (i in cases) {
@@ -75,10 +80,13 @@ for (i in cases) {
 
     names(WS_profiles)[j] <- i
 
-    save(data_WS_profile, file = file.path(path_results, paste0("data_HHLab_", i, ".RData")))
+    all_data_calibration$WSE <- data_WS_profile
+
+    save(all_data_calibration, file = file.path(path_results, paste0("data_HHLab_", i, ".RData")))
 
     if (i == last(cases)) {
-        save(WS_profiles, file = file.path(path_results, paste0("data_HHLab_all_cases.RData")))
+        all_data_calibration$WSE <- WS_profiles
+        save(all_data_calibration, file = file.path(path_results, paste0("data_HHLab_all_cases.RData")))
     }
     j <- j + 1
 }
