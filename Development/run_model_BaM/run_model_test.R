@@ -109,34 +109,33 @@ n_degree_Kmin <- 1
 n_degree_Kflood <- 0
 
 # Input parameters in main channel:
-Kmin_prior <- list(
-    # Initial guess by parameter in main channel
-    Kmin.init = c(
-        1 / 0.010, # a0_min
-        0 # a1_min
-    ),
-    # Prior distribution by parameter in main channel
-    Kmin.distri = c(
-        "FlatPrior+",
-        "FlatPrior"
-    ),
-    # Parameters of the prior distribution by parameter in main channel
-    Kmin.prior.par = list(
-        NULL,
-        NULL
-    )
+a0_min <- RBaM::parameter(
+    name = "a0_min",
+    init = 1 / 0.010, # Initial guess
+    prior.dist = "FlatPrior+", # Prior distribution
+    prior.par = NULL
+) # Parameters of the prior distribution
+
+a1_min <- RBaM::parameter(
+    name = "a1_min",
+    init = 0,
+    prior.dist = "FlatPrior",
+    prior.par = NULL
 )
 
-# Input parameters in the floodplain:
+a0_flood <- RBaM::parameter(
+    name = "a0_flood",
+    init = 20,
+    prior.dist = "FIX",
+    prior.par = NULL
+)
+
+Kmin_prior <- list(
+    a0_min,
+    a1_min
+)
 Kflood_prior <- list(
-    # Initial guess by parameter in the floodplain
-    Kflood.init = c(20),
-    # Prior distribution by parameter in the floodplain
-    Kflood.distri = c("FIX"),
-    # Parameters of the prior distribution by parameter in the floodplain
-    Kflood.prior.par = list(
-        NULL
-    )
+    a0_flood
 )
 
 # Spatialisation:
@@ -163,9 +162,9 @@ if (temporal_SaveResults) {
     # If the folder exists, remove all files inside
     if (dir.exists(path_temporal_results)) {
         old_files <- list.files(path_temporal_results, full.names = remove_oldFiles)
-        file.remove(old_files)
+        invisible(file.remove(old_files))
     } else {
-        dir.create(path_temporal_results, recursive = TRUE)
+        invisible(dir.create(path_temporal_results, recursive = TRUE))
     }
 }
 
@@ -233,21 +232,15 @@ if (any(c(
 # ~~~~~~~~~~~~~~~~~~~ #
 
 # Check number of prior given according to n_degree chosen
-if (!all(lengths(Kmin_prior) == (n_degree_Kmin + 1))) stop(paste0(n_degree_Kmin + 1, " prior data must be specified by parameter in main channel"))
+if (!all(length(Kmin_prior) == (n_degree_Kmin + 1))) stop(paste0(n_degree_Kmin + 1, " prior data must be specified by parameter in main channel"))
 
 # Check number of prior given according to n_degree chosen
-if (!all(lengths(Kflood_prior) == (n_degree_Kflood + 1))) stop(paste0(n_degree_Kflood + 1, " prior data must be specified by parameter in main channel"))
+if (!all(length(Kflood_prior) == (n_degree_Kflood + 1))) stop(paste0(n_degree_Kflood + 1, " prior data must be specified by parameter in main channel"))
 
-param_model_Prior_specification <- c(Kmin_prior, Kflood_prior)
-
-param_model_BaMPrior <- set_param_model(
-    n_degree_Kmin = n_degree_Kmin,
-    n_degree_Kflood = n_degree_Kflood,
-    param_model_Prior_specification = param_model_Prior_specification
-)
+theta_param <- c(Kmin_prior, Kflood_prior)
 
 # Check
-if (length(param_model_BaMPrior) != ((n_degree_Kflood + 1) + (n_degree_Kmin + 1))) stop("The number of polynomial degree in main channel and floodplain must be coincide with the number of prior data given")
+if (length(theta_param) != ((n_degree_Kflood + 1) + (n_degree_Kmin + 1))) stop("The number of polynomial degree in main channel and floodplain must be coincide with the number of prior data given")
 
 ###
 dir_REPFile <- list.files(mageDir[1], pattern = "\\.REP$", ignore.case = TRUE)
@@ -332,7 +325,7 @@ mod <- model(
     ID = ID,
     nX = nX,
     nY = nY, ,
-    par = param_model_BaMPrior,
+    par = theta_param,
     xtra = xtra
 )
 
@@ -456,27 +449,164 @@ Yu <- CalibrationData[, c("Yu_Z", "Yu_Q", "Yu_V")]
 # The logPosterior function returns a list containing log-post, log-prior, log-lkh and simulated values
 
 # TESTS ERROR MODELS : INPUT
-logLikelihood <- llfunk_Felipe
+logLikelihood <- llfunk_Linear_X_in_Z_Gaussian_QV
 
-n_param_gamma <- if (identical(logLikelihood, llfunk_iid_Gaussian)) {
-    1
+# Give prior information about structural error model
+
+if (identical(logLikelihood, llfunk_Linear_X_in_Z_Gaussian_QV)) {
+    n_param_gamma <-
+        2 + # gamma0, gamma1 Z
+        1 + # gamma0 Q
+        1 # gamma0 V
+    names_param_gamma <- c(
+        "g0_Y1",
+        "g1_Y1",
+        "g0_Y2",
+        "g0_Y3"
+    )
+    param_error_model_Z <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 0.001,
+            prior.dist = "FlatPrior",
+            prior.par = NULL
+        ),
+        RBaM::parameter(
+            name = "gamma1",
+            init = 0,
+            prior.dist = "FlatPrior",
+            prior.par = NULL
+        )
+    )
+
+    param_error_model_Q <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
+
+    param_error_model_V <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
+} else if (identical(logLikelihood, llfunk_iid_Gaussian)) {
+    n_param_gamma <-
+        1 + # gamma0 Z
+        1 + # gamma0 Q
+        1 # gamma0 V
+
+    names_param_gamma <- c(
+        "g0_Y1",
+        "g0_Y2",
+        "g0_Y3"
+    )
+    param_error_model_Z <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 0.001,
+            prior.dist = "FlatPrior",
+            prior.par = NULL
+        )
+    )
+    param_error_model_Q <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
+    param_error_model_V <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
 } else if (identical(logLikelihood, llfunk_iLinear_Gaussian)) {
-    2
+    n_param_gamma <-
+        2 + # gamma0, gamma1 Z
+        2 + # gamma0, gamma1  Q
+        2 # gamma0, gamma1  V
+
+    names_param_gamma <- c(
+        "g0_Y1",
+        "g1_Y1",
+        "g0_Y2",
+        "g1_Y2",
+        "g0_Y3",
+        "g1_Y3"
+    )
+    param_error_model_Z <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 0.001,
+            prior.dist = "FlatPrior",
+            prior.par = NULL
+        ),
+        RBaM::parameter(
+            name = "gamma1",
+            init = 0,
+            prior.dist = "FlatPrior",
+            prior.par = NULL
+        )
+    )
+    param_error_model_Q <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        ),
+        RBaM::parameter(
+            name = "gamma1",
+            init = 0,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
+    param_error_model_V <- list(
+        RBaM::parameter(
+            name = "gamma0",
+            init = 10,
+            prior.dist = "FIX",
+            prior.par = NULL
+        ),
+        RBaM::parameter(
+            name = "gamma1",
+            init = 0,
+            prior.dist = "FIX",
+            prior.par = NULL
+        )
+    )
 } else {
     stop("Unknown log-likelihood function")
 }
 
-########### Adapt where observational data are WSE,Q, V with different structural error model. For the moment, constant for all of them is assigned
+# Total number of parameters to estimate
+number_parameters <- length(mod$par) + n_param_gamma
 
-# number_parameters <- length(mod$par) + nY * n_param_gamma
-number_parameters <- length(mod$par) + 4
+# LogPrior estimation using the Kmin_prior and the Kflood_prior and param_error_model_Z, param_error_model_Q, param_error_model_V
 
+all_prior_info_param <- c(
+    theta_param,
+    param_error_model_Z,
+    param_error_model_Q,
+    param_error_model_V
+)
 
 # Add check to give a value for each parameter (using number_parameters)
 logPrior <- function(parvector) {
     out <-
         # Priors for model parameters
-        # dlnorm(parvector[1], meanlog = log(100), sdlog = 0.1, log = TRUE) + # a0_min
         0 + # a0_min
         0 + # a1_min
         dlnorm(parvector[3], meanlog = log(20), sdlog = 0.2, log = TRUE) + # a0_flood
@@ -494,11 +624,22 @@ logPrior <- function(parvector) {
     return(out)
 }
 
+
 # Compute the posterior log-density at some parameter values
-parvector <- c(
-    RBaM::getInitPar(mod$par), # initial parameter values for the model parameters
-    c(0.001, 0, 10, 10) # Initial values for the structural error parameters (gamma) for each output variable
-)
+# parvector <- c(
+#     RBaM::getInitPar(mod$par), # initial parameter values for the model parameters
+#     c(0.001, 0, 10, 10) # Initial values for the structural error parameters (gamma) for each output variable
+# )
+parvector <- sapply(all_prior_info_param, function(x) {
+    x$init
+})
+
+if (!identical(
+    logPrior(parvector),
+    logPrior_Verification(all_prior_info_param)
+)) {
+    stop("Values given in LogPrior function are not matching with the verification function. Please remember that the FIX distribution, the sdlog = 0.2")
+}
 
 logpost <- logPosterior_BaM(
     parvector = parvector, # parameter values at which the posterior is evaluated
@@ -527,13 +668,14 @@ maxpost$convergence
 x0 <- maxpost$par
 names(x0) <- c(
     RBaM::getNames(mod$par),
-    "g0_Y1", "g1_Y1", "g0_Y2", "g0_Y3"
+    names_param_gamma
 )
 # Adaptive Metropolis
 ptm <- proc.time()
 mcmc <- MCMC_AM(
     logPdf = logPosterior_BaM, x0 = x0,
-    X = X, Yobs = Yobs, Yu = Yu, lpfunk = logPrior, llfunk = logLikelihood, mod = mod, llargs = X$x
+    X = X, Yobs = Yobs, Yu = Yu, lpfunk = logPrior, llfunk = logLikelihood, mod = mod, llargs = X$x,
+    nAdapt = 30, nCycles = 20
 ) # arguments passed to logPosterior
 proc.time() - ptm
 pairs(cbind(mcmc$samples, mcmc$components$logPosterior))
@@ -549,26 +691,21 @@ plots <- tracePlot(mcmc$components)
 wrap_plots(plots, ncol = 3)
 
 
-
-
-
-# One-At-A-Time Metropolis, no speed-up
-# ptm <- proc.time()
-# mcmc_OAAT <- MCMC_OAAT(
-#     logPdf = logPosterior_BaM, x0 = x0,
-#     X = X, Yobs = Yobs, Yu = Yu, lpfunk = logPrior, llfunk = logLikelihood, mod = mod
-# ) # arguments passed to logPosterior
-# proc.time() - ptm
-# pairs(cbind(mcmc_OAAT$samples, mcmc_OAAT$components$logPosterior))
-
-# tracePlot(mcmc$samples)
-# tracePlot(mcmc$components)
-
 # # One-At-A-Time Metropolis, with speed-up
-# ptm <- proc.time()
-# mcmc_OAAT_speed_up <- MCMC_OAAT(
-#     logPdf = logPosterior_BaM, x0 = x0, nTheta = length(x0) - 2,
-#     X = X, Yobs = Yobs, Yu = Yu, lpfunk = logPrior, llfunk = logLikelihood, mod = mod
-# ) # arguments passed to logPosterior
-# proc.time() - ptm
-# pairs(cbind(mcmc_OAAT_speed_up$samples, mcmc_OAAT_speed_up$components$logPosterior))
+ptm <- proc.time()
+mcmc_OAAT_speed_up <- MCMC_OAAT(
+    logPdf = logPosterior_BaM, x0 = x0, nTheta = length(x0) - 2,
+    X = X, Yobs = Yobs, Yu = Yu, lpfunk = logPrior, llfunk = logLikelihood, mod = mod, llargs = X$x,
+    nAdapt = 30, nCycles = 20
+) # arguments passed to logPosterior
+proc.time() - ptm
+pairs(cbind(mcmc_OAAT_speed_up$samples, mcmc_OAAT_speed_up$components$logPosterior))
+
+
+plots <- tracePlot(mcmc_OAAT_speed_up$samples)
+
+wrap_plots(plots, ncol = 3)
+
+
+plots <- tracePlot(mcmc_OAAT_speed_up$components)
+wrap_plots(plots, ncol = 3)
