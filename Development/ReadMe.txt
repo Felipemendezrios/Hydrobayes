@@ -9,3 +9,5 @@ The likelihood is calculated by myself, using some RBaM functions, but I can mod
 - New structural error models: spatial regression? different by output variable (sure)?
 - I need to integrate new function to get prediction phases
 - Need to pass error model parameters for propaging total uncertainty case.
+
+- run_model_multi_reach = file to run a test for multi reach implementation saved in verification folder
