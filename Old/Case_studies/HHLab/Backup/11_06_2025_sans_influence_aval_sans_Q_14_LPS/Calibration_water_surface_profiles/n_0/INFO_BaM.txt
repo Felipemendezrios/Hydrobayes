@@ -1,0 +1,12 @@
+ "ID":"MDL_MAGE_TEMP"
+ "nX":1
+ "nY":3
+ "parName":["a0_min","a0_flood"]
+ "parType":["STD","FIX"]
+ "dParName":[]
+ "stateName":[]
+ "structuralParName":[["intercept"],["intercept"],["intercept"]]
+ "estimatedX":[0]
+ "estimatedXbias":[0]
+ "estimatedYbias":[0,0,0]
+ "MCMCheaders":["a0_min","Y1_intercept","Y2_intercept","Y3_intercept","LogPost"]

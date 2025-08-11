@@ -1,0 +1,16 @@
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Calibration_time_series/n_0/X1.pred" ! Files containing spaghettis for each input variable (size nX)
+61                                                         ! Nobs, number of observations per spaghetti (common to all files!)
+1                                                          ! Nspag, number of spaghettis for each input variable (size nX)
+.true.                                                     ! Propagate parametric uncertainty?
+.false.,.false.,.false.,.false.,.false.,.false.,.false.,.false. ! Propagate remnant uncertainty for each output variable? (size nY)
+500                                                        ! Nsim[prior]. If <=0: posterior sampling (nsim is given by mcmc sample); if >0: sample nsim replicates from prior distribution
+"PriorZdT_0.06.spag","PriorZdT_0.65.spag","PriorZdT_1.65.spag","PriorZdT_3.65.spag","PriorZdT_5.65.spag","PriorZdT_7.65.spag","PriorZdT_9.65.spag","PriorZdT_11.65.spag" ! Files containing spaghettis for each output variable (size nY)
+.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.    ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nY)
+.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.    ! Post-processing: create envelops? (size nY)
+"PriorZdT_0.06.env","PriorZdT_0.65.env","PriorZdT_1.65.env","PriorZdT_3.65.env","PriorZdT_5.65.env","PriorZdT_7.65.env","PriorZdT_9.65.env","PriorZdT_11.65.env" ! Post-processing: name of envelop files (size nY)
+.true.                                                     ! Print progress in console during computations?
+.false.                                                    ! Do state prediction? (size nState)
+                                                           !  Files containing spaghettis for each state variable (size nState)
+                                                           ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nState)
+.false.                                                    ! Post-processing: create envelops? (size nState)
+                                                           ! Post-processing: name of envelop files (size nState)

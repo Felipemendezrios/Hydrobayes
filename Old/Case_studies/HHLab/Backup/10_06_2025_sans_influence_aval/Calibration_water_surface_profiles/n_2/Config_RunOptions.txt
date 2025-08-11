@@ -1,0 +1,4 @@
+.false.                                                    ! Do MCMC sampling?
+.false.                                                    ! Do MCMC summarizing?
+.false.                                                    ! Do residual analysis?
+.true.                                                     ! Do prediction experiments?
