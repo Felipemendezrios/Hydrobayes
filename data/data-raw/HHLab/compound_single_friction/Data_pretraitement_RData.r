@@ -15,6 +15,7 @@ string_velocity <- "Mean_Velocity_Qf_08_at_z_star_0p94_x_star_various.csv"
 
 So <- 1.1e-3
 delta_h_floodplain <- 0.117
+channel_long <- 18
 
 all_data_calibration <- list(
     WSE = NA,
@@ -68,14 +69,14 @@ for (i in cases) {
     h_mean_FP_by_x_star$z_riverbed <- h_mean_MC_by_x_star$z_riverbed <- NA
 
     for (p in h_mean_FP_by_x_star$x) {
-        h_mean_FP_by_x_star$z_riverbed[z] <- So * (h_mean_FP_by_x_star$x[nrow(h_mean_FP_by_x_star)] - p)
+        h_mean_FP_by_x_star$z_riverbed[z] <- So * (channel_long - p)
         z <- z + 1
     }
 
     z <- 1
 
     for (p in h_mean_MC_by_x_star$x) {
-        h_mean_MC_by_x_star$z_riverbed[z] <- So * (h_mean_MC_by_x_star$x[nrow(h_mean_MC_by_x_star)] - p)
+        h_mean_MC_by_x_star$z_riverbed[z] <- So * (channel_long - p)
         z <- z + 1
     }
 
