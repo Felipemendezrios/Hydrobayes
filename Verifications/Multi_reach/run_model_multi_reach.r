@@ -455,7 +455,7 @@ xtra <- xtraModelInfo(
 mod <- model(
     ID = "MAGE_ZQV",
     nX = 4,
-    nY = 3, ,
+    nY = 5, ,
     par = theta_param,
     xtra = xtra
 )
@@ -620,7 +620,11 @@ for (j in seq_along(RUGFiles)) {
 }
 
 Y <- CalData[, c(5:7)]
+Y$Y_Kmin <- -9999
+Y$Y_Kmoy <- -9999
 Yu <- CalData[, c(8:10)]
+Yu$Y_Kmin <- -9999
+Yu$Y_Kmoy <- -9999
 
 data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(path_temp_results))
 
@@ -652,6 +656,26 @@ remant_error_list <- list(
             init = 10,
             prior.dist = "LogNormal",
             prior.par = c(log(10), 0.2)
+        ))
+    ),
+    remnantErrorModel(
+        fname = "Config_RemnantSigma3.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 15,
+            prior.dist = "LogNormal",
+            prior.par = c(log(15), 0.2)
+        ))
+    ),
+    remnantErrorModel(
+        fname = "Config_RemnantSigma3.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 15,
+            prior.dist = "LogNormal",
+            prior.par = c(log(15), 0.2)
         ))
     )
 )
