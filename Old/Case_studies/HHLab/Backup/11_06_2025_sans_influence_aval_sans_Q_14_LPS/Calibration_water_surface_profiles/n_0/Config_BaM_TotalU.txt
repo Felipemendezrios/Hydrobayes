@@ -1,0 +1,11 @@
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Calibration_water_surface_profiles/n_0/" ! Workspace
+"Config_RunOptions.txt"                                    ! Config file: run options
+"Config_Model.txt"                                         ! Config file: model
+"Config_setup_TotalU.txt"                                  ! Config file: xtra model information
+"Config_Data.txt"                                          ! Config file: Data
+"Config_RemnantSigma.txt","Config_RemnantSigma.txt","Config_RemnantSigma.txt" ! Config file: Remnant sigma (as many files as there are output variables separated by commas)
+"Config_MCMC.txt"                                          ! Config file: MCMC
+"Config_Cooking.txt"                                       ! Config file: cooking of MCMC samples
+"Config_Summary.txt"                                       ! Config file: summary of MCMC samples
+"Config_Residuals.txt"                                     ! Config file: residual analysis
+"Config_Pred_Master_TotalU.txt"                            ! Config file: prediction experiments (master file)
