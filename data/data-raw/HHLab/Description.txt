@@ -1,7 +1,0 @@
-Article : J. Fluid Mech. (2022), vol. 951, A17, doi:10.1017/jfm.2022.818
-
-Dépôt HAL : hal-03846864
-
- Description:
- Streamwise profile of the flow depth h1 at spanwise position y = 0.5 m for case Q-Q
- (i.e. with right-hand inflow discharge Q1 = 60 l/s and left-hand inflow discharge Q2 = 60 l/s)
