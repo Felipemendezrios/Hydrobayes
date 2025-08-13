@@ -1,8 +1,9 @@
 ---
-title: "Compound channel hydraulic flume (n_min = 0 n_flood = 1)"
+title: "Compound channel hydraulic flume"
 author: "Felipe"
 date: "`r Sys.Date()`"
 output: html_document
+bibliography: biblio.bib
 ---
 
 
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 # Experimental set up
 
-A compound channel setup was used for this case study with the follow specifications:
+A compound channel setup was used for this case study. The paper including all information about the experience was found in [@proust_compound_2020](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/149CD8E4F0E601F2BD076C569537F14B/S002211201900973Xa.pdf/compound_openchannel_flows_effects_of_transverse_currents_on_the_flow_structure.pdf), data are available in [@proust_dataset_2025](https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/HJKRYH).
 
   - Length: 18 m
   - Width: 3 m
@@ -645,3 +646,5 @@ All simulations are very close to the observed stages. Even though the flow cond
 # Remarks:
 
 the measurements used for this case are averages of values taken separately in the floodplain and the main channel. In addition, the upstream discharge was divided in the experiment, which may have influenced the first measurements. The model's simulations are average values by cross-sections, considering a total discharge constant without difference between main channel or floodplain.  
+
+# Bibliography:
