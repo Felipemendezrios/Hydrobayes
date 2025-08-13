@@ -80,22 +80,19 @@ for (i in cases) {
         z <- z + 1
     }
 
-    h_mean_MC_by_x_star$z_mean <- h_mean_MC_by_x_star$z_riverbed + h_mean_MC_by_x_star$h_mean
-    h_mean_FP_by_x_star$z_mean <- h_mean_FP_by_x_star$z_riverbed + h_mean_FP_by_x_star$h_mean + delta_h_floodplain
+    h_mean_MC_by_x_star$h_from_riverbed <- h_mean_MC_by_x_star$h_mean
+    h_mean_FP_by_x_star$h_from_riverbed <- h_mean_FP_by_x_star$h_mean + delta_h_floodplain
 
-    model <- lm(formula = z_mean ~ x, data = h_mean_MC_by_x_star)
+    h_mean_MC_by_x_star$z_mean <- h_mean_MC_by_x_star$z_riverbed + h_mean_MC_by_x_star$h_from_riverbed
+    h_mean_FP_by_x_star$z_mean <- h_mean_FP_by_x_star$z_riverbed + h_mean_FP_by_x_star$h_from_riverbed
+
+    data_WS_profile <- rbind(h_mean_FP_by_x_star, h_mean_MC_by_x_star)
+
+    model <- lm(formula = h_from_riverbed ~ x, data = data_WS_profile)
     residuals <- resid(model) # or model$residuals
     sd_residuals <- sd(residuals)
 
-    h_mean_MC_by_x_star$Yu <- sd_residuals
-
-    model <- lm(formula = z_mean ~ x, data = h_mean_FP_by_x_star)
-    residuals <- resid(model) # or model$residuals
-    sd_residuals <- sd(residuals)
-
-    h_mean_FP_by_x_star$Yu <- sd_residuals
-
-    data_WS_profile <- rbind(h_mean_MC_by_x_star, h_mean_FP_by_x_star)
+    data_WS_profile$Yu <- sd_residuals
 
     all_data_calibration$WSE <- data_WS_profile
     save(all_data_calibration, file = file.path(path_results, "data_HHLab_uniform_case.RData"))
