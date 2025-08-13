@@ -1,0 +1,16 @@
+"MAGE_ZQV"                                                 ! Model ID - type getCatalogue() in RBaM to see available models
+4                                                          ! nX: number of input variables
+5                                                          ! nY: number of output variables
+3                                                          ! nPar: number of parameters theta
+"a0_min_r_1"                                               ! Parameter name
+100                                                        ! Initial guess
+"FlatPrior+"                                               ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"a0_flood_r_1"                                             ! Parameter name
+33                                                         ! Initial guess
+"FlatPrior+"                                               ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"a1_flood_r_1"                                             ! Parameter name
+0                                                          ! Initial guess
+"FlatPrior"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
