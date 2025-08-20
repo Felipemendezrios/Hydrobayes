@@ -4,7 +4,6 @@ ZQdX_residuals <- function(
     Q_input = NULL,
     Qplot = TRUE,
     title_label,
-    xlabel = "Position (m)",
     ylabel) {
     if (Qplot == TRUE && is.null(Q_input)) {
         stop("Q_input must be provided if Qplot is TRUE")
@@ -15,7 +14,7 @@ ZQdX_residuals <- function(
     residuals_event_mm_m3_s[residuals_event_mm_m3_s == -1e9] <- NA
 
     ZQplot <- ggplot(residuals_event_mm_m3_s, aes(x = X3_obs)) +
-        labs(title = title_label, x = xlabel, y = ylabel) +
+        labs(title = title_label, x = "Streamwise position (meters)", y = ylabel) +
         theme_bw() +
         theme(plot.title = element_text(hjust = 0.5))
     if (Qplot == TRUE) {
@@ -129,4 +128,71 @@ k_plot <- function(
             legend.title = element_text(hjust = 0.5)
         )
     return(k_plot)
+}
+
+
+CalData_plot <- function(
+    data,
+    scales_free = "free_y",
+    y_label,
+    title_label,
+    col_label = NULL,
+    plot_water_depth = TRUE,
+    wrap = TRUE) {
+    if (plot_water_depth) {
+        plot_CalData <-
+            ggplot(data, aes(
+                x = x,
+                color = ID,
+                y = h_mean
+            ))
+
+        if (any(data$Yu != 0)) {
+            plot_CalData <- plot_CalData +
+                geom_errorbar(aes(
+                    ymin = h_mean - 1.96 * Yu,
+                    ymax = h_mean + 1.96 * Yu
+                ))
+        }
+    } else {
+        plot_CalData <-
+            ggplot(data = data, aes(
+                x = x,
+                y = z_mean,
+                col = ID
+            )) +
+            geom_line(
+                aes(
+                    y = z_riverbed,
+                    col = "riverbed"
+                )
+            )
+
+        if (any(data$Yu != 0)) {
+            plot_CalData <- plot_CalData +
+                geom_errorbar(aes(
+                    ymin = z_mean - 1.96 * Yu,
+                    ymax = z_mean + 1.96 * Yu
+                ))
+        }
+    }
+    plot_CalData <- plot_CalData +
+        geom_point() +
+        labs(
+            x = "Streamwise position (meters)",
+            y = y_label,
+            title = title_label,
+            col = col_label
+        ) +
+        theme_bw() +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5)
+        )
+
+    if (wrap) {
+        plot_CalData <- plot_CalData +
+            facet_wrap(~ID, scales = scales_free, ncol = 1)
+    }
+    return(plot_CalData)
 }
