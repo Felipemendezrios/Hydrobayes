@@ -1,0 +1,27 @@
+# MyNewStudy
+
+This is my new study description
+
+---
+
+## General information
+
+...
+
+## TODO
+
+- [X] Network
+- [ ] Geometry
+- [ ] ...
+
+## Change log
+
+2025-08-11: Add a default bief
+
+---
+
+## Copyright
+
+© Felipe-Alberto Mendezrios - 2025
+
+All right reserved.
