@@ -44,13 +44,10 @@ Question :
 - The method could identify the friction in the main channel and the floodplain using a single event in floodplain?
 - How to reduce the corelation between kmin/kmoy ?
 - Non informative prior information force to get a minimal number of events (2) to identify the friction in the main channel and floodplain? Should one of the events flow only in the main channel?
-- A local observation of the friction in the space and time would help to break the corelation between the estimation of kmin/kmoy?
 
 Notes:
 - High corelation between kmin/kmoy. They can be interchangeable and the result will be the same with a weighting or factor to compensate.
 - Observation uncertainties were considered closer to zero to get a better identifiability of the friction coefficients
-
-
 
 
 

@@ -1,0 +1,16 @@
+"Results_MCMC.txt"                                         ! result.fname, name of MCMC file (|!| name of the file only, not full path)
+50                                                         ! nAdapt, adaptation period: jump sizes are increased/decreased every Nadapt iterations to comply with the desired moving rates
+50                                                         ! nCycles, no more adaptation after iteration number stopAdapt
+0.1                                                        ! minMoveRate, lower bound for the desired move rate interval
+0.5                                                        ! maxMoveRate, upper bound for the desired move rate interval
+0.9                                                        ! downMult, (<1) multiplication factor used to decrease jump size when move rate is too low
+1.1                                                        ! upMult, (>1, avoid 1/dowMult) multiplication factor used to increase jump size when move rate is too high
+1                                                          ! Mode for setting the initial Std of the jump distribution - 0=auto[recommended]
+"****    DEFINITION OF INITIAL JUMP STD   ****"            ! Cosmetic line, unused
+0.1                                                        ! multFactor, multiplicative factor to set initial jump standard deviations to multFactor*|initValue| [AUTO mode]
+10                                                         ! Jump standard deviations for model parameters theta [MANUAL mode]
+0.001                                                      ! Jump standard deviations for structural error parameters gamma of output variable 1 [MANUAL mode]
+1                                                          ! Jump standard deviations for structural error parameters gamma of output variable 2 [MANUAL mode]
+1                                                          ! Jump standard deviations for structural error parameters gamma of output variable 3 [MANUAL mode]
+1.5                                                        ! Jump standard deviations for structural error parameters gamma of output variable 4 [MANUAL mode]
+1.5                                                        ! Jump standard deviations for structural error parameters gamma of output variable 5 [MANUAL mode]
