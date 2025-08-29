@@ -1,0 +1,75 @@
+---
+title: "Rectangular channel in hydraulic flume"
+author: "Felipe"
+date: "`r Sys.Date()`"
+output: html_document
+bibliography: biblio.bib
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.align = "center"
+)
+```
+
+# Experimental set up
+
+A rectangular channel set up was used for this case study, this case never flows in floodplain. All the information about the case of study could be consulted here : the paper [Proust et al., (2022)](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/shallow-mixing-layers-over-hydraulically-smooth-bottom-in-a-tilted-open-channel/1E7D46915C8BCD807E30C1F0B1E17225&ved=2ahUKEwj_0Oax162PAxUpNvsDHWKaDosQFnoECBwQAQ&usg=AOvVaw2EI5uRyB-SEpsj14bvVBfI) and the numerical data [Dataset Proust et al., (2022)](https://doi.org/10.57745/EQURJN):
+
+Here the features of the experiment:
+
+- Length: 18 m 
+- Width: 3 m 
+- Slope : 1.04 x 10-3
+- Material : glass, same friction everywhere
+- Flow conditions : uniform flows with a total discharge of 14, 30, 60, 120 L/s  
+- Water level measurements: 161 measures from 0.50 m to 16.50 m
+
+```{r}
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Rectangular_channel.png")
+```
+
+# Main features for the estimation
+
+
+# Laboratory measurements
+
+# Experiment:
+
+## Calibration data
+
+## Check MCMC
+### All MCMC samples
+### MCMC cooked
+### Corelation plot of MCMC cooked
+## Check summary
+## Estimation of the friction coefficient
+## Residuals
+### In termes of WSE
+### In termes of discharge
+## Notes
+# Questions
+# Main conclusions
+# Underlying questions
+
+
+
+
+
+
+# Experiment:
+
+## Calibration data
+
+## Check MCMC
+### All MCMC samples
+### MCMC cooked
+### Corelation plot of MCMC cooked
+## Check summary
+## Estimation of the friction coefficient
+## Residuals
+### In termes of WSE
+### In termes of discharge
+## Notes
