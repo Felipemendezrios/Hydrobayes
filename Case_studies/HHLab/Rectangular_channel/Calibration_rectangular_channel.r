@@ -433,7 +433,7 @@ jump_MCMC_theta_param_user <- 8
 jump_MCMC_error_model_user <- 0.001
 threshold_jump_MCMC_error_model <- 0.5
 prior_error_model <- get_init_prior(remant_error_list)
-mod <- list()
+mod_polynomials <- list()
 ##################################
 
 file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments"
@@ -498,16 +498,24 @@ for (Experiment_id in all_experiments) {
 
         path_polynomial <- file.path(path_temp_experiment, polynomial_id)
         # Path to save results
-        path_temp_results <- file.path(path_polynomial, "Calibration")
+        workspace_user <- file.path(path_polynomial, "Calibration")
+        path_post_traitement <- file.path(workspace_user, "post_traitement")
+        path_post_traitement_data <- file.path(path_post_traitement, "RData")
 
-        if (!dir.exists(path_temp_results)) {
-            dir.create(path_temp_results)
+        if (!dir.exists(workspace_user)) {
+            dir.create(workspace_user)
         } else {
             if (do_calibration) {
-                file.remove(list.files(path_temp_results, full.names = TRUE, recursive = TRUE))
+                file.remove(list.files(workspace_user, full.names = TRUE, recursive = TRUE))
             }
         }
+        if (!dir.exists(path_post_traitement)) {
+            dir.create(path_post_traitement)
+        }
 
+        if (!dir.exists(path_post_traitement_data)) {
+            dir.create(path_post_traitement_data)
+        }
 
         if (length(Kmin_prior) != (Nb_reaches_estimation * (n_degree_Kmin + 1))) stop(paste0("More prior information (", length(Kmin_prior), ") than the number of reaches for estimation (", Nb_reaches_estimation, ")"))
 
@@ -516,7 +524,7 @@ for (Experiment_id in all_experiments) {
         # Write Legendre vector:
         write.table(
             grid_covariant_discretized,
-            file = file.path(path_temp_results, "legendre_covariate_non_normalized.txt"), row.names = F
+            file = file.path(workspace_user, "legendre_covariate_non_normalized.txt"), row.names = F
         )
 
         mageDir <- c(paste0(path_polynomial, "/model_mage/", all_events, "/"))
@@ -581,8 +589,8 @@ for (Experiment_id in all_experiments) {
             max_degree = n_degree_Kflood, grid_covariant_discretized = grid_covariant_discretized
         )
 
-        zFileKmin <- file.path(path_temp_results, "Zfile_Kmin.txt")
-        zFileKmoy <- file.path(path_temp_results, "Zfile_Kflood.txt")
+        zFileKmin <- file.path(workspace_user, "Zfile_Kmin.txt")
+        zFileKmoy <- file.path(workspace_user, "Zfile_Kflood.txt")
 
         xtra <- xtraModelInfo(
             fname = "Config_setup.txt",
@@ -600,19 +608,20 @@ for (Experiment_id in all_experiments) {
             )
         )
 
-        mod[[counter_model]] <- model(
+        mod_polynomials[[counter_model]] <- model(
             ID = "MAGE_ZQV",
             nX = 4,
             nY = 5, ,
             par = theta_param,
             xtra = xtra
         )
+        mod <- mod_polynomials[[counter_model]]
         # Re-write RUG file : keep the position of the cross sections as original
 
         prior_theta_param <- get_init_prior(theta_param)
         prior_all_dist_theta_param <- get_init_prior(theta_param, FIX_dist = TRUE)
 
-        data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(path_temp_results))
+        data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(workspace_user))
 
         jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
             prior_theta_param[(prior_theta_param != 0)] * 0.1,
@@ -640,10 +649,14 @@ for (Experiment_id in all_experiments) {
         )
         mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
 
-        # runModel(workspace = tempdir(), mod = mod, X = X)
-
+        # Save all data used during calibration for prediction
+        save(mod, data, remant_error_list,
+            mcmcOptions_user, mcmcCooking_user,
+            mcmcSummary_user, workspace_user,
+            file = file.path(path_post_traitement_data, "BaM_objects.RData")
+        )
         BaM(
-            mod = mod[[counter_model]],
+            mod = mod,
             data = data,
             remnant = remant_error_list,
             mcmc = mcmcOptions_user,
@@ -656,19 +669,19 @@ for (Experiment_id in all_experiments) {
             na.value = -9999,
             run = FALSE,
             preClean = FALSE,
-            workspace = path_temp_results,
+            workspace = workspace_user,
             # dir.exe = file.path(find.package("RBaM"), "bin"),
             # name.exe = "BaM",
             predMaster_fname = "Config_Pred_Master.txt"
         )
         counter_model <- counter_model + 1
 
-        dir_cf <- file.path(path_temp_results, "Config_BaM.txt")
+        dir_cf <- file.path(workspace_user, "Config_BaM.txt")
 
         if (do_calibration) {
             system2(
                 command = file.path(dir_exe_BaM, "BaM"),
-                args = c("-cf", file.path(path_temp_results, "Config_BaM.txt")),
+                args = c("-cf", file.path(workspace_user, "Config_BaM.txt")),
                 wait = FALSE
             )
         }
@@ -723,19 +736,32 @@ for (Experiment_id in all_experiments) {
         } else {
             stop("polynomial_id not supported yet")
         }
-        path_polynomial_temp <- file.path(path_experiment, polynomial_id)
-        path_model_mage <- c(paste0(path_polynomial_temp, "/model_mage/", all_events, "/"))
-        path_temp_plots <- file.path(path_polynomial_temp, "Calibration")
+        path_polynomial <- file.path(path_experiment, polynomial_id)
+        path_temp_plots <- file.path(path_polynomial, "Calibration")
+        path_post_traitement <- file.path(path_temp_plots, "post_traitement")
+        path_post_traitement_data <- file.path(path_post_traitement, "RData")
+
+
+        if (!dir.exists(path_post_traitement)) {
+            dir.create(path_post_traitement)
+        }
+
+        if (!dir.exists(path_post_traitement_data)) {
+            dir.create(path_post_traitement_data)
+        }
+
+        path_model_mage <- c(paste0(path_polynomial, "/model_mage/", all_events, "/"))
+
 
         ### PLOTS
         mcmc_not_cooked <- readMCMC(file.path(path_temp_plots, "Results_MCMC.txt"))
         plots <- tracePlot(mcmc_not_cooked)
 
         mcmcplot <- wrap_plots(plots, ncol = 3)
-
+        # Save plot and data
         ggsave(
             file.path(
-                path_temp_plots,
+                path_post_traitement,
                 "MCMC_not_cooked.png"
             ),
             mcmcplot,
@@ -750,7 +776,7 @@ for (Experiment_id in all_experiments) {
 
         ggsave(
             file.path(
-                path_temp_plots,
+                path_post_traitement,
                 "densityplot_not_cooked.png"
             ),
             pdf_plot,
@@ -770,7 +796,7 @@ for (Experiment_id in all_experiments) {
 
             ggsave(
                 file.path(
-                    path_temp_plots,
+                    path_post_traitement,
                     "MCMC_Cooked.png"
                 ),
                 mcmcplot,
@@ -785,7 +811,7 @@ for (Experiment_id in all_experiments) {
 
             ggsave(
                 file.path(
-                    path_temp_plots,
+                    path_post_traitement,
                     "densityplot_Cooked.png"
                 ),
                 pdf_plot,
@@ -796,7 +822,7 @@ for (Experiment_id in all_experiments) {
 
 
             png(
-                file.path(path_temp_plots, "corelation_cooked.png"),
+                file.path(path_post_traitement, "corelation_cooked.png"),
                 width = 800,
                 height = 800,
                 res = 120
@@ -844,18 +870,31 @@ for (Experiment_id in all_experiments) {
             main_channel = TRUE,
             ks_literature = ks_literature_glass
         )
+
+        df_MAP_kmin <- kmin_calculations[[1]]
         kmin_plot <- kmin_calculations[[2]]
-        df_MAP <- kmin_calculations[[1]]
+        df_envelope_kmin <- kmin_calculations[[3]]
+
+        ls_spatial_friction_kmin <- list(
+            df_envelope = df_envelope_kmin,
+            df_MAP = df_MAP_kmin
+        )
+        save(ls_spatial_friction_kmin,
+            file = file.path(path_post_traitement_data, "Data_friction_estimation_ls_spatial_friction_kmin.RData")
+        )
 
         ggsave(
             file.path(
-                path_temp_plots,
+                path_post_traitement,
                 "kmin.png"
             ),
             kmin_plot,
             width = 20,
             height = 20,
             units = "cm"
+        )
+        save(kmin_plot,
+            file = file.path(path_post_traitement_data, "Plot_friction_estimation_plot_kmin_plot.RData")
         )
 
         # matrix_zFileKflood <- read.table(file.path(path_temp_plots, "Zfile_Kflood.txt"), header = TRUE)
@@ -870,17 +909,28 @@ for (Experiment_id in all_experiments) {
         #     main_channel = FALSE,
         #     ks_literature = ks_literature_floodplain
         # )
-        # kmoy_plot <- kmoy_calculations[[2]]
+        # kmoy_plot_kmoy <- kmoy_calculations[[2]]
         # df_MAP_kmoy <- kmoy_calculations[[1]]
+        # df_envelope_kmoy <- kmoy_calculations[[3]]
+        # ls_spatial_friction_kmoy <- list(
+        #     df_envelope = df_envelope_kmoy,
+        #     df_MAP = df_MAP_kmoy
+        # )
+        # save(ls_spatial_friction_kmoy,
+        #     file = file.path(path_post_traitement_data, "Data_friction_estimation_ls_spatial_friction_kmoy.RData")
+        # )
         # ggsave(
         #     file.path(
-        #         path_temp_plots,
+        #         path_post_traitement,
         #         "kmoy.png"
         #     ),
         #     kmoy_plot,
         #      width = 20,
         # height = 20,
         # units = "cm"
+        # )
+        # save(kmoy_plot,
+        #     file = file.path(path_post_traitement_data, "Plot_friction_estimation_kmoy_plot.RData")
         # )
 
         CalData <- read.table(file.path(path_temp_plots, "CalibrationData.txt"), header = TRUE)
@@ -897,7 +947,7 @@ for (Experiment_id in all_experiments) {
                 residuals[, 1:4],
                 residuals[, c(9, 19, 20, 24, 29)] * 1000
             )
-            residuals_event_mm_m3_s <- data.frame(residuals_mm_m3_s, Yu_z = CalData$Yu_z * 1000)
+            sim_event_mm_m3_s <- data.frame(residuals_mm_m3_s, Yu_z = CalData$Yu_z * 1000)
         } else {
             # Residuals file is not ready, so I need to create by myself with MAP estimation from sampled data while MCMC is turning
             # Get data format from mage results
@@ -960,7 +1010,7 @@ for (Experiment_id in all_experiments) {
 
             runModel(
                 workspace = temporal_dir,
-                mod = mod[[counter]],
+                mod = mod_polynomials[[counter]],
                 X = X,
                 stout = NULL
             )
@@ -975,7 +1025,7 @@ for (Experiment_id in all_experiments) {
             u_obs[u_obs == -9999] <- NA
             res <- obs - sim
 
-            residuals_event_mm_m3_s <- data.frame(
+            sim_event_mm_m3_s <- data.frame(
                 X1_obs = X[, 1],
                 X2_obs = X[, 2],
                 X3_obs = X[, 3],
@@ -986,10 +1036,10 @@ for (Experiment_id in all_experiments) {
                 Y1_res = res[, 1],
                 Yu_z = u_obs[, 1]
             )
+            setwd(dir_workspace)
         }
-        setwd(dir_workspace)
-        Q_residuals <- ZQdX_residuals(
-            residuals_event_mm_m3_s = residuals_event_mm_m3_s,
+        Q_sim_vs_obs <- ZQdX_sim(
+            sim_event_mm_m3_s = sim_event_mm_m3_s,
             Q_input = c(120, 60, 30, 14),
             Qplot = TRUE,
             title_label = "MAP simulations vs boundary condition \n(Discharge upstream)",
@@ -998,17 +1048,20 @@ for (Experiment_id in all_experiments) {
 
         ggsave(
             file.path(
-                path_temp_plots,
+                path_post_traitement,
                 "Q_residuals.png"
             ),
-            Q_residuals,
+            Q_sim_vs_obs,
             width = 20,
             height = 20,
             units = "cm"
         )
+        save(Q_sim_vs_obs,
+            file = file.path(path_post_traitement_data, "Plot_Q_sim_vs_obs.RData")
+        )
 
-        Z_residuals <- ZQdX_residuals(
-            residuals_event_mm_m3_s = residuals_event_mm_m3_s,
+        Z_sim_vs_obs <- ZQdX_sim(
+            sim_event_mm_m3_s = sim_event_mm_m3_s,
             Q_input = NULL,
             Qplot = FALSE,
             title_label = "MAP simulations vs Observations (WSE)",
@@ -1017,22 +1070,28 @@ for (Experiment_id in all_experiments) {
 
         ggsave(
             file.path(
-                path_temp_plots,
-                "Z_residuals.png"
+                path_post_traitement,
+                "Plot_Z_residuals.png"
             ),
-            Z_residuals,
+            Z_sim_vs_obs,
             width = 20,
             height = 20,
             units = "cm"
+        )
+        save(Z_sim_vs_obs,
+            file = file.path(path_post_traitement_data, "Plot_Z_sim_vs_obs.RData")
+        )
+        save(sim_event_mm_m3_s,
+            file = file.path(path_post_traitement_data, "Data_Z_sim_vs_obs.RData")
         )
     }
     plotDIC <- plot_DIC(path_experiment)
     ggsave(
         file.path(
-            plotDIC,
+            path_experiment,
             "DIC.png"
         ),
-        Z_residuals,
+        plotDIC,
         width = 20,
         height = 20,
         units = "cm"
