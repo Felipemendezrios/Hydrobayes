@@ -1,0 +1,6 @@
+"Constant"                                                 ! Function f used in sdev=f(Ysim) - available: Constant, Linear, Exponential,Gaussian - resp. npar: 1,2,3,3
+1                                                          ! Number of parameters gamma for the function f above
+"intercept"                                                ! Parameter name
+2.30258509299405                                           ! Initial guess
+"LogNormal"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+2.30258509299405,1                                         ! Prior parameters
