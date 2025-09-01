@@ -167,8 +167,8 @@ write_RUGFile <- function(RUG_path,
             RUG_id_reach[i],
             RUG_KP_start[i],
             RUG_KP_end[i],
-            RUG_Kmin,
-            RUG_Kmoy
+            RUG_Kmin[i],
+            RUG_Kmoy[i]
         )
         # Write to file
         writeLines(line, fileConn)

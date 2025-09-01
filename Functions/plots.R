@@ -20,11 +20,27 @@ ZQdX_residuals <- function(
     if (Qplot == TRUE) {
         ZQplot <- ZQplot +
             geom_point(aes(y = Y2_sim, col = "sim")) +
-            geom_hline(aes(yintercept = Q_input, col = "boundary\nconditions", linetype = "1")) +
             scale_color_manual(values = c("sim" = "blue", "boundary\nconditions" = "red")) +
-            scale_linetype_manual(values = c("1" = "dashed", "2" = "solid", "3" = "dotted", "4" = "twodash")) +
-            labs(colour = NULL, linetype = "boundary\ncondition\nevents") +
             facet_wrap(~X1_obs, ncol = 2)
+
+        # Create a data frame for the horizontal lines
+        hline_data <- data.frame(
+            X1_obs = 1:length(Q_input),
+            yintercept = Q_input,
+            linetype = 1:length(Q_input), # or use named linetypes like c("solid", "dashed", "dotted")
+            col = "boundary\nconditions" # same color for all lines
+        )
+
+        ZQplot <- ZQplot +
+            geom_hline(
+                data = hline_data,
+                aes(yintercept = yintercept, linetype = factor(linetype), color = col),
+                show.legend = TRUE
+            )
+
+        ZQplot <- ZQplot +
+            scale_linetype_manual(values = c("1" = "dashed", "2" = "solid", "3" = "dotted", "4" = "twodash")) +
+            labs(colour = NULL, linetype = "boundary\ncondition\nevents")
     } else {
         ZQplot <- ZQplot +
             geom_point(aes(y = Y1_sim, col = "sim")) +
@@ -127,7 +143,7 @@ k_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         )
-    return(k_plot)
+    return(list(df_MAP, k_plot))
 }
 
 
@@ -195,4 +211,61 @@ CalData_plot <- function(
             facet_wrap(~ID, scales = scales_free, ncol = 1)
     }
     return(plot_CalData)
+}
+
+
+plot_DIC <- function(
+    dir_polynomial,
+    DIC_criterion = "DIC3") {
+    all_files <- list.files(
+        file.path(
+            dir_polynomial
+        ),
+        recursive = TRUE
+    )
+
+    DIC_path_Files <- all_files[grep(all_files, pattern = "Results_DIC.txt")]
+    if (length(DIC_path_Files) == 0) stop("Any Results_DIC.txt file was found")
+    DIC_results <- c()
+
+
+    for (i in 1:length(DIC_path_Files)) {
+        DIC_by_degree <- read.table(file.path(dir_polynomial, DIC_path_Files[i]), col.names = c("Criteria", "Value"))
+        # Match the criterion chosen
+        DIC_by_degree <- DIC_by_degree[which(DIC_by_degree[, 1] == DIC_criterion), ]
+        # Assign the polynomial degree
+        extraction <- strsplit(DIC_path_Files[i], "/")[[1]][1]
+        # Extraire le chiffre après le underscore
+        chiffre <- sub(".*_(\\d+)", "\\1", extraction)
+
+        # Convertir en numérique (optionnel)
+        DIC_by_degree$Degree <- as.numeric(chiffre)
+
+        DIC_results <- rbind(DIC_results, DIC_by_degree)
+    }
+    min_local <- DIC_results[which.min(DIC_results$Value), ]
+
+    DIC_plot <- ggplot(DIC_results, aes(x = factor(Degree), y = Value, col = factor(Criteria))) +
+        geom_point(size = 3) +
+        geom_point(data = min_local, aes(x = , factor(Degree), y = Value), col = "blue", size = 3) +
+        annotate("segment",
+            x = factor(min_local$Degree), y = min_local$Value * 1.005, xend = factor(min_local$Degree), yend = min_local$Value * 1.002,
+            linewidth = 2, linejoin = "mitre",
+            arrow = arrow(type = "closed", length = unit(0.01, "npc"))
+        ) +
+        theme_bw() +
+        labs(
+            x = "Polynomial degree",
+            y = "Value",
+            col = "Criterion",
+            title = "DIC criterion :",
+            subtitle = "Comparison of several polynomial degrees"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            plot.subtitle = element_text(hjust = 0.5)
+        )
+
+
+    return(DIC_plot)
 }
