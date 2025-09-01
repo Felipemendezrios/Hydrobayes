@@ -1,6 +1,6 @@
-# Plot the residual of ZQdX
-ZQdX_residuals <- function(
-    residuals_event_mm_m3_s,
+# Plot the simulation of ZQdX
+ZQdX_sim <- function(
+    sim_event_mm_m3_s,
     Q_input = NULL,
     Qplot = TRUE,
     title_label,
@@ -10,10 +10,10 @@ ZQdX_residuals <- function(
     }
 
     # Replace -9999 and -1e9 with NA
-    residuals_event_mm_m3_s[residuals_event_mm_m3_s == -9999] <- NA
-    residuals_event_mm_m3_s[residuals_event_mm_m3_s == -1e9] <- NA
+    sim_event_mm_m3_s[sim_event_mm_m3_s == -9999] <- NA
+    sim_event_mm_m3_s[sim_event_mm_m3_s == -1e9] <- NA
 
-    ZQplot <- ggplot(residuals_event_mm_m3_s, aes(x = X3_obs)) +
+    ZQplot <- ggplot(sim_event_mm_m3_s, aes(x = X3_obs)) +
         labs(title = title_label, x = "Streamwise position (meters)", y = ylabel) +
         theme_bw() +
         theme(plot.title = element_text(hjust = 0.5))
@@ -46,7 +46,7 @@ ZQdX_residuals <- function(
             geom_point(aes(y = Y1_sim, col = "sim")) +
             geom_point(aes(y = Y1_obs, col = "obs"))
 
-        if (any(residuals_event_mm_m3_s$Yu_z != 0)) {
+        if (any(sim_event_mm_m3_s$Yu_z != 0)) {
             ZQplot <- ZQplot +
                 geom_errorbar(aes(
                     ymin = Y1_obs - 1.96 * Yu_z,
@@ -143,7 +143,7 @@ k_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         )
-    return(list(df_MAP, k_plot))
+    return(list(df_MAP, k_plot, df_envelope))
 }
 
 
