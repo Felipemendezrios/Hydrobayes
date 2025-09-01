@@ -9,7 +9,8 @@ bibliography: biblio.bib
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  echo = FALSE
+  echo = FALSE,
+  fig.align = "center"
 )
 ```
 # Experimental set up
@@ -55,6 +56,11 @@ Take a look about all the measurements:
 ```{r}
 load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/compound_single_friction/data_HHLab_uniform_case.RData")
 
+function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
+for (i in function_list) {
+  source(i)
+}
+
 
 WSE_all_data <- all_data_calibration$WSE
 WSE_all_data[, -c(1, 3)] <- WSE_all_data[, -c(1, 3)] * 1000
@@ -82,7 +88,7 @@ CalData_plot(
 )
 ```
 
-# Experiment: 1_WSE_floodplain_realistic_uncertainty
+# Experiment: ``1_WSE_floodplain_realistic_uncertainty`
 
 Here the experiment with the observational data obtained in the laboratory,averaging the values of the WSE.
 
@@ -169,22 +175,57 @@ knitr::include_graphics(file.path(path, "Q_residuals.png"))
 
 - High negative corelation between a0_kmin and a0_kmoy. They can be interchangeable and the result will be the same with a weighting or factor to compensate.
 
-
 # Question 1:
+**How to reduce the corelation between a0_kmin and a0_kmoy using only a single event?**
 
-How to reduce the corelation between a0_kmin and a0_kmoy using only a single event?
+- **First proposal:** reduce the uncertainty in the observational data (case `1_WSE_floodplain_null_uncertainty`)
+- **Second proposal:** add a single pseudo-observation of the friction in the main channel with very low uncertainty (case `1_WSE_floodplain_1_Kmin_null_uncertainty`)
+- **Third proposal:** add several pseudo-observations of the friction in the main channel with a realistic uncertainty (case `1_WSE_floodplain_several_Kmin`)
+- **Fourth proposal:** similar as the second proposal but now the pseudo-observation is taken in the floodplain (case `1_WSE_floodplain_1_Kmoy_null_uncertainty`)
 
-- First proposal: reduce the uncertainty in the observational data (case 1_WSE_floodplain_low_uncertainty)
-- Second proposal: add a single pseudo-observation of the friction in the main channel with very low uncertainty (case 1_WSE_floodplain_1_Kmin_low_uncertainty)
-- Third proposal: add several pseudo-observations of the friction in the main channel with a realistic uncertainty (case 1_WSE_floodplain_several_Kmin)
-- Fourth proposal: Saùe as third proposal but now the psudo-observation is in the floodplain (case 1_WSE_floodplain_1_Kmoy_low_uncertainty)
-## Experiment: 1_WSE_floodplain_low_uncertainty
+
+# Main conclusions:
+
+The conclusions are presented before describing the experiments, in order to highlight the key findings of the study.
+
+**In laboratory measurements:**
+
+- Water depth measurements presented a discrepancy between measurements in the main channel and the floodplain. Averaging them could already introduce some errors during modelling.
+- A light backwater wave was observed from downstream to upstream. Indeed, the hydraulic control is the weir located downstream which is controlling the flow dynamics.
+- The height of the weir is not reported. Therefore, the closest observed water level was chosen as the downstream boundary condition, introducing non-negligible errors in the modeling.
+
+**Results of experiments:**
+
+- High corelations between the friction in the main channel and the floodplain were detected.
+- To reduce this corelation, it is necessary to get more information about the friction at least from one of them, WSE observation with low uncertainty to restreint the possible combinations of parameters.
+- The method is able to estimate the parameters, but special attention should be paid to the selection of observational data in order to avoid very high parametric uncertainties.
+- To reproduce the observed WSE, the friction values in either the main channel or the floodplain must be set to unrealistic levels according to the literature.
+
+## Underlying questions:
+
+1. The method could identify the friction in the main channel and the floodplain using a single event in floodplain?
+
+    **Answer:** `1_WSE_floodplain_realistic_uncertainty` experiment, presented previously, shows calibration using a single event in floodplain lead to estimate a high number of good combinations for reproducing the observed WSE. So, it is possible but parametric uncertainty is huge due to the strong negative corelation
+
+1. How to reduce the corelation between kmin/kmoy ?
+
+    **Answer:** Taking a pseudo-observation of the friction either in main channel or floodplain with low uncertainty to reduce the number of combinations of the parameters.    
+
+1. A minimal number of events (2) to identify the friction in the main channel and floodplain? Should one of the events flow only in the main channel?
+
+
+    **Answer:** This experiment must be performed in a synthetic experiment to conclude about it.
+
+
+## Experiment: `1_WSE_floodplain_null_uncertainty`
+
+Reduce the uncertainty in the observational data 
 
 ## Calibration data
 
 A sample was taken of all measurements shown previously:
 ```{r}
-id <- "1_WSE_floodplain_low_uncertainty"
+id <- "1_WSE_floodplain_null_uncertainty"
 path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_single_friction/Calibration", id)
 
 knitr::include_graphics(file.path(path, "CalData_plot.png"))
@@ -263,5 +304,287 @@ knitr::include_graphics(file.path(path, "Q_residuals.png"))
 -  From the first case, the uncertainty is already low, thus reducing the uncertainty in the observational data does not help to break the corelation between the parameters.
 -  To assess the identifiability of the parameters, non uncertainty in observation is considered for the rest of the experiments.
 
+## Experiment: `1_WSE_floodplain_1_Kmin_null_uncertainty`
+
+Add a single pseudo-observation of the friction in the main channel with very low uncertainty 
+
+## Calibration data
+
+The WSE observation is considered without uncertainty as the previous example. Below the calibration data is shown:
+
+```{r}
+id <- "1_WSE_floodplain_1_Kmin_null_uncertainty"
+path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_single_friction/Calibration", id)
+
+getCalData <- read.table(
+  file = file.path(path, "CalibrationData.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+knitr::kable(getCalData,
+  align = "c"
+)
+```
+
+## Check MCMC
+
+### All MCMC samples:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_not_cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_not_cooked.png"))
+```
+
+### MCMC cooked:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_Cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_Cooked.png"))
+```
+
+
+## Corelation plot of MCMC cooked:
+```{r}
+knitr::include_graphics(file.path(path, "corelation_cooked.png"))
+```
+
+## Check summary
+```{r}
+getSummary <- read.table(
+  file = file.path(path, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom,
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm, discharge in m3/s, velocity in m/s kmin and kmoy in m1/3/s."
+)
+```
+
+## Estimation of the friction coefficients
+### In the main channel:
+```{r}
+knitr::include_graphics(file.path(path, "kmin.png"))
+```
+
+## Estimation of the friction coefficients
+### In the floodplain:
+```{r}
+knitr::include_graphics(file.path(path, "kmoy.png"))
+```
+
+## Residuals 
+### in terms of WSE
+```{r}
+knitr::include_graphics(file.path(path, "Z_residuals.png"))
+```
+
+### In terms of discharge
+```{r}
+knitr::include_graphics(file.path(path, "Q_residuals.png"))
+```
+
+## Notes:
+
+- By forcing a observation very tight in the main channel and keeping a polynomial degree of 0, indicates that the estimation of the friction in the main channel is already known before the calibration. In other words, in a constant longitudinal friction, with a very tight observation of the fricion coefficient in the main channel or floodplain reduce the number of parameters to estimate of 1. 
+- No more corelation is observed but this case is not realistic, as the friction coefficient in the main channel is not known accurately.
+- By fixing the friction coefficient in the main channel, the estimation of the friction coefficient in the floodplain can be better identified
+
+## Experiment: `1_WSE_floodplain_several_Kmin`
+
+Add several pseudo-observations of the friction in the main channel with a realistic uncertainty
+
+## Calibration data
+
+```{r}
+id <- "1_WSE_floodplain_several_Kmin"
+path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_single_friction/Calibration", id)
+
+getCalData <- read.table(
+  file = file.path(path, "CalibrationData.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+knitr::kable(getCalData,
+  align = "c"
+)
+```
+
+## Check MCMC
+
+### All MCMC samples:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_not_cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_not_cooked.png"))
+```
+
+### MCMC cooked:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_Cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_Cooked.png"))
+```
+
+
+## Corelation plot of MCMC cooked:
+```{r}
+knitr::include_graphics(file.path(path, "corelation_cooked.png"))
+```
+
+## Check summary
+```{r}
+getSummary <- read.table(
+  file = file.path(path, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom,
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm, discharge in m3/s, velocity in m/s kmin and kmoy in m1/3/s."
+)
+```
+
+## Estimation of the friction coefficients
+### In the main channel:
+```{r}
+knitr::include_graphics(file.path(path, "kmin.png"))
+```
+
+## Estimation of the friction coefficients
+### In the floodplain:
+```{r}
+knitr::include_graphics(file.path(path, "kmoy.png"))
+```
+
+## Residuals 
+### in terms of WSE
+```{r}
+knitr::include_graphics(file.path(path, "Z_residuals.png"))
+```
+
+### In terms of discharge
+```{r}
+knitr::include_graphics(file.path(path, "Q_residuals.png"))
+```
+
+## Notes:
+
+- Several pseudo-observations of the friction in the main channel lead to target a set of combinations of the friction coefficients in the main channel and the floodplain leading to reproduce the observed WSE.
+- The corelation between te parameters is reduced but not completely removed.
+
+## Experiment: `1_WSE_floodplain_1_Kmoy_null_uncertainty`
+
+Similar as the second proposal but now the pseudo-observation is taken in the floodplain 
+
+## Calibration data
+
+```{r}
+id <- "1_WSE_floodplain_1_Kmoy_null_uncertainty"
+path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_single_friction/Calibration", id)
+
+getCalData <- read.table(
+  file = file.path(path, "CalibrationData.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+knitr::kable(getCalData,
+  align = "c"
+)
+```
+
+## Check MCMC
+
+### All MCMC samples:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_not_cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_not_cooked.png"))
+```
+
+### MCMC cooked:
+
+```{r}
+knitr::include_graphics(file.path(path, "MCMC_Cooked.png"))
+knitr::include_graphics(file.path(path, "densityplot_Cooked.png"))
+```
+
+
+## Corelation plot of MCMC cooked:
+```{r}
+knitr::include_graphics(file.path(path, "corelation_cooked.png"))
+```
+
+## Check summary
+```{r}
+getSummary <- read.table(
+  file = file.path(path, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom,
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm, discharge in m3/s, velocity in m/s kmin and kmoy in m1/3/s."
+)
+```
+
+## Estimation of the friction coefficients
+### In the main channel:
+```{r}
+knitr::include_graphics(file.path(path, "kmin.png"))
+```
+
+## Estimation of the friction coefficients
+### In the floodplain:
+```{r}
+knitr::include_graphics(file.path(path, "kmoy.png"))
+```
+
+## Residuals 
+### in terms of WSE
+```{r}
+knitr::include_graphics(file.path(path, "Z_residuals.png"))
+```
+
+### In terms of discharge
+```{r}
+knitr::include_graphics(file.path(path, "Q_residuals.png"))
+```
+
+## Notes:
+
+- As in the second proposal, the friction coefficient in the floodplain is already known before the calibration due to the tight uncertainty in the pseudo-observation. 
+- By fixing this parameters, the estimation shows that the model needs to compensate the friction in the main channel to reproduce the observed WSE.
+- The corelation between the parameters is broken but the uncertainty on the pseudo-observation is not realistic.
 
 # Bibliography:

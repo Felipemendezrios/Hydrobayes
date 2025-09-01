@@ -1,6 +1,9 @@
 rm(list = ls())
 graphics.off()
 
+# Set directory
+dir_workspace <- here::here()
+
 function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
 for (i in function_list) {
     source(i)
@@ -15,6 +18,7 @@ library(dplyr)
 library(patchwork)
 library(tidyr)
 library(ggplot2)
+library(stringr)
 
 # Common for observation and calibration
 all_experiments <- c(
@@ -40,6 +44,7 @@ all_events <- c(
 Do_Correction_Cross_section <- TRUE
 
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
+MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
 do_calibration <- FALSE
 
 # Observations data input:
@@ -428,11 +433,14 @@ jump_MCMC_theta_param_user <- 8
 jump_MCMC_error_model_user <- 0.001
 threshold_jump_MCMC_error_model <- 0.5
 prior_error_model <- get_init_prior(remant_error_list)
+mod <- list()
 ##################################
+
+file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments"
 
 for (Experiment_id in all_experiments) {
     if (Do_Correction_Cross_section) {
-        path_Cross_section_to_remplace <- c(paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments/", Experiment_id, "/", all_polynomial_degree, "/model_mage/", all_events[1], "/net/Reach_002.ST"))
+        path_Cross_section_to_remplace <- c(paste0(file_main_path, "/", Experiment_id, "/", all_polynomial_degree, "/model_mage/", all_events[1], "/net/Reach_002.ST"))
 
         for (temp_path in path_Cross_section_to_remplace) {
             Cross_sections_interpolation_and_export_rectangular_channel(
@@ -447,7 +455,7 @@ for (Experiment_id in all_experiments) {
         }
     }
 
-    path_temp_experiment <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments", Experiment_id)
+    path_temp_experiment <- file.path(file_main_path, Experiment_id)
 
     ggsave(file.path(path_temp_experiment, "CalData_plot.png"),
         plot = CalData_plot_export,
@@ -455,7 +463,7 @@ for (Experiment_id in all_experiments) {
         height = 20,
         units = "cm"
     )
-
+    counter_model <- 1
     for (polynomial_id in all_polynomial_degree) {
         # That will work only for exploring several polynomial degrees in the main chanil, fixing the floodplain
         if (polynomial_id == "n_0") {
@@ -576,11 +584,10 @@ for (Experiment_id in all_experiments) {
         zFileKmin <- file.path(path_temp_results, "Zfile_Kmin.txt")
         zFileKmoy <- file.path(path_temp_results, "Zfile_Kflood.txt")
 
-
         xtra <- xtraModelInfo(
             fname = "Config_setup.txt",
             object = list(
-                exeFile = "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage",
+                exeFile = MAGE_executable,
                 version = "8",
                 mageDir = mageDir,
                 repFile = paste0(mage_projet_name, ".REP"),
@@ -593,14 +600,13 @@ for (Experiment_id in all_experiments) {
             )
         )
 
-        mod <- model(
+        mod[[counter_model]] <- model(
             ID = "MAGE_ZQV",
             nX = 4,
             nY = 5, ,
             par = theta_param,
             xtra = xtra
         )
-
         # Re-write RUG file : keep the position of the cross sections as original
 
         prior_theta_param <- get_init_prior(theta_param)
@@ -637,7 +643,7 @@ for (Experiment_id in all_experiments) {
         # runModel(workspace = tempdir(), mod = mod, X = X)
 
         BaM(
-            mod = mod,
+            mod = mod[[counter_model]],
             data = data,
             remnant = remant_error_list,
             mcmc = mcmcOptions_user,
@@ -655,6 +661,7 @@ for (Experiment_id in all_experiments) {
             # name.exe = "BaM",
             predMaster_fname = "Config_Pred_Master.txt"
         )
+        counter_model <- counter_model + 1
 
         dir_cf <- file.path(path_temp_results, "Config_BaM.txt")
 
@@ -669,7 +676,22 @@ for (Experiment_id in all_experiments) {
 }
 
 
+
+
+
+
+########### PLOTS:
+
+
+final_calibraion <- TRUE
+# friction for glass
+ks_literature_glass <- data.frame(min = 1 / 0.013, max = 1 / 0.009, mean = 1 / 0.010)
+# ks_literature_floodplain <- data.frame(min = 1 / 0.05, max = 1 / 0.025, mean = 1 / 0.033)
+
+n_degree_Kflood <- -1 # FIX -1
 for (Experiment_id in all_experiments) {
+    path_experiment <- file.path(file_main_path, Experiment_id)
+    counter <- 1
     for (polynomial_id in all_polynomial_degree) {
         # That will work only for exploring several polynomial degrees in the main chanil, fixing the floodplain
         if (polynomial_id == "n_0") {
@@ -701,8 +723,9 @@ for (Experiment_id in all_experiments) {
         } else {
             stop("polynomial_id not supported yet")
         }
-
-        path_temp_plots <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments", Experiment_id, polynomial_id, "Calibration/")
+        path_polynomial_temp <- file.path(path_experiment, polynomial_id)
+        path_model_mage <- c(paste0(path_polynomial_temp, "/model_mage/", all_events, "/"))
+        path_temp_plots <- file.path(path_polynomial_temp, "Calibration")
 
         ### PLOTS
         mcmc_not_cooked <- readMCMC(file.path(path_temp_plots, "Results_MCMC.txt"))
@@ -715,7 +738,10 @@ for (Experiment_id in all_experiments) {
                 path_temp_plots,
                 "MCMC_not_cooked.png"
             ),
-            mcmcplot
+            mcmcplot,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
 
         # Density plot for each parameter
@@ -727,72 +753,88 @@ for (Experiment_id in all_experiments) {
                 path_temp_plots,
                 "densityplot_not_cooked.png"
             ),
-            pdf_plot
+            pdf_plot,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
 
-        mcmc <- readMCMC(file.path(path_temp_plots, "Results_Cooking.txt"))
-        plots <- tracePlot(mcmc)
+        if (final_calibraion) {
+            if (!file.exists(file.path(path_temp_plots, "Results_Cooking.txt"))) stop("MCMC is still running or calculation is not going to the end. Verify if calibration is already finished or verify that calibration has not error messages. Please put final_results = FALSE as input")
 
-        mcmcplot <- wrap_plots(plots, ncol = 3)
+            mcmc <- readMCMC(file.path(path_temp_plots, "Results_Cooking.txt"))
+            plots <- tracePlot(mcmc)
 
-
-        ggsave(
-            file.path(
-                path_temp_plots,
-                "MCMC_Cooked.png"
-            ),
-            mcmcplot
-        )
-
-        # Density plot for each parameter
-        plots <- densityPlot(mcmc)
-        pdf_plot <- wrap_plots(plots, ncol = 3)
-
-        ggsave(
-            file.path(
-                path_temp_plots,
-                "densityplot_Cooked.png"
-            ),
-            pdf_plot
-        )
+            mcmcplot <- wrap_plots(plots, ncol = 3)
 
 
-        png(
-            file.path(path_temp_plots, "corelation_cooked.png"),
-            width = 800,
-            height = 800,
-            res = 120
-        )
-        pairs(mcmc)
-        dev.off()
+            ggsave(
+                file.path(
+                    path_temp_plots,
+                    "MCMC_Cooked.png"
+                ),
+                mcmcplot,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
 
-        getSummary <- read.table(
-            file = file.path(path_temp_plots, "Results_Summary.txt"),
-            header = TRUE,
-            stringsAsFactors = FALSE
-        )
+            # Density plot for each parameter
+            plots <- densityPlot(mcmc)
+            pdf_plot <- wrap_plots(plots, ncol = 3)
 
-        # Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
-        knitr::kable(getSummary,
-            align = "c"
-        )
+            ggsave(
+                file.path(
+                    path_temp_plots,
+                    "densityplot_Cooked.png"
+                ),
+                pdf_plot,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
 
 
-        # Zoom into the MAP and standard deviation of the error model
-        getSummary_zoom <- getSummary[c(11, 16), ]
-        getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # WSE in mm
+            png(
+                file.path(path_temp_plots, "corelation_cooked.png"),
+                width = 800,
+                height = 800,
+                res = 120
+            )
+            pairs(mcmc)
+            dev.off()
 
-        # friction for glass
-        ks_literature_glass <- data.frame(min = 1 / 0.013, max = 1 / 0.009, mean = 1 / 0.010)
+            getSummary <- read.table(
+                file = file.path(path_temp_plots, "Results_Summary.txt"),
+                header = TRUE,
+                stringsAsFactors = FALSE
+            )
 
-        # Get MAP simulation
-        MAP_param_matrix <- as.numeric(getSummary_zoom[2, c(1:(n_degree_Kmin + 1 + 1 + n_degree_Kflood))])
+            # Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+            knitr::kable(getSummary,
+                align = "c"
+            )
+
+
+            # Zoom into the MAP and standard deviation of the error model
+            getSummary_zoom <- getSummary[c(11, 16), ]
+            getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # WSE in mm
+
+            # Get MAP simulation
+            MAP_param_matrix <- as.numeric(getSummary_zoom[2, c(1:(n_degree_Kmin + 1 + 1 + n_degree_Kflood))])
+        } else {
+            results_MCMC_sampling <- read.table(file.path(path_temp_plots, "Results_MCMC.txt"), header = TRUE)
+            mcmc <- data.frame(results_MCMC_sampling[, 1:(n_degree_Kmin + 1 + 1 + n_degree_Kflood)])
+
+            # Get MAP simulation: from current analysis without burning and slim
+            MAP_param_matrix <- as.numeric(results_MCMC_sampling[which.max(results_MCMC_sampling$LogPost), 1:(n_degree_Kmin + 1 + 1 + n_degree_Kflood)])
+        }
 
         matrix_zFileKmin <- read.table(file.path(path_temp_plots, "Zfile_Kmin.txt"), header = TRUE)
 
         position <- read.table(file.path(path_temp_plots, "legendre_covariate_non_normalized.txt"), header = TRUE)
 
-        kmin_plot <- k_plot(
+        kmin_calculations <- k_plot(
             matrix_spatialisation = matrix_zFileKmin,
             mcmc = mcmc,
             n_degree_kmin = n_degree_Kmin,
@@ -802,20 +844,23 @@ for (Experiment_id in all_experiments) {
             main_channel = TRUE,
             ks_literature = ks_literature_glass
         )
+        kmin_plot <- kmin_calculations[[2]]
+        df_MAP <- kmin_calculations[[1]]
 
         ggsave(
             file.path(
                 path_temp_plots,
                 "kmin.png"
             ),
-            kmin_plot
+            kmin_plot,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
-
-        # ks_literature_floodplain <- data.frame(min = 1 / 0.05, max = 1 / 0.025, mean = 1 / 0.033)
 
         # matrix_zFileKflood <- read.table(file.path(path_temp_plots, "Zfile_Kflood.txt"), header = TRUE)
 
-        # kmoy_plot <- k_plot(
+        # kmoy_calculations <- k_plot(
         #     matrix_spatialisation = matrix_zFileKflood,
         #     mcmc = mcmc,
         #     n_degree_kmin = n_degree_Kmin,
@@ -825,36 +870,127 @@ for (Experiment_id in all_experiments) {
         #     main_channel = FALSE,
         #     ks_literature = ks_literature_floodplain
         # )
-
+        # kmoy_plot <- kmoy_calculations[[2]]
+        # df_MAP_kmoy <- kmoy_calculations[[1]]
         # ggsave(
         #     file.path(
         #         path_temp_plots,
         #         "kmoy.png"
         #     ),
-        #     kmoy_plot
+        #     kmoy_plot,
+        #      width = 20,
+        # height = 20,
+        # units = "cm"
         # )
 
-        # Read residuals
-        residuals <- read.table(
-            file = file.path(path_temp_plots, "Results_Residuals.txt"),
-            header = TRUE,
-            stringsAsFactors = FALSE
-        )
-
-        # Convert residuals to mm and m3/s
-        residuals_mm_m3_s <- data.frame(
-            residuals[, 1:4],
-            residuals[, c(9, 19, 20, 24, 29)] * 1000
-        )
-
         CalData <- read.table(file.path(path_temp_plots, "CalibrationData.txt"), header = TRUE)
+        # Read residuals
+        if (final_calibraion) {
+            residuals <- read.table(
+                file = file.path(path_temp_plots, "Results_Residuals.txt"),
+                header = TRUE,
+                stringsAsFactors = FALSE
+            )
 
+            # Convert residuals to mm and m3/s
+            residuals_mm_m3_s <- data.frame(
+                residuals[, 1:4],
+                residuals[, c(9, 19, 20, 24, 29)] * 1000
+            )
+            residuals_event_mm_m3_s <- data.frame(residuals_mm_m3_s, Yu_z = CalData$Yu_z * 1000)
+        } else {
+            # Residuals file is not ready, so I need to create by myself with MAP estimation from sampled data while MCMC is turning
+            # Get data format from mage results
+            temporal_dir <- tempdir()
+            files <- list.files(temporal_dir, full.names = TRUE)
 
-        residuals_event_mm_m3_s <- data.frame(residuals_mm_m3_s, Yu_z = CalData$Yu_z * 1000)
+            exclude_file <- file.path(temporal_dir, "vscode-R")
 
+            # List all files in the temp directory
+            files <- list.files(temporal_dir, full.names = TRUE)
+
+            # Exclude the specific file
+            files_to_delete <- setdiff(files, exclude_file)
+
+            # Remove remaining files if any
+            if (length(files_to_delete) > 0) {
+                unlink(files_to_delete, recursive = TRUE)
+            }
+
+            file.copy(
+                from = path_model_mage,
+                to = temporal_dir, recursive = TRUE
+            )
+            temp_path <- file.path(temporal_dir, basename(path_model_mage))
+
+            path_RUGFile <- file.path(
+                temp_path,
+                list.files(temp_path)[grep(list.files(temp_path), pattern = ".RUG")]
+            )
+            MAP_RUGFile <- lapply(path_RUGFile, function(file) {
+                read_fortran_data(
+                    file_path = file,
+                    col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
+                    skip = 1
+                )
+            })
+
+            for (i in seq_along(MAP_RUGFile)) {
+                if (nrow(df_MAP) != nrow(MAP_RUGFile[[i]])) stop("Mage project has not the same size as the value estimated based on the MAP estimator")
+                MAP_RUGFile[[i]]$V6 <- df_MAP$Value
+
+                write_RUGFile(
+                    RUG_path = path_RUGFile[i],
+                    RUG_id_reach = MAP_RUGFile[[i]]$V2,
+                    RUG_KP_start = MAP_RUGFile[[i]]$V4,
+                    RUG_KP_end = MAP_RUGFile[[i]]$V5,
+                    RUG_Kmin = MAP_RUGFile[[i]]$V6,
+                    RUG_Kmoy = MAP_RUGFile[[i]]$V7,
+                    RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
+                )
+            }
+
+            REPFile <- list.files(temp_path)[grep(list.files(temp_path), pattern = ".REP")]
+            REPFile <- str_remove(REPFile, pattern = ".REP")
+
+            for (i in 1:length(temp_path)) {
+                setwd(temp_path[i])
+                system2(MAGE_executable, args = REPFile[i], wait = TRUE)
+            }
+
+            runModel(
+                workspace = temporal_dir,
+                mod = mod[[counter]],
+                X = X,
+                stout = NULL
+            )
+            counter <- counter + 1
+
+            setwd(temporal_dir)
+
+            sim <- read.table("Y.txt", header = TRUE)
+            obs <- CalData[, 5:9]
+            obs[obs == -9999] <- NA
+            u_obs <- CalData[, 10:14]
+            u_obs[u_obs == -9999] <- NA
+            res <- obs - sim
+
+            residuals_event_mm_m3_s <- data.frame(
+                X1_obs = X[, 1],
+                X2_obs = X[, 2],
+                X3_obs = X[, 3],
+                X4_obs = X[, 4],
+                Y1_obs = obs[, 1],
+                Y1_sim = sim[, 1],
+                Y2_sim = sim[, 2],
+                Y1_res = res[, 1],
+                Yu_z = u_obs[, 1]
+            )
+        }
+        setwd(dir_workspace)
         Q_residuals <- ZQdX_residuals(
             residuals_event_mm_m3_s = residuals_event_mm_m3_s,
-            Q_input = 114,
+            Q_input = c(120, 60, 30, 14),
             Qplot = TRUE,
             title_label = "MAP simulations vs boundary condition \n(Discharge upstream)",
             ylabel = "Q (L/s)"
@@ -865,7 +1001,10 @@ for (Experiment_id in all_experiments) {
                 path_temp_plots,
                 "Q_residuals.png"
             ),
-            Q_residuals
+            Q_residuals,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
 
         Z_residuals <- ZQdX_residuals(
@@ -881,7 +1020,21 @@ for (Experiment_id in all_experiments) {
                 path_temp_plots,
                 "Z_residuals.png"
             ),
-            Z_residuals
+            Z_residuals,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
     }
+    plotDIC <- plot_DIC(path_experiment)
+    ggsave(
+        file.path(
+            plotDIC,
+            "DIC.png"
+        ),
+        Z_residuals,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
 }

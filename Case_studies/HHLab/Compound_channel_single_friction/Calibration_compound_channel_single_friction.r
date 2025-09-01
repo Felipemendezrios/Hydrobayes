@@ -27,11 +27,11 @@ library(ggplot2)
 # 1_WSE_floodplain_1_Kmoy_low_uncertainty: a single event with WSE in the floodplain and one Kmoy tight
 
 all_experiments <- c(
-    "1_WSE_floodplain_low_uncertainty",
+    "1_WSE_floodplain_null_uncertainty",
     "1_WSE_floodplain_realistic_uncertainty",
-    "1_WSE_floodplain_1_Kmin_low_uncertainty",
+    "1_WSE_floodplain_1_Kmin_null_uncertainty",
     "1_WSE_floodplain_several_Kmin",
-    "1_WSE_floodplain_1_Kmoy_low_uncertainty"
+    "1_WSE_floodplain_1_Kmoy_null_uncertainty"
 )
 
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
