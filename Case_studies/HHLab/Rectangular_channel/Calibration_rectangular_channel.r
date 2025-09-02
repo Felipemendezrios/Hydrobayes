@@ -41,7 +41,7 @@ all_events <- c(
 )
 
 
-Do_Correction_Cross_section <- TRUE
+Do_Correction_Cross_section <- FALSE
 
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
@@ -569,8 +569,8 @@ for (Experiment_id in all_experiments) {
                 RUG_id_reach = RUG_id_reach,
                 RUG_KP_start = RUG_KP_start,
                 RUG_KP_end = RUG_KP_end,
-                RUG_Kmin = RUG_Kmin,
-                RUG_Kmoy = RUG_Kmoy,
+                RUG_Kmin = RUG_Kmin_args,
+                RUG_Kmoy = RUG_Kmoy_args,
                 RUG_format = "%1s%3d      %10.0f%10.0f%10.2f%10.2f"
             )
         }
