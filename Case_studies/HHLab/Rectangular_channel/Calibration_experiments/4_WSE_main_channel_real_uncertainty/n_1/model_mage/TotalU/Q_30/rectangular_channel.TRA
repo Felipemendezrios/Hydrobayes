@@ -1,0 +1,436 @@
+  INRAE
+  Centre Auvergne-Rhône-Alpes Est                   5 rue de La Doua - CS 20244
+                                                    69625 Villeurbanne - FRANCE
+ 
+ 
+ 
+                    MM      MM     AA     GGGGGGGGGG EEEEEEEEEE
+                    MMM    MMM    AAAA    GGGGGGGGGG EEEEEEEEEE
+                    MMMM  MMMM   AA  AA   GG         EE
+                    MM MMMM MM  AA    AA  GG         EE
+                    MM  MM  MM AAAAAAAAAA GG  GGGGGG EEEEEE
+                    MM      MM AAAAAAAAAA GG  GGGGGG EEEEEE
+                    MM      MM AA      AA GG      GG EE
+                    MM      MM AA      AA GG      GG EE
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+ 
+                            Exécution du programme MAGE
+                    Auteur : Jean-Baptiste Faure - INRAE - 1989-2022, Theophile Terraz - INRAE - 2022-2024
+ 
+                Dépôt APP : IDDN.FR.001.180002.000.S.P.2013.000.30200
+                Version : 8.3.6 - 2024-05-17 pour linux
+                Dernier correctif : 7f2e0ca debug spline
+                Date du dernier correctif : 2024-09-24 12:06:33 +0200
+                Date de compilation : 2024-09-24_14-27-44 - Compilateur : GCC version 9.4.0
+ 
+ Copyright (C) 2023 INRAE
+ 
+ Mage is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later version.
+ 
+ Alternatively, you can redistribute it and/or
+ modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation; either version 2 of
+ the License, or (at your option) any later version.
+ 
+ Mage is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ or the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public
+ License and a copy of the GNU General Public License along with
+ Mage. If not, see <http://www.gnu.org/licenses/>.
+ 
+                        20 Points maximum pour décrire la géométrie d'un casier
+                        15 Ouvrages élémentaires maximum par section singulière
+                           Précision des réels : 15 chiffres (8 octets) - Fichier BIN complet
+                           Parallélisation OpenMP inactive
+ 
+ 
+ 
+ 
+ Ligne de commande de la simulation : /home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage rectangular_channel.REP
+ 
+ ------------------------------------------------------------------------------
+ Copie du répertoire utilisé pour cette simulation (fichier : rectangular_channel.REP)
+ 
+ NUM                                      Nom du fichier des paramètres NUMériques
+ PAR                                      Nom du fichier des PARamètres numériques
+ NET ../Q_120/rectangular_channel.NET     Nom du fichier définissant la topologie du réseau
+ INI rectangular_channel.INI              Nom du fichier des conditions INItiales
+ HYD rectangular_channel.HYD              Nom du fichier des HYDrogrammes amont
+ RUG rectangular_channel.RUG              Nom du fichier des rugosités
+ DEV ../Q_120/rectangular_channel.DEV     Nom du fichier des déversements latéraux
+ LAT ../Q_120/rectangular_channel.LAT     Nom du fichier des hydrogrammes LATéraux
+ LIM rectangular_channel.LIM              Nom du fichier des LIMnigrammes aval
+ TRA rectangular_channel.TRA              Nom du fichier de sortie formaté
+ BIN rectangular_channel.BIN              Nom du fichier de stockage BINaire
+ GRA                                      Nom du fichier de stockage GRAnulo
+ ERR rectangular_channel.ERR              Nom du fichier des messages d'ERReur
+ ------------------------------------------------------------------------------
+ Nombre total de biefs :   1
+ Nombre total de noeuds :   2
+ Nombre total de sections de calcul :    17
+ Nombre total de sections singulières :   0
+ Réseau ramifié
+ Longueur totale du réseau =      16.00 m
+ Coefficient du schéma implicite : 0.700 Schéma : S B R
+ Type des itérations : -1
+ Coefficient de sous-relaxation :  0.00
+ Pas de temps fixe :   180.00
+ Tirant d'eau minimum : 1.0000E-03
+ Nombre maximum d'itérations sur les non-linéarites : 99
+ Facteur de réduction du pas de temps en cas de non-convergence :  2
+ Nombre maximum d'itérations sans réduction de la précision : 10
+ Facteur de réduction de la précision :  1.000     en cote  1.000     en débit et  1.000     pour le résidu
+ 
+ Volumes des hydrogrammes ponctuels :
+      Volume de l'hydrogramme injecté au noeud xx1 : 108 m3
+      Volume total des apports ponctuels : 108 m3
+ 
+ 
+ ---------------------- VOLUMES DES HYDROGRAMMES LATERAUX ----------------------
+ Volume total des apports latéraux : 0 m3
+ 
+ Déversements latéraux :
+ Bief   1 droit   Pm      0.00 a     16.00 hors réseau (coeff débit :  0.000)
+ Bief   1 gauche  Pm      0.00 a     16.00 hors réseau (coeff débit :  0.000)
+ 
+ ------------------------------------------------------------------------------
+ 
+                              Analyse de la géométrie
+ 
+                        Recherche des marches d'escalier aux noeuds
+ 
+ Ecart maximum des cotes de fond à la moyenne
+ Filtre : écart absolu >  0.001 m
+ 
+ 
+                     Recherche des ruptures de pente dans les biefs
+ 
+ Filtre : pente_max > 2 * pente_min et pente_Amont ou pente_Aval > 0,5%
+    Bief  Abscisse       Pente amont   Pente aval
+ 
+ 
+               Recherche des variations importantes de largeur du lit mineur
+ 
+ Filtre : variation de largeur > 20%
+ Largeur moyenne à la cote de débordement mineur-moyen du bief 001 :      2.000 m
+ 
+ 
+               Vérification du calcul des paramètres géométriques
+ Seuils de détection : 0,1 m pour la largeur et le périmètre, 1,0 m  pour la section
+ Échantillonage sur  50 niveaux
+ 
+ Les profils ci-dessous sont probablement non standard car non situé dans un plan vertical.
+ Autrement dit leur trace sur un plan horizontal n'est pas un segment de droite.
+ Si c'est bien le cas, les calculs en XYZ sont a priori meilleurs.
+ 
+ Bief, Pk, écarts max LC/XYZ et cote correspondante pour Largeur, Périmètre et Section mouillée
+ Seconde ligne : valeurs LC / XYZ
+  1         0.0000      1.9600      0.0366      1.9600      0.0366      1.0000      1.0166
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         1.0000      1.9600      0.0356      1.9600      0.0356      1.0000      1.0156
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         2.0000      1.9600      0.0346      1.9600      0.0346      1.0000      1.0146
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         3.0000      1.9600      0.0335      1.9600      0.0335      1.0000      1.0135
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         4.0000      1.9600      0.0325      1.9600      0.0325      1.0000      1.0125
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         5.0000      1.9600      0.0314      1.9600      0.0314      1.0000      1.0114
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         6.0000      1.9600      0.0304      1.9600      0.0304      1.0000      1.0104
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         7.0000      1.9600      0.0294      1.9600      0.0294      1.0000      1.0094
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         8.0000      1.9600      0.0283      1.9600      0.0283      1.0000      1.0083
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1         9.0000      1.9600      0.0273      1.9600      0.0273      1.0000      1.0073
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        10.0000      1.9600      0.0262      1.9600      0.0262      1.0000      1.0062
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        11.0000      1.9600      0.0252      1.9600      0.0252      1.0000      1.0052
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        12.0000      1.9600      0.0242      1.9600      0.0242      1.0000      1.0042
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        13.0000      1.9600      0.0231      1.9600      0.0231      1.0000      1.0031
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        14.0000      1.9600      0.0221      1.9600      0.0221      1.0000      1.0021
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        15.0000      1.9600      0.0210      1.9600      0.0210      1.0000      1.0010
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+  1        16.0000      1.9600      0.0200      1.9600      0.0200      1.0000      1.0000
+                      0.0400      2.0000      0.0800      2.0400      1.0000      2.0000
+ 
+ 
+               Vérification de la cote du fond des lits majeurs
+Pour chaque profil on vérifie si les cotes de fond des lits majeurs gauche et droit
+sont supérieures aux cotes de débordement correspondantes
+Si ce n'est pas le cas une étiquette !!! est ajoutée à la fin de la ligne
+Les colonnes Aire gche et Aire droite indiquent les surfaces mouillées des lits majeurs à leur cote de berge respective
+Ces aires devraient être nulles
+ 
+ Bief       Pk       Zfd gauche  Zbg gauche  Aire gche   Zfd droit   Zbg droit  Aire droite
+  1         0.0000      1.0166      1.0166      0.0000      1.0166      1.0166      0.0000
+  1         1.0000      1.0156      1.0156      0.0000      1.0156      1.0156      0.0000
+  1         2.0000      1.0146      1.0146      0.0000      1.0146      1.0146      0.0000
+  1         3.0000      1.0135      1.0135      0.0000      1.0135      1.0135      0.0000
+  1         4.0000      1.0125      1.0125      0.0000      1.0125      1.0125      0.0000
+  1         5.0000      1.0114      1.0114      0.0000      1.0114      1.0114      0.0000
+  1         6.0000      1.0104      1.0104      0.0000      1.0104      1.0104      0.0000
+  1         7.0000      1.0094      1.0094      0.0000      1.0094      1.0094      0.0000
+  1         8.0000      1.0083      1.0083      0.0000      1.0083      1.0083      0.0000
+  1         9.0000      1.0073      1.0073      0.0000      1.0073      1.0073      0.0000
+  1        10.0000      1.0062      1.0062      0.0000      1.0062      1.0062      0.0000
+  1        11.0000      1.0052      1.0052      0.0000      1.0052      1.0052      0.0000
+  1        12.0000      1.0042      1.0042      0.0000      1.0042      1.0042      0.0000
+  1        13.0000      1.0031      1.0031      0.0000      1.0031      1.0031      0.0000
+  1        14.0000      1.0021      1.0021      0.0000      1.0021      1.0021      0.0000
+  1        15.0000      1.0010      1.0010      0.0000      1.0010      1.0010      0.0000
+  1        16.0000      1.0000      1.0000      0.0000      1.0000      1.0000      0.0000
+ 
+ 
+ ==> Vérification détaillée des lits majeurs...
+                ligne d'eau initiale à  00:00:00:00
+ 
+ 
+ 
+ ########  DATE :  00:00:00:00        (jjj:hh:mn:ss) (00 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 2 m3
+    Noeud : xx1 Cote :    0.078                                Débit :    0.060
+    Noeud : xx2 Cote :    0.060                                Débit :    0.060
+ ===============================================================================
+ Volume total du réseau : 2 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (09 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.059                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.035
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (11 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.057                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.029
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:09:00        (jjj:hh:mn:ss) (07 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:12:00        (jjj:hh:mn:ss) (05 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:15:00        (jjj:hh:mn:ss) (05 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:18:00        (jjj:hh:mn:ss) (05 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:21:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:24:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:27:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:30:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:33:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:36:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:39:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:42:00        (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:45:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:48:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:51:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:54:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:57:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:01:00:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 1 m3
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
+    Noeud : xx2 Cote :    0.040                                Débit :    0.030
+ ===============================================================================
+ Volume total du réseau : 1 m3
+ ===============================================================================
+ Erreur (relative par bief) en volume à l'instant final :  0.00E+00 (Bief 001)
+ Erreur maximale sur la simulation :  0.00E+00 (Bief 001 Date :  00:00:00:00)
+ Nombre total d'itérations :       86
+ Nombre total de pas de temps :       20
+ Date simulation : 02/09/2025 (11:07:33) Durée : 00:00:00 CPU : 00:00:00,007
+ ****************************** FIN NORMALE DE MAGE ****************************

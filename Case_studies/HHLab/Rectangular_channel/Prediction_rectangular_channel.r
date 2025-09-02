@@ -10,6 +10,8 @@ for (i in function_list) {
 # Libraries
 library(RBaM)
 library(ggplot2)
+library(dplyr)
+library(tidyr)
 
 # Set directory
 dir_workspace <- here::here()
@@ -26,19 +28,19 @@ path_experiment <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroB
 # Do not touch
 n_degree_seq <- seq(0, n_degree_max, 1)
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
+nY <- 5
 ###################################################
 
-# Intitialization
-pred_confi_file_name <- c() # vector with setting prediction file name (Config_Pred_"type of prediction")
-doStructural_logical <- c() # logical vector with setting in function of type of prediction
-doParametric_logical <- c() # logical vector with setting in function of type of prediction
-priorNsim_int <- c() # list of number of simulation for
-pred_list <- c() # list with information about all predictions
-pred_var_name <- c() # list with names of each variable
-mod_list <- list() # list to write several models for running in parallel
-
-
 for (n_degree in n_degree_seq) {
+    # Intitialization
+    pred_confi_file_name <- c() # vector with setting prediction file name (Config_Pred_"type of prediction")
+    doStructural_logical <- c() # logical vector with setting in function of type of prediction
+    doParametric_logical <- c() # logical vector with setting in function of type of prediction
+    priorNsim_int <- c() # list of number of simulation for
+    pred_list <- c() # list with information about all predictions
+    pred_var_name <- c() # list with names of each variable
+    mod_list <- list() # list to write several models for running in parallel
+
     # Polynomial degree i
     path_polynomial <- file.path(path_experiment, paste0("n_", n_degree), "Calibration")
     if (!dir.exists(path_polynomial)) stop(paste0("Polynomial degree ", n_degree, " is not performed yet. Please do the calibration"))
@@ -51,23 +53,24 @@ for (n_degree in n_degree_seq) {
     }
 
     # Load data and model used during calibration
-    path_BaM_object <- file.path(path_polynomial, "BaM_object_calibration")
+    path_BaM_object <- file.path(path_polynomial, "post_traitement", "RData")
     load(file.path(path_BaM_object, "BaM_objects.RData"))
 
     Caldata <- data$data
+    X <- data$data[, data$col.X]
+    grid <- data.frame(grid = Caldata[, c("x")])
 
-    grid <- data.frame(grid = Caldata[, 1])
-
-    names_file_prediction <- colnames(Caldata[, !grepl(colnames(Caldata), pattern = "^Yu_")])[-1]
-    nY <- length(names_file_prediction)
+    names_file_prediction <- colnames(Caldata[, !grepl(colnames(Caldata), pattern = "^Yu_")])[c(-1:-4)]
     for (i in 1:nY) {
-        # name of prediction files (.spag)
+        # Initialize temporary storage for prediction file names
         pred_var_name_temps <- c()
+
         for (j in 1:n_prediction) {
+            # File naming
             pred_var_name_temps <- cbind(
                 pred_var_name_temps,
                 paste0(
-                    prediction_file[j],
+                    prediction_file[j], "_",
                     names_file_prediction[i], ".spag"
                 )
             )
@@ -77,6 +80,7 @@ for (n_degree in n_degree_seq) {
                 prediction_file[j],
                 ".txt"
             ))
+            #  Logical flags for structural and parametric predictions
             doStructural_logical[[j]] <- switch(prediction_file[j],
                 "Prior" = c(rep(FALSE, nY)),
                 "ParamU" = c(rep(FALSE, nY)),
@@ -89,6 +93,7 @@ for (n_degree in n_degree_seq) {
                 "Maxpost" = c(FALSE),
                 "TotalU" = c(TRUE),
             )
+            # Simulation count for Prior
             priorNsim_int[j] <- switch(prediction_file[j],
                 "Prior" = nsim_prior,
                 "ParamU" = c(-1),
@@ -99,39 +104,55 @@ for (n_degree in n_degree_seq) {
             mod_list[[j]] <- mod
             # Move model_mage folder to the result folder
             dir_origin <- mod_list[[j]]$xtra$object$mageDir
-            dir_copied <- file.path(dirname(dir_origin), paste0(basename(dir_origin), "_", prediction_file[j]))
+            dir_copied_all <- file.path(normalizePath(dirname(dir_origin)), prediction_file[j], basename(dir_origin))
+            for (source_dir in dir_origin) {
+                source_dir <- normalizePath(source_dir)
+                dir_name <- basename(source_dir)
+                dir_copied <- file.path(dirname(source_dir), prediction_file[j], dir_name)
 
-            if (!dir.exists(dir_copied)) {
-                dir.create(dir_copied)
-            } else {
-                file.remove(list.files(dir_copied, full.names = TRUE, recursive = TRUE))
-            }
+                if (dir.exists(dir_copied)) {
+                    unlink(dir_copied, recursive = TRUE)
+                }
 
-            files_to_copy <- list.files(dir_origin, full.names = TRUE, recursive = TRUE)
-            # Relative paths (to preserve directory structure)
-            relative_paths <- list.files(dir_origin, full.names = FALSE, recursive = TRUE)
-            # Ensure destination directories exist
-            subfolder <- dirname(relative_paths)[dirname(relative_paths) != "."]
-            subfolderDir <- file.path(dir_copied, subfolder)
-            if (!dir.exists(subfolderDir)) {
-                dir.create(subfolderDir, recursive = TRUE)
-            } else {
-                file.remove(list.files(subfolderDir, full.names = TRUE))
+                dir.create(dir_copied, recursive = TRUE)
+
+                files_to_copy <- list.files(
+                    source_dir,
+                    full.names = TRUE,
+                    recursive = TRUE,
+                    include.dirs = TRUE
+                )
+
+                # Copie chaque fichier/sous-dossier vers dir_copied
+                for (file in files_to_copy) {
+                    # Chemin relatif du fichier/sous-dossier par rapport à source_dir
+                    relative_path <- sub(source_dir, "", file)
+                    # Chemin de destination final
+                    dest_path <- file.path(dir_copied, relative_path)
+
+                    # Crée les sous-dossiers nécessaires dans la destination
+                    if (dir.exists(file)) {
+                        if (!dir.exists(dest_path)) {
+                            dir.create(dest_path, recursive = TRUE)
+                        }
+                    } else {
+                        if (!dir.exists(dirname(dest_path))) {
+                            dir.create(dirname(dest_path), recursive = TRUE)
+                        }
+                        file.copy(file, dest_path)
+                    }
+                }
             }
-            file.copy(
-                from = files_to_copy,
-                to = file.path(dir_copied, relative_paths),
-                overwrite = TRUE
-            )
-            mod_list[[j]]$xtra$object$mageDir <- paste0(dir_copied, "/")
+            mod_list[[j]]$xtra$object$mageDir <- paste0(dir_copied_all, "/")
             mod_list[[j]]$xtra$fname <- sub("\\.txt$", paste0("_", prediction_file[j], ".txt"), mod$xtra$fname)
         }
         pred_var_name <- rbind(pred_var_name, pred_var_name_temps)
     }
     # create a pred_list only for spagfile and another for fname
+
     for (i in 1:n_prediction) {
         pred_list[[i]] <- prediction(
-            X = grid,
+            X = X,
             spagFiles = pred_var_name[, i],
             data.dir = workspace_user,
             fname = pred_confi_file_name[i],
@@ -154,27 +175,32 @@ for (n_degree in n_degree_seq) {
             na.value = -9999,
             run = FALSE,
             preClean = FALSE,
-            workspace = workspace_user,
+            workspace = path_polynomial,
             dir.exe = dir_exe_BaM,
             name.exe = "BaM",
             predMaster_fname = paste0("Config_Pred_Master_", prediction_file[i], ".txt")
         )
-        # Move Config_BaM.txt file to the result folder
-        file.copy(from = dir_cf, to = file.path(
-            path_polynomial,
-            paste0("Config_BaM_", prediction_file[i], ".txt")
-        ), overwrite = TRUE)
+
+        # Rename Config_BaM.txt file to the result folder
+        cf_file <- file.path(path_polynomial, paste0("Config_BaM_", prediction_file[i], ".txt"))
+        if (file.exists(file.path(path_polynomial, "Config_BaM.txt"))) {
+            invisible(file.rename(
+                from = file.path(path_polynomial, "Config_BaM.txt"),
+                to = cf_file
+            ))
+        }
 
         if (do_prediction) {
             system2(
                 command = file.path(dir_exe_BaM, "BaM"),
-                args = c("-cf", file.path(
-                    workspace_user,
-                    paste0("Config_BaM_", prediction_file[i], ".txt")
-                )),
+                args = c("-cf", cf_file),
                 wait = FALSE
             )
             Sys.sleep(0.1)
         }
     }
 }
+
+
+
+### Plots
