@@ -74,8 +74,10 @@ k_plot <- function(
     ks_literature) {
     if (main_channel) {
         indx <- 1:(n_degree_kmin + 1)
+        label_title <- "Friction coefficient estimation in the main channel \nwith parametric uncertainty"
     } else {
         indx <- (n_degree_kmin + 1 + 1):(n_degree_kmin + 1 + n_degree_kflood + 1)
+        label_title <- "Friction coefficient estimation in the floodplain \nwith parametric uncertainty"
     }
     k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc[, indx])))
 
@@ -129,7 +131,7 @@ k_plot <- function(
             values = c("Chow (1959)" = "dashed")
         ) +
         labs(
-            title = "Friction coefficient estimation in the floodplain \nwith parametric uncertainty",
+            title = label_title,
             x = "Streamwise position (meters)",
             y = expression("Friction coefficient (m"^
                 {
@@ -143,6 +145,8 @@ k_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         )
+
+
     return(list(df_MAP, k_plot, df_envelope))
 }
 

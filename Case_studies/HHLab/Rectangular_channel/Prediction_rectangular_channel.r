@@ -16,7 +16,8 @@ library(tidyr)
 # Set directory
 dir_workspace <- here::here()
 
-do_prediction <- TRUE
+do_prediction <- FALSE
+do_plots <- TRUE
 
 prediction_file <- c("Prior", "ParamU", "Maxpost", "TotalU")
 n_prediction <- length(prediction_file)
@@ -203,4 +204,25 @@ for (n_degree in n_degree_seq) {
 
 
 
-### Plots
+### Plots (not finished yet!)
+
+# Do not touche
+conf_level <- 0.95 # Hard-coded
+z_val <- qnorm(1 - (1 - conf_level) / 2)
+# Desired level order
+desired_order <- c("TotalU", "ParamU", "Maxpost", "Prior")
+
+if (do_plots) {
+    # for (n_degree in n_degree_seq) {}
+
+    n_degree <- 0
+
+    all_uncertainty_data <- c()
+    # Polynomial degree i
+    path_polynomial <- file.path(path_experiment, paste0("n_", n_degree), "Calibration")
+    if (!dir.exists(path_polynomial)) stop(paste0("Polynomial degree ", n_degree, " is not performed yet. Please do the calibration"))
+    path_post_traitement <- file.path(path_polynomial, "post_traitement")
+    path_post_traitement_data <- file.path(path_post_traitement, "RData")
+    # Read observation
+    load(file.path(path_post_traitement, "RData", "Data_Z_sim_vs_obs.RData"))
+}
