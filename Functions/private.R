@@ -63,3 +63,47 @@ Cross_sections_interpolation_and_export_rectangular_channel <- function(
     # Close the connection
     close(con)
 }
+
+
+
+assign_reach <- function(specific_points_Model, covariate_value) {
+    reaches <- rep(NA, length(covariate_value))
+
+    if (nrow(specific_points_Model == 1)) {
+        all_set <- dplyr::between(covariate_value, specific_points_Model$KP_start, specific_points_Model$KP_end)
+        if (!all(all_set)) stop("specific_points_Model must contain all covariate_value")
+        reaches[which(all_set)] <- specific_points_Model$reach[1]
+    } else {
+        duplicated_numbers <- covariate_value[duplicated(covariate_value)]
+
+        if ((nrow(specific_points_Model) - 1) != length(duplicated_numbers)) stop("Number of rows of specific_points_Model minus 1 must coincide with the number of repeated values in covariate_value")
+
+        for (i in 1:nrow(specific_points_Model)) {
+            idx_position_reaches <- which(dplyr::between(covariate_value, specific_points_Model$KP_start[i], specific_points_Model$KP_end[i]))
+
+            idx_duplicated_values <- which(covariate_value[idx_position_reaches] %in% duplicated_numbers)
+
+            if (length(idx_duplicated_values) != 0) {
+                if (length(idx_duplicated_values) != 2 & length(idx_duplicated_values) != 4) stop("Duplicated values are not found, it must be two or four")
+
+                # First duplicated values
+                if (i == 1 & length(idx_duplicated_values) == 2) {
+                    reaches[idx_position_reaches] <- specific_points_Model$reach[i]
+
+                    reaches[idx_duplicated_values[2]] <- specific_points_Model$reach[i + 1]
+                } else if (length(idx_duplicated_values) == 4) {
+                    idx_position_reaches <- idx_position_reaches[-idx_duplicated_values[c(1, 2)]]
+                    reaches[idx_position_reaches] <- specific_points_Model$reach[i]
+                    reaches[idx_duplicated_values[4]] <- specific_points_Model$reach[i + 1]
+                } else if (length(idx_duplicated_values) == 2) {
+                    idx_position_reaches <- idx_position_reaches[-idx_duplicated_values[c(1, 2)]]
+                    reaches[idx_position_reaches] <- specific_points_Model$reach[i]
+                }
+            } else {
+                reaches[idx_position_reaches] <- specific_points_Model$reach[i]
+            }
+        }
+    }
+    grid_covariant_discretized <- data.frame(Reach = reaches, Covariate = covariate_value)
+    return(grid_covariant_discretized)
+}

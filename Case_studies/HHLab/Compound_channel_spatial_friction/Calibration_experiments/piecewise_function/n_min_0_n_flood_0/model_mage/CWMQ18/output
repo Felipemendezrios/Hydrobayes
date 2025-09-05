@@ -1,0 +1,131 @@
+ Ligne de commande de la simulation : /home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage CWMQ.REP
+ Entrée dans initTopoGeometrie()
+ Fichier de définition du réseau : CWMQ.NET                                                    
+ ==> Lecture du réseau : OK
+ ==> Création des nœuds : OK
+ calcul des niveaux hydrauliques : OK
+ calcul des rangs hydrauliques : OK
+ Réseau ramifié           1           0           2
+ Liste des biefs dans l'ordre de calcul (selon leur rang)
+ Reach_002
+ ==> Calcul du rang hydraulique : OK
+ ==> Comptage des profils de tous les biefs
+ ==> Liste des biefs et Rangs de calcul
+ Bief n°  1 : Reach_002       ; xx1        ; xx2        ;    1 -   26 ; Rang =   1 ; Niveau Hyd. =   1     0.000    18.000
+ Sortie de initTopoGeometrie()
+ Erreur dans .RUG à la ligne 102 bief   2 non trouvé ; la ligne 102 est ignorée
+ Erreur dans .RUG à la ligne 103 bief   2 non trouvé ; la ligne 103 est ignorée
+ Erreur dans .RUG à la ligne 104 bief   2 non trouvé ; la ligne 104 est ignorée
+ Erreur dans .RUG à la ligne 105 bief   2 non trouvé ; la ligne 105 est ignorée
+ Erreur dans .RUG à la ligne 106 bief   2 non trouvé ; la ligne 106 est ignorée
+ Erreur dans .RUG à la ligne 107 bief   2 non trouvé ; la ligne 107 est ignorée
+ Erreur dans .RUG à la ligne 108 bief   2 non trouvé ; la ligne 108 est ignorée
+ Erreur dans .RUG à la ligne 109 bief   2 non trouvé ; la ligne 109 est ignorée
+ Erreur dans .RUG à la ligne 110 bief   2 non trouvé ; la ligne 110 est ignorée
+ Erreur dans .RUG à la ligne 111 bief   2 non trouvé ; la ligne 111 est ignorée
+ Erreur dans .RUG à la ligne 112 bief   2 non trouvé ; la ligne 112 est ignorée
+ Erreur dans .RUG à la ligne 113 bief   2 non trouvé ; la ligne 113 est ignorée
+ Erreur dans .RUG à la ligne 114 bief   2 non trouvé ; la ligne 114 est ignorée
+ Erreur dans .RUG à la ligne 115 bief   2 non trouvé ; la ligne 115 est ignorée
+ Erreur dans .RUG à la ligne 116 bief   2 non trouvé ; la ligne 116 est ignorée
+ Erreur dans .RUG à la ligne 117 bief   2 non trouvé ; la ligne 117 est ignorée
+ Erreur dans .RUG à la ligne 118 bief   2 non trouvé ; la ligne 118 est ignorée
+ Erreur dans .RUG à la ligne 119 bief   2 non trouvé ; la ligne 119 est ignorée
+ Erreur dans .RUG à la ligne 120 bief   2 non trouvé ; la ligne 120 est ignorée
+ Erreur dans .RUG à la ligne 121 bief   2 non trouvé ; la ligne 121 est ignorée
+ Erreur dans .RUG à la ligne 122 bief   2 non trouvé ; la ligne 122 est ignorée
+ Erreur dans .RUG à la ligne 123 bief   2 non trouvé ; la ligne 123 est ignorée
+ Erreur dans .RUG à la ligne 124 bief   2 non trouvé ; la ligne 124 est ignorée
+ Erreur dans .RUG à la ligne 125 bief   2 non trouvé ; la ligne 125 est ignorée
+ Erreur dans .RUG à la ligne 126 bief   2 non trouvé ; la ligne 126 est ignorée
+ Erreur dans .RUG à la ligne 127 bief   2 non trouvé ; la ligne 127 est ignorée
+ Erreur dans .RUG à la ligne 128 bief   2 non trouvé ; la ligne 128 est ignorée
+ Erreur dans .RUG à la ligne 129 bief   2 non trouvé ; la ligne 129 est ignorée
+ Erreur dans .RUG à la ligne 130 bief   2 non trouvé ; la ligne 130 est ignorée
+ Erreur dans .RUG à la ligne 131 bief   2 non trouvé ; la ligne 131 est ignorée
+ Erreur dans .RUG à la ligne 132 bief   2 non trouvé ; la ligne 132 est ignorée
+ Erreur dans .RUG à la ligne 133 bief   2 non trouvé ; la ligne 133 est ignorée
+ Erreur dans .RUG à la ligne 134 bief   2 non trouvé ; la ligne 134 est ignorée
+ Erreur dans .RUG à la ligne 135 bief   2 non trouvé ; la ligne 135 est ignorée
+ Erreur dans .RUG à la ligne 136 bief   2 non trouvé ; la ligne 136 est ignorée
+ Erreur dans .RUG à la ligne 137 bief   2 non trouvé ; la ligne 137 est ignorée
+ Erreur dans .RUG à la ligne 138 bief   2 non trouvé ; la ligne 138 est ignorée
+ Erreur dans .RUG à la ligne 139 bief   2 non trouvé ; la ligne 139 est ignorée
+ Erreur dans .RUG à la ligne 140 bief   2 non trouvé ; la ligne 140 est ignorée
+ Erreur dans .RUG à la ligne 141 bief   2 non trouvé ; la ligne 141 est ignorée
+ Erreur dans .RUG à la ligne 142 bief   2 non trouvé ; la ligne 142 est ignorée
+ Erreur dans .RUG à la ligne 143 bief   2 non trouvé ; la ligne 143 est ignorée
+ Erreur dans .RUG à la ligne 144 bief   2 non trouvé ; la ligne 144 est ignorée
+ Erreur dans .RUG à la ligne 145 bief   2 non trouvé ; la ligne 145 est ignorée
+ Erreur dans .RUG à la ligne 146 bief   2 non trouvé ; la ligne 146 est ignorée
+ Erreur dans .RUG à la ligne 147 bief   2 non trouvé ; la ligne 147 est ignorée
+ Erreur dans .RUG à la ligne 148 bief   2 non trouvé ; la ligne 148 est ignorée
+ Erreur dans .RUG à la ligne 149 bief   2 non trouvé ; la ligne 149 est ignorée
+ Erreur dans .RUG à la ligne 150 bief   2 non trouvé ; la ligne 150 est ignorée
+ Erreur dans .RUG à la ligne 151 bief   2 non trouvé ; la ligne 151 est ignorée
+ Erreur dans .RUG à la ligne 152 bief   2 non trouvé ; la ligne 152 est ignorée
+ Erreur dans .RUG à la ligne 153 bief   2 non trouvé ; la ligne 153 est ignorée
+ Erreur dans .RUG à la ligne 154 bief   2 non trouvé ; la ligne 154 est ignorée
+ Erreur dans .RUG à la ligne 155 bief   2 non trouvé ; la ligne 155 est ignorée
+ Erreur dans .RUG à la ligne 156 bief   2 non trouvé ; la ligne 156 est ignorée
+ Erreur dans .RUG à la ligne 157 bief   2 non trouvé ; la ligne 157 est ignorée
+ Erreur dans .RUG à la ligne 158 bief   2 non trouvé ; la ligne 158 est ignorée
+ Erreur dans .RUG à la ligne 159 bief   2 non trouvé ; la ligne 159 est ignorée
+ Erreur dans .RUG à la ligne 160 bief   2 non trouvé ; la ligne 160 est ignorée
+ Erreur dans .RUG à la ligne 161 bief   2 non trouvé ; la ligne 161 est ignorée
+ Erreur dans .RUG à la ligne 162 bief   2 non trouvé ; la ligne 162 est ignorée
+ Erreur dans .RUG à la ligne 163 bief   2 non trouvé ; la ligne 163 est ignorée
+ Erreur dans .RUG à la ligne 164 bief   2 non trouvé ; la ligne 164 est ignorée
+ Erreur dans .RUG à la ligne 165 bief   2 non trouvé ; la ligne 165 est ignorée
+ Erreur dans .RUG à la ligne 166 bief   2 non trouvé ; la ligne 166 est ignorée
+ Erreur dans .RUG à la ligne 167 bief   2 non trouvé ; la ligne 167 est ignorée
+ Erreur dans .RUG à la ligne 168 bief   2 non trouvé ; la ligne 168 est ignorée
+ Erreur dans .RUG à la ligne 169 bief   2 non trouvé ; la ligne 169 est ignorée
+ Erreur dans .RUG à la ligne 170 bief   2 non trouvé ; la ligne 170 est ignorée
+ Erreur dans .RUG à la ligne 171 bief   2 non trouvé ; la ligne 171 est ignorée
+ Erreur dans .RUG à la ligne 172 bief   2 non trouvé ; la ligne 172 est ignorée
+ Erreur dans .RUG à la ligne 173 bief   2 non trouvé ; la ligne 173 est ignorée
+ Erreur dans .RUG à la ligne 174 bief   2 non trouvé ; la ligne 174 est ignorée
+ Erreur dans .RUG à la ligne 175 bief   2 non trouvé ; la ligne 175 est ignorée
+ Erreur dans .RUG à la ligne 176 bief   2 non trouvé ; la ligne 176 est ignorée
+ Erreur dans .RUG à la ligne 177 bief   2 non trouvé ; la ligne 177 est ignorée
+ Erreur dans .RUG à la ligne 178 bief   2 non trouvé ; la ligne 178 est ignorée
+ Erreur dans .RUG à la ligne 179 bief   2 non trouvé ; la ligne 179 est ignorée
+ Erreur dans .RUG à la ligne 180 bief   2 non trouvé ; la ligne 180 est ignorée
+ Erreur dans .RUG à la ligne 181 bief   2 non trouvé ; la ligne 181 est ignorée
+ Erreur dans .RUG à la ligne 182 bief   2 non trouvé ; la ligne 182 est ignorée
+ Erreur dans .RUG à la ligne 183 bief   2 non trouvé ; la ligne 183 est ignorée
+ Erreur dans .RUG à la ligne 184 bief   2 non trouvé ; la ligne 184 est ignorée
+ Erreur dans .RUG à la ligne 185 bief   2 non trouvé ; la ligne 185 est ignorée
+ Erreur dans .RUG à la ligne 186 bief   2 non trouvé ; la ligne 186 est ignorée
+ Erreur dans .RUG à la ligne 187 bief   2 non trouvé ; la ligne 187 est ignorée
+ Erreur dans .RUG à la ligne 188 bief   2 non trouvé ; la ligne 188 est ignorée
+ Erreur dans .RUG à la ligne 189 bief   2 non trouvé ; la ligne 189 est ignorée
+ Erreur dans .RUG à la ligne 190 bief   2 non trouvé ; la ligne 190 est ignorée
+ Erreur dans .RUG à la ligne 191 bief   2 non trouvé ; la ligne 191 est ignorée
+ Erreur dans .RUG à la ligne 192 bief   2 non trouvé ; la ligne 192 est ignorée
+ Erreur dans .RUG à la ligne 193 bief   2 non trouvé ; la ligne 193 est ignorée
+ Erreur dans .RUG à la ligne 194 bief   2 non trouvé ; la ligne 194 est ignorée
+ Erreur dans .RUG à la ligne 195 bief   2 non trouvé ; la ligne 195 est ignorée
+ Erreur dans .RUG à la ligne 196 bief   2 non trouvé ; la ligne 196 est ignorée
+ Erreur dans .RUG à la ligne 197 bief   2 non trouvé ; la ligne 197 est ignorée
+ Erreur dans .RUG à la ligne 198 bief   2 non trouvé ; la ligne 198 est ignorée
+ Erreur dans .RUG à la ligne 199 bief   2 non trouvé ; la ligne 199 est ignorée
+ Erreur dans .RUG à la ligne 200 bief   2 non trouvé ; la ligne 200 est ignorée
+ Erreur dans .RUG à la ligne 201 bief   2 non trouvé ; la ligne 201 est ignorée
+ La section située au Pm      9.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     10.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     11.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     11.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     12.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     13.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     14.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     14.50 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     15.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     16.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     16.50 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     17.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     18.00 du bief   1 n'a pas de coeff. de rugosité
+ >>> erreur : il y a  13 profil(s) sans coefficient de rugosité
+ possible problème d'arrondi des pk par pamhyr
+ ---> FIN INATTENDUE DE MAGE                                                      
