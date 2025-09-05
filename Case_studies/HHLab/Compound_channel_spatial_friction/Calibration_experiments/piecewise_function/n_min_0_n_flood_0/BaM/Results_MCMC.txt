@@ -1,0 +1,1 @@
+a0_min_glass  a0_flood_wood a0_flood_gras Y1_intercept  Y2_intercept  Y3_intercept  Y4_intercept  Y5_intercept  LogPost       

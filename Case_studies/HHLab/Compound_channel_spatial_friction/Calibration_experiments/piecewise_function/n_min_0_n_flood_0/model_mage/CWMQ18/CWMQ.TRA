@@ -1,0 +1,105 @@
+  INRAE
+  Centre Auvergne-Rhône-Alpes Est                   5 rue de La Doua - CS 20244
+                                                    69625 Villeurbanne - FRANCE
+
+
+
+                    MM      MM     AA     GGGGGGGGGG EEEEEEEEEE
+                    MMM    MMM    AAAA    GGGGGGGGGG EEEEEEEEEE
+                    MMMM  MMMM   AA  AA   GG         EE        
+                    MM MMMM MM  AA    AA  GG         EE        
+                    MM  MM  MM AAAAAAAAAA GG  GGGGGG EEEEEE    
+                    MM      MM AAAAAAAAAA GG  GGGGGG EEEEEE    
+                    MM      MM AA      AA GG      GG EE        
+                    MM      MM AA      AA GG      GG EE        
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+  
+                            Exécution du programme MAGE
+                    Auteur : Jean-Baptiste Faure - INRAE - 1989-2022, Theophile Terraz - INRAE - 2022-2024
+
+                Dépôt APP : IDDN.FR.001.180002.000.S.P.2013.000.30200
+                Version : 8.3.6 - 2024-05-17 pour linux
+                Dernier correctif : 7f2e0ca debug spline
+                Date du dernier correctif : 2024-09-24 12:06:33 +0200
+                Date de compilation : 2024-09-24_14-27-44 - Compilateur : GCC version 9.4.0
+ 
+ Copyright (C) 2023 INRAE
+ 
+ Mage is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later version.
+ 
+ Alternatively, you can redistribute it and/or
+ modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation; either version 2 of
+ the License, or (at your option) any later version.
+ 
+ Mage is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ or the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public
+ License and a copy of the GNU General Public License along with
+ Mage. If not, see <http://www.gnu.org/licenses/>.
+  
+                        20 Points maximum pour décrire la géométrie d'un casier
+                        15 Ouvrages élémentaires maximum par section singulière
+                           Précision des réels : 15 chiffres (8 octets) - Fichier BIN complet
+                           Parallélisation OpenMP inactive
+
+
+
+
+ Ligne de commande de la simulation : /home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage CWMQ.REP
+
+ ------------------------------------------------------------------------------
+ Copie du répertoire utilisé pour cette simulation (fichier : CWMQ.REP)
+ 
+ NUM              Nom du fichier des paramètres NUMériques
+ PAR              Nom du fichier des PARamètres numériques
+ NET CWMQ.NET     Nom du fichier définissant la topologie du réseau
+ INI CWMQ.INI     Nom du fichier des conditions INItiales
+ HYD CWMQ.HYD     Nom du fichier des HYDrogrammes amont
+ RUG CWMQ.RUG     Nom du fichier des rugosités
+ DEV CWMQ.DEV     Nom du fichier des déversements latéraux
+ LAT CWMQ.LAT     Nom du fichier des hydrogrammes LATéraux
+ LIM CWMQ.LIM     Nom du fichier des LIMnigrammes aval
+ TRA CWMQ.TRA     Nom du fichier de sortie formaté
+ BIN CWMQ.BIN     Nom du fichier de stockage BINaire
+ GRA              Nom du fichier de stockage GRAnulo
+ ERR CWMQ.ERR     Nom du fichier des messages d'ERReur
+ ------------------------------------------------------------------------------
+ Nombre total de biefs :   1
+ Nombre total de noeuds :   2
+ Nombre total de sections de calcul :    26
+ Nombre total de sections singulières :   0
+ Réseau ramifié
+ Longueur totale du réseau =      18.00 m
+ Coefficient du schéma implicite : 0.700 Schéma : S B R
+ Type des itérations : -1
+ Coefficient de sous-relaxation :  0.00
+ Pas de temps fixe :   180.00
+ Tirant d'eau minimum : 1.0000E-03
+ Nombre maximum d'itérations sur les non-linéarites : 99
+ Facteur de réduction du pas de temps en cas de non-convergence :  2
+ Nombre maximum d'itérations sans réduction de la précision : 10
+ Facteur de réduction de la précision :  1.000     en cote  1.000     en débit et  1.000     pour le résidu
+ La section située au Pm      9.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     10.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     11.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     11.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     12.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     13.25 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     14.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     14.50 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     15.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     16.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     16.50 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     17.00 du bief   1 n'a pas de coeff. de rugosité
+ La section située au Pm     18.00 du bief   1 n'a pas de coeff. de rugosité
+ >>> erreur : il y a  13 profil(s) sans coefficient de rugosité
+ possible problème d'arrondi des pk par pamhyr
+ ***************************** FIN INATTENDUE DE MAGE ***************************
