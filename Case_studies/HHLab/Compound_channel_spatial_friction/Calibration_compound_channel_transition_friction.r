@@ -1,37 +1,513 @@
 rm(list = ls())
 graphics.off()
 
-# Set directory
-dir_workspace <- here::here()
+# function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
+# for (i in function_list) {
+#     source(i)
+# }
 
-function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
-for (i in function_list) {
-    source(i)
-}
-# Processed data
-load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/compound_transition_friction/data_HHLab_uniform_case.RData")
+#############################################
+# Load libraries
+#############################################
 
-# Libraries
 library(RBaM)
 library(dplyr)
 library(patchwork)
 library(tidyr)
 library(ggplot2)
 library(stringr)
+#############################################
+# End load libraries
+#############################################
+# Load functions
+# function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
+# for (i in function_list) {
+#     source(i)
+# }
 
-# Common for observation and calibration
+
+
+#############################################
+# Load Functions
+#############################################
+
+get_init_prior <- function(parameter, FIX_dist = FALSE) {
+    # Identify if parameter is remnantErrorModel class
+    logical_test <- class(parameter[[1]]) == "remnantErrorModel"
+    if (logical_test) { # if remnantErrorModel, a list is needed
+        init_priors <- list()
+    } else { # if not a vector is needed
+        init_priors <- numeric(0)
+    }
+
+    counter_gamma <- 1
+    for (i in parameter) {
+        # Handle if parameters is remnantErrorModel
+        if (logical_test) {
+            param <- i$par
+            number_var_error_model <- seq_along(param)
+
+            for (local_counter in number_var_error_model) {
+                if (FIX_dist) {
+                    init_priors[[counter_gamma]] <- param[[local_counter]]$init
+                    counter_gamma <- counter_gamma + 1
+                } else {
+                    if (param[[local_counter]]$prior$dist != "FIX") {
+                        init_priors[[counter_gamma]] <- param[[local_counter]]$init
+                        counter_gamma <- counter_gamma + 1
+                    }
+                }
+            }
+        } else {
+            # Handle if parameters comes from theta
+            param <- i
+            if (FIX_dist) {
+                init_priors <- c(init_priors, param$init)
+            } else {
+                if (param$prior$dist != "FIX") {
+                    init_priors <- c(init_priors, param$init)
+                }
+            }
+        }
+    }
+    return(init_priors)
+}
+
+# Interpolation function passing by some specific nodes:
+interpolation_specific_points <- function(total_points = 100,
+                                          specific_nodes) {
+    if (total_points <= length(specific_nodes)) stop("Total points defined is lower or equal to the specific points required. Please either increase the number of total_points or avoid to used interpolation function")
+
+    # Order specific_nodes
+    specific_nodes <- sort(specific_nodes)
+
+    # Calculate the intervals between the specific points
+    intervals <- diff(specific_nodes)
+    # Distribute the number of points proportionally to each interval
+    total_local_points <- total_points - 1 # last value during diff function
+    points_per_interval_float <- (intervals / sum(intervals)) * total_local_points
+
+    points_per_interval <- round(points_per_interval_float)
+
+    # Generate sub-sequences for each interval, excluding the duplicate endpoint
+    specific_seq_temp <- unlist(mapply(
+        function(start, end, n) seq(start, end, length.out = n + 1)[-(n + 1)], # Exclude the endpoint
+        specific_nodes[-length(specific_nodes)], # Start of each interval
+        specific_nodes[-1], # End of each interval
+        points_per_interval # Number of points per interval
+    ))
+
+    # Add the final endpoint manually
+    specific_seq <-
+        c(
+            specific_seq_temp,
+            last(specific_nodes)
+        )
+
+
+    if (!all(specific_nodes %in% specific_seq)) stop("Distance so close, increase number of interpolate KP to get all points required")
+
+    return(specific_seq)
+}
+
+# Function to assign reach to a grid
+assign_reach_from_a_grid <- function(reach_KP_boundaries, grid) {
+    reaches <- rep(NA, length(grid))
+
+    if (nrow(reach_KP_boundaries) == 1) {
+        all_set <- dplyr::between(grid, reach_KP_boundaries$KP_start, reach_KP_boundaries$KP_end)
+        if (!all(all_set)) stop("reach_KP_boundaries must contain all grid")
+        reaches[which(all_set)] <- reach_KP_boundaries$reach[1]
+    } else {
+        # Include left and exclude right
+        for (i in 1:nrow(reach_KP_boundaries)) {
+            if (i != nrow(reach_KP_boundaries)) {
+                idx_position_reaches <- which(
+                    grid >= reach_KP_boundaries$KP_start[i] &
+                        grid < reach_KP_boundaries$KP_end[i]
+                )
+            } else {
+                idx_position_reaches <- which(
+                    grid >= reach_KP_boundaries$KP_start[i] &
+                        grid <= reach_KP_boundaries$KP_end[i]
+                )
+            }
+
+            reaches[idx_position_reaches] <- reach_KP_boundaries$reach[i]
+        }
+    }
+
+    if (any(is.na(reaches))) {
+        return(stop("Some values in the vector reaches have not been assigned"))
+    }
+
+    return(reaches)
+}
+
+# Function to get covariate in piecewise function
+getCovariate_piecewise <- function(KP_grid, shiftPoints) {
+    if (any(diff(KP_grid) < 0)) {
+        return(stop("KP grid must be increasing all the time"))
+    }
+    if (KP_grid[1] == min(shiftPoints)) {
+        return(stop("Shift point must be different to the first KP_grid"))
+    }
+    if (last(KP_grid) == max(shiftPoints)) {
+        return(stop("Shift point must be different to the last KP_grid"))
+    }
+    if (!any(KP_grid < min(shiftPoints))) {
+        return(stop(paste0("Shift point ", min(shiftPoints), "is out of the KP grid")))
+    }
+    if (!any(KP_grid > max(shiftPoints))) {
+        return(stop(paste0("Shift point ", max(shiftPoints), " is out of the KP grid")))
+    }
+    if (any(duplicated(shiftPoints))) {
+        return(stop("Non duplicated values in shiftPoints"))
+    }
+
+    all_shiftPoints <- sort(c(
+        shiftPoints,
+        KP_grid[1],
+        last(KP_grid)
+    ))
+
+    # Assign each value in KP_grid to an interval
+    intervals <- cut(KP_grid, breaks = all_shiftPoints, include.lowest = TRUE, right = TRUE)
+
+    # Create binary matrix version 0:
+    covariate_matrix_v0 <- stats::model.matrix(~ intervals - 1)
+    covariate_matrix_v1 <- cbind(KP_grid, covariate_matrix_v0)
+    # Get duplicated values from grid respresenting switch of reach
+    id_shiftSReaches <- which(duplicated(KP_grid) | duplicated(KP_grid, fromLast = TRUE))
+
+    if (length(id_shiftSReaches) != 0) {
+        # Identify which of these are the second (or later) occurrences
+        is_second_occurrence <- duplicated(KP_grid[id_shiftSReaches])
+        # If TRUE, matrix should be corrected to consider shift point coincide with switch of reach
+        # Correct the matrix for the second (or later) occurrences
+        for (i in which(is_second_occurrence)) {
+            id <- id_shiftSReaches[i]
+            # Find the column where the current 1 is set
+            current_col <- which(covariate_matrix_v1[id, ] == 1)
+            # If the current column is not the last one, set the next column to 1 and the current to 0
+            if (current_col < ncol(covariate_matrix_v1)) {
+                covariate_matrix_v1[id, current_col] <- 0
+                covariate_matrix_v1[id, current_col + 1] <- 1
+            }
+        }
+    }
+    covariate_matrix <- covariate_matrix_v1[, -c(1)]
+    colnames(covariate_matrix) <- NULL
+    return(covariate_matrix)
+}
+
+# Function to estimate covariate's values of a polynomial degree fixed
+getlegendre <- function(
+    polynomial_degree,
+    covariate_discretization) {
+    if (length(unique(covariate_discretization)) == 1) {
+        stop("covariate_discretization must contain more than one unique value")
+    }
+    normalized_values <- 2 * (covariate_discretization - min(covariate_discretization)) / (max(covariate_discretization) - min(covariate_discretization)) - 1
+
+    # Write co variant matrix for main channel
+    # Create an empty data frame and fill it with polynomial values
+    legendre_df_covariate <- data.frame(x = normalized_values) # Start with x values
+    legendre_df <- legendre_df_covariate
+
+    if (polynomial_degree < 0) stop("The polynomial degree must be positive")
+    if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normalized_values should be between [-1,1]")
+
+    if (polynomial_degree == 0) {
+        return(rep(1, length(normalized_values)))
+    }
+    if (polynomial_degree == 1) {
+        return(normalized_values)
+    }
+
+    # P_0(normalized_values) = 1
+    Pn_1 <- rep(1, length(normalized_values))
+    # P_1(normalized_values) = normalized_values
+    Pn <- normalized_values
+
+    for (k in 1:(polynomial_degree - 1)) {
+        P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
+        Pn_1 <- Pn
+        Pn <- P_next
+    }
+    return(Pn)
+}
+
+# Function to get covariate in Legendre polynomial
+getCovariate_Legendre <- function(max_polynomial_degree, ...) {
+    if (!(max_polynomial_degree >= 0 && max_polynomial_degree == floor(max_polynomial_degree))) stop("max_polynomial_degree must be a positive integer")
+
+    # Capture the first argument passed via ...
+    args <- list(...)
+    # Check if required arguments are present
+    if (!("covariate_discretization" %in% names(args))) {
+        stop("covariate_discretization must be provided as a named argument")
+    }
+    # Extract covariate_discretization
+    covariate_discretization <- args$covariate_discretization
+
+    Z <- matrix(
+        data = 0,
+        nrow = length(covariate_discretization),
+        ncol = max_polynomial_degree + 1 # Because degrees start at 0
+    )
+    for (polynomial_degree in seq(0, max_polynomial_degree)) {
+        Z[, polynomial_degree + 1] <- getlegendre(
+            polynomial_degree = polynomial_degree,
+            covariate_discretization = covariate_discretization
+        )
+    }
+
+    return(Z)
+}
+
+# Block-diagonal binding of matrices
+# source: https://stackoverflow.com/questions/17495841/block-diagonal-binding-of-matrices
+block_diagonal_matrix <- function(...) {
+    d <- list(...)
+    nrows <- sum(sapply(d, NROW))
+    ncols <- sum(sapply(d, NCOL))
+    ans <- matrix(0, nrows, ncols)
+    i1 <- 1
+    j1 <- 1
+    for (m in d) {
+        if (!is.matrix(m)) {
+            return(stop("All arguments must be matrices"))
+        }
+        i2 <- i1 + NROW(m) - 1
+        j2 <- j1 + NCOL(m) - 1
+        ans[i1:i2, j1:j2] <- m
+        i1 <- i2 + 1
+        j1 <- j2 + 1
+    }
+    return(ans)
+}
+
+RUGFile_constructor_SR_correction <- function(Key_Info_XR_MR) {
+    # Calculate the length of RUGFile using Key_Info_XR_MR
+    length_RUGFile <- sum(
+        sapply(Key_Info_XR_MR, function(id) {
+            length(id$reach)
+        })
+    )
+    # Initialize RUGFile_first_part as a data frame with 5 columns
+    RUGFile_first_part <- data.frame(
+        matrix(
+            data = 0,
+            nrow = length_RUGFile,
+            ncol = 5 # RUGFILE columns : reach, kp_start, kp_end, kmin,Kflood
+        )
+    )
+    colnames(RUGFile_first_part) <- c("reach", "KP_start", "KP_end", "Kmin", "Kflood")
+    i1 <- 1
+    for (id_Key in Key_Info_XR_MR) {
+        i2 <- i1 + length(id_Key$KP_grid)
+        RUGFile_first_part[i1:i2, c(1, 2, 3)] <- data.frame(
+            id_reach = id_Key$reach[-length(id_Key$reach)],
+            KP_start = id_Key$KP_grid[-length(id_Key$KP_grid)],
+            KP_end = id_Key$KP_grid[-1]
+        )
+        i1 <- i2 + 1
+    }
+    return(RUGFile = RUGFile_first_part)
+}
+
+CalData_plot <- function(
+    data,
+    scales_free = "free_y",
+    y_label,
+    title_label,
+    col_label = NULL,
+    plot_water_depth = TRUE,
+    wrap = TRUE) {
+    if (plot_water_depth) {
+        plot_CalData <-
+            ggplot(data, aes(
+                x = x,
+                color = ID,
+                y = h_mean
+            ))
+
+        if (any(data$Yu != 0)) {
+            plot_CalData <- plot_CalData +
+                geom_errorbar(aes(
+                    ymin = h_mean - 1.96 * Yu,
+                    ymax = h_mean + 1.96 * Yu
+                ))
+        }
+    } else {
+        plot_CalData <-
+            ggplot(data = data, aes(
+                x = x,
+                y = z_mean,
+                col = ID
+            )) +
+            geom_line(
+                aes(
+                    y = z_riverbed,
+                    col = "riverbed"
+                )
+            )
+
+        if (any(data$Yu != 0)) {
+            plot_CalData <- plot_CalData +
+                geom_errorbar(aes(
+                    ymin = z_mean - 1.96 * Yu,
+                    ymax = z_mean + 1.96 * Yu
+                ))
+        }
+    }
+    plot_CalData <- plot_CalData +
+        geom_point() +
+        labs(
+            x = "Streamwise position (meters)",
+            y = y_label,
+            title = title_label,
+            col = col_label
+        ) +
+        theme_bw() +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5)
+        )
+
+    if (wrap) {
+        plot_CalData <- plot_CalData +
+            facet_wrap(~ID, scales = scales_free, ncol = 1)
+    }
+    return(plot_CalData)
+}
+get_specific_SR_points <- function(SR_properties) {
+    if (identical(SR_properties$function_SR, getCovariate_piecewise)) {
+        SR_shifts_points <- SR_properties$shiftPoints
+        return(SR_shifts_points)
+    }
+}
+
+SR_constructor <- function(SR_key_HM,
+                           Key_Info_XR_MR) {
+    # Initialize structure by fixing layer 1 : XR
+    # Layer 2 : Kmin or Kmoy is handle outside this function
+    SR <- vector(mode = "list", length = length(SR_key_HM))
+    names(SR) <- names(SR_key_HM)
+
+    # Extract only KP boundaries points keeping the same structure of XR
+    SR_KP_boundaries_structure <- lapply(SR_key_HM, function(element) {
+        lapply(element, function(SR) {
+            SR$KP_boundaries_points
+        })
+    })
+
+    # Loop through XR
+    for (id_XR in seq_along(SR_key_HM)) {
+        # Get KP boundaries of all SR at a XR
+        SR_KP_boundaries_list <- SR_KP_boundaries_structure[[id_XR]]
+        RUG_min_boundary_KP <- min(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_start)
+        RUG_max_boundary_KP <- max(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_end)
+
+        # Check if KP boundaries of each SR respect the KP boundaries of XR
+        if (min(unlist(SR_KP_boundaries_list)) != RUG_min_boundary_KP ||
+            max(unlist(SR_KP_boundaries_list)) != RUG_max_boundary_KP) {
+            return(stop(sprintf(
+                "KP boundary mismatch: data min/max (%s, %s) vs HM min/max (%s, %s)",
+                RUG_min_boundary_KP,
+                RUG_max_boundary_KP,
+                min(unlist(SR_KP_boundaries_list)),
+                max(unlist(SR_KP_boundaries_list))
+            )))
+        }
+        data_KP <- Key_Info_XR_MR[[id_XR]]$KP_grid
+        data_reaches <- Key_Info_XR_MR[[id_XR]]$reach
+
+        # Adding layer 3 : declare all SRs into the structure
+        SR[[id_XR]] <- vector("list", length(SR_KP_boundaries_list))
+        names(SR[[id_XR]]) <- names(SR_KP_boundaries_list)
+        # Loop through each SR
+        for (id_SR in seq_along(SR_KP_boundaries_list)) {
+            # Adding layer 4: assign properties of each SR
+            # Starting with KP and reach
+            boundaries <- SR_KP_boundaries_list[[id_SR]]
+
+            # Include left and exclude right
+            if (id_SR != length(SR_KP_boundaries_list)) {
+                position_match <- which(data_KP >= boundaries[1] &
+                    data_KP < boundaries[2])
+            } else {
+                position_match <- which(data_KP >= boundaries[1] &
+                    data_KP <= boundaries[2])
+            }
+
+            SR[[id_XR]][[id_SR]]$KP <- data_KP[position_match]
+            SR[[id_XR]][[id_SR]]$reach <- data_reaches[position_match]
+
+            # Add Z and priors
+            if (identical(
+                SR_key_HM[[id_XR]][[id_SR]]$function_SR,
+                getCovariate_piecewise
+            )) {
+                if (!("shiftPoints" %in% names(SR_key_HM[[id_XR]][[id_SR]]))) {
+                    return(stop(paste0(
+                        "To apply getCovariate_piecewise function, shiftPoints must be passed as argument. Please check the XR = ", names(SR_key_HM)[[id_XR]], ", SR = ", names(SR_key_HM[[id_XR]])[[id_SR]]
+                    )))
+                }
+                SR[[id_XR]][[id_SR]]$Z <- getCovariate_piecewise(
+                    shiftPoints = SR_key_HM[[id_XR]][[id_SR]]$shiftPoints,
+                    KP_grid = SR[[id_XR]][[id_SR]]$KP
+                )
+            } else if (identical(
+                SR_key_HM[[id_XR]][[id_SR]]$function_SR,
+                getCovariate_Legendre
+            )) {
+                if (!("max_polynomial_degree" %in% names(SR_key_HM[[id_XR]][[id_SR]]))) {
+                    return(stop(paste0(
+                        "To apply getCovariate_Legendre function, max_polynomial_degree must be passed as argument. Please check the XR = ", names(SR_key_HM)[[id_XR]], ", SR = ", names(SR_key_HM[[id_XR]])[[id_SR]]
+                    )))
+                }
+                SR[[id_XR]][[id_SR]]$Z <- getCovariate_Legendre(
+                    max_polynomial_degree = SR_key_HM[[id_XR]][[id_SR]]$max_polynomial_degree,
+                    covariate_discretization = SR[[id_XR]][[id_SR]]$KP
+                )
+            } else {
+                return(stop("function_SR given in input is not supported. Please select either getCovariate_Legendre or getCovariate_piecewise"))
+            }
+
+            SR[[id_XR]][[id_SR]]$prior <- SR_key_HM[[id_XR]][[id_SR]]$prior
+
+            if (dim(SR[[id_XR]][[id_SR]]$Z)[2] != length(SR[[id_XR]][[id_SR]]$prior)) {
+                stop(paste0(
+                    "Error identified in XR = ", names(SR_key_HM)[[id_XR]], ", SR = ", names(SR_key_HM[[id_XR]])[[id_SR]], ". Number of columns of Z (", dim(SR[[id_XR]][[id_SR]]$Z)[2], ") must be equal to the length(prior) = ", length(SR[[id_XR]][[id_SR]]$prior)
+                ))
+            }
+        }
+    }
+    return(SR)
+}
+
+############################################
+# End source functions
+############################################
+
+
+############################################
+# Module 1 : set directory paths
+############################################
+
+# Set directory
+dir_workspace <- here::here()
+
+# Common for observation and calibration folders
 all_experiments <- c(
     "piecewise_function"
 )
-# Folder related to the polynomial degree calibration
-if (all_experiments == "piecewise_function") {
-    all_polynomial_degree <- c(
-        "n_min_0_n_flood_0"
-    )
-} else {
-
-}
-
+# Experiments input data to be used during calibration setting
+all_cal_case <- c(
+    "Kmin_n_deg_0_Kflood_PW_function_nK_2.r"
+)
 
 # Folder related to the observations (careful with the order!)
 all_events <- c(
@@ -42,7 +518,16 @@ all_events <- c(
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
 file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_spatial_friction/Calibration_experiments"
-do_calibration <- FALSE
+mage_projet_name <- "CWMQ"
+############################################
+# End module 1: set directories paths
+############################################
+
+############################################
+# Module 2: calibration data
+############################################
+# Processed data
+load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/compound_transition_friction/data_HHLab_uniform_case.RData")
 
 # Observations data input:
 # Measurements for calibration by event!
@@ -78,7 +563,6 @@ WSE_data_temp <- data.frame(WSE_data_temp %>%
         .groups = "drop"
     ))
 
-mage_projet_name <- "CWMQ"
 WSE_data_temp <- WSE_data_temp[str_detect(WSE_data_temp$ID_experiment, pattern = mage_projet_name), ]
 
 # This part help to handle when observed data is presented as a list and user need to specify the the order of the events with the same name for matching with all_all_events, where the order is important
@@ -128,7 +612,6 @@ for (i in seq_along(Link_x_t_ind_event)) {
     )
 }
 
-
 if (!all(observed_data$event == X$event)) stop("The order of the event are not the same between the X data frame and observed_data data frame")
 
 # Assign manually uncertainty values in meters
@@ -170,9 +653,30 @@ CalData_plot_export <- CalData_plot(
     plot_water_depth = FALSE,
     wrap = FALSE
 )
-########
+############################################
+# End module 2: calibration data
+############################################
+
+############################################
+# Module 3 : hydraulic model (HM) environment
+############################################
+# Input information about reaches and boundaries KP of the HM.
+# MR : Model reach interpreted by the HM.
+# This input information must be coherent with HM specifications.
+Input_MR <- data.frame(
+    reach = c(1),
+    KP_start = c(0),
+    KP_end = c(18)
+)
+############################################
+# End module 3 : hydraulic model (HM) environment
+############################################
 
 
+############################################
+# Module 4: calibration setting
+############################################
+# Structural error information
 remant_error_list <- list(
     remnantErrorModel(
         fname = "Config_RemnantSigma.txt",
@@ -225,362 +729,37 @@ remant_error_list <- list(
     )
 )
 
-###################
-# Create the metadata to link reaches from MAGE to BaM! and inversely
-###################
-# Remark: reaches could be equal in BaM! and MAGE, but it is not mandatory
-
-# Two cases are supported:
-
-# 1. In case of spatially distributed friction: BaM! integrates several reaches from MAGE to keep a same spatialisation avoiding discontinuities at nodes of two reaches in MAGE model. So the number reaches in BaM! could be lower than MAGE. The extrem case is when the number of reaches in BaM! are the same from MAGE. A different set of reaches could be done to the main channel and to the floodplain
-
-# E.g: Here the reach in BaM number one (1) in the main channel contains 2 consecutive reaches (1,2) from MAGE perspective
-# toto <- list(
-#     Kmin = list(
-#         link_1 = list(reach_BaM = 1, reach_MAGE = c(1, 2)),
-#         link_2 = list(reach_BaM = 2, reach_MAGE = c(3, 5, 6)),
-#         link_3 = list(reach_BaM = 3, reach_MAGE = c(4))
-#     ),
-#     Kflood = list(
-#         link_1 = list(reach_BaM = 1, reach_MAGE = c(1, 2, 3, 5)),
-#         link_2 = list(reach_BaM = 2, reach_MAGE = c(4, 6))
-#     )
-# )
-# # Validate uniqueness of reach_MAGE
-# all_reaches_MAGE <- unlist(lapply(toto, function(x) x$reach_MAGE))
-# if (length(all_reaches_MAGE) != length(unique(all_reaches_MAGE))) {
-#  stop("Duplicate reach_MAGE values detected!")
-# }
-# all_reaches_BaM <- unlist(lapply(toto, function(x) x$reach_BaM))
-# if (length(all_reaches_BaM) != length(unique(all_reaches_BaM))) {
-#   stop("Duplicate reach_BaM values detected!")
-# }
-
-
-
-# 2. In case of piecewise function: the number of the reaches in MAGE is lower than BaM!. Inversely at the previous case, in a reach of Mage, it could be more than one reach from BaM! perspective. This method let us estimated a piecewise function in a reach of MAGE.
-
-# E.g: Here the reach in MAGE number one (1) in the main channel contains 2 consecutive reaches (1,2) from BaM perspective to estimate a piecewise function
-#  list(
-#         Kmin = list(
-#             link_1 = list(reach_BaM = c(1, 2), reach_MAGE = 1),
-#             link_2 = list(reach_BaM = c(3, 5, 6), reach_MAGE = 2),
-#             link_3 = list(reach_BaM = c(4), reach_MAGE = 3)
-#         ),
-#         Kflood = list(
-#             link_1 = list(reach_BaM = c(1, 2, 3, 5), reach_MAGE = 1),
-#             link_2 = list(reach_BaM = c(4, 6), reach_MAGE = 2)
-#         )
-#     )
-
-
-
-# Both of them are implemented here:
-if (all_experiments == "piecewise_function") {
-    metadata <- list(
-        Kmin = list(
-            link_1 = list(reach_BaM = c(1), reach_MAGE = 1)
-        ),
-        Kflood = list(
-            link_1 = list(reach_BaM = c(1, 2), reach_MAGE = 1)
-        )
-    )
-} else {
-    stop("not supported yet")
-}
-# Validate uniqueness of reach_MAGE
-all_reaches_MAGE <- unlist(lapply(toto, function(x) x$reach_MAGE))
-if (length(all_reaches_MAGE) != length(unique(all_reaches_MAGE))) {
-    stop("Duplicate reach_MAGE values detected!")
-}
-all_reaches_BaM <- unlist(lapply(toto, function(x) x$reach_BaM))
-if (length(all_reaches_BaM) != length(unique(all_reaches_BaM))) {
-    stop("Duplicate reach_BaM values detected!")
-}
-
-# Give the reaches connected
-# Reaches for spatially distributed the friction : the order here will be important (be careful depending on the mage model set up). That will impact the way that positions are interpretated.
-
-# Number of reaches in MAGE
-Number_reaches_Mage_Model <- list(1)
-
-## Definition of the number of reaches must be adapted to the larger number of segment during calibration either in tha main channel or in the floodplain. A value must be done by number of reaches in MAGE
-Number_segment_Cal_Kmin <- list(c(1))
-Number_segment_Cal_Kflood <- list(c(1, 2))
-
-if (length(Number_reaches_Mage_Model) != length(Number_segment_Cal_Kmin) | length(Number_reaches_Mage_Model) != length(Number_segment_Cal_Kflood) | length(Number_segment_Cal_Kmin) != length(Number_segment_Cal_Kflood)
-) {
-    stop("Size of Number_reaches_Mage_Model, Number_segment_Cal_Kmin and Number_segment_Cal_Kflood must be equal")
-}
-
-# # Example data
-# Number_reaches_Mage_Model <- list(1, 2)  # IDs of the reaches
-# Number_segment_Cal_Kmin <- list(c(1), c(1,2,3,4))  # Segments for main channel
-# Number_segment_Cal_Kflood <- list(c(1,2), c(1))  # Segments for floodplain
-
-
-# Mage needs the maximal number of division between the main channel and the floodplain to create the .RUG file. But the estimation will be performed separately.
-Maximal_Number_segment_Cal_MAGE <- ifelse(Number_segment_Cal_Kmin >= Number_segment_Cal_Kflood, "Kmin", "Kflood")
-
-# case <- "independant"
-# cases:
-# follow: two reaches are consecutive
-# independant: in a single reach, a piecewise function will be estimated either in the main channel or the floodplain
-#  monoreach: a single reach
-
-# if (case == "independant") {
-#     reaches_user_Kmin <- list(
-#         1
-#     )
-#     reaches_user_Kflood <- list(
-#         1,
-#         2
-#     )
-# } else if (case == "follow") {
-#     reaches_user_Kmin <- list(
-#         c(1)
-#     )
-#     reaches_user_Kflood <- list(
-#         c(1, 2)
-#     )
-# } else if (case == "monoreach") {
-#     reaches_user_Kmin <- list(
-#         1
-#     )
-#     reaches_user_Kflood <- list(
-#         1
-#     )
-# } else {
-#     stop("ERROR")
-# }
-
-if (length(reaches_user_Kmin) != Number_segment_Cal_Kmin) stop("reaches_user_Kmin must be coherent to the number of segment during calibration for the main channel")
-if (length(reaches_user_Kflood) != Number_segment_Cal_Kflood) stop("reaches_user_Kflood must be coherent to the number of segment during calibration for the floodplain")
-
-# Number of different reaches
-Nb_reaches_estimation_Kmin <- length(reaches_user_Kmin)
-Nb_reaches_estimation_Kflood <- length(reaches_user_Kflood)
-
-
-
-## Calibration setting
-
-# Input parameters in main channel:
-# Reach 1 : main channel
-a0_min_reach_1 <- RBaM::parameter(
-    name = "a0_min_glass",
-    init = 1 / 0.010, # Initial guess
-    prior.dist = "FlatPrior+", # Prior distribution
-    prior.par = NULL
-) # Parameters of the prior distribution
-
-# reach 1 : floodplain
-a0_flood_reach_1_mean <- RBaM::parameter(
-    name = "a0_flood",
-    init = (33 + 1 / 0.013) / 2,
-    prior.dist = "FlatPrior+",
-    prior.par = NULL
-)
-
-a0_flood_reach_1_wood <- RBaM::parameter(
-    name = "a0_flood_wood",
-    init = 33,
-    prior.dist = "FlatPrior+",
-    prior.par = NULL
-)
-
-a0_flood_reach_1_grass <- RBaM::parameter(
-    name = "a0_flood_grass",
-    init = 1 / 0.013,
-    prior.dist = "FlatPrior+",
-    prior.par = NULL
-)
-
-a1_flood_reach_1 <- RBaM::parameter(
-    name = "a1_flood",
-    init = 0,
-    prior.dist = "FlatPrior",
-    prior.par = NULL
-)
-
-a2_flood_reach_1 <- RBaM::parameter(
-    name = "a2_flood",
-    init = 0,
-    prior.dist = "FlatPrior",
-    prior.par = NULL
-)
-
-a3_flood_reach_1 <- RBaM::parameter(
-    name = "a3_flood",
-    init = 0,
-    prior.dist = "FlatPrior",
-    prior.par = NULL
-)
-a4_flood_reach_1 <- RBaM::parameter(
-    name = "a4_flood",
-    init = 0,
-    prior.dist = "FlatPrior",
-    prior.par = NULL
-)
-
-
-## Cross-section treatment: BaM perspective
-### interpolation
-
-specific_points_Model_Kmin <- data.frame(
-    reach = c(1),
-    KP_start = c(0),
-    KP_end = c(18)
-)
-
-specific_points_Model_Kflood <- data.frame(
-    reach = c(1, 2),
-    KP_start = c(0, 9.05),
-    KP_end = c(9.05, 18)
-)
-
-
-if (Nb_reaches_estimation_Kmin != nrow(specific_points_Model_Kmin)) stop("The number of segment to assign during calibration (Nb_reaches_estimation_Kmin) must be equal to the number of reaches in specific_points_Model_Kmin")
-if (Nb_reaches_estimation_Kflood != nrow(specific_points_Model_Kflood)) stop("The number of segment to assign during calibration (Nb_reaches_estimation_Kflood) must be equal to the number of reaches in specific_points_Model_Kflood")
-
-if (nrow(specific_points_Model_Kmin) > 1) {
-    for (i in 1:(nrow(specific_points_Model_Kmin) - 1)) {
-        if (specific_points_Model_Kmin$KP_end[i] != specific_points_Model_Kmin$KP_start[i + 1]) stop("specific_points_Model_Kmin must respect that KP_start of reach i must be equal to the KP_end of the reach i + 1 ")
-    }
-}
-if (nrow(specific_points_Model_Kflood) > 1) {
-    for (i in 1:(nrow(specific_points_Model_Kflood) - 1)) {
-        if (specific_points_Model_Kflood$KP_end[i] != specific_points_Model_Kflood$KP_start[i + 1]) stop("specific_points_Model_Kflood must respect that KP_start of reach i must be equal to the KP_end of the reach i + 1 ")
-    }
-}
-
-if (specific_points_Model_Kmin$KP_start[1] != specific_points_Model_Kflood$KP_start[1]) stop("First cross-section is not the same between the main channel and the floodplain. Check specific_points_Model_Kmin and specific_points_Model_Kflood")
-
-if (last(specific_points_Model_Kmin$KP_end) != last(specific_points_Model_Kflood$KP_end)) stop("Last cross-section is not the same between the main channel and the floodplain. Check specific_points_Model_Kmin and specific_points_Model_Kflood")
-
-
-# Fit to either the size of data frames of the main channel or floodplain to pass into .RUG file
-if (Maximal_Number_segment_Cal_MAGE == "Kmin") {
-    specific_points_Model <- specific_points_Model_Kmin
-    reaches_user <- reaches_user_Kmin
-} else {
-    specific_points_Model <- specific_points_Model_Kflood
-    reaches_user <- reaches_user_Kflood
-}
-
-# Real reaches from Mage projet (interpolation by reach)
-grid_covariant_discretized_by_reach <- list()
-for (i in 1:nrow(specific_points_Model)) {
-    boundaries_points <- c(specific_points_Model$KP_start[i], specific_points_Model$KP_end[i])
-
-    grid_covariant_discretized_by_reach[[i]] <- data.frame(
-        real_reach = specific_points_Model$reach[i],
-        interpol_values = interpolation_specific_points(
-            total_points = 100,
-            all_specific_points = boundaries_points
-        )
-    )
-}
-
-grid_covariant_discretized_real_bief <- bind_rows(grid_covariant_discretized_by_reach)
-
-# position_direction
-# increasing: positions are increasing in flow direction
-# decreasing: positions are decreasing in flow direction
-position_direction <- "increasing"
-# For example: position_direction = increasing and reaches_user_Kmin is c(1,2)
-
-# Only a unit will be considered, composed of two biefs, one and two. A check will be performed to check if all positions are increasing as defined in input data
-
-# Second example: position_direction = decreasing and reaches_user_Kmin is c(2,1)
-
-# In this case, reach 2 is downstream and reach 1 is upstream. A check will be performed to be sure that position will decrease by reach
-
-
-grid_covariant_discretized <- c()
-# Change to reach for spatialisation
-for (i in 1:length(reaches_user)) {
-    mask <- which(grid_covariant_discretized_real_bief$real_reach %in% reaches_user[[i]])
-
-    if (length(mask) == 0) stop(paste0("Real reaches are ", specific_points_Model$reach, " and the reaches defined by the user are not matching: ", reaches_user))
-
-    df_covariant_by_reach <- grid_covariant_discretized_real_bief[mask, ]
-
-    if (length(reaches_user[[i]]) != 1) {
-        # Case union of real bief for spatialisation
-        if (position_direction == "increasing") {
-            # Check if all interpol_values are positive for each real_reach
-            check <- df_covariant_by_reach %>%
-                group_by(real_reach) %>%
-                summarize(check = all(diff(interpol_values) > 0, na.rm = TRUE))
-
-
-            if (!any(check$check)) stop("All position values should increase in flow direction")
-        } else if (position_direction == "decreasing") {
-            # Check if all interpol_values are positive for each real_reach
-            check <- df_covariant_by_reach %>%
-                group_by(real_reach) %>%
-                summarize(check = all(diff(interpol_values) < 0, na.rm = TRUE))
-
-            if (!all(check$check)) stop(paste0("All position values should decrease in flow direction. Please check reach(es) ", check$real_reach[check$check == FALSE]))
-        } else {
-            stop(paste0("The position_direction variable should be either increasing or decreasing in flow direction all the time"))
-        }
-    }
-    #### Save data independently of the case
-    if (i == 1) {
-        grid_covariant_discretized <- data.frame(
-            Reach = i,
-            Covariate = df_covariant_by_reach$interpol_values
-        )
-    } else {
-        grid_covariant_discretized_temp <- data.frame(
-            Reach = i,
-            Covariate = df_covariant_by_reach$interpol_values
-        )
-        grid_covariant_discretized <- rbind(
-            grid_covariant_discretized, grid_covariant_discretized_temp
-        )
-    }
-}
-
-# Adapt the values of the reach separately from the main channel to the floodplain, but keeping the same covariate discretization
-if (Maximal_Number_segment_Cal_MAGE == "Kmin") {
-    grid_covariant_discretized_Kmin <- grid_covariant_discretized
-    grid_covariant_discretized_Kflood <- assign_reach(
-        specific_points_Model = specific_points_Model_Kflood,
-        grid_covariant_discretized$Covariate
-    )
-} else {
-    grid_covariant_discretized_Kflood <- grid_covariant_discretized
-    grid_covariant_discretized_Kmin <- assign_reach(
-        specific_points_Model = specific_points_Model_Kmin,
-        covariate_value = grid_covariant_discretized$Covariate
-    )
-}
-
-##################################
-## Common for all run of the case of study.
-# Harcode values, it does not matter, it just useful for give the size of the .RUG File
-RUG_Kmin <- rep(20, nrow(specific_points_Model))
-RUG_Kflood <- rep(10, nrow(specific_points_Model))
-
 # Setting jump standard deviation for MCMC sampling
 jump_MCMC_theta_param_user <- 8
 jump_MCMC_error_model_user <- 0.001
 threshold_jump_MCMC_error_model <- 0.5
 prior_error_model <- get_init_prior(remant_error_list)
-############################
 
+
+# Logical to trigger some functionalities
+do_calibration <- FALSE
+
+############################################
+# End module 4: calibration setting
+############################################
+
+
+############################################
+# Module 5: Calculations
+############################################
 mod_polynomials <- list()
 
 # for (Experiment_id in all_experiments) {
+
 # }
 
 Experiment_id <- all_experiments
 
 path_experiment <- file.path(file_main_path, Experiment_id)
 counter_model <- 1
+if (!dir.exists(path_experiment)) {
+    dir.create(path_experiment)
+}
 
 ggsave(file.path(path_experiment, "CalData_plot.png"),
     plot = CalData_plot_export,
@@ -591,69 +770,32 @@ ggsave(file.path(path_experiment, "CalData_plot.png"),
 
 wood_first <- mage_projet_name == "CWMQ"
 
-for (polynomial_id in all_polynomial_degree) {
-    if (Experiment_id == "piecewise_function") {
-        if (polynomial_id == "n_min_0_n_flood_0") {
-            n_degree_Kmin <- 0
-            n_degree_Kflood <- 0
-
-            Kmin_prior <- list(
-                a0_min_reach_1
-            )
-
-            if (wood_first) {
-                Kflood_prior <- list(
-                    a0_flood_reach_1_wood,
-                    a0_flood_reach_1_grass
-                )
-            } else {
-                Kflood_prior <- list(
-                    a0_flood_reach_1_grass,
-                    a0_flood_reach_1_wood
-                )
-            }
-        } else {
-            stop(paste0(polynomial_id, " is not supported in the experiment_id = pieceswise_function. Only case n_min_0_n_flood_0 is supported"))
-        }
-    } else {
-        # That will work only for exploring several polynomial degrees in the main chanil, fixing the floodplain
-        # if (polynomial_id == "n_0") {
-        #     n_degree_Kmin <- 0
-        #     Kmin_prior <- list(
-        #         a0_min_reach_1
-        #     )
-        # } else if (polynomial_id == "n_1") {
-        #     n_degree_Kmin <- 1
-        #     Kmin_prior <- list(
-        #         a0_min_reach_1,
-        #         a1_min_reach_1
-        #     )
-        # } else if (polynomial_id == "n_2") {
-        #     n_degree_Kmin <- 2
-        #     Kmin_prior <- list(
-        #         a0_min_reach_1,
-        #         a1_min_reach_1,
-        #         a2_min_reach_1
-        #     )
-        # } else if (polynomial_id == "n_3") {
-        #     n_degree_Kmin <- 3
-        #     Kmin_prior <- list(
-        #         a0_min_reach_1,
-        #         a1_min_reach_1,
-        #         a2_min_reach_1,
-        #         a3_min_reach_1
-        #     )
-        # } else {
-        #     stop("polynomial_id not supported yet")
-        # }
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Source the input data for the experiments
+    path_Experiment_Input_Data <- file.path(file_main_path, "Experiments_Input_Data", all_cal_case[id_cal_case])
+    if (!file.exists(path_Experiment_Input_Data)) {
+        stop(paste0(
+            "The experiment input data named : '",
+            all_cal_case[id_cal_case],
+            "' does not exist"
+        ))
     }
-
-    path_polynomial <- file.path(path_experiment, polynomial_id)
+    source(path_Experiment_Input_Data)
+    path_polynomial <- file.path(
+        path_experiment,
+        sub("\\.r$", "", all_cal_case[id_cal_case])
+    )
     # Path to save results
     workspace_user <- file.path(path_polynomial, "BaM")
     path_post_traitement <- file.path(workspace_user, "post_traitement")
     path_post_traitement_data <- file.path(path_post_traitement, "RData")
-
+    if (!dir.exists(path_polynomial)) {
+        dir.create(path_polynomial)
+    } else {
+        if (do_calibration) {
+            file.remove(list.files(path_polynomial, full.names = TRUE, recursive = TRUE))
+        }
+    }
     if (!dir.exists(workspace_user)) {
         dir.create(workspace_user)
     } else {
