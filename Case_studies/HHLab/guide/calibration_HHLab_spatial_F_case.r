@@ -431,6 +431,29 @@ SR_constructor <- function(SR_key_HM,
     return(SR)
 }
 
+# Assuming Kflood_SR is your nested list
+extract_priors <- function(nested_list) {
+    priors <- list()
+
+    # Recursive function to extract 'prior' elements
+    extract <- function(x) {
+        if (is.list(x)) {
+            if ("prior" %in% names(x)) {
+                priors <<- c(priors, list(x$prior))
+            } else {
+                lapply(x, extract)
+            }
+        }
+    }
+
+    # Apply the recursive function
+    extract(nested_list)
+
+    # Flatten the list of priors
+    flat_priors <- unlist(priors, recursive = FALSE)
+
+    return(flat_priors)
+}
 ############################################
 # End source functions
 ############################################
@@ -651,30 +674,6 @@ if (nrow(RUGFile) != nrow(Z_MatrixKflood)) stop("RugFile must have the same size
 ############################################
 # End Calibration settings
 ############################################
-
-# Assuming Kflood_SR is your nested list
-extract_priors <- function(nested_list) {
-    priors <- list()
-
-    # Recursive function to extract 'prior' elements
-    extract <- function(x) {
-        if (is.list(x)) {
-            if ("prior" %in% names(x)) {
-                priors <<- c(priors, list(x$prior))
-            } else {
-                lapply(x, extract)
-            }
-        }
-    }
-
-    # Apply the recursive function
-    extract(nested_list)
-
-    # Flatten the list of priors
-    flat_priors <- unlist(priors, recursive = FALSE)
-
-    return(flat_priors)
-}
 
 Kmin_prior <- extract_priors(Kmin_SR)
 Kflood_prior <- extract_priors(Kflood_SR)
