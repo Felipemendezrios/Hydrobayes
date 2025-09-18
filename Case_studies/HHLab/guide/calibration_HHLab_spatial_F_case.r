@@ -331,10 +331,6 @@ get_specific_SR_points <- function(SR_properties) {
         return(SR_shifts_points)
     }
 }
-`%out%` <- function(x, y) {
-    x[!x %in% y]
-}
-
 
 SR_constructor <- function(SR_key_HM,
                            Key_Info_XR_MR) {
@@ -451,9 +447,9 @@ SR_constructor <- function(SR_key_HM,
 # MR : Model reach interpreted by the HM.
 # This input information must be coherent with HM specifications.
 Input_MR <- data.frame(
-    reach = c(1, 2, 3, 4),
-    KP_start = c(0, 5, 10, 25),
-    KP_end = c(10, 15, 20, 35)
+    reach = c(1),
+    KP_start = c(0),
+    KP_end = c(18)
 )
 
 
@@ -466,9 +462,7 @@ Input_MR <- data.frame(
 # All reaches in the model (MR) defined within the same coordinate reference
 
 Input_XR <- list(
-    main_channel = c(1, 3),
-    tributary_1 = 2,
-    tributary_2 = 4
+    main_channel = c(1)
 )
 
 # At this level, all information is already available to link BaM and HM
@@ -560,45 +554,17 @@ Input_Kmin_Key_SR_MR <- list(
         list(
             SR1 = list(
                 # KP boundary points
-                KP_boundaries_points = c(0, 20),
+                KP_boundaries_points = c(0, 18),
                 # Function to apply at this SR
-                function_SR = getCovariate_piecewise,
+                function_SR = getCovariate_Legendre,
                 # Arguments of this SR
-                shiftPoints = c(5, 10, 14, 18),
+                max_polynomial_degree = 0,
                 prior = list(
-                    RBaM::parameter(name = "MC_Kmin_SR1_a0_1", init = 35),
-                    RBaM::parameter(name = "MC_Kmin_SR1_a0_2", init = 55),
-                    RBaM::parameter(name = "MC_Kmin_SR1_a0_3", init = 30),
-                    RBaM::parameter(name = "MC_Kmin_SR1_a0_4", init = 20),
-                    RBaM::parameter(name = "MC_Kmin_SR1_a0_5", init = 25)
+                    RBaM::parameter(name = "MC_Kmin_SR1_a0_1", init = 1 / 0.010)
                 )
             )
-        ),
-    tributary_1 = list(
-        SR1 = list(
-            KP_boundaries_points = c(5, 15),
-            function_SR = getCovariate_Legendre,
-            max_polynomial_degree = 2,
-            prior = list(
-                RBaM::parameter(name = "TB1_Kmin_SR1_a0", init = 30),
-                RBaM::parameter(name = "TB1_Kmin_SR1_a1", init = 0),
-                RBaM::parameter(name = "TB1_Kmin_SR1_a2", init = 0)
-            )
         )
-    ),
-    tributary_2 = list(
-        SR1 = list(
-            KP_boundaries_points = c(25, 35),
-            function_SR = getCovariate_Legendre,
-            max_polynomial_degree = 1,
-            prior = list(
-                RBaM::parameter(name = "TB2_Kmin_SR1_a0", init = 30),
-                RBaM::parameter(name = "TB2_Kmin_SR1_a1", init = 0)
-            )
-        )
-    )
 )
-
 # Check if size is respected between ID and Kmin
 if (length(Input_XR) != length(Input_Kmin_Key_SR_MR)) stop("Size must be equal between Input_Kmin_Key_SR_MR and Input_XR")
 
@@ -618,10 +584,10 @@ Z_all_Kmin_SR <- lapply(Kmin_SR, function(channel) {
 flat_Kmin_SR <- unlist(Z_all_Kmin_SR, recursive = FALSE)
 
 # Pass the flattened list to block_diagonal_matrix
-zFileKmin <- do.call(block_diagonal_matrix, flat_Kmin_SR)
+Z_MatrixKmin <- do.call(block_diagonal_matrix, flat_Kmin_SR)
 
 # Check size between RUGFile and Z_file
-if (nrow(RUGFile) != nrow(zFileKmin)) stop("RugFile must have the same size as Z file (spatialisation)")
+if (nrow(RUGFile) != nrow(Z_MatrixKmin)) stop("RugFile must have the same size as Z file (spatialisation)")
 
 ############################################
 # End Kmin environment
@@ -641,49 +607,17 @@ Input_Kflood_Key_SR_MR <- list(
         list(
             SR1 = list(
                 # KP boundary points
-                KP_boundaries_points = c(0, 10),
+                KP_boundaries_points = c(0, 18),
                 # Function to apply at this SR
                 function_SR = getCovariate_piecewise,
                 # Arguments of this SR
-                shiftPoints = c(2.5, 7),
+                shiftPoints = c(9.05),
                 prior = list(
-                    RBaM::parameter(name = "MC_Kflood_SR1_a0_1", init = 35),
-                    RBaM::parameter(name = "MC_Kflood_SR1_a0_2", init = 55),
-                    RBaM::parameter(name = "MC_Kflood_SR1_a0_3", init = 30)
-                )
-            ),
-            SR2 = list(
-                KP_boundaries_points = c(10, 20),
-                function_SR = getCovariate_Legendre,
-                max_polynomial_degree = 2,
-                prior = list(
-                    RBaM::parameter(name = "MC_Kflood_SR2_a0", init = 35),
-                    RBaM::parameter(name = "MC_Kflood_SR2_a1", init = 0),
-                    RBaM::parameter(name = "MC_Kflood_SR2_a2", init = 0)
+                    RBaM::parameter(name = "MC_Kflood_SR1_a0_1", init = 1 / 0.010),
+                    RBaM::parameter(name = "MC_Kflood_SR1_a0_2", init = (33 + 1 / 0.013) / 2)
                 )
             )
-        ),
-    tributary_1 = list(
-        SR1 = list(
-            KP_boundaries_points = c(5, 15),
-            function_SR = getCovariate_piecewise,
-            shiftPoints = c(8),
-            prior = list(
-                RBaM::parameter(name = "TB1_Kflood_SR1_a0_1", init = 30),
-                RBaM::parameter(name = "TB1_Kflood_SR1_a0_2", init = 20)
-            )
         )
-    ),
-    tributary_2 = list(
-        SR1 = list(
-            KP_boundaries_points = c(25, 35),
-            function_SR = getCovariate_Legendre,
-            max_polynomial_degree = 0,
-            prior = list(
-                RBaM::parameter(name = "TB2_Kflood_SR1_a0", init = 30)
-            )
-        )
-    )
 )
 
 # Check if size is respected between ID and Kmin
@@ -705,73 +639,14 @@ Z_all_Kflood_SR <- lapply(Kflood_SR, function(channel) {
 flat_Kflood_SR <- unlist(Z_all_Kflood_SR, recursive = FALSE)
 
 # Pass the flattened list to block_diagonal_matrix
-zFileKflood <- do.call(block_diagonal_matrix, flat_Kflood_SR)
+Z_MatrixKflood <- do.call(block_diagonal_matrix, flat_Kflood_SR)
 
 # Check size between RUGFile and Z_file
-if (nrow(RUGFile) != nrow(zFileKflood)) stop("RugFile must have the same size as Z file (spatialisation)")
+if (nrow(RUGFile) != nrow(Z_MatrixKflood)) stop("RugFile must have the same size as Z file (spatialisation)")
 
 ############################################
 # End Kflood environment
 ############################################
-
-#######################################
-# Structural error settings
-#######################################
-
-
-remant_error_list <- list(
-    remnantErrorModel(
-        fname = "Config_RemnantSigma.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 0.0005,
-            prior.dist = "FlatPrior",
-        ))
-    ),
-    remnantErrorModel(
-        fname = "Config_RemnantSigma2.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 10,
-            prior.dist = "LogNormal",
-            prior.par = c(log(10), 0.2)
-        ))
-    ),
-    remnantErrorModel(
-        fname = "Config_RemnantSigma3.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 10,
-            prior.dist = "LogNormal",
-            prior.par = c(log(10), 0.2)
-        ))
-    ),
-    remnantErrorModel(
-        fname = "Config_RemnantSigma4.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 15,
-            prior.dist = "LogNormal",
-            prior.par = c(log(15), 0.2)
-        ))
-    ),
-    remnantErrorModel(
-        fname = "Config_RemnantSigma5.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 15,
-            prior.dist = "LogNormal",
-            prior.par = c(log(15), 0.2)
-        ))
-    )
-)
-
-
 
 ############################################
 # End Calibration settings
@@ -798,8 +673,27 @@ third_level_sublists <- lapply(Kflood_SR, function(channel) {
 # Flatten the list to remove the second and first levels
 Kflood_prior <- unlist(third_level_sublists, recursive = FALSE)
 
-theta_param <- c(Kmin_prior, Kflood_prior)
+theta_param <- c(
+    list(
+        RBaM::parameter(name = "MC_Kmin_SR1_a0_1", init = 1 / 0.010),
+        RBaM::parameter(name = "MC_Kflood_SR1_a0_1", init = 1 / 0.010),
+        RBaM::parameter(name = "MC_Kflood_SR1_a0_2", init = (33 + 1 / 0.013) / 2)
+    )
+)
+# theta_param <- c(Kmin_prior, Kflood_prior)
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
+# Folder related to the observations (careful with the order!)
+all_events <- c(
+    "CWMQ18",
+    "CWMQ12"
+)
+mage_projet_name <- "CWMQ"
+path_polynomial <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Compound_channel_spatial_friction/Calibration_experiments/piecewise_function_old/n_min_0_n_flood_0"
+mageDir <- c(paste0(path_polynomial, "/model_mage/", all_events, "/"))
+
+
+zFileKmin <- file.path(tempdir(), "Zfile_Kmin.txt")
+zFileKflood <- file.path(tempdir(), "Zfile_Kflood.txt")
 
 xtra <- xtraModelInfo(
     fname = "Config_setup.txt",
@@ -808,11 +702,11 @@ xtra <- xtraModelInfo(
         version = "8",
         mageDir = mageDir,
         repFile = paste0(mage_projet_name, ".REP"),
-        zKmin = matrix_zFileKmin,
+        zKmin = Z_MatrixKmin,
         zFileKmin = zFileKmin,
         doExpKmin = FALSE,
-        zKmoy = matrix_zFileKmoy,
-        zFileKmoy = zFileKmoy,
+        zKmoy = Z_MatrixKflood,
+        zFileKmoy = zFileKflood,
         doExpKmoy = FALSE
     )
 )
@@ -824,10 +718,138 @@ mod_polynomials <- model(
     par = theta_param,
     xtra = xtra
 )
+##################
+Cal_measures <-
+    list(
+        CWMQ18 =
+            data.frame(
+                event = 1,
+                reach = 1,
+                x = c(2.225, 4.310, 5.270, 6.240, 8.315, 9.115, 9.250, 10.250, 11.250, 12.250, 13.250),
+                t = rep(3420, 11)
+            ),
+        CWMQ12 =
+            data.frame(
+                event = 2,
+                reach = 1,
+                x = c(2.225, 2.975, 3.345, 4.095, 5.060, 6.240, 6.990, 8.030, 8.795, 9.065, 9.115, 9.545, 10.030, 11.370, 12.120, 12.325, 13.290),
+                t = rep(3420, 17)
+            )
+    )
 
-runModel(
+
+# Folder related to the observations (careful with the order!)
+all_events <- c(
+    "CWMQ18",
+    "CWMQ12"
+)
+
+# Processed data
+load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/compound_transition_friction/data_HHLab_uniform_case.RData")
+
+# All available data
+WSE_data_temp <- all_data_calibration$WSE
+
+WSE_data_temp <- data.frame(WSE_data_temp %>%
+    group_by(ID_experiment, x) %>%
+    summarise(
+        z_mean = mean(z_mean),
+        Yu = mean(Yu),
+        z_riverbed = mean(z_riverbed),
+        .groups = "drop"
+    ))
+
+mage_projet_name <- "CWMQ"
+WSE_data_temp <- WSE_data_temp[str_detect(WSE_data_temp$ID_experiment, pattern = mage_projet_name), ]
+
+match_case_event <- data.frame(
+    idx_data = unique(levels(factor(WSE_data_temp$ID_experiment))),
+    idx_event = unique(levels(factor(WSE_data_temp$ID_experiment)))
+)
+
+Link_x_t_ind_event <- lapply(names(Cal_measures), function(event) {
+    # Find the row in match_case_event where idx_event matches the current event
+    row_idx <- which(match_case_event$idx_event == event)
+
+    list(
+        idx_data = match_case_event$idx_data[row_idx],
+        idx_event = event,
+        Cal_measure = Cal_measures[[event]]
+    )
+})
+
+# # Initialize an empty list to store the results
+observed_data <- data.frame()
+X <- c()
+
+# Loop over each element in Link_x_t_ind_event
+for (i in seq_along(Link_x_t_ind_event)) {
+    idx_data <- Link_x_t_ind_event[[i]]$idx_data
+    cal_x <- Link_x_t_ind_event[[i]]$Cal_measure$x
+
+    # Get the corresponding data frame from WSE_data_temp
+    # wse_df <- WSE_data_temp[[idx_data]]
+    wse_df <- WSE_data_temp[WSE_data_temp$ID_experiment == idx_data, ]
+
+    # Filter rows where x is in cal_x
+    observed_data <- rbind(
+        observed_data,
+        data.frame(
+            event = Link_x_t_ind_event[[i]]$Cal_measure$event,
+            wse_df[wse_df$x %in% cal_x, c("z_riverbed", "z_mean", "Yu")]
+        )
+    )
+    # Extract the Cal_measure data frame
+    X <- rbind(
+        X,
+        Link_x_t_ind_event[[i]]$Cal_measure
+    )
+}
+
+write_RUGFile <- function(RUG_path,
+                          RUGFile_data,
+                          RUG_format) {
+    # Open a .RUG file for writing
+    fileConn <- file(RUG_path, "w")
+    # Write the first line as a comment
+    writeLines("* This file is generated by PAMHYR, please don't modify", fileConn)
+    formatted_lines <- sapply(1:nrow(RUGFile_data), function(i) {
+        sprintf(
+            RUG_format,
+            "K",
+            RUGFile_data$id_reach[i],
+            RUGFile_data$KP_start[i],
+            RUGFile_data$KP_end[i],
+            RUGFile_data$Kmin[i],
+            RUGFile_data$Kflood[i]
+        )
+    })
+
+    # Write the formatted lines to the file
+    writeLines(formatted_lines, fileConn)
+
+
+    # Close the file
+    close(fileConn)
+}
+
+
+RUGFile_path <- paste0(mageDir, mage_projet_name, ".RUG")
+j <- 1
+write_RUGFile(
+    RUG_path = RUGFile_path[j],
+    RUGFile_data = RUGFile,
+    RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
+)
+
+#################
+Y <- runModel(
     workspace = tempdir(),
     mod = mod_polynomials,
-    X = X,
-    stout = NULL
+    X = X
+    # stout = NULL
 )
+nrow(Y)
+nrow(X)
+
+cbind(X, Y)
