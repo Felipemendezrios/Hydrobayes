@@ -30,6 +30,29 @@ library(stringr)
 #############################################
 # Load Functions
 #############################################
+# Assuming Kflood_SR is your nested list
+extract_priors <- function(nested_list) {
+    priors <- list()
+
+    # Recursive function to extract 'prior' elements
+    extract <- function(x) {
+        if (is.list(x)) {
+            if ("prior" %in% names(x)) {
+                priors <<- c(priors, list(x$prior))
+            } else {
+                lapply(x, extract)
+            }
+        }
+    }
+
+    # Apply the recursive function
+    extract(nested_list)
+
+    # Flatten the list of priors
+    flat_priors <- unlist(priors, recursive = FALSE)
+
+    return(flat_priors)
+}
 
 get_init_prior <- function(parameter, FIX_dist = FALSE) {
     # Identify if parameter is remnantErrorModel class
@@ -810,6 +833,16 @@ for (id_cal_case in 1:length(all_cal_case)) {
     if (!dir.exists(path_post_traitement_data)) {
         dir.create(path_post_traitement_data)
     }
+
+
+    ################## To be continued
+
+
+
+
+
+
+
     if (length(Kmin_prior) != (Nb_reaches_estimation_Kmin * max((n_degree_Kmin + 1)))) stop(paste0("More prior information (", length(Kmin_prior), ") than the number of reaches for estimation (", Nb_reaches_estimation_Kmin, ")"))
     if (length(Kflood_prior) != (Nb_reaches_estimation_Kflood * (n_degree_Kflood + 1))) stop(paste0("More prior information (", length(Kflood_prior), ") than the number of reaches for estimation (", Nb_reaches_estimation_Kflood, ")"))
 
