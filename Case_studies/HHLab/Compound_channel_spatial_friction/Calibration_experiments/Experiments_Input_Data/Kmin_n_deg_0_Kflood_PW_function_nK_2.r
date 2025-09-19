@@ -132,6 +132,17 @@ Z_MatrixKmin <- do.call(block_diagonal_matrix, flat_Kmin_SR)
 # Check size between RUGFile and Z_file
 if (nrow(RUGFile) != nrow(Z_MatrixKmin)) stop("RugFile must have the same size as Z file (spatialisation)")
 
+# Get discretization of the covariate
+covariate_Kmin_lists <- lapply(Kmin_SR, function(channel) {
+    lapply(channel, function(SR) {
+        SR$KP
+    })
+})
+covariate_Kmin <- data.frame(covariate = unlist(covariate_Kmin_lists))
+rownames(covariate_Kmin) <- NULL
+
+if (nrow(covariate_Kmin) != nrow(Z_MatrixKmin)) stop("Number of lines of covariate_Kmin must be equal to the Z_MatrixKmin")
+Kmin_prior <- extract_priors(Kmin_SR)
 ############################################
 # End Kmin environment
 ############################################
@@ -187,8 +198,18 @@ Z_MatrixKflood <- do.call(block_diagonal_matrix, flat_Kflood_SR)
 # Check size between RUGFile and Z_file
 if (nrow(RUGFile) != nrow(Z_MatrixKflood)) stop("RugFile must have the same size as Z file (spatialisation)")
 
+# Get discretization of the covariate
+covariate_Kflood_lists <- lapply(Kflood_SR, function(channel) {
+    lapply(channel, function(SR) {
+        SR$KP
+    })
+})
 
-Kmin_prior <- extract_priors(Kmin_SR)
+covariate_Kflood <- data.frame(covariate = unlist(covariate_Kflood_lists))
+rownames(covariate_Kflood) <- NULL
+
+if (nrow(covariate_Kflood) != nrow(Z_MatrixKflood)) stop("Number of lines of covariate_Kflood must be equal to the Z_MatrixKflood")
+
 Kflood_prior <- extract_priors(Kflood_SR)
 
 ############################################
