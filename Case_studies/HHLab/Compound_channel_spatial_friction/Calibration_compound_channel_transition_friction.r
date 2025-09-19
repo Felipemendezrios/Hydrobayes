@@ -633,6 +633,8 @@ Cal_measures <-
             )
     )
 
+# Scaled values of WSE, discharge and uncertainties
+factor_scaled <- 1000
 
 # All available data
 WSE_data_temp <- all_data_calibration$WSE
@@ -721,9 +723,9 @@ Yu$Yu_Kmoy <- -9999
 ## Plot
 CalData_plot_df <- data.frame(
     x = X$x,
-    z_mean = Y$WSE * 1000,
-    Yu = Yu$Yu_z * 1000,
-    z_riverbed = observed_data$z_riverbed * 1000,
+    z_mean = Y$WSE * factor_scaled,
+    Yu = Yu$Yu_z * factor_scaled,
+    z_riverbed = observed_data$z_riverbed * factor_scaled,
     ID = factor(X$event)
 )
 
@@ -1011,4 +1013,678 @@ for (id_cal_case in 1:length(all_cal_case)) {
             wait = FALSE
         )
     }
+}
+
+
+
+#################################
+# PLOTS:
+#################################
+## Functions:
+# Plot spatialisation of k in main channel or floodplain
+K_plot <- function(
+    matrix_spatialisation,
+    mcmc,
+    n_param_Kmin,
+    n_param_Kflood,
+    covariate_discretization,
+    MAP_param_vector,
+    main_channel = TRUE) {
+    if (main_channel) {
+        indx <- 1:n_param_Kmin
+        label_title <- "Friction coefficient estimation in the main channel \nwith parametric uncertainty"
+    } else {
+        indx <- (n_param_Kmin + 1):(n_param_Kmin + n_param_Kflood)
+        label_title <- "Friction coefficient estimation in the floodplain \nwith parametric uncertainty"
+    }
+    k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc[, indx])))
+
+    k_estimated_MCMC$KP <- covariate_discretization[[1]]
+
+    # Convert to long format
+    df_MCMC_sampling <- tidyr::pivot_longer(
+        k_estimated_MCMC,
+        cols = -KP,
+        values_to = "Value"
+    ) %>%
+        select(KP, Value) %>%
+        mutate(ID = "MCMC Sampling")
+
+    k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_param_vector[indx]
+
+    df_MAP <- data.frame(
+        KP = covariate_discretization[[1]],
+        Value = k_estimated_MAP,
+        ID = "MAP"
+    )
+
+    # Get 95% uncertainty for envelope curve : create ribbon data from MCMC
+    df_envelope <- df_MCMC_sampling %>%
+        filter(ID == "MCMC Sampling") %>%
+        group_by(KP) %>%
+        summarise(
+            ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
+            ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
+            ID = "Parametric\nuncertainty", # so we can map to fill
+            .groups = "drop"
+        )
+
+    K_plot <- ggplot() +
+        geom_ribbon(
+            data = df_envelope,
+            aes(x = KP, ymin = ymin, ymax = ymax, fill = ID)
+        ) +
+        geom_line(
+            data = df_MAP,
+            aes(x = KP, y = Value, color = ID)
+        ) +
+        scale_fill_manual(values = c("Parametric\nuncertainty" = "pink")) +
+        scale_color_manual(values = c("MAP" = "black")) +
+        labs(
+            title = label_title,
+            x = "Streamwise position (meters)",
+            y = expression("Friction coefficient (m"^
+                {
+                    1 / 3
+                } * "/s)"),
+            fill = "95% credibility\ninterval",
+            color = NULL
+        ) +
+        theme_bw() +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5)
+        )
+
+
+    return(list(df_MAP, K_plot, df_envelope))
+}
+
+read_fortran_data <- function(file_path, col_widths_RUGFile, skip = 0) {
+    # Read the file with the fixed-width format
+    data <- read.fwf(file_path, widths = col_widths_RUGFile, header = FALSE, skip = skip)
+    data <- data[, -3]
+    colnames(data) <-
+        c(
+            "",
+            "id_reach",
+            "KP_start",
+            "KP_end",
+            "Kmin",
+            "Kflood"
+        )
+    return(data)
+}
+# Plot the simulation of ZQdX
+ZQdX_sim <- function(
+    sim_event_mm_m3_s,
+    Q_input = NULL,
+    Qplot = TRUE,
+    title_label,
+    ylabel) {
+    if (Qplot == TRUE && is.null(Q_input)) {
+        stop("Q_input must be provided if Qplot is TRUE")
+    }
+
+    # Replace -9999 and -1e9 with NA
+    sim_event_mm_m3_s[sim_event_mm_m3_s == -9999] <- NA
+    sim_event_mm_m3_s[sim_event_mm_m3_s == -1e9] <- NA
+
+    ZQplot <- ggplot(sim_event_mm_m3_s, aes(x = X3_obs)) +
+        labs(title = title_label, x = "Streamwise position (meters)", y = ylabel) +
+        theme_bw() +
+        theme(plot.title = element_text(hjust = 0.5))
+    if (Qplot == TRUE) {
+        ZQplot <- ZQplot +
+            geom_point(aes(y = Y2_sim, col = "sim")) +
+            scale_color_manual(values = c("sim" = "blue", "boundary\nconditions" = "red")) +
+            facet_wrap(~X1_obs, ncol = 2)
+
+        # Create a data frame for the horizontal lines
+        hline_data <- data.frame(
+            X1_obs = 1:length(Q_input),
+            yintercept = Q_input,
+            linetype = 1:length(Q_input), # or use named linetypes like c("solid", "dashed", "dotted")
+            col = "boundary\nconditions" # same color for all lines
+        )
+
+        ZQplot <- ZQplot +
+            geom_hline(
+                data = hline_data,
+                aes(yintercept = yintercept, linetype = factor(linetype), color = col),
+                show.legend = TRUE
+            )
+
+        ZQplot <- ZQplot +
+            scale_linetype_manual(values = c("1" = "dashed", "2" = "solid", "3" = "dotted", "4" = "twodash")) +
+            labs(colour = NULL, linetype = "boundary\ncondition\nevents")
+    } else {
+        ZQplot <- ZQplot +
+            geom_point(aes(y = Y1_sim, col = "sim")) +
+            geom_point(aes(y = Y1_obs, col = "obs"))
+
+        if (any(sim_event_mm_m3_s$Yu_z != 0)) {
+            ZQplot <- ZQplot +
+                geom_errorbar(aes(
+                    ymin = Y1_obs - 1.96 * Yu_z,
+                    ymax = Y1_obs + 1.96 * Yu_z, col = "obs"
+                ))
+        }
+
+        ZQplot <- ZQplot +
+            scale_color_manual(values = c("sim" = "blue", "obs" = "red")) +
+            labs(colour = NULL) +
+            facet_wrap(~X1_obs, ncol = 2)
+    }
+    return(ZQplot)
+}
+
+plot_DIC <- function(
+    dir_polynomial,
+    DIC_criterion = "DIC3") {
+    all_files <- list.files(
+        file.path(
+            dir_polynomial
+        ),
+        recursive = TRUE
+    )
+
+    DIC_path_Files <- all_files[grep(all_files, pattern = "Results_DIC.txt")]
+    if (length(DIC_path_Files) == 0) stop("Any Results_DIC.txt file was found")
+    DIC_results <- c()
+
+
+    for (i in 1:length(DIC_path_Files)) {
+        DIC_by_degree <- read.table(file.path(dir_polynomial, DIC_path_Files[i]), col.names = c("Criteria", "Value"))
+        # Match the criterion chosen
+        DIC_by_degree <- DIC_by_degree[which(DIC_by_degree[, 1] == DIC_criterion), ]
+        # Assign the polynomial degree
+        extraction <- strsplit(DIC_path_Files[i], "/")[[1]][1]
+        # # Extraire le chiffre après le underscore
+        # chiffre <- sub(".*_(\\d+)", "\\1", extraction)
+
+        # # Convertir en numérique (optionnel)
+        DIC_by_degree$case <- extraction
+
+        DIC_results <- rbind(DIC_results, DIC_by_degree)
+    }
+    min_local <- DIC_results[which.min(DIC_results$Value), ]
+
+    DIC_plot <- ggplot(DIC_results, aes(x = factor(case), y = Value, col = factor(Criteria))) +
+        geom_point(size = 3) +
+        geom_point(data = min_local, aes(x = , factor(case), y = Value), col = "blue", size = 3) +
+        annotate("segment",
+            x = factor(min_local$Degree), y = min_local$Value * 1.005, xend = factor(min_local$Degree), yend = min_local$Value * 1.002,
+            linewidth = 2, linejoin = "mitre",
+            arrow = arrow(type = "closed", length = unit(0.01, "npc"))
+        ) +
+        theme_bw() +
+        labs(
+            x = "Calibration case",
+            y = "Value",
+            col = "Criterion",
+            title = "DIC criterion :",
+            subtitle = "Comparison of several polynomial degrees"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            plot.subtitle = element_text(hjust = 0.5)
+        )
+
+    return(DIC_plot)
+}
+
+###############
+# Theorical values
+####################
+
+Kmin_literature <- data.frame(
+    x_start = c(0),
+    x_end = c(18),
+    min_value = c(1 / 0.013),
+    max_value = c(1 / 0.009),
+    mean_value = c(1 / 0.010)
+)
+
+
+Kflood_literature <- data.frame(
+    x_start = c(0, 9.05),
+    x_end = c(9.05, 18),
+    min_value = c(mean(c(1 / 0.010, 1 / 0.012)), mean(c(1 / 0.025, 1 / 0.030))),
+    mean_value = c(mean(c(1 / 0.015, 1 / 0.012)), mean(c(1 / 0.025, 1 / 0.035))),
+    max_value = c(mean(c(1 / 0.014, 1 / 0.018)), mean(c(1 / 0.035, 1 / 0.05)))
+)
+
+
+segment_layer_reference <- function(K_literature) {
+    K_segment_long <- data.frame()
+
+    for (i in 1:nrow(K_literature)) {
+        row <- K_literature[i, ]
+
+        # Add min segment
+        K_segment_long <- rbind(
+            K_segment_long,
+            data.frame(
+                x_start = row$x_start,
+                x_end = row$x_end,
+                y_value = row$min_value,
+                line_type = "Chow (1959)"
+            )
+        )
+
+        # Add mean segment
+        K_segment_long <- rbind(
+            K_segment_long,
+            data.frame(
+                x_start = row$x_start,
+                x_end = row$x_end,
+                y_value = row$mean_value,
+                line_type = "Chow (1959)"
+            )
+        )
+
+        # Add max segment
+        K_segment_long <- rbind(
+            K_segment_long,
+            data.frame(
+                x_start = row$x_start,
+                x_end = row$x_end,
+                y_value = row$max_value,
+                line_type = "Chow (1959)"
+            )
+        )
+    }
+    K_segment_layer <- geom_segment(
+        data = K_segment_long,
+        aes(x = x_start, y = y_value, xend = x_end, yend = y_value, linetype = line_type),
+        color = "gray"
+    )
+
+    return(K_segment_layer)
+}
+
+Kmin_segment_layer <- segment_layer_reference(K_literature = Kmin_literature)
+Kflood_segment_layer <- segment_layer_reference(K_literature = Kflood_literature)
+
+
+#######################
+plotDIC <- plot_DIC(path_experiment)
+ggsave(
+    file.path(
+        path_experiment,
+        "DIC.png"
+    ),
+    plotDIC,
+    width = 20,
+    height = 20,
+    units = "cm"
+)
+
+# At each eid_cal_case
+Q_observed <- c(162, 162)
+final_calibraion <- FALSE
+counter <- 1
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Source the input data for the experiments
+    path_Experiment_Input_Data <- file.path(file_main_path, "Experiments_Input_Data", all_cal_case[id_cal_case])
+    if (!file.exists(path_Experiment_Input_Data)) {
+        stop(paste0(
+            "The experiment input data named : '",
+            all_cal_case[id_cal_case],
+            "' does not exist"
+        ))
+    }
+
+    source(path_Experiment_Input_Data)
+
+    path_polynomial <- file.path(
+        path_experiment,
+        sub("\\.r$", "", all_cal_case[id_cal_case])
+    )
+    path_temp_plots <- file.path(path_polynomial, "BaM")
+    path_post_traitement <- file.path(path_temp_plots, "post_traitement")
+    path_post_traitement_data <- file.path(path_post_traitement, "RData")
+
+    if (!dir.exists(path_post_traitement)) {
+        dir.create(path_post_traitement)
+    }
+
+    if (!dir.exists(path_post_traitement_data)) {
+        dir.create(path_post_traitement_data)
+    }
+
+    path_model_mage <- c(paste0(path_polynomial, "/model_mage/", all_events, "/"))
+
+    mcmc_not_cooked <- readMCMC(file.path(path_temp_plots, "Results_MCMC.txt"))
+    plots <- tracePlot(mcmc_not_cooked)
+
+    mcmcplot <- wrap_plots(plots, ncol = 3)
+    # Save plot and data
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "MCMC_not_cooked.png"
+        ),
+        mcmcplot,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
+    # Density plot for each parameter
+    plots <- densityPlot(mcmc_not_cooked)
+    pdf_plot <- wrap_plots(plots, ncol = 3)
+
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "densityplot_not_cooked.png"
+        ),
+        pdf_plot,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+    if (final_calibraion) {
+        if (!file.exists(file.path(path_temp_plots, "Results_Cooking.txt"))) stop("MCMC is still running or calculation is not going to the end. Verify if calibration is already finished or verify that calibration has not error messages. Please put final_results = FALSE as input")
+
+        mcmc <- readMCMC(file.path(path_temp_plots, "Results_Cooking.txt"))
+        plots <- tracePlot(mcmc)
+
+        mcmcplot <- wrap_plots(plots, ncol = 3)
+
+
+        ggsave(
+            file.path(
+                path_post_traitement,
+                "MCMC_Cooked.png"
+            ),
+            mcmcplot,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+
+        # Density plot for each parameter
+        plots <- densityPlot(mcmc)
+        pdf_plot <- wrap_plots(plots, ncol = 3)
+
+        ggsave(
+            file.path(
+                path_post_traitement,
+                "densityplot_Cooked.png"
+            ),
+            pdf_plot,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+
+
+        png(
+            file.path(path_post_traitement, "corelation_cooked.png"),
+            width = 800,
+            height = 800,
+            res = 120
+        )
+        pairs(mcmc)
+        dev.off()
+
+        getSummary <- read.table(
+            file = file.path(path_temp_plots, "Results_Summary.txt"),
+            header = TRUE,
+            stringsAsFactors = FALSE
+        )
+
+        # Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+        knitr::kable(getSummary,
+            align = "c"
+        )
+
+
+        # Zoom into the MAP and standard deviation of the error model
+        getSummary_zoom <- getSummary[c(11, 16), ]
+        getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * factor_scaled # WSE in mm
+
+        # Get MAP simulation
+        MAP_param_matrix <- as.numeric(getSummary_zoom[2, c(1:(length(Kmin_prior) + length(Kflood_prior)))])
+    } else {
+        results_MCMC_sampling <- read.table(file.path(path_temp_plots, "Results_MCMC.txt"), header = TRUE)
+        mcmc <- data.frame(results_MCMC_sampling[, 1:(length(Kmin_prior) + length(Kflood_prior))])
+
+        # Get MAP simulation: from current analysis without burning and slim
+        MAP_param_matrix <- as.numeric(results_MCMC_sampling[which.max(results_MCMC_sampling$LogPost), 1:(length(Kmin_prior) + length(Kflood_prior))])
+    }
+    Kmin_calculations <- K_plot(
+        matrix_spatialisation = Z_MatrixKmin,
+        mcmc = mcmc,
+        n_param_Kmin = length(Kmin_prior),
+        n_param_Kflood = length(Kflood_prior),
+        covariate_discretization = covariate_grid,
+        MAP_param_vector = MAP_param_matrix,
+        main_channel = TRUE
+    )
+    df_MAP_Kmin <- Kmin_calculations[[1]]
+    Kmin_plot <- Kmin_calculations[[2]]
+    df_envelope_Kmin <- Kmin_calculations[[3]]
+
+    ls_spatial_friction_Kmin <- list(
+        df_envelope = df_envelope_Kmin,
+        df_MAP = df_MAP_Kmin
+    )
+    save(ls_spatial_friction_Kmin,
+        file = file.path(path_post_traitement_data, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
+    )
+
+    final_Kmin_plot <- Kmin_plot + Kmin_segment_layer
+    scale_linetype_manual(
+        name = "Reference\nvalues",
+        values = c("Chow (1959)" = "dashed")
+    )
+
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "Kmin.png"
+        ),
+        final_Kmin_plot,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+    save(final_Kmin_plot,
+        file = file.path(path_post_traitement_data, "Plot_friction_estimation_plot_Kmin_plot.RData")
+    )
+
+    Kflood_calculations <- K_plot(
+        matrix_spatialisation = Z_MatrixKflood,
+        mcmc = mcmc,
+        n_param_Kmin = length(Kmin_prior),
+        n_param_Kflood = length(Kflood_prior),
+        covariate_discretization = covariate_grid,
+        MAP_param_vector = MAP_param_matrix,
+        main_channel = FALSE
+    )
+    df_MAP_Kflood <- Kflood_calculations[[1]]
+    Kflood_plot <- Kflood_calculations[[2]]
+    df_envelope_Kflood <- Kflood_calculations[[3]]
+
+    ls_spatial_friction_Kflood <- list(
+        df_envelope = df_envelope_Kflood,
+        df_MAP = df_MAP_Kflood
+    )
+    save(ls_spatial_friction_Kflood,
+        file = file.path(path_post_traitement_data, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
+    )
+
+    final_Kflood_plot <- Kflood_plot + Kflood_segment_layer +
+        scale_linetype_manual(
+            name = "Reference\nvalues",
+            values = c("Chow (1959)" = "dashed")
+        )
+
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "Kflood.png"
+        ),
+        final_Kflood_plot,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+    save(final_Kflood_plot,
+        file = file.path(path_post_traitement_data, "Plot_friction_estimation_plot_Kflood_plot.RData")
+    )
+    ####################################
+    # Residuals
+    ###################################
+    CalData <- read.table(file.path(path_temp_plots, "CalibrationData.txt"), header = TRUE)
+    # Read residuals
+    if (final_calibraion) {
+        residuals <- read.table(
+            file = file.path(path_temp_plots, "Results_Residuals.txt"),
+            header = TRUE,
+            stringsAsFactors = FALSE
+        )
+
+        # Convert residuals to mm and m3/s
+        residuals_mm_m3_s <- data.frame(
+            residuals[, 1:4],
+            residuals[, c(9, 19, 20, 24, 29)] * factor_scaled
+        )
+        sim_event_mm_m3_s <- data.frame(residuals_mm_m3_s, Yu_z = CalData$Yu_z * factor_scaled)
+    } else {
+        # Residuals file is not ready, so I need to create by myself with MAP estimation from sampled data while MCMC is turning
+        # Get data format from mage results
+        temporal_dir <- tempdir()
+        files <- list.files(temporal_dir, full.names = TRUE)
+
+        exclude_file <- file.path(temporal_dir, "vscode-R")
+
+        # List all files in the temp directory
+        files <- list.files(temporal_dir, full.names = TRUE)
+
+        # Exclude the specific file
+        files_to_delete <- setdiff(files, exclude_file)
+
+        # Remove remaining files if any
+        if (length(files_to_delete) > 0) {
+            unlink(files_to_delete, recursive = TRUE)
+        }
+        file.copy(
+            from = path_model_mage,
+            to = temporal_dir, recursive = TRUE
+        )
+        temp_path <- file.path(temporal_dir, basename(path_model_mage))
+
+        path_RUGFile <- file.path(
+            temp_path,
+            list.files(temp_path)[grep(list.files(temp_path), pattern = ".RUG")]
+        )
+        MAP_RUGFile <- lapply(path_RUGFile, function(file) {
+            read_fortran_data(
+                file_path = file,
+                col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
+                skip = 1
+            )
+        })
+        df_MAP <- list(
+            df_MAP_Kmin,
+            df_MAP_Kflood
+        )
+        for (i in seq_along(MAP_RUGFile)) {
+            if (nrow(df_MAP[[i]]) != nrow(MAP_RUGFile[[i]])) stop("Mage project has not the same size as the value estimated based on the MAP estimator")
+            MAP_RUGFile[[i]]$V6 <- df_MAP[[1]]$Value
+
+            write_RUGFile(
+                RUG_path = path_RUGFile[i],
+                RUGFile_data = MAP_RUGFile[[i]],
+                RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
+            )
+        }
+
+        REPFile <- list.files(temp_path)[grep(list.files(temp_path), pattern = ".REP")]
+        REPFile <- str_remove(REPFile, pattern = ".REP")
+
+        for (i in 1:length(temp_path)) {
+            setwd(temp_path[i])
+            system2(MAGE_executable, args = REPFile[i], wait = TRUE)
+        }
+
+        runModel(
+            workspace = temporal_dir,
+            mod = mod_polynomials[[counter]],
+            X = X,
+            stout = NULL
+        )
+        counter <- counter + 1
+
+        setwd(temporal_dir)
+
+        sim <- read.table("Y.txt", header = TRUE)
+        obs <- CalData[, 5:9]
+        obs[obs == -9999] <- NA
+        u_obs <- CalData[, 10:14]
+        u_obs[u_obs == -9999] <- NA
+        res <- obs - sim
+
+        sim_event_mm_m3_s <- data.frame(
+            X1_obs = X[, 1],
+            X2_obs = X[, 2],
+            X3_obs = X[, 3],
+            X4_obs = X[, 4],
+            Y1_obs = obs[, 1],
+            Y1_sim = sim[, 1],
+            Y2_sim = sim[, 2],
+            Y1_res = res[, 1],
+            Yu_z = u_obs[, 1]
+        )
+        setwd(dir_workspace)
+    }
+
+    Q_sim_vs_obs <- ZQdX_sim(
+        sim_event_mm_m3_s = sim_event_mm_m3_s,
+        Q_input = Q_observed,
+        Qplot = TRUE,
+        title_label = "MAP simulations vs boundary condition \n(Discharge upstream)",
+        ylabel = "Q (L/s)"
+    )
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "Q_residuals.png"
+        ),
+        Q_sim_vs_obs,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+    save(Q_sim_vs_obs,
+        file = file.path(path_post_traitement_data, "Plot_Q_sim_vs_obs.RData")
+    )
+    Z_sim_vs_obs <- ZQdX_sim(
+        sim_event_mm_m3_s = sim_event_mm_m3_s,
+        Q_input = NULL,
+        Qplot = FALSE,
+        title_label = "MAP simulations vs Observations (WSE)",
+        ylabel = "Water surface elevation (mm)"
+    )
+    ggsave(
+        file.path(
+            path_post_traitement,
+            "Plot_Z_residuals.png"
+        ),
+        Z_sim_vs_obs,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+    save(Z_sim_vs_obs,
+        file = file.path(path_post_traitement_data, "Plot_Z_sim_vs_obs.RData")
+    )
+    save(sim_event_mm_m3_s,
+        file = file.path(path_post_traitement_data, "Data_Z_sim_vs_obs.RData")
+    )
 }

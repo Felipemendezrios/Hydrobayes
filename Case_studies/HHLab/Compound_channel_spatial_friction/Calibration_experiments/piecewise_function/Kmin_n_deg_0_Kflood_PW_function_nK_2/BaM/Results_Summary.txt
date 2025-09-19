@@ -1,4 +1,4 @@
-               MC_Kmin_SR1_a0 MC_Kflood_SR1_aMC_Kflood_SR1_aY1_intercept   Y2_intercept   Y3_intercept   Y4_intercept   Y5_intercept   
+               MC_Kmin_SR1_a0 MC_Kflood_SR1_a MC_Kflood_SR1_a Y1_intercept   Y2_intercept   Y3_intercept   Y4_intercept   Y5_intercept
 N                 0.200100E+04   0.200100E+04   0.200100E+04   0.200100E+04   0.200100E+04   0.200100E+04   0.200100E+04   0.200100E+04
 Minimum           0.532517E+02   0.844985E-01   0.123836E+03   0.431583E-06   0.517619E+01   0.493973E+01   0.846214E+01   0.797333E+01
 Maximum           0.753828E+02   0.150400E+03   0.443001E+03   0.383240E-02   0.188838E+02   0.187151E+02   0.268300E+02   0.283355E+02

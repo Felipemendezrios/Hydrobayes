@@ -238,33 +238,33 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (23 itérations)  ########
+ ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (14 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.190E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.195                                Débit :    0.162
-    Noeud : xx2 Cote :    0.170                                Débit :    0.167
- ===============================================================================
- Volume total du réseau : 5 m3
- ===============================================================================
- 
- 
- 
- ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (13 itérations)  ########
- ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.199E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
-    Noeud : xx2 Cote :    0.170                                Débit :    0.159
+ BIEF   1 : 5 m3 [  0.00 ha (0.201E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.187                                Débit :    0.162
+    Noeud : xx2 Cote :    0.170                                Débit :    0.165
  ===============================================================================
  Volume total du réseau : 5 m3
  ===============================================================================
  
  
  
- ########  DATE :  00:00:09:00        (jjj:hh:mn:ss) (08 itérations)  ########
+ ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (07 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
-    Noeud : xx2 Cote :    0.170                                Débit :    0.164
+ BIEF   1 : 5 m3 [  0.00 ha (0.207E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.191                                Débit :    0.162
+    Noeud : xx2 Cote :    0.170                                Débit :    0.160
+ ===============================================================================
+ Volume total du réseau : 5 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:09:00        (jjj:hh:mn:ss) (07 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
+    Noeud : xx2 Cote :    0.170                                Débit :    0.163
  ===============================================================================
  Volume total du réseau : 5 m3
  ===============================================================================
@@ -273,19 +273,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:12:00        (jjj:hh:mn:ss) (07 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
-    Noeud : xx2 Cote :    0.170                                Débit :    0.161
- ===============================================================================
- Volume total du réseau : 5 m3
- ===============================================================================
- 
- 
- 
- ########  DATE :  00:00:15:00        (jjj:hh:mn:ss) (07 itérations)  ########
- ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -293,10 +282,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:18:00        (jjj:hh:mn:ss) (07 itérations)  ########
+ ########  DATE :  00:00:15:00        (jjj:hh:mn:ss) (06 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -304,10 +293,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:21:00        (jjj:hh:mn:ss) (07 itérations)  ########
+ ########  DATE :  00:00:18:00        (jjj:hh:mn:ss) (06 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -315,10 +304,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:24:00        (jjj:hh:mn:ss) (06 itérations)  ########
+ ########  DATE :  00:00:21:00        (jjj:hh:mn:ss) (06 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -326,10 +315,21 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:27:00        (jjj:hh:mn:ss) (06 itérations)  ########
+ ########  DATE :  00:00:24:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
+    Noeud : xx2 Cote :    0.170                                Débit :    0.162
+ ===============================================================================
+ Volume total du réseau : 5 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:00:27:00        (jjj:hh:mn:ss) (05 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -339,8 +339,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:30:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -350,8 +350,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:33:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -359,10 +359,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:36:00        (jjj:hh:mn:ss) (05 itérations)  ########
+ ########  DATE :  00:00:36:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -372,8 +372,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:39:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -383,8 +383,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:42:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -394,8 +394,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:45:00        (jjj:hh:mn:ss) (03 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -405,8 +405,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:48:00        (jjj:hh:mn:ss) (03 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -416,8 +416,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:51:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -427,8 +427,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:54:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -438,8 +438,8 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:00:57:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
@@ -449,15 +449,15 @@ Ces aires devraient être nulles
  
  ########  DATE :  00:01:00:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
- BIEF   1 : 5 m3 [  0.00 ha (0.197E+01 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :    0.196                                Débit :    0.162
+ BIEF   1 : 5 m3 [  0.00 ha (0.206E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    0.190                                Débit :    0.162
     Noeud : xx2 Cote :    0.170                                Débit :    0.162
  ===============================================================================
  Volume total du réseau : 5 m3
  ===============================================================================
  Erreur (relative par bief) en volume à l'instant final :  0.00E+00 (Bief 001)
  Erreur maximale sur la simulation :  0.00E+00 (Bief 001 Date :  00:00:00:00)
- Nombre total d'itérations :      121
+ Nombre total d'itérations :       99
  Nombre total de pas de temps :       20
- Date simulation : 19/09/2025 (14:55:16) Durée : 00:00:00 CPU : 00:00:00,016
+ Date simulation : 19/09/2025 (21:57:03) Durée : 00:00:00 CPU : 00:00:00,014
  ****************************** FIN NORMALE DE MAGE ****************************
