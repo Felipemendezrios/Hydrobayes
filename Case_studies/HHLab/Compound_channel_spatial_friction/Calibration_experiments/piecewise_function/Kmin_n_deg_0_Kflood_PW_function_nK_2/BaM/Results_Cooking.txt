@@ -1,4 +1,4 @@
-MC_Kmin_SR1_a0 MC_Kflood_SR1_aMC_Kflood_SR1_aY1_intercept   Y2_intercept   Y3_intercept   Y4_intercept   Y5_intercept   LogPost        
+MC_Kmin_SR1_a0 MC_Kflood_SR1_a MC_Kflood_SR1_a Y1_intercept   Y2_intercept   Y3_intercept   Y4_intercept   Y5_intercept   LogPost
    0.664873E+02   0.564550E+02   0.232641E+03   0.154498E-02   0.916126E+01   0.152380E+02   0.119464E+02   0.169020E+02   0.108973E+03
    0.632922E+02   0.564550E+02   0.228771E+03   0.866695E-03   0.111243E+02   0.152380E+02   0.119464E+02   0.120647E+02   0.109442E+03
    0.632922E+02   0.564550E+02   0.237529E+03   0.866695E-03   0.111243E+02   0.159821E+02   0.178162E+02   0.137959E+02   0.109246E+03
