@@ -161,12 +161,11 @@ Input_Kflood_Key_SR_MR <- list(
                 # KP boundary points
                 KP_boundaries_points = c(0, 18),
                 # Function to apply at this SR
-                function_SR = getCovariate_piecewise,
+                function_SR = getCovariate_Legendre,
                 # Arguments of this SR
-                shiftPoints = c(9.05),
+                max_polynomial_degree = 0,
                 prior = list(
-                    RBaM::parameter(name = "MC_Kflood_SR1_a0_1", init = 1 / 0.010, prior.dist = "FlatPrior+"),
-                    RBaM::parameter(name = "MC_Kflood_SR1_a0_2", init = (33 + 1 / 0.013) / 2, prior.dist = "FlatPrior+")
+                    RBaM::parameter(name = "MC_Kflood_SR1_a0", init = ((33 + 1 / 0.013) / 2 + 1 / 0.010) / 2, prior.dist = "FlatPrior+")
                 )
             )
         )
