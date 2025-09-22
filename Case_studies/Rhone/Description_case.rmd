@@ -1,0 +1,164 @@
+---
+title: "Description of Rhone case study"
+author: "Felipe Mendez-Rios"
+date: "`r Sys.Date()`"
+output: html_document
+bibliography: biblio.bib
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.align = "center"
+)
+```
+
+# Description of the study case
+
+Several dams have been built to retain water and produce energy from the Rhône River. However, the zones of interest in this study are reaches controlled by friction, where the water surface elevation is influenced not by hydraulic structures but only by friction. Therefore, the reach between Sault-Brénaz (SBR) and Jons (JNS), covering approximately 35 km of streamwise distance, can serve as an example for implementing the methodology. The model of the reach in study was obtained from [@hernandez_modedu_2025], observational data to introduce to the model and use into the calibration was obtained from @pella_calage_sault_brenaz_jons_nodate and @thollet_observatoire_2024.
+
+```{r}
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/Real_reaches_between_SBR_JNS.png")
+```
+
+Some data about this zone of study:
+
+- The main channel has two major tributaries: the Bourbre at 36.25 km and the Ain at 34.50 km, both measured from the Jons dam (downstream). 
+- The annual mean discharge at Jons is approximately 600 m³/s.
+- Jons Dam maintains a mostly constant water level over time: 182.4 meters (more details in the table below).
+- Retention basin is presented in the Ain tributary
+- Five water level measurements were taken at different discharge scenarios on different dates (more details in the [Calibration data](#calibration)).
+- Several platforms were used to obtain information useful for the model:
+  - ([hydroportail](https://hydro.eaufrance.fr/)) 
+  - ([BDOH](https://bdoh.inrae.fr/OBSERVATOIRE-DES-SEDIMENTS-DU-RHONE/))
+
+**Remarks:** If the model starts using LGN data, it should be shortened at the cross-section corresponding to a streamwise distance of 56 km.
+
+```{r}
+library(knitr)
+
+data <- data.frame(
+  `Upstream discharge (m3/s)` = c(86, 1000, 2100, 4500),
+  `Water level (m)` = c(182.6, 182.4, 182.4, 182.25)
+)
+kable(data, align = "c", caption = "Water level at different upstream discharges at Jons")
+```
+
+Check the hydrometric stations relevant to modeling the reach under study:
+```{r, echo=FALSE, message=FALSE}
+library(dplyr)
+
+# Create the data frame
+hydro_data <- tibble::tibble(
+  Reach = c("Rhone", "Rhone", "Rhone", "Rhone", "Ain", "Bourbre"),
+  `Hydrometric station` = c("Sault-Brénaz", "Lagnieu", "Anthon", "Jons", "Port Galland", "Tignieu"),
+  Abbreviation = c("SBR", "LGN", "ANT", "JNS", "PGL", "TIG"),
+  `Available discharge data since [Date]` = c("1920-1992", "19/11/2020", "22/03/2023", "31/12/1992", "01/01/1984", "31/12/1980"),
+  `Available stage data since [Date]` = c("x", "29/02/2000", "22/03/2023", "Imposed to 182.4 meters", "x", "31/12/1981"),
+  `Available rating curve data since [Date]` = c("x", "19/11/2020", "29/07/2015", "x", "x", "x"),
+  `Available gaugings data since [Date]` = c("x", "x", "x", "x", "x", "1963"),
+  `Hydraulic condition` = c(
+    "Upstream",
+    "Upstream",
+    "Downstream of the confluence between Ain tributary and Rhône river",
+    "Downstream of the Rhône reach",
+    "Upstream of the Ain tributary",
+    "Upstream of the Bourbre tributary"
+  ),
+  Links = c(
+    "[Data SBR](https://hydro.eaufrance.fr/stationhydro/V163002003/fiche)",
+    "[Data LGN](https://hydro.eaufrance.fr/sitehydro/V1630020/fiche)",
+    "[Data ANT](https://hydro.eaufrance.fr/sitehydro/V3009113/fiche)",
+    "[Data JNS](https://bdoh.inrae.fr/OBSERVATOIRE-DES-SEDIMENTS-DU-RHONE/JONS/DEB)",
+    "[Data PGL](https://bdoh.inrae.fr/OBSERVATOIRE-DES-SEDIMENTS-DU-RHONE/station/PORT-GALLAND)",
+    "[Data TIG OSR](https://bdoh.inrae.fr/OBSERVATOIRE-DES-SEDIMENTS-DU-RHONE/BOURBRE/DEB) & [Data TIG Hydroportail](https://hydro.eaufrance.fr/sitehydro/V1774010/fiche)  "
+  ),
+  Comments = c(
+    "CNR is the owner of the data. SBR station seems to be inactive since 1992. However, a new hydrometric station at LGN was installed in 1987, but DREAL has one station at the same place too",
+    "The discharge time series is not within the range of dates for which water surface elevation measurements were obtained. A stage time series is available, but no rating curve exists to convert stage to discharge. Therefore, the upstream boundary condition must be a discharge time series.",
+    "These data will not be helpful during calibration, because water surface elevation measurements were done before 2023, but they could help validate the model during predictions.",
+    "Constant water level imposed by the dam. Discharge time series is available if needed ",
+    "CNR measurements. temporal lag must be considered",
+    "Assumption: not temporal lag between hydrometric station and the confluence"
+  )
+)
+
+kable(hydro_data, align = "c", caption = "Summary information of the hydrometric stations useful for modelling")
+```
+
+
+# Modelling experiments
+
+Two experiments is proposed:
+
+- **Case 1:** linear model using three consecutive reaches. The Ain is considered as a punctual apport in the node at Anthon.
+- **Case 2:** complet model multi-reach. Taking into account the Ain as tributary and his retension basin.
+
+## Case 1: linear model
+
+```{r}
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/case_1_linear_model.png")
+```
+
+The Ain tributary is modelled as a punctual discharge introduced in the node at Anthon. Series time data is obtained from Port-Galland (4 km upstream), so a temporal lag must be considered. Therefore, for any temporal simulation, it may be more rigorous to perform a simulation with the multi-reach model in order to obtain the discharges just upstream of the confluence with the Rhône. These simulated discharges can then be imposed on the linear model at the Anthon-ANT node.
+
+Just for information, the temporal lag between PGL to ANT is approximately 4 hours for a discharge of 125 m3/s.
+
+
+
+## Case 2: complet model
+```{r}
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/case_2_real_case.png")
+```
+
+The Ain tributary is modelled as a reach, so a case of multi-reach is considered. Model will start at LGN instead of SBR, so the model is shorten until the KP 55900.
+
+Just for information, the temporal lag between SBR to LGN is approximately 1 hour for a discharge of 400 m3/s.
+
+# Calibration data {#calibration}
+
+Five water surface elevations were measured. The figures below summarizes this information.
+
+```{r}
+# Cal 158
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/ZdX_Cal_158.png")
+# Cal 300
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/ZdX_Cal_300.png")
+# Cal 525
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/ZdX_Cal_525.png")
+# Cal 750
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/ZdX_Cal_750.png")
+# Cal 1350
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Description/ZdX_Cal_1350.png")
+```
+
+# Boundary conditions:
+
+The table below summarizes whether the input data for the model were available during the period when the water surface elevations were measured. The information needed is:
+
+- Discharge time series (QdT) at LGN
+- QdT at TIG-Bourbre 
+- QdT at PGL-Ain 
+- ZdT at JNS
+
+```{r}
+data <- data.frame(
+  `Discharge (m3/s)` = c(158, 300, 525, 750, 1350),
+  `Date` = c("13/02/2011", "08/10/2008", "24/03/2009", "26/02/2010", "08/12/2010"),
+  `LGN QdT` = c("No", "No", "No", "No", "No"),
+  `TIG-Bourbre QdT` = c("Yes", "Yes", "Yes", "Yes", "Yes"),
+  `PGL-Ain QdT` = c("Yes", "Yes", "Yes", "Yes", "Yes"),
+  `JNS ZdT` = c("182.4", "182.4", "182.4", "182.4", "182.4")
+)
+
+kable(data, align = "c", caption = "Match between input model information and observational data")
+```
+
+**Remarks:** 
+
+- **LGN QdT**: the discharge time series is available since 19/11/2020. Stage records are available since 29/02/2000, but no rating curve was reported until 19/11/2020. To overcome this issue, a steady flow condition is assumed during the simulation period around the measurements.
+- **JNS ZdT**: the water level is controlled by the opening gate operated by the dam manager. Data reported in the OSR project indicate that the water level remains approximately constant at 182.40 meters. During modeling, the stage time series at Jons will be fixed at this value.
+
+
+# Bibliography:
