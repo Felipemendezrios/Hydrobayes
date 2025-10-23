@@ -637,15 +637,15 @@ for (Experiment_id in all_experiments) {
         }
 
         mcmcOptions_user <- mcmcOptions(
-            nCycles = 50,
-            nAdapt = 50,
+            nCycles = 100,
+            nAdapt = 100,
             manualMode = TRUE,
             thetaStd = jump_MCMC_theta_param,
             gammaStd = jump_MCMC_error_model
         )
         mcmcCooking_user <- mcmcCooking(
-            burn = 0.2,
-            nSlim = 1
+            burn = 0.5,
+            nSlim = 10
         )
         mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
 

@@ -211,7 +211,7 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (15 itérations)  ########
+ ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (14 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
     Noeud : xx1 Cote :    0.045                                Débit :    0.014
@@ -222,7 +222,7 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (23 itérations)  ########
+ ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (20 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
     Noeud : xx1 Cote :    0.042                                Débit :    0.014
@@ -247,7 +247,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:12:00        (jjj:hh:mn:ss) (06 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -258,7 +258,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:15:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -269,7 +269,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:18:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -280,7 +280,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:21:00        (jjj:hh:mn:ss) (05 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -291,7 +291,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:24:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -302,7 +302,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:27:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -313,7 +313,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:30:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -324,7 +324,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:33:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -335,7 +335,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:36:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -346,7 +346,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:39:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -357,7 +357,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:42:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -368,7 +368,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:45:00        (jjj:hh:mn:ss) (04 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -379,7 +379,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:48:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -390,7 +390,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:51:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -401,7 +401,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:54:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -412,7 +412,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:57:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -423,14 +423,14 @@ Ces aires devraient être nulles
  ########  DATE :  00:01:00:00        (jjj:hh:mn:ss) (02 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
  ===============================================================================
  Erreur (relative par bief) en volume à l'instant final :  0.00E+00 (Bief 001)
  Erreur maximale sur la simulation :  0.00E+00 (Bief 001 Date :  00:00:00:00)
- Nombre total d'itérations :      110
+ Nombre total d'itérations :      106
  Nombre total de pas de temps :       20
- Date simulation : 02/09/2025 (11:07:33) Durée : 00:00:00 CPU : 00:00:00,006
+ Date simulation : 23/10/2025 (11:02:33) Durée : 00:00:00 CPU : 00:00:00,006
  ****************************** FIN NORMALE DE MAGE ****************************

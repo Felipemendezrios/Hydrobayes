@@ -6,7 +6,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab"
+workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Old/Case_studies/HHLab"
 setwd(workspace)
 
 # Here, define calibration type

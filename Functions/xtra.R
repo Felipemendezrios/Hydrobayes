@@ -50,7 +50,7 @@ interpolation_specific_points <- function(total_points = 100,
 
 
 getlegendre <- function(
-    max_degree,
+    polynomial_degree,
     covariate_discretization) {
     normalized_values <- 2 * (covariate_discretization - min(covariate_discretization)) / (max(covariate_discretization) - min(covariate_discretization)) - 1
 
@@ -59,13 +59,13 @@ getlegendre <- function(
     legendre_df_covariate <- data.frame(x = normalized_values) # Start with x values
     legendre_df <- legendre_df_covariate
 
-    if (max_degree < 0) stop("The maximum degree must be positive")
+    if (polynomial_degree < 0) stop("The maximum degree must be positive")
     if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normalized_values should be between [-1,1]")
 
-    if (max_degree == 0) {
+    if (polynomial_degree == 0) {
         return(rep(1, length(normalized_values)))
     }
-    if (max_degree == 1) {
+    if (polynomial_degree == 1) {
         return(normalized_values)
     }
 
@@ -74,7 +74,7 @@ getlegendre <- function(
     # P_1(normalized_values) = normalized_values
     Pn <- normalized_values
 
-    for (k in 1:(max_degree - 1)) {
+    for (k in 1:(polynomial_degree - 1)) {
         P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
         Pn_1 <- Pn
         Pn <- P_next
@@ -110,7 +110,7 @@ KFile_spatial <- function(
         # Loop for the polynomial degree
         for (degree in 0:max_degree) {
             pn_values <- getlegendre(
-                max_degree = degree,
+                polynomial_degree = degree,
                 covariate_discretization = cov_values_by_reach
             )
             matrix_spatialisation[ZFile_id_row, counter_position] <- pn_values
