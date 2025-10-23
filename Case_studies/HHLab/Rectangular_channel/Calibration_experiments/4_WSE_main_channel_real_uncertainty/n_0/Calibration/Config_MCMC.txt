@@ -1,6 +1,6 @@
 "Results_MCMC.txt"                                         ! result.fname, name of MCMC file (|!| name of the file only, not full path)
-50                                                         ! nAdapt, adaptation period: jump sizes are increased/decreased every Nadapt iterations to comply with the desired moving rates
-50                                                         ! nCycles, no more adaptation after iteration number stopAdapt
+100                                                        ! nAdapt, adaptation period: jump sizes are increased/decreased every Nadapt iterations to comply with the desired moving rates
+100                                                        ! nCycles, no more adaptation after iteration number stopAdapt
 0.1                                                        ! minMoveRate, lower bound for the desired move rate interval
 0.5                                                        ! maxMoveRate, upper bound for the desired move rate interval
 0.9                                                        ! downMult, (<1) multiplication factor used to decrease jump size when move rate is too low

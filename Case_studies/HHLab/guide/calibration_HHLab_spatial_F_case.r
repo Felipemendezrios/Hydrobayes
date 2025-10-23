@@ -16,6 +16,10 @@ dir_workspace <- here::here()
 # Load Functions
 #############################################
 
+last <- function(data) {
+    tail(data, n = 1)
+}
+
 # Interpolation function passing by some specific nodes:
 interpolation_specific_points <- function(total_points = 100,
                                           specific_nodes) {

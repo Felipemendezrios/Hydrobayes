@@ -211,7 +211,7 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (09 itérations)  ########
+ ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (11 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
     Noeud : xx1 Cote :    0.059                                Débit :    0.030
@@ -222,10 +222,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (11 itérations)  ########
+ ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (12 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.057                                Débit :    0.030
+    Noeud : xx1 Cote :    0.058                                Débit :    0.030
     Noeud : xx2 Cote :    0.040                                Débit :    0.029
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -430,7 +430,7 @@ Ces aires devraient être nulles
  ===============================================================================
  Erreur (relative par bief) en volume à l'instant final :  0.00E+00 (Bief 001)
  Erreur maximale sur la simulation :  0.00E+00 (Bief 001 Date :  00:00:00:00)
- Nombre total d'itérations :       86
+ Nombre total d'itérations :       89
  Nombre total de pas de temps :       20
- Date simulation : 02/09/2025 (11:05:17) Durée : 00:00:00 CPU : 00:00:00,007
+ Date simulation : 23/10/2025 (11:02:04) Durée : 00:00:00 CPU : 00:00:00,006
  ****************************** FIN NORMALE DE MAGE ****************************

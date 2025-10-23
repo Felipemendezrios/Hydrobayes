@@ -211,10 +211,10 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (15 itérations)  ########
+ ########  DATE :  00:00:03:00        (jjj:hh:mn:ss) (14 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.046                                Débit :    0.014
+    Noeud : xx1 Cote :    0.045                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.022
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -222,7 +222,7 @@ Ces aires devraient être nulles
  
  
  
- ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (37 itérations)  ########
+ ########  DATE :  00:00:06:00        (jjj:hh:mn:ss) (21 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
     Noeud : xx1 Cote :    0.042                                Débit :    0.014
@@ -247,7 +247,7 @@ Ces aires devraient être nulles
  ########  DATE :  00:00:12:00        (jjj:hh:mn:ss) (06 itérations)  ########
  ===============================================================================
  BIEF   1 : 1 m3
-    Noeud : xx1 Cote :    0.043                                Débit :    0.014
+    Noeud : xx1 Cote :    0.042                                Débit :    0.014
     Noeud : xx2 Cote :    0.027                                Débit :    0.014
  ===============================================================================
  Volume total du réseau : 1 m3
@@ -430,7 +430,7 @@ Ces aires devraient être nulles
  ===============================================================================
  Erreur (relative par bief) en volume à l'instant final :  0.00E+00 (Bief 001)
  Erreur maximale sur la simulation :  0.00E+00 (Bief 001 Date :  00:00:00:00)
- Nombre total d'itérations :      124
+ Nombre total d'itérations :      107
  Nombre total de pas de temps :       20
- Date simulation : 02/09/2025 (11:07:33) Durée : 00:00:00 CPU : 00:00:00,006
+ Date simulation : 23/10/2025 (11:02:34) Durée : 00:00:00 CPU : 00:00:00,008
  ****************************** FIN NORMALE DE MAGE ****************************
