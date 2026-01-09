@@ -1,0 +1,103 @@
+ Err010 à  00:00:05:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   36776.50 du Bief 008
+       Vitesse =  8.731 Largeur =  126.279 Section =   236.70 Hauteur =  3.331
+ Err010 à  00:00:01:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  8.513 Largeur =  100.445 Section =   135.32 Hauteur =  2.365
+ Err003 à  00:00:14:26,24     + 300 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 06 : écart en DZ = 0.256977E-03 ; écart en DQ = 0.208212E-03
+       Itération 07 : écart en DZ = 0.256977E-03 ; écart en DQ = 0.208214E-03
+       Z : Pm   39646.00 du bief   4 ; Q : Pm   39692.00 du bief   4
+       Residu : 0.394351E-01(004: 39646.00)
+ Err003 à  00:00:18:26,24     + 60.000 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.103200E-03 ; écart en DQ = 0.954496E-03
+       Itération 06 : écart en DZ = 0.103200E-03 ; écart en DQ = 0.954496E-03
+       Z : Pm   34670.20 du bief   8 ; Q : Pm   34670.20 du bief   8
+       Residu : 0.295355E+00(008: 34614.60)
+ Err003 à  00:00:19:02,24     + 12.000 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 10 : écart en DZ = 0.625651E-05 ; écart en DQ = 0.635843E-04
+       Itération 11 : écart en DZ = 0.625651E-05 ; écart en DQ = 0.635843E-04
+       Z : Pm   34614.60 du bief   8 ; Q : Pm   34670.20 du bief   8
+       Residu : 0.158920E+00(008: 34614.60)
+ Err003 à  00:00:19:11,84     + 2.400 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 06 : écart en DZ = 0.398572E-05 ; écart en DQ = 0.472741E-04
+       Itération 07 : écart en DZ = 0.398571E-05 ; écart en DQ = 0.472741E-04
+       Z : Pm   34670.20 du bief   8 ; Q : Pm   34670.20 du bief   8
+       Residu : 0.860939E-01(008: 34614.60)
+ Err002 à  00:00:19:14,24 + 2.400 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.112203E-05 ; écart en DQ = 0.166703E-04
+       Itération 99 : écart en DZ = 0.388490E-05 ; écart en DQ = 0.421928E-04
+       Z : Pm   34614.60 du bief   8 ; Q : Pm   34670.20 du bief   8
+       Residu : 0.205250E+00(008: 34614.60)
+ Err003 à  00:00:19:14,24     + 0.480 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 15 : écart en DZ = 0.274132E-05 ; écart en DQ = 0.318837E-04
+       Itération 16 : écart en DZ = 0.274134E-05 ; écart en DQ = 0.318840E-04
+       Z : Pm   34670.20 du bief   8 ; Q : Pm   34670.20 du bief   8
+       Residu : 0.701055E-01(008: 34614.60)
+ Err002 à  00:00:19:16,89 + 2.200 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.933841E-07 ; écart en DQ = 0.480884E-05
+       Itération 99 : écart en DZ = 0.915648E-07 ; écart en DQ = 0.471580E-05
+       Z : Pm   34670.20 du bief   8 ; Q : Pm   34614.60 du bief   8
+       Residu : 0.256161E-03(008: 34614.60)
+ Err002 à  00:00:19:21,29 + 2.200 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.367981E-08 ; écart en DQ = 0.689517E-07
+       Itération 99 : écart en DZ = 0.357302E-08 ; écart en DQ = 0.669506E-07
+       Z : Pm   34670.20 du bief   8 ; Q : Pm   34614.60 du bief   8
+       Residu : 0.195089E-02(008: 34559.00)
+ Err001 à  00:04:24:10,47 + 4.150 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.241559E-04 ; écart en DQ = 0.112452E-03
+       Itération 08 : écart en DZ = 0.366840E-04 ; écart en DQ = 0.170758E-03
+       Z : Pm   37444.00 du bief   8 ; Q : Pm   37399.00 du bief   8
+ Err001 à  00:04:24:14,62 + 4.150 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.128832E+00 ; écart en DQ = 0.644007E+00
+       Itération 08 : écart en DZ = 0.175352E+01 ; écart en DQ = 0.289327E+03
+       Z : Pm   37328.00 du bief   8 ; Q : Pm   37399.00 du bief   8
+ Err001 à  00:04:56:46,67 + 4.190 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.345292E-04 ; écart en DQ = 0.169610E-03
+       Itération 08 : écart en DZ = 0.529162E-04 ; écart en DQ = 0.259951E-03
+       Z : Pm   37444.00 du bief   8 ; Q : Pm   37399.00 du bief   8
+ Err010 à  00:04:56:54,97           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  4.945 Largeur =   41.006 Section =    21.99 Hauteur =  1.053
+ Err003 à  00:06:46:11,53     + 4.290 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 16 : écart en DZ = 0.272942E-05 ; écart en DQ = 0.494264E-04
+       Itération 17 : écart en DZ = 0.272940E-05 ; écart en DQ = 0.494261E-04
+       Z : Pm   41444.00 du bief   5 ; Q : Pm   41444.00 du bief   5
+       Residu : 0.203498E+00(005: 41444.00)
+ Err003 à  00:06:46:14,93     + 0.850 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 14 : écart en DZ = 0.110959E-05 ; écart en DQ = 0.214272E-04
+       Itération 15 : écart en DZ = 0.110960E-05 ; écart en DQ = 0.214272E-04
+       Z : Pm   41444.00 du bief   5 ; Q : Pm   41444.00 du bief   5
+       Residu : 0.357455E-01(005: 41444.00)
+ Err001 à  01:00:14:05,72 + 4.380 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.230389E-04 ; écart en DQ = 0.134486E-03
+       Itération 08 : écart en DZ = 0.366937E-04 ; écart en DQ = 0.214183E-03
+       Z : Pm   37444.00 du bief   8 ; Q : Pm   37399.00 du bief   8
+ Err001 à  01:00:14:10,07 + 4.340 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.533916E-01 ; écart en DQ = 0.334581E+00
+       Itération 08 : écart en DZ = 0.133335E+00 ; écart en DQ = 0.229327E+01
+       Z : Pm   37399.00 du bief   8 ; Q : Pm   37399.00 du bief   8
+ Err010 à  01:06:27:11,99           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.82E+01 au Pm   32823.00 du Bief 008
+       Vitesse = 11.253 Largeur =   41.955 Section =     8.13 Hauteur =  0.450
+ Err003 à  01:15:32:35,65     + 4.610 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 08 : écart en DZ = 0.532706E-04 ; écart en DQ = 0.104510E-02
+       Itération 09 : écart en DZ = 0.532709E-04 ; écart en DQ = 0.104510E-02
+       Z : Pm   32766.00 du bief   8 ; Q : Pm   32709.00 du bief   8
+       Residu : 0.362992E+00(008: 32640.00)

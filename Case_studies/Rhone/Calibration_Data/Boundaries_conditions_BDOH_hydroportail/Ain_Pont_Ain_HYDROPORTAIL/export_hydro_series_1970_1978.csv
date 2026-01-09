@@ -1,0 +1,2 @@
+<CdSiteHydro>;<CdStationHydro>;<CdCapteur>;<GrdSerieObsHydro>;<DtObsHydro>;<StObsHydro>;<ResObsHydro>;<QualifObsHydro>;<MethObsHydro>;<ContObsHydro>;<FLG>
+"Code du site hydrométrique";"Code de la station hydrométrique";"Code du capteur";"Grandeur observée de la série";"Date d'observation hydrométrique";"Résultat de l'observation hydro";"Résultat de l'observation hydrométrique";"Qualification de la donnée de l'observation hydrométrique";"Méthode d'obtention du résultat de l'observation hydrométrique";"Continuité de la donnée de l'observation hydrométrique";<FLG>

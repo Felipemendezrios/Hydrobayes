@@ -1,0 +1,18 @@
+Export du 18/12/2025 13:04:23 UTC au format « BDOH »
+Période d'extraction : du 31/12/1992 23:00:00 UTC au 01/08/2025 00:00:00 UTC
+Fuseau horaire : UTC+00:00
+
+
+DOI associés à l'observatoire « Observatoire des Sédiments du Rhône » :
+ - dx.doi.org/10.17180/OBS.OSR [ Thollet, F.; Le Bescond, C.; Lagouy, M.; Gruat A.; Grisot, G.;  Le Coz, J.; Coquery, M.; Lepage, H.; Gairoard, S.; Gattacceca, J.C.; Ambrosi, J.-P.; Radakovitch, O., Dur, G., Richard, L., Giner, F., Eyrolle, F., Angot, H., Mourier, D., Bonnefoy, A., Dugué, V., Launay, M., Troudet, L., Labille, J., Kieffer, L.    (2021): Observatoire des Sédiments du Rhône; INRAE. ]
+ - dx.doi.org/https://doi.org/10.15454/RJCQZ7 [ Concentrations and fluxes of suspended particulate matters and associated contaminants in the Rhône River from Lake Geneva to the Mediterranean Sea ]
+
+
+Chronique « JONS / DEB » :
+
+    285601 mesures présentes, du 31/12/1992 23:00:00 UTC+00:00 au 01/08/2025 00:00:00 UTC+00:00
+
+    Fichier : JONS_DEB.txt
+
+    Généalogie
+        Débit calculé à partir des hydrogrammes du Rhône à Lagnieu, de l&#039;Ain à Pont de Chazey et de la Bourbre à Tignieu Jameyzieu, avec le modèle hydraulique 1-D du Rhône développé par l&#039;OSR.
