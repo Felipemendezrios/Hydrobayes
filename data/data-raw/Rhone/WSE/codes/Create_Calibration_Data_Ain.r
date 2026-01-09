@@ -128,7 +128,7 @@ all_data_station_2016 <- all_data_station_2016 %>%
 library(ggplot2)
 
 filtered_data <- all_data_station_2016 %>%
-    filter(Q < 18 & Q > 14.5)
+    filter(Q < 20 & Q > 14.5)
 
 ggplot(filtered_data, aes(x = Date, y = Q, color = STA_name)) +
     geom_point(alpha = 0.7, size = 1)
@@ -177,8 +177,8 @@ aligned_filtered <- aligned %>% filter(all_within_tolerance)
 # Step 1: Create intervals ±7 days around each aligned timestamp
 intervals <- aligned_filtered %>%
     mutate(
-        start = Date - days(7),
-        end   = Date + days(7)
+        start = Date - days(10),
+        end   = Date + days(10)
     ) %>%
     select(start, end)
 
@@ -202,7 +202,7 @@ filtered_aligned_data <- filtered_data %>%
         map_lgl(Date, ~ any(.x >= intervals_combined$start & .x <= intervals_combined$end))
     )
 
-selected_date <- as.POSIXct("2016-08-29 09:39:00", tz = "UTC")
+selected_date <- as.POSIXct("2016-09-02 00:18:00", tz = "UTC")
 ggplot(filtered_aligned_data, aes(x = Date, y = Q, color = STA_name)) +
     geom_point(alpha = 0.7, size = 1) +
     labs(
@@ -212,7 +212,9 @@ ggplot(filtered_aligned_data, aes(x = Date, y = Q, color = STA_name)) +
         color = "Station"
     ) +
     theme_minimal() +
-    geom_vline(xintercept = selected_date)
+    geom_vline(xintercept = selected_date) +
+    geom_vline(xintercept = selected_date + days(2)) +
+    geom_vline(xintercept = selected_date - days(2))
 
 # The selected date is 2016-08-29 09:39:00 and the duration will be the same as the Q=90m3/s
 # Number of rows
