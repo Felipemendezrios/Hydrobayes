@@ -43,7 +43,7 @@ extract_data <- function(
 
     Data_subset <- Data[keep, ]
 
-    interval_id <- name_id <- rep(NA_integer_, nrow(Data))
+    interval_id <- id_WSE_name_case <- rep(NA_integer_, nrow(Data))
     for (i in seq_len(nrow(range_dates_measures))) {
         idx <- between(
             Data$Date,
@@ -52,40 +52,41 @@ extract_data <- function(
         )
 
         interval_id[idx] <- i
-        name_id[idx] <- range_dates_measures$id_case[i]
+        id_WSE_name_case[idx] <- range_dates_measures$id_case[i]
     }
-    Data_subset$id_time_interval <- interval_id[keep]
-    Data_subset$name_id <- name_id[keep]
+    Data_subset$id_WSE_number_case <- interval_id[keep]
+    Data_subset$id_WSE_name_case <- id_WSE_name_case[keep]
 
-    out_path_RData <- file.path(out_path, paste0(export_name, "_subset.RData"))
-    out_path_csv <- file.path(out_path, paste0(export_name, "_subset.csv"))
+
+    # out_path_csv <- file.path(out_path, paste0(export_name, "_subset.csv"))
 
     # Convert the discharge in numeric format
     Data_subset$Q <- as.numeric(gsub(",", ".", Data_subset$Q))
 
     # Add interval id to the ranges
     range_dates_measures <- range_dates_measures %>%
-        mutate(id_time_interval = row_number())
+        mutate(id_WSE_number_case = row_number())
 
     Data_subset <- Data_subset %>%
         left_join(
-            range_dates_measures %>% select(id_time_interval, start),
-            by = "id_time_interval"
+            range_dates_measures %>% select(id_WSE_number_case, start),
+            by = "id_WSE_number_case"
         ) %>%
-        group_by(id_time_interval) %>%
+        group_by(id_WSE_number_case) %>%
         arrange(Date) %>%
         mutate(
             t_minutes = as.numeric(difftime(Date, start, units = "mins"))
         ) %>%
         ungroup() %>%
-        select(Date, t_minutes, Q, id_time_interval, name_id)
+        select(Date, t_minutes, Q, id_WSE_number_case, id_WSE_name_case)
 
+    out_path_RData <- file.path(out_path, paste0(export_name, "_subset.RData"))
     save(Data_subset, file = out_path_RData)
-    write.table(
-        file = out_path_csv,
-        Data_subset, row.names = FALSE, col.names = TRUE, sep = ";"
-    )
-    return(invisible(out_path))
+    # write.table(
+    #     file = out_path_csv,
+    #     Data_subset, row.names = FALSE, col.names = TRUE, sep = ";"
+    # )
+    return(Data_subset)
 }
 
 
@@ -129,14 +130,63 @@ if (any(range_dates_measures$end <= range_dates_measures$start)) {
 }
 
 results_files <- vector("character", nrow(metadata_modified))
+all_subsets <- vector("list", nrow(metadata_modified))
+names(all_subsets) <- metadata_modified$export_name
 
 for (i in seq_len(nrow(metadata_modified))) {
     path_data <- metadata_modified$files[i]
     export_name <- metadata_modified$export_name[i]
-    results_files[i] <- extract_data(
+
+    all_subsets[[export_name]] <- extract_data(
         path_data = path_data,
         range_dates_measures = range_dates_measures,
         out_path = getwd(),
         export_name = export_name
     )
 }
+for (i in seq_along(all_subsets)) {
+    all_subsets[[i]]$id_sta <- names(all_subsets)[i]
+}
+
+# Get all unique id_WSE_name_cases
+all_id_WSE_name_cases <- unique(unlist(lapply(all_subsets, function(x) x$id_WSE_name_case)))
+
+# Create list to store subsets by id_WSE_name_case
+subsets_by_id_WSE_name_case <- vector("list", length(all_id_WSE_name_cases))
+names(subsets_by_id_WSE_name_case) <- all_id_WSE_name_cases
+
+# Populate the list
+for (nid in all_id_WSE_name_cases) {
+    subsets_by_id_WSE_name_case[[nid]] <- do.call(rbind, lapply(all_subsets, function(df) {
+        df[df$id_WSE_name_case == nid, ]
+    }))
+}
+
+# Loop through each list element
+for (name_id in names(subsets_by_id_WSE_name_case)) {
+    # Create folder for this name_id
+    dir.create(name_id, showWarnings = FALSE)
+
+    # Get the tibble
+    df <- subsets_by_id_WSE_name_case[[name_id]]
+
+    # Get all unique stations in this tibble
+    stations <- unique(df$id_sta)
+
+    # Loop through each station and save as CSV
+    for (sta in stations) {
+        df_sta <- df %>% filter(id_sta == sta)
+
+        # Define CSV file path
+        file_path <- file.path(name_id, paste0(sta, ".csv"))
+
+        # Write CSV
+        write.csv(df_sta, file_path, row.names = FALSE)
+    }
+}
+
+
+write.csv(range_dates_measures,
+    file = "Dates_start_end_extraction.csv",
+    row.names = FALSE
+)
