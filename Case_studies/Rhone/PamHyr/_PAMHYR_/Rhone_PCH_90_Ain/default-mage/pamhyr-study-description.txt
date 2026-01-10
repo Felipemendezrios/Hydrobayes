@@ -1,0 +1,33 @@
+# Rhône with Ain tributary
+
+## Bathymetry
+Rhône bathymetry was obtained from Léa Kieffer in OSR6.
+Ain tributary was composed in two parts:
+From Port Galland (PGA) until the confluence with the Rhône, information was obtained from OSR6 with a reservoir compartment. 
+Then, from PGA to Pont Chazey (PCH), digital elevation model (DEM) was used to get the cross sections and set up the model.
+
+## Case
+WSE at Ain tributary : discharge 90 m/s
+
+## Simulation time period:
+2016-04-07 11:57:47 to 2016-04-17 13:38:01
+
+## Date of measurements:
+2016-04-12 11:57:47	to 2016-04-12 13:38:01
+
+
+
+
+
+## Change log
+
+2025-07-16: Création du modèle
+
+---
+
+## Copyright
+
+© Dorian Hernandez - 2025 - INRAE
+© Felipe Méndez-Rios - 2025 - INRAE
+
+All right reserved.

@@ -75,7 +75,7 @@ extract_data <- function(
         group_by(id_WSE_number_case) %>%
         arrange(Date) %>%
         mutate(
-            t_minutes = as.numeric(difftime(Date, model_start, units = "mins"))
+            t_minutes = as.numeric(difftime(Date, model_start, units = "secs"))
         ) %>%
         ungroup() %>%
         select(Date, t_minutes, Q, id_WSE_number_case, id_WSE_name_case)
@@ -211,6 +211,11 @@ for (name_id in names(subsets_by_id_WSE_name_case)) {
     )
 }
 
+range_dates_measures <- range_dates_measures %>%
+    mutate(
+        diff_start = difftime(measured_start, model_start, units = "secs"),
+        diff_end   = difftime(measured_end,model_start, units = "secs")
+    )
 
 write.csv(range_dates_measures,
     file = "Dates_start_end_extraction.csv",
