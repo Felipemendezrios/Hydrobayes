@@ -36,8 +36,8 @@ extract_data <- function(
     keep <- Reduce(`|`, lapply(seq_len(nrow(range_dates_measures)), function(i) {
         between(
             Data$Date,
-            range_dates_measures$start[i],
-            range_dates_measures$end[i]
+            range_dates_measures$model_start[i],
+            range_dates_measures$model_end[i]
         )
     }))
 
@@ -47,8 +47,8 @@ extract_data <- function(
     for (i in seq_len(nrow(range_dates_measures))) {
         idx <- between(
             Data$Date,
-            range_dates_measures$start[i],
-            range_dates_measures$end[i]
+            range_dates_measures$model_start[i],
+            range_dates_measures$model_end[i]
         )
 
         interval_id[idx] <- i
@@ -69,13 +69,13 @@ extract_data <- function(
 
     Data_subset <- Data_subset %>%
         left_join(
-            range_dates_measures %>% select(id_WSE_number_case, start),
+            range_dates_measures %>% select(id_WSE_number_case, model_start),
             by = "id_WSE_number_case"
         ) %>%
         group_by(id_WSE_number_case) %>%
         arrange(Date) %>%
         mutate(
-            t_minutes = as.numeric(difftime(Date, start, units = "mins"))
+            t_minutes = as.numeric(difftime(Date, model_start, units = "mins"))
         ) %>%
         ungroup() %>%
         select(Date, t_minutes, Q, id_WSE_number_case, id_WSE_name_case)
@@ -115,17 +115,17 @@ extension_time <- days(5)
 # Range of dates searched
 range_dates_measures <- range_dates_measures %>%
     rename(
-        start = `min(time)`,
-        end = `max(time)`
+        measured_start = `min(time)`,
+        measured_end = `max(time)`
     ) %>%
     mutate(
         # id_case = as.numeric(id_case),
-        start = start - extension_time,
-        end = end + extension_time,
+        model_start = measured_start - extension_time,
+        model_end = measured_end + extension_time,
     ) %>%
     arrange(id_case)
 
-if (any(range_dates_measures$end <= range_dates_measures$start)) {
+if (any(range_dates_measures$model_end <= range_dates_measures$model_start)) {
     stop("increasing interval values")
 }
 
