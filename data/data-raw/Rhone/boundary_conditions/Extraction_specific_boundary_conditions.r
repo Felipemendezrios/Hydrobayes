@@ -144,6 +144,8 @@ for (i in seq_len(nrow(metadata_modified))) {
         export_name = export_name
     )
 }
+
+###### create csv files
 for (i in seq_along(all_subsets)) {
     all_subsets[[i]]$id_sta <- names(all_subsets)[i]
 }
@@ -165,8 +167,9 @@ for (nid in all_id_WSE_name_cases) {
 # Loop through each list element
 for (name_id in names(subsets_by_id_WSE_name_case)) {
     # Create folder for this name_id
-    dir.create(name_id, showWarnings = FALSE)
-
+    if (!dir.exists(name_id)) {
+        dir.create(name_id, showWarnings = FALSE)
+    }
     # Get the tibble
     df <- subsets_by_id_WSE_name_case[[name_id]]
 
@@ -183,6 +186,29 @@ for (name_id in names(subsets_by_id_WSE_name_case)) {
         # Write CSV
         write.csv(df_sta, file_path, row.names = FALSE)
     }
+
+    df <- df %>%
+        mutate(
+            id_river = if_else(startsWith(id_sta, "Ain"), "AIN", "Rhone")
+        )
+
+    # Extract the start and end dates as a numeric vector
+    vlines <- range_dates_measures %>%
+        filter(id_case == name_id) %>%
+        select(2, 3) %>% # assuming 2 = start_date, 3 = end_date
+        unlist() # convert to vector
+
+    plot_qdt <- ggplot(df, aes(x = Date, y = Q, col = id_sta)) +
+        geom_point() +
+        geom_vline(xintercept = vlines, linetype = "dashed", color = "red") +
+        facet_wrap(~id_river, ncol = 1, scales = "free_y") +
+        theme_bw()
+
+    ggsave(
+        filename = file.path(name_id, "QdT_stations.png"), # the file path
+        plot = plot_qdt, # your ggplot object
+        width = 8, height = 5, units = "in" # optional: size
+    )
 }
 
 
