@@ -49,8 +49,10 @@ all_data_model <- rbind(
 
 model_profile_id_reach_KP <- all_data_model %>%
     group_by(profile_id, id_reach) %>%
+    filter(label == "axe") %>%
     summarise(
         KP = first(header_val),
+        Z_thalweg = first(Z),
         .groups = "drop" # This ungroups after summarising
     ) %>%
     as.data.frame()
@@ -155,7 +157,15 @@ all_WSE_Rhone <-
         obs_assigned_KP_model,
         by = "KP"
     ) %>%
-    select(profile_id, KP, id_case, WSE, time, id_reach)
+    select(profile_id, KP, Z_thalweg, id_case, WSE, time, id_reach)
+
+ggplot(
+    all_WSE_Rhone,
+    aes(x = KP, y = WSE, col = id_case)
+) +
+    geom_point() +
+    geom_line(aes(x = KP, y = Z_thalweg, col = "model"))
+
 
 
 save(all_WSE_Rhone, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/all_observations_Rhone.RData")
