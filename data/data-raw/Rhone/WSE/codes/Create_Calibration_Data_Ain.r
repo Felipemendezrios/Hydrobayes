@@ -38,11 +38,13 @@ if (nrow(inconsistent_profiles) != 0) stop("inconsistent profiles")
 
 obs_reach <- data.frame(obs_raw %>%
     group_by(profile_id) %>%
+    filter(label == "axe") %>%
     summarise(
         KP = first(header_val), # assuming header_val is same for each profile
         X90_Date = first(X90_Date), # pick the first value (or use mean if needed)
         X90_WSE = first(X90_wse),
-        X16_WSE = first(X16_wse)
+        X16_WSE = first(X16_wse),
+        Z_thalweg = first(Z)
     ))
 
 
@@ -247,13 +249,14 @@ obs_PCH_PGA <- data.frame(obs_reach %>%
     )
 
 ggplot(obs_PCH_PGA, aes(x = KP, y = WSE, col = id_case)) +
-    geom_point()
+    geom_point() +
+    geom_line(aes(x = KP, y = Z_thalweg))
 
 ggplot(obs_PCH_PGA, aes(x = time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
-save(obs_PCH_PGA, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_PCH_PGA_with_observations.RData")
+# save(obs_PCH_PGA, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_PCH_PGA_with_observations.RData")
 #######################################################################
 
 reach_name <- "model_ST_PGA_CAIN_with_observations.csv"
@@ -291,13 +294,14 @@ if (nrow(inconsistent_profiles) != 0) stop("inconsistent profiles")
 
 obs_reach <- data.frame(obs_raw_clean %>%
     group_by(profile_id) %>%
+    filter(label == "axe") %>%
     summarise(
         KP = first(header_val), # assuming header_val is same for each profile
         X90_Date = first(X90_Date), # pick the first value (or use mean if needed)
         X90_WSE = first(X90_WSE),
-        X16_WSE = first(X16_wse)
+        X16_WSE = first(X16_wse),
+        Z_thalweg = first(Z)
     ))
-
 
 time_duration <- as.numeric(difftime(
     obs_reach$X90_Date[length(obs_reach$X90_Date)],
@@ -335,13 +339,14 @@ obs_PGA_CAIN <- data.frame(obs_reach %>%
     )
 
 ggplot(obs_PGA_CAIN, aes(x = KP, y = WSE, col = id_case)) +
-    geom_point()
+    geom_point() +
+    geom_line(aes(x = KP, y = Z_thalweg))
 
 ggplot(obs_PGA_CAIN, aes(x = time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
-save(obs_PGA_CAIN, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_PGA_CAIN_with_observations.RData")
+# save(obs_PGA_CAIN, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_PGA_CAIN_with_observations.RData")
 #######################################################################
 #######################################################################
 
@@ -380,13 +385,14 @@ if (nrow(inconsistent_profiles) != 0) stop("inconsistent profiles")
 
 obs_reach <- data.frame(obs_raw_clean %>%
     group_by(profile_id) %>%
+    filter(label == "axe") %>%
     summarise(
         KP = first(header_val), # assuming header_val is same for each profile
         X90_Date = first(X90_Date), # pick the first value (or use mean if needed)
         X90_WSE = first(X90_wse),
-        X16_WSE = first(X16_wse)
+        X16_WSE = first(X16_wse),
+        Z_thalweg = first(Z)
     ))
-
 
 time_duration <- as.numeric(difftime(
     obs_reach$X90_Date[length(obs_reach$X90_Date)],
@@ -424,13 +430,14 @@ obs_CAIN_Confluence <- data.frame(obs_reach %>%
     )
 
 ggplot(obs_CAIN_Confluence, aes(x = KP, y = WSE, col = id_case)) +
-    geom_point()
+    geom_point() +
+    geom_line(aes(x = KP, y = Z_thalweg))
 
 ggplot(obs_CAIN_Confluence, aes(x = time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
-save(obs_CAIN_Confluence, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_CAIN_Confluence_with_observations.RData")
+# save(obs_CAIN_Confluence, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/model_ST_CAIN_Confluence_with_observations.RData")
 #######################################################################
 
 all_WSE_Ain <- rbind(
