@@ -1,0 +1,1792 @@
+ Err002 à  04:03:16:20,80 + 4.040 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.434524E-06 ; écart en DQ = 0.123550E-04
+       Itération 99 : écart en DZ = 0.161928E-04 ; écart en DQ = 0.460095E-03
+       Z : Pm   33875.00 du bief   3 ; Q : Pm   33937.50 du bief   3
+       Residu : 0.132438E+01(003: 33937.50)
+ Err002 à  04:03:31:48 + 4.000 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.431195E-04 ; écart en DQ = 0.150905E-02
+       Itération 99 : écart en DZ = 0.419590E-04 ; écart en DQ = 0.151616E-02
+       Z : Pm   34000.00 du bief   3 ; Q : Pm   34050.00 du bief   3
+       Residu : 0.852989E+01(003: 34100.00)
+ Err003 à  04:03:31:51,20     + 0.800 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 30 : écart en DZ = 0.233310E-05 ; écart en DQ = 0.256329E-03
+       Itération 31 : écart en DZ = 0.233308E-05 ; écart en DQ = 0.256329E-03
+       Z : Pm   34000.00 du bief   3 ; Q : Pm   34050.00 du bief   3
+       Residu : 0.299503E+00(003: 34100.00)
+ Err001 à  04:03:31:52 + 0.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.168561E-03 ; écart en DQ = 0.181545E-01
+       Itération 08 : écart en DZ = 0.269177E-03 ; écart en DQ = 0.288399E-01
+       Z : Pm   34000.00 du bief   3 ; Q : Pm   34050.00 du bief   3
+ Err002 à  04:03:34:16,77 + 3.990 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.368386E-05 ; écart en DQ = 0.921362E-04
+       Itération 99 : écart en DZ = 0.405453E-05 ; écart en DQ = 0.103131E-03
+       Z : Pm   30458.33 du bief   3 ; Q : Pm   30416.67 du bief   3
+       Residu : 0.352632E+01(003: 30416.67)
+ Err010 à  04:03:34:24,67           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+10 au Pm   30500.00 du Bief 003
+       Vitesse = ****** Largeur =    0.075 Section =     0.00 Hauteur =  0.001
+ Err003 à  04:05:03:13,50     + 3.870 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.700432E-05 ; écart en DQ = 0.169351E-03
+       Itération 06 : écart en DZ = 0.700436E-05 ; écart en DQ = 0.169352E-03
+       Z : Pm   25453.00 du bief   8 ; Q : Pm   25349.33 du bief   8
+       Residu : 0.259933E+00(008: 25349.33)
+ Err001 à  04:05:03:17,35 + 3.850 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.996378E-01 ; écart en DQ = 0.251302E+01
+       Itération 08 : écart en DZ = 0.126283E+01 ; écart en DQ = 0.905479E+02
+       Z : Pm   25026.75 du bief   8 ; Q : Pm   25349.33 du bief   8
+ Err002 à  04:05:46:47,68 + 3.840 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.364916E-05 ; écart en DQ = 0.629285E-04
+       Itération 99 : écart en DZ = 0.672178E-05 ; écart en DQ = 0.117924E-03
+       Z : Pm   30600.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.230851E+00(003: 30600.00)
+ Err001 à  04:05:46:51,48 + 3.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.307892E-02 ; écart en DQ = 0.543098E-01
+       Itération 08 : écart en DZ = 0.648630E-02 ; écart en DQ = 0.114459E+00
+       Z : Pm   30600.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+ Err003 à  04:05:48:42,60     + 3.840 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 52 : écart en DZ = 0.624001E-05 ; écart en DQ = 0.161805E-03
+       Itération 53 : écart en DZ = 0.623997E-05 ; écart en DQ = 0.161805E-03
+       Z : Pm   31083.33 du bief   3 ; Q : Pm   31041.67 du bief   3
+       Residu : 0.927592E+01(003: 31083.33)
+ Err001 à  04:05:48:46,40 + 3.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.534458E-05 ; écart en DQ = 0.142634E-03
+       Itération 08 : écart en DZ = 0.618586E-05 ; écart en DQ = 0.165092E-03
+       Z : Pm   31083.33 du bief   3 ; Q : Pm   31041.67 du bief   3
+ Err001 à  04:05:48:46,40 + 0.760 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.276793E-03 ; écart en DQ = 0.217678E-01
+       Itération 08 : écart en DZ = 0.478855E-03 ; écart en DQ = 0.376472E-01
+       Z : Pm   31000.00 du bief   3 ; Q : Pm   31041.67 du bief   3
+ Err003 à  04:07:35:30,72     + 3.840 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.385307E-05 ; écart en DQ = 0.165066E-03
+       Itération 06 : écart en DZ = 0.385307E-05 ; écart en DQ = 0.165066E-03
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.429990E+00(003: 29812.50)
+ Err003 à  04:07:35:38,32     + 3.800 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.365739E-05 ; écart en DQ = 0.157681E-03
+       Itération 06 : écart en DZ = 0.365739E-05 ; écart en DQ = 0.157681E-03
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.405588E+00(003: 29812.50)
+ Err003 à  04:07:35:39,08     + 0.760 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.294417E-06 ; écart en DQ = 0.435712E-04
+       Itération 06 : écart en DZ = 0.294417E-06 ; écart en DQ = 0.435712E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.539824E-01(003: 29812.50)
+ Err003 à  04:07:35:40,58     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287499E-06 ; écart en DQ = 0.430538E-04
+       Itération 06 : écart en DZ = 0.287499E-06 ; écart en DQ = 0.430538E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532364E-01(003: 29812.50)
+ Err003 à  04:07:35:42,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287486E-06 ; écart en DQ = 0.430522E-04
+       Itération 06 : écart en DZ = 0.287486E-06 ; écart en DQ = 0.430522E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532343E-01(003: 29812.50)
+ Err003 à  04:07:35:44,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287475E-06 ; écart en DQ = 0.430509E-04
+       Itération 06 : écart en DZ = 0.287475E-06 ; écart en DQ = 0.430509E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532324E-01(003: 29812.50)
+ Err003 à  04:07:35:45,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287441E-06 ; écart en DQ = 0.430417E-04
+       Itération 06 : écart en DZ = 0.287441E-06 ; écart en DQ = 0.430417E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532199E-01(003: 29812.50)
+ Err003 à  04:07:35:45,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287464E-06 ; écart en DQ = 0.430497E-04
+       Itération 06 : écart en DZ = 0.287464E-06 ; écart en DQ = 0.430497E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532306E-01(003: 29812.50)
+ Err003 à  04:07:35:47,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287424E-06 ; écart en DQ = 0.430397E-04
+       Itération 06 : écart en DZ = 0.287424E-06 ; écart en DQ = 0.430397E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532171E-01(003: 29812.50)
+ Err003 à  04:07:35:48,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287449E-06 ; écart en DQ = 0.430480E-04
+       Itération 06 : écart en DZ = 0.287449E-06 ; écart en DQ = 0.430480E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532281E-01(003: 29812.50)
+ Err003 à  04:07:35:48,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287428E-06 ; écart en DQ = 0.430400E-04
+       Itération 06 : écart en DZ = 0.287428E-06 ; écart en DQ = 0.430400E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532174E-01(003: 29812.50)
+ Err003 à  04:07:35:49,58     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287452E-06 ; écart en DQ = 0.430482E-04
+       Itération 06 : écart en DZ = 0.287452E-06 ; écart en DQ = 0.430482E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532283E-01(003: 29812.50)
+ Err003 à  04:07:35:50,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287412E-06 ; écart en DQ = 0.430382E-04
+       Itération 06 : écart en DZ = 0.287412E-06 ; écart en DQ = 0.430382E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532148E-01(003: 29812.50)
+ Err003 à  04:07:35:51,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287438E-06 ; écart en DQ = 0.430466E-04
+       Itération 06 : écart en DZ = 0.287438E-06 ; écart en DQ = 0.430466E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532260E-01(003: 29812.50)
+ Err003 à  04:07:35:52,58     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287408E-06 ; écart en DQ = 0.430378E-04
+       Itération 06 : écart en DZ = 0.287408E-06 ; écart en DQ = 0.430378E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532140E-01(003: 29812.50)
+ Err003 à  04:07:35:53,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287417E-06 ; écart en DQ = 0.430442E-04
+       Itération 06 : écart en DZ = 0.287417E-06 ; écart en DQ = 0.430442E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532226E-01(003: 29812.50)
+ Err003 à  04:07:35:54,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287390E-06 ; écart en DQ = 0.430356E-04
+       Itération 06 : écart en DZ = 0.287390E-06 ; écart en DQ = 0.430356E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532111E-01(003: 29812.50)
+ Err003 à  04:07:35:54,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287418E-06 ; écart en DQ = 0.430443E-04
+       Itération 06 : écart en DZ = 0.287418E-06 ; écart en DQ = 0.430443E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532226E-01(003: 29812.50)
+ Err003 à  04:07:35:56,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287373E-06 ; écart en DQ = 0.430336E-04
+       Itération 06 : écart en DZ = 0.287373E-06 ; écart en DQ = 0.430336E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532083E-01(003: 29812.50)
+ Err003 à  04:07:35:57,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287408E-06 ; écart en DQ = 0.430430E-04
+       Itération 06 : écart en DZ = 0.287408E-06 ; écart en DQ = 0.430430E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532207E-01(003: 29812.50)
+ Err003 à  04:07:35:58,58     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287373E-06 ; écart en DQ = 0.430335E-04
+       Itération 06 : écart en DZ = 0.287373E-06 ; écart en DQ = 0.430335E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532079E-01(003: 29812.50)
+ Err003 à  04:07:36:00,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287392E-06 ; écart en DQ = 0.430412E-04
+       Itération 06 : écart en DZ = 0.287392E-06 ; écart en DQ = 0.430412E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532180E-01(003: 29812.50)
+ Err003 à  04:07:36:00,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287388E-06 ; écart en DQ = 0.430406E-04
+       Itération 06 : écart en DZ = 0.287388E-06 ; écart en DQ = 0.430406E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532172E-01(003: 29812.50)
+ Err003 à  04:07:36:03,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287379E-06 ; écart en DQ = 0.430395E-04
+       Itération 06 : écart en DZ = 0.287379E-06 ; écart en DQ = 0.430395E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532156E-01(003: 29812.50)
+ Err003 à  04:07:36:03,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287338E-06 ; écart en DQ = 0.430295E-04
+       Itération 06 : écart en DZ = 0.287338E-06 ; écart en DQ = 0.430295E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532021E-01(003: 29812.50)
+ Err003 à  04:07:36:05,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287366E-06 ; écart en DQ = 0.430379E-04
+       Itération 06 : écart en DZ = 0.287366E-06 ; écart en DQ = 0.430379E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532133E-01(003: 29812.50)
+ Err003 à  04:07:36:06,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287327E-06 ; écart en DQ = 0.430281E-04
+       Itération 06 : écart en DZ = 0.287327E-06 ; écart en DQ = 0.430281E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532000E-01(003: 29812.50)
+ Err003 à  04:07:36:08,33     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287305E-06 ; écart en DQ = 0.430255E-04
+       Itération 06 : écart en DZ = 0.287305E-06 ; écart en DQ = 0.430255E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.531965E-01(003: 29812.50)
+ Err003 à  04:07:36:09,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287335E-06 ; écart en DQ = 0.430343E-04
+       Itération 06 : écart en DZ = 0.287335E-06 ; écart en DQ = 0.430343E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.532082E-01(003: 29812.50)
+ Err003 à  04:07:36:13,58     + 3.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.333239E-05 ; écart en DQ = 0.144796E-03
+       Itération 06 : écart en DZ = 0.333239E-05 ; écart en DQ = 0.144796E-03
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.366288E+00(003: 29812.50)
+ Err003 à  04:07:36:15,08     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287268E-06 ; écart en DQ = 0.430210E-04
+       Itération 06 : écart en DZ = 0.287268E-06 ; écart en DQ = 0.430210E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.531899E-01(003: 29812.50)
+ Err003 à  04:07:36:18,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287246E-06 ; écart en DQ = 0.430183E-04
+       Itération 06 : écart en DZ = 0.287246E-06 ; écart en DQ = 0.430183E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.531859E-01(003: 29812.50)
+ Err003 à  04:07:36:21,83     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.287238E-06 ; écart en DQ = 0.430172E-04
+       Itération 06 : écart en DZ = 0.287238E-06 ; écart en DQ = 0.430172E-04
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+       Residu : 0.531843E-01(003: 29812.50)
+ Err001 à  04:07:36:41,33 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.556741E-02 ; écart en DQ = 0.241436E+00
+       Itération 08 : écart en DZ = 0.142963E-01 ; écart en DQ = 0.626258E+00
+       Z : Pm   29750.00 du bief   3 ; Q : Pm   29812.50 du bief   3
+ Err003 à  04:08:27:18,60     + 3.850 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 06 : écart en DZ = 0.135886E-04 ; écart en DQ = 0.364636E-03
+       Itération 07 : écart en DZ = 0.135886E-04 ; écart en DQ = 0.364636E-03
+       Z : Pm   31083.33 du bief   3 ; Q : Pm   31041.67 du bief   3
+       Residu : 0.232556E+02(003: 31083.33)
+ Err001 à  04:08:27:20,14 + 0.770 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.108858E-03 ; écart en DQ = 0.843457E-02
+       Itération 08 : écart en DZ = 0.148970E-03 ; écart en DQ = 0.115441E-01
+       Z : Pm   31000.00 du bief   3 ; Q : Pm   31041.67 du bief   3
+ Err003 à  04:08:27:20,29     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.150532E-06 ; écart en DQ = 0.534666E-04
+       Itération 06 : écart en DZ = 0.150532E-06 ; écart en DQ = 0.534666E-04
+       Z : Pm   31000.00 du bief   3 ; Q : Pm   31041.67 du bief   3
+       Residu : 0.579824E-01(003: 31083.33)
+ Err003 à  04:08:36:24,70     + 3.850 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.103332E-04 ; écart en DQ = 0.181659E-03
+       Itération 06 : écart en DZ = 0.103332E-04 ; écart en DQ = 0.181659E-03
+       Z : Pm   30600.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.364030E+00(003: 30575.00)
+ Err003 à  04:08:36:32,40     + 3.850 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.772115E-05 ; écart en DQ = 0.135756E-03
+       Itération 06 : écart en DZ = 0.772122E-05 ; écart en DQ = 0.135757E-03
+       Z : Pm   30600.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.272085E+00(003: 30575.00)
+ Err003 à  04:08:36:33,17     + 0.770 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.166219E-05 ; écart en DQ = 0.677942E-04
+       Itération 06 : écart en DZ = 0.166219E-05 ; écart en DQ = 0.677942E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.116257E+00(003: 30600.00)
+ Err003 à  04:08:36:33,92     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159827E-05 ; écart en DQ = 0.663922E-04
+       Itération 06 : écart en DZ = 0.159827E-05 ; écart en DQ = 0.663922E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112213E+00(003: 30600.00)
+ Err003 à  04:08:36:34,67     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159809E-05 ; écart en DQ = 0.664122E-04
+       Itération 06 : écart en DZ = 0.159809E-05 ; écart en DQ = 0.664122E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112237E+00(003: 30600.00)
+ Err003 à  04:08:36:36,17     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159805E-05 ; écart en DQ = 0.664108E-04
+       Itération 06 : écart en DZ = 0.159805E-05 ; écart en DQ = 0.664108E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112234E+00(003: 30600.00)
+ Err003 à  04:08:36:36,92     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159811E-05 ; écart en DQ = 0.663873E-04
+       Itération 06 : écart en DZ = 0.159811E-05 ; écart en DQ = 0.663873E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112203E+00(003: 30600.00)
+ Err003 à  04:08:36:37,67     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159797E-05 ; écart en DQ = 0.664081E-04
+       Itération 06 : écart en DZ = 0.159797E-05 ; écart en DQ = 0.664081E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112228E+00(003: 30600.00)
+ Err003 à  04:08:36:38,42     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159810E-05 ; écart en DQ = 0.663864E-04
+       Itération 06 : écart en DZ = 0.159810E-05 ; écart en DQ = 0.663864E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112201E+00(003: 30600.00)
+ Err003 à  04:08:36:39,17     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159794E-05 ; écart en DQ = 0.664069E-04
+       Itération 06 : écart en DZ = 0.159794E-05 ; écart en DQ = 0.664069E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112225E+00(003: 30600.00)
+ Err003 à  04:08:36:39,92     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159803E-05 ; écart en DQ = 0.663843E-04
+       Itération 06 : écart en DZ = 0.159803E-05 ; écart en DQ = 0.663843E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112197E+00(003: 30600.00)
+ Err003 à  04:08:36:40,67     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159791E-05 ; écart en DQ = 0.664060E-04
+       Itération 06 : écart en DZ = 0.159791E-05 ; écart en DQ = 0.664060E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112223E+00(003: 30600.00)
+ Err003 à  04:08:36:41,42     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159795E-05 ; écart en DQ = 0.663816E-04
+       Itération 06 : écart en DZ = 0.159795E-05 ; écart en DQ = 0.663816E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112191E+00(003: 30600.00)
+ Err003 à  04:08:36:42,17     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159785E-05 ; écart en DQ = 0.664040E-04
+       Itération 06 : écart en DZ = 0.159785E-05 ; écart en DQ = 0.664040E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112219E+00(003: 30600.00)
+ Err003 à  04:08:36:42,92     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159793E-05 ; écart en DQ = 0.663808E-04
+       Itération 06 : écart en DZ = 0.159793E-05 ; écart en DQ = 0.663808E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112189E+00(003: 30600.00)
+ Err003 à  04:08:36:43,67     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159777E-05 ; écart en DQ = 0.664014E-04
+       Itération 06 : écart en DZ = 0.159777E-05 ; écart en DQ = 0.664014E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112213E+00(003: 30600.00)
+ Err003 à  04:08:36:44,42     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159787E-05 ; écart en DQ = 0.663789E-04
+       Itération 06 : écart en DZ = 0.159787E-05 ; écart en DQ = 0.663789E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112185E+00(003: 30600.00)
+ Err003 à  04:08:36:45,17     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159767E-05 ; écart en DQ = 0.663984E-04
+       Itération 06 : écart en DZ = 0.159767E-05 ; écart en DQ = 0.663984E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112207E+00(003: 30600.00)
+ Err003 à  04:08:36:46,67     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159776E-05 ; écart en DQ = 0.663752E-04
+       Itération 06 : écart en DZ = 0.159776E-05 ; écart en DQ = 0.663752E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112177E+00(003: 30600.00)
+ Err003 à  04:08:36:50,42     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.159761E-05 ; écart en DQ = 0.663704E-04
+       Itération 06 : écart en DZ = 0.159761E-05 ; écart en DQ = 0.663704E-04
+       Z : Pm   30550.00 du bief   3 ; Q : Pm   30575.00 du bief   3
+       Residu : 0.112167E+00(003: 30600.00)
+ Err003 à  04:13:11:37,25     + 3.890 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167551E-04 ; écart en DQ = 0.417524E-03
+       Itération 06 : écart en DZ = 0.167553E-04 ; écart en DQ = 0.417527E-03
+       Z : Pm   31041.67 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.141911E+02(003: 31041.67)
+ Err003 à  04:13:11:38,02     + 0.770 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.330007E-05 ; écart en DQ = 0.225641E-03
+       Itération 06 : écart en DZ = 0.330007E-05 ; écart en DQ = 0.225641E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.323442E+00(003: 31000.00)
+ Err003 à  04:13:11:41,77     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315988E-05 ; écart en DQ = 0.220572E-03
+       Itération 06 : écart en DZ = 0.315988E-05 ; écart en DQ = 0.220572E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312969E+00(003: 31000.00)
+ Err003 à  04:13:11:42,37     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167435E-06 ; écart en DQ = 0.498535E-04
+       Itération 06 : écart en DZ = 0.167435E-06 ; écart en DQ = 0.498535E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538382E-01(003: 31000.00)
+ Err003 à  04:13:11:43,27     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315922E-05 ; écart en DQ = 0.220533E-03
+       Itération 06 : écart en DZ = 0.315922E-05 ; écart en DQ = 0.220533E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312908E+00(003: 31000.00)
+ Err003 à  04:13:11:45,52     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315895E-05 ; écart en DQ = 0.220514E-03
+       Itération 06 : écart en DZ = 0.315895E-05 ; écart en DQ = 0.220514E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312875E+00(003: 31000.00)
+ Err003 à  04:13:11:46,12     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167393E-06 ; écart en DQ = 0.498427E-04
+       Itération 06 : écart en DZ = 0.167393E-06 ; écart en DQ = 0.498427E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538257E-01(003: 31000.00)
+ Err003 à  04:13:11:47,02     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315676E-05 ; écart en DQ = 0.220244E-03
+       Itération 06 : écart en DZ = 0.315676E-05 ; écart en DQ = 0.220244E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312229E+00(003: 31000.00)
+ Err003 à  04:13:11:47,62     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167415E-06 ; écart en DQ = 0.498538E-04
+       Itération 06 : écart en DZ = 0.167415E-06 ; écart en DQ = 0.498538E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538389E-01(003: 31000.00)
+ Err003 à  04:13:11:48,52     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315787E-05 ; écart en DQ = 0.220441E-03
+       Itération 06 : écart en DZ = 0.315787E-05 ; écart en DQ = 0.220441E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312762E+00(003: 31000.00)
+ Err003 à  04:13:11:49,12     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167401E-06 ; écart en DQ = 0.498508E-04
+       Itération 06 : écart en DZ = 0.167401E-06 ; écart en DQ = 0.498508E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538351E-01(003: 31000.00)
+ Err003 à  04:13:11:49,27     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167373E-06 ; écart en DQ = 0.498385E-04
+       Itération 06 : écart en DZ = 0.167373E-06 ; écart en DQ = 0.498385E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538204E-01(003: 31000.00)
+ Err003 à  04:13:11:50,17     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315775E-05 ; écart en DQ = 0.220446E-03
+       Itération 06 : écart en DZ = 0.315775E-05 ; écart en DQ = 0.220446E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312760E+00(003: 31000.00)
+ Err003 à  04:13:11:50,92     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315757E-05 ; écart en DQ = 0.220434E-03
+       Itération 06 : écart en DZ = 0.315757E-05 ; écart en DQ = 0.220434E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312741E+00(003: 31000.00)
+ Err003 à  04:13:11:52,42     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315735E-05 ; écart en DQ = 0.220413E-03
+       Itération 06 : écart en DZ = 0.315735E-05 ; écart en DQ = 0.220413E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312709E+00(003: 31000.00)
+ Err003 à  04:13:11:52,87     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167364E-06 ; écart en DQ = 0.498418E-04
+       Itération 06 : écart en DZ = 0.167364E-06 ; écart en DQ = 0.498418E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538246E-01(003: 31000.00)
+ Err003 à  04:13:11:53,32     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167304E-06 ; écart en DQ = 0.498205E-04
+       Itération 06 : écart en DZ = 0.167304E-06 ; écart en DQ = 0.498205E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537998E-01(003: 31000.00)
+ Err003 à  04:13:11:53,62     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167332E-06 ; écart en DQ = 0.498331E-04
+       Itération 06 : écart en DZ = 0.167332E-06 ; écart en DQ = 0.498331E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.538149E-01(003: 31000.00)
+ Err003 à  04:13:11:54,52     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315695E-05 ; écart en DQ = 0.220395E-03
+       Itération 06 : écart en DZ = 0.315695E-05 ; écart en DQ = 0.220395E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312675E+00(003: 31000.00)
+ Err003 à  04:13:11:55,27     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315484E-05 ; écart en DQ = 0.220154E-03
+       Itération 06 : écart en DZ = 0.315484E-05 ; écart en DQ = 0.220154E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312063E+00(003: 31000.00)
+ Err003 à  04:13:11:55,87     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167224E-06 ; écart en DQ = 0.498021E-04
+       Itération 06 : écart en DZ = 0.167224E-06 ; écart en DQ = 0.498021E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537790E-01(003: 31000.00)
+ Err003 à  04:13:11:56,77     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315685E-05 ; écart en DQ = 0.220386E-03
+       Itération 06 : écart en DZ = 0.315685E-05 ; écart en DQ = 0.220386E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312658E+00(003: 31000.00)
+ Err003 à  04:13:11:59,02     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315613E-05 ; écart en DQ = 0.220350E-03
+       Itération 06 : écart en DZ = 0.315613E-05 ; écart en DQ = 0.220350E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312595E+00(003: 31000.00)
+ Err003 à  04:13:12:01,27     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315576E-05 ; écart en DQ = 0.220334E-03
+       Itération 06 : écart en DZ = 0.315576E-05 ; écart en DQ = 0.220334E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312563E+00(003: 31000.00)
+ Err003 à  04:13:12:02,02     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315363E-05 ; écart en DQ = 0.220083E-03
+       Itération 06 : écart en DZ = 0.315363E-05 ; écart en DQ = 0.220083E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311941E+00(003: 31000.00)
+ Err003 à  04:13:12:02,62     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167167E-06 ; écart en DQ = 0.497862E-04
+       Itération 06 : écart en DZ = 0.167167E-06 ; écart en DQ = 0.497862E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537603E-01(003: 31000.00)
+ Err003 à  04:13:12:04,27     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315300E-05 ; écart en DQ = 0.220034E-03
+       Itération 06 : écart en DZ = 0.315300E-05 ; écart en DQ = 0.220034E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311868E+00(003: 31000.00)
+ Err003 à  04:13:12:04,57     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167139E-06 ; écart en DQ = 0.497799E-04
+       Itération 06 : écart en DZ = 0.167139E-06 ; écart en DQ = 0.497799E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537528E-01(003: 31000.00)
+ Err003 à  04:13:12:06,22     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315262E-05 ; écart en DQ = 0.220022E-03
+       Itération 06 : écart en DZ = 0.315262E-05 ; écart en DQ = 0.220022E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311840E+00(003: 31000.00)
+ Err003 à  04:13:12:06,97     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315439E-05 ; écart en DQ = 0.220247E-03
+       Itération 06 : écart en DZ = 0.315439E-05 ; écart en DQ = 0.220247E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.312421E+00(003: 31000.00)
+ Err003 à  04:13:12:09,22     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315212E-05 ; écart en DQ = 0.219966E-03
+       Itération 06 : écart en DZ = 0.315212E-05 ; écart en DQ = 0.219966E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311761E+00(003: 31000.00)
+ Err003 à  04:13:12:09,22     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167087E-06 ; écart en DQ = 0.497658E-04
+       Itération 06 : écart en DZ = 0.167087E-06 ; écart en DQ = 0.497658E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537364E-01(003: 31000.00)
+ Err003 à  04:13:12:12,37     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315129E-05 ; écart en DQ = 0.219940E-03
+       Itération 06 : écart en DZ = 0.315129E-05 ; écart en DQ = 0.219940E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311703E+00(003: 31000.00)
+ Err003 à  04:13:12:12,67     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167048E-06 ; écart en DQ = 0.497561E-04
+       Itération 06 : écart en DZ = 0.167048E-06 ; écart en DQ = 0.497561E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537250E-01(003: 31000.00)
+ Err003 à  04:13:12:13,57     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.315131E-05 ; écart en DQ = 0.219944E-03
+       Itération 06 : écart en DZ = 0.315131E-05 ; écart en DQ = 0.219944E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.311706E+00(003: 31000.00)
+ Err003 à  04:13:12:14,17     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.167045E-06 ; écart en DQ = 0.497551E-04
+       Itération 06 : écart en DZ = 0.167045E-06 ; écart en DQ = 0.497551E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.537235E-01(003: 31000.00)
+ Err003 à  04:13:37:12,60     + 3.900 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 06 : écart en DZ = 0.858288E-05 ; écart en DQ = 0.188323E-03
+       Itération 07 : écart en DZ = 0.858290E-05 ; écart en DQ = 0.188323E-03
+       Z : Pm   31000.00 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.708482E+00(003: 30972.22)
+ Err003 à  04:13:37:14,16     + 0.780 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.337925E-05 ; écart en DQ = 0.194050E-03
+       Itération 06 : écart en DZ = 0.337926E-05 ; écart en DQ = 0.194050E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.293961E+00(003: 31000.00)
+ Err003 à  04:13:37:16,41     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.365619E-05 ; écart en DQ = 0.216399E-03
+       Itération 06 : écart en DZ = 0.365620E-05 ; écart en DQ = 0.216399E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.322144E+00(003: 31000.00)
+ Err001 à  04:13:37:17,16 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.225502E-01 ; écart en DQ = 0.143031E+01
+       Itération 08 : écart en DZ = 0.435304E-01 ; écart en DQ = 0.262349E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:17,16     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.243382E-06 ; écart en DQ = 0.605177E-04
+       Itération 06 : écart en DZ = 0.243382E-06 ; écart en DQ = 0.605177E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.633428E-01(003: 31000.00)
+ Err003 à  04:13:37:18,81     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.404562E-05 ; écart en DQ = 0.239461E-03
+       Itération 06 : écart en DZ = 0.404564E-05 ; écart en DQ = 0.239462E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.356465E+00(003: 31000.00)
+ Err001 à  04:13:37:19,56 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.215862E-01 ; écart en DQ = 0.131876E+01
+       Itération 08 : écart en DZ = 0.835343E-01 ; écart en DQ = 0.491604E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:20,31     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.391843E-05 ; écart en DQ = 0.231937E-03
+       Itération 06 : écart en DZ = 0.391844E-05 ; écart en DQ = 0.231938E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.345261E+00(003: 31000.00)
+ Err001 à  04:13:37:21,06 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.209946E-01 ; écart en DQ = 0.127824E+01
+       Itération 08 : écart en DZ = 0.840690E-01 ; écart en DQ = 0.494422E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:21,21     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.241660E-06 ; écart en DQ = 0.600879E-04
+       Itération 06 : écart en DZ = 0.241660E-06 ; écart en DQ = 0.600879E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.629068E-01(003: 31000.00)
+ Err003 à  04:13:37:22,86     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.299310E-05 ; écart en DQ = 0.177102E-03
+       Itération 06 : écart en DZ = 0.299311E-05 ; écart en DQ = 0.177103E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.263657E+00(003: 31000.00)
+ Err010 à  04:13:37:24,36           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   31166.67 du Bief 003
+       Vitesse = 10.002 Largeur =   96.296 Section =   223.84 Hauteur =  4.216
+ Err003 à  04:13:37:23,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.235584E-06 ; écart en DQ = 0.585914E-04
+       Itération 06 : écart en DZ = 0.235584E-06 ; écart en DQ = 0.585914E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.612939E-01(003: 31000.00)
+ Err003 à  04:13:37:25,26     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.381789E-05 ; écart en DQ = 0.225984E-03
+       Itération 06 : écart en DZ = 0.381790E-05 ; écart en DQ = 0.225985E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.336387E+00(003: 31000.00)
+ Err001 à  04:13:37:26,01 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.199803E-01 ; écart en DQ = 0.120945E+01
+       Itération 08 : écart en DZ = 0.879959E-01 ; écart en DQ = 0.517108E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:26,31     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.241218E-06 ; écart en DQ = 0.599890E-04
+       Itération 06 : écart en DZ = 0.241218E-06 ; écart en DQ = 0.599890E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.627717E-01(003: 31000.00)
+ Err003 à  04:13:37:27,21     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.360168E-05 ; écart en DQ = 0.213185E-03
+       Itération 06 : écart en DZ = 0.360169E-05 ; écart en DQ = 0.213185E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.317333E+00(003: 31000.00)
+ Err003 à  04:13:37:27,66     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.224973E-06 ; écart en DQ = 0.559520E-04
+       Itération 06 : écart en DZ = 0.224973E-06 ; écart en DQ = 0.559520E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.607356E-01(003: 30972.22)
+ Err002 à  04:13:37:29,31 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.211066E-05 ; écart en DQ = 0.124802E-03
+       Itération 99 : écart en DZ = 0.154212E-05 ; écart en DQ = 0.913038E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.135765E+00(003: 31000.00)
+ Err003 à  04:13:37:29,31     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.219416E-06 ; écart en DQ = 0.545693E-04
+       Itération 06 : écart en DZ = 0.219416E-06 ; écart en DQ = 0.545693E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.592342E-01(003: 30972.22)
+ Err003 à  04:13:37:30,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222127E-06 ; écart en DQ = 0.552463E-04
+       Itération 06 : écart en DZ = 0.222127E-06 ; écart en DQ = 0.552463E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.599687E-01(003: 30972.22)
+ Err003 à  04:13:37:30,96     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.320068E-05 ; écart en DQ = 0.189424E-03
+       Itération 06 : écart en DZ = 0.320069E-05 ; écart en DQ = 0.189424E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.281969E+00(003: 31000.00)
+ Err003 à  04:13:37:31,26     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.221139E-06 ; écart en DQ = 0.549996E-04
+       Itération 06 : écart en DZ = 0.221139E-06 ; écart en DQ = 0.549996E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.597008E-01(003: 30972.22)
+ Err003 à  04:13:37:32,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.226292E-06 ; écart en DQ = 0.562831E-04
+       Itération 06 : écart en DZ = 0.226292E-06 ; écart en DQ = 0.562831E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.610935E-01(003: 30972.22)
+ Err002 à  04:13:37:32,91 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.209816E-05 ; écart en DQ = 0.124064E-03
+       Itération 99 : écart en DZ = 0.153094E-05 ; écart en DQ = 0.906455E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.134780E+00(003: 31000.00)
+ Err003 à  04:13:37:33,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.236439E-06 ; écart en DQ = 0.587896E-04
+       Itération 06 : écart en DZ = 0.236439E-06 ; écart en DQ = 0.587896E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.615633E-01(003: 31000.00)
+ Err003 à  04:13:37:33,96     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.243418E-05 ; écart en DQ = 0.143945E-03
+       Itération 06 : écart en DZ = 0.243418E-05 ; écart en DQ = 0.143945E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.214318E+00(003: 31000.00)
+ Err003 à  04:13:37:33,96     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225717E-06 ; écart en DQ = 0.561403E-04
+       Itération 06 : écart en DZ = 0.225717E-06 ; écart en DQ = 0.561403E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.609379E-01(003: 30972.22)
+ Err003 à  04:13:37:34,71     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225722E-06 ; écart en DQ = 0.561418E-04
+       Itération 06 : écart en DZ = 0.225722E-06 ; écart en DQ = 0.561418E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.609395E-01(003: 30972.22)
+ Err003 à  04:13:37:35,61     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.299130E-05 ; écart en DQ = 0.177012E-03
+       Itération 06 : écart en DZ = 0.299130E-05 ; écart en DQ = 0.177013E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.263497E+00(003: 31000.00)
+ Err003 à  04:13:37:36,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.238432E-06 ; écart en DQ = 0.592889E-04
+       Itération 06 : écart en DZ = 0.238432E-06 ; écart en DQ = 0.592889E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.620735E-01(003: 31000.00)
+ Err003 à  04:13:37:36,81     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.221380E-06 ; écart en DQ = 0.550619E-04
+       Itération 06 : écart en DZ = 0.221380E-06 ; écart en DQ = 0.550619E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.597666E-01(003: 30972.22)
+ Err003 à  04:13:37:37,71     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.301480E-05 ; écart en DQ = 0.178407E-03
+       Itération 06 : écart en DZ = 0.301480E-05 ; écart en DQ = 0.178408E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.265567E+00(003: 31000.00)
+ Err003 à  04:13:37:38,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222777E-06 ; écart en DQ = 0.554098E-04
+       Itération 06 : écart en DZ = 0.222777E-06 ; écart en DQ = 0.554098E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.601439E-01(003: 30972.22)
+ Err003 à  04:13:37:38,16     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.236193E-06 ; écart en DQ = 0.587303E-04
+       Itération 06 : écart en DZ = 0.236193E-06 ; écart en DQ = 0.587303E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.614949E-01(003: 31000.00)
+ Err003 à  04:13:37:38,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.224003E-06 ; écart en DQ = 0.557160E-04
+       Itération 06 : écart en DZ = 0.224003E-06 ; écart en DQ = 0.557160E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.604760E-01(003: 30972.22)
+ Err003 à  04:13:37:39,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.238153E-06 ; écart en DQ = 0.592299E-04
+       Itération 06 : écart en DZ = 0.238153E-06 ; écart en DQ = 0.592299E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.619863E-01(003: 31000.00)
+ Err002 à  04:13:37:39,96 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.170395E-05 ; écart en DQ = 0.100668E-03
+       Itération 99 : écart en DZ = 0.119008E-05 ; écart en DQ = 0.705373E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.104840E+00(003: 31000.00)
+ Err003 à  04:13:37:40,11     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.243712E-06 ; écart en DQ = 0.606010E-04
+       Itération 06 : écart en DZ = 0.243712E-06 ; écart en DQ = 0.606010E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.634542E-01(003: 31000.00)
+ Err003 à  04:13:37:41,01     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.404400E-05 ; écart en DQ = 0.239406E-03
+       Itération 06 : écart en DZ = 0.404402E-05 ; écart en DQ = 0.239408E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.356321E+00(003: 31000.00)
+ Err002 à  04:13:37:41,76 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.253663E-06 ; écart en DQ = 0.149963E-04
+       Itération 99 : écart en DZ = 0.200080E-06 ; écart en DQ = 0.118238E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.175908E-01(003: 31000.00)
+ Err003 à  04:13:37:42,51     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.254093E-05 ; écart en DQ = 0.150293E-03
+       Itération 06 : écart en DZ = 0.254093E-05 ; écart en DQ = 0.150293E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.223744E+00(003: 31000.00)
+ Err003 à  04:13:37:42,66     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225210E-06 ; écart en DQ = 0.560179E-04
+       Itération 06 : écart en DZ = 0.225210E-06 ; écart en DQ = 0.560179E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.608023E-01(003: 30972.22)
+ Err002 à  04:13:37:43,56 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.180499E-05 ; écart en DQ = 0.106636E-03
+       Itération 99 : écart en DZ = 0.127824E-05 ; écart en DQ = 0.757427E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.112583E+00(003: 31000.00)
+ Err003 à  04:13:37:44,31     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.309702E-05 ; écart en DQ = 0.183295E-03
+       Itération 06 : écart en DZ = 0.309703E-05 ; écart en DQ = 0.183296E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.272824E+00(003: 31000.00)
+ Err003 à  04:13:37:44,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.219449E-06 ; écart en DQ = 0.545844E-04
+       Itération 06 : écart en DZ = 0.219449E-06 ; écart en DQ = 0.545844E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.592461E-01(003: 30972.22)
+ Err002 à  04:13:37:45,51 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.222129E-05 ; écart en DQ = 0.131394E-03
+       Itération 99 : écart en DZ = 0.163555E-05 ; écart en DQ = 0.968087E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.143943E+00(003: 31000.00)
+ Err001 à  04:13:37:46,26 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.209194E-01 ; écart en DQ = 0.127128E+01
+       Itération 08 : écart en DZ = 0.890171E-01 ; écart en DQ = 0.523406E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:46,71     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225044E-06 ; écart en DQ = 0.559792E-04
+       Itération 06 : écart en DZ = 0.225044E-06 ; écart en DQ = 0.559792E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.607590E-01(003: 30972.22)
+ Err003 à  04:13:37:46,86     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.242581E-06 ; écart en DQ = 0.603230E-04
+       Itération 06 : écart en DZ = 0.242581E-06 ; écart en DQ = 0.603230E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.631631E-01(003: 31000.00)
+ Err003 à  04:13:37:47,16     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.226806E-06 ; écart en DQ = 0.564163E-04
+       Itération 06 : écart en DZ = 0.226806E-06 ; écart en DQ = 0.564163E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.612333E-01(003: 30972.22)
+ Err003 à  04:13:37:48,06     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.336794E-05 ; écart en DQ = 0.199364E-03
+       Itération 06 : écart en DZ = 0.336795E-05 ; écart en DQ = 0.199365E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.296718E+00(003: 31000.00)
+ Err003 à  04:13:37:48,51     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.219883E-06 ; écart en DQ = 0.546930E-04
+       Itération 06 : écart en DZ = 0.219883E-06 ; écart en DQ = 0.546930E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.593627E-01(003: 30972.22)
+ Err003 à  04:13:37:48,81     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.236812E-06 ; écart en DQ = 0.588948E-04
+       Itération 06 : écart en DZ = 0.236812E-06 ; écart en DQ = 0.588948E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.616447E-01(003: 31000.00)
+ Err001 à  04:13:37:49,71 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.234604E-01 ; écart en DQ = 0.143840E+01
+       Itération 08 : écart en DZ = 0.102356E+00 ; écart en DQ = 0.602449E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err002 à  04:13:37:50,46 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.198032E-05 ; écart en DQ = 0.117071E-03
+       Itération 99 : écart en DZ = 0.142829E-05 ; écart en DQ = 0.845952E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.125752E+00(003: 31000.00)
+ Err003 à  04:13:37:50,76     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.235765E-06 ; écart en DQ = 0.586296E-04
+       Itération 06 : écart en DZ = 0.235765E-06 ; écart en DQ = 0.586296E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.613859E-01(003: 31000.00)
+ Err003 à  04:13:37:51,21     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223520E-06 ; écart en DQ = 0.555998E-04
+       Itération 06 : écart en DZ = 0.223520E-06 ; écart en DQ = 0.555998E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.603459E-01(003: 30972.22)
+ Err003 à  04:13:37:52,11     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.294329E-05 ; écart en DQ = 0.174185E-03
+       Itération 06 : écart en DZ = 0.294330E-05 ; écart en DQ = 0.174185E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.259256E+00(003: 31000.00)
+ Err003 à  04:13:37:52,41     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225698E-06 ; écart en DQ = 0.561426E-04
+       Itération 06 : écart en DZ = 0.225698E-06 ; écart en DQ = 0.561426E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.609346E-01(003: 30972.22)
+ Err003 à  04:13:37:52,71     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.235156E-06 ; écart en DQ = 0.584828E-04
+       Itération 06 : écart en DZ = 0.235156E-06 ; écart en DQ = 0.584828E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.612188E-01(003: 31000.00)
+ Err001 à  04:13:37:53,61 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.229258E-01 ; écart en DQ = 0.141018E+01
+       Itération 08 : écart en DZ = 0.876912E-01 ; écart en DQ = 0.516904E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err002 à  04:13:37:54,36 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.149083E-06 ; écart en DQ = 0.881182E-05
+       Itération 99 : écart en DZ = 0.116965E-06 ; écart en DQ = 0.691178E-05
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.102820E-01(003: 31000.00)
+ Err001 à  04:13:37:55,11 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.178476E-01 ; écart en DQ = 0.107433E+01
+       Itération 08 : écart en DZ = 0.815153E-01 ; écart en DQ = 0.479237E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:55,41     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.240567E-06 ; écart en DQ = 0.598362E-04
+       Itération 06 : écart en DZ = 0.240567E-06 ; écart en DQ = 0.598362E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.626217E-01(003: 31000.00)
+ Err001 à  04:13:37:56,31 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.123450E-01 ; écart en DQ = 0.736809E+00
+       Itération 08 : écart en DZ = 0.521757E-01 ; écart en DQ = 0.307104E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:56,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.238827E-06 ; écart en DQ = 0.594000E-04
+       Itération 06 : écart en DZ = 0.238827E-06 ; écart en DQ = 0.594000E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.621712E-01(003: 31000.00)
+ Err001 à  04:13:37:57,51 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.217252E-01 ; écart en DQ = 0.132493E+01
+       Itération 08 : écart en DZ = 0.905058E-01 ; écart en DQ = 0.532447E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err003 à  04:13:37:57,51     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.237212E-06 ; écart en DQ = 0.590053E-04
+       Itération 06 : écart en DZ = 0.237212E-06 ; écart en DQ = 0.590053E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.617344E-01(003: 31000.00)
+ Err001 à  04:13:37:58,41 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.141756E-01 ; écart en DQ = 0.847907E+00
+       Itération 08 : écart en DZ = 0.659663E-01 ; écart en DQ = 0.388298E+01
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+ Err002 à  04:13:37:59,16 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.232672E-05 ; écart en DQ = 0.137679E-03
+       Itération 99 : écart en DZ = 0.172436E-05 ; écart en DQ = 0.102040E-03
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.151716E+00(003: 31000.00)
+ Err003 à  04:13:37:59,31     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.219960E-06 ; écart en DQ = 0.547173E-04
+       Itération 06 : écart en DZ = 0.219960E-06 ; écart en DQ = 0.547173E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.593857E-01(003: 30972.22)
+ Err003 à  04:13:37:59,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.225540E-06 ; écart en DQ = 0.561058E-04
+       Itération 06 : écart en DZ = 0.225540E-06 ; écart en DQ = 0.561058E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.608923E-01(003: 30972.22)
+ Err003 à  04:13:38:00,21     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.236978E-06 ; écart en DQ = 0.589406E-04
+       Itération 06 : écart en DZ = 0.236978E-06 ; écart en DQ = 0.589406E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.616913E-01(003: 31000.00)
+ Err003 à  04:13:38:00,96     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.243798E-06 ; écart en DQ = 0.606358E-04
+       Itération 06 : écart en DZ = 0.243798E-06 ; écart en DQ = 0.606358E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.634770E-01(003: 31000.00)
+ Err002 à  04:13:38:01,86 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.647721E-06 ; écart en DQ = 0.381794E-04
+       Itération 99 : écart en DZ = 0.106060E-05 ; écart en DQ = 0.625634E-04
+       Z : Pm   30944.44 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.248613E-01(003: 31000.00)
+ Err010 à  04:13:38:03,36           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.28E+01 au Pm   30972.22 du Bief 003
+       Vitesse = 16.029 Largeur =  136.862 Section =   468.51 Hauteur =  6.059
+ Err003 à  04:15:04:46,16     + 3.920 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 09 : écart en DZ = 0.406404E-05 ; écart en DQ = 0.100686E-03
+       Itération 10 : écart en DZ = 0.406407E-05 ; écart en DQ = 0.100685E-03
+       Z : Pm   25453.00 du bief   8 ; Q : Pm   25349.33 du bief   8
+       Residu : 0.146884E+00(008: 25349.33)
+ Err010 à  04:15:04:53,96           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   25349.33 du Bief 008
+       Vitesse = 12.687 Largeur =   93.167 Section =   181.11 Hauteur =  3.775
+ Err003 à  04:15:23:47,94     + 3.930 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 06 : écart en DZ = 0.295555E-04 ; écart en DQ = 0.659271E-03
+       Itération 07 : écart en DZ = 0.295557E-04 ; écart en DQ = 0.659271E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.242761E+01(003: 30944.44)
+ Err003 à  04:15:23:51,06     + 0.780 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.422372E-05 ; écart en DQ = 0.241126E-03
+       Itération 06 : écart en DZ = 0.422372E-05 ; écart en DQ = 0.241126E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.352879E+00(003: 30972.22)
+ Err003 à  04:15:23:54,81     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396931E-05 ; écart en DQ = 0.233813E-03
+       Itération 06 : écart en DZ = 0.396931E-05 ; écart en DQ = 0.233813E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336199E+00(003: 30972.22)
+ Err003 à  04:15:23:57,81     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396887E-05 ; écart en DQ = 0.233793E-03
+       Itération 06 : écart en DZ = 0.396887E-05 ; écart en DQ = 0.233793E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336161E+00(003: 30972.22)
+ Err003 à  04:15:23:58,56     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396836E-05 ; écart en DQ = 0.233771E-03
+       Itération 06 : écart en DZ = 0.396836E-05 ; écart en DQ = 0.233771E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336127E+00(003: 30972.22)
+ Err003 à  04:15:23:59,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223195E-06 ; écart en DQ = 0.548139E-04
+       Itération 06 : écart en DZ = 0.223195E-06 ; écart en DQ = 0.548139E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576069E-01(003: 30944.44)
+ Err003 à  04:15:23:59,91     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396813E-05 ; écart en DQ = 0.233759E-03
+       Itération 06 : écart en DZ = 0.396813E-05 ; écart en DQ = 0.233759E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336105E+00(003: 30972.22)
+ Err003 à  04:15:24:00,66     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396871E-05 ; écart en DQ = 0.233474E-03
+       Itération 06 : écart en DZ = 0.396871E-05 ; écart en DQ = 0.233474E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335825E+00(003: 30972.22)
+ Err003 à  04:15:24:02,16     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396822E-05 ; écart en DQ = 0.233761E-03
+       Itération 06 : écart en DZ = 0.396822E-05 ; écart en DQ = 0.233761E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336102E+00(003: 30972.22)
+ Err003 à  04:15:24:02,16     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223207E-06 ; écart en DQ = 0.548323E-04
+       Itération 06 : écart en DZ = 0.223207E-06 ; écart en DQ = 0.548323E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576264E-01(003: 30944.44)
+ Err003 à  04:15:24:03,06     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396782E-05 ; écart en DQ = 0.233744E-03
+       Itération 06 : écart en DZ = 0.396782E-05 ; écart en DQ = 0.233744E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336074E+00(003: 30972.22)
+ Err003 à  04:15:24:03,81     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396779E-05 ; écart en DQ = 0.233742E-03
+       Itération 06 : écart en DZ = 0.396779E-05 ; écart en DQ = 0.233742E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336069E+00(003: 30972.22)
+ Err003 à  04:15:24:04,56     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396718E-05 ; écart en DQ = 0.233716E-03
+       Itération 06 : écart en DZ = 0.396718E-05 ; écart en DQ = 0.233716E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336028E+00(003: 30972.22)
+ Err003 à  04:15:24:05,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223166E-06 ; écart en DQ = 0.548241E-04
+       Itération 06 : écart en DZ = 0.223166E-06 ; écart en DQ = 0.548241E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576167E-01(003: 30944.44)
+ Err003 à  04:15:24:05,91     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396752E-05 ; écart en DQ = 0.233728E-03
+       Itération 06 : écart en DZ = 0.396752E-05 ; écart en DQ = 0.233728E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336042E+00(003: 30972.22)
+ Err003 à  04:15:24:06,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223141E-06 ; écart en DQ = 0.548030E-04
+       Itération 06 : écart en DZ = 0.223141E-06 ; écart en DQ = 0.548030E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575931E-01(003: 30944.44)
+ Err003 à  04:15:24:06,96     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396738E-05 ; écart en DQ = 0.233721E-03
+       Itération 06 : écart en DZ = 0.396738E-05 ; écart en DQ = 0.233721E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.336029E+00(003: 30972.22)
+ Err003 à  04:15:24:07,41     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223149E-06 ; écart en DQ = 0.548044E-04
+       Itération 06 : écart en DZ = 0.223149E-06 ; écart en DQ = 0.548044E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575941E-01(003: 30944.44)
+ Err003 à  04:15:24:08,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223130E-06 ; écart en DQ = 0.548172E-04
+       Itération 06 : écart en DZ = 0.223130E-06 ; écart en DQ = 0.548172E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576084E-01(003: 30944.44)
+ Err003 à  04:15:24:08,31     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223110E-06 ; écart en DQ = 0.548132E-04
+       Itération 06 : écart en DZ = 0.223110E-06 ; écart en DQ = 0.548132E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576041E-01(003: 30944.44)
+ Err003 à  04:15:24:08,46     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223110E-06 ; écart en DQ = 0.548133E-04
+       Itération 06 : écart en DZ = 0.223110E-06 ; écart en DQ = 0.548133E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.576041E-01(003: 30944.44)
+ Err003 à  04:15:24:09,36     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396702E-05 ; écart en DQ = 0.233395E-03
+       Itération 06 : écart en DZ = 0.396702E-05 ; écart en DQ = 0.233395E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335683E+00(003: 30972.22)
+ Err003 à  04:15:24:09,36     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223116E-06 ; écart en DQ = 0.547978E-04
+       Itération 06 : écart en DZ = 0.223116E-06 ; écart en DQ = 0.547978E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575865E-01(003: 30944.44)
+ Err003 à  04:15:24:10,26     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396622E-05 ; écart en DQ = 0.233670E-03
+       Itération 06 : écart en DZ = 0.396622E-05 ; écart en DQ = 0.233670E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335945E+00(003: 30972.22)
+ Err002 à  04:15:24:11,01 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.314794E-05 ; écart en DQ = 0.185459E-03
+       Itération 99 : écart en DZ = 0.820795E-06 ; écart en DQ = 0.481609E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.691702E-01(003: 30972.22)
+ Err003 à  04:15:24:11,31     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223083E-06 ; écart en DQ = 0.547912E-04
+       Itération 06 : écart en DZ = 0.223083E-06 ; écart en DQ = 0.547912E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575790E-01(003: 30944.44)
+ Err003 à  04:15:24:11,76     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223085E-06 ; écart en DQ = 0.548080E-04
+       Itération 06 : écart en DZ = 0.223085E-06 ; écart en DQ = 0.548080E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575975E-01(003: 30944.44)
+ Err003 à  04:15:24:12,66     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396630E-05 ; écart en DQ = 0.233669E-03
+       Itération 06 : écart en DZ = 0.396630E-05 ; écart en DQ = 0.233669E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335937E+00(003: 30972.22)
+ Err003 à  04:15:24:12,96     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223098E-06 ; écart en DQ = 0.548100E-04
+       Itération 06 : écart en DZ = 0.223098E-06 ; écart en DQ = 0.548100E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575995E-01(003: 30944.44)
+ Err003 à  04:15:24:13,26     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223072E-06 ; écart en DQ = 0.547891E-04
+       Itération 06 : écart en DZ = 0.223072E-06 ; écart en DQ = 0.547891E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575759E-01(003: 30944.44)
+ Err003 à  04:15:24:14,16     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396576E-05 ; écart en DQ = 0.233646E-03
+       Itération 06 : écart en DZ = 0.396576E-05 ; écart en DQ = 0.233646E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335899E+00(003: 30972.22)
+ Err003 à  04:15:24:14,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223080E-06 ; écart en DQ = 0.548067E-04
+       Itération 06 : écart en DZ = 0.223080E-06 ; écart en DQ = 0.548067E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575953E-01(003: 30944.44)
+ Err003 à  04:15:24:15,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223035E-06 ; écart en DQ = 0.547818E-04
+       Itération 06 : écart en DZ = 0.223035E-06 ; écart en DQ = 0.547818E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575675E-01(003: 30944.44)
+ Err003 à  04:15:24:16,71     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396571E-05 ; écart en DQ = 0.233641E-03
+       Itération 06 : écart en DZ = 0.396571E-05 ; écart en DQ = 0.233641E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335883E+00(003: 30972.22)
+ Err003 à  04:15:24:17,46     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396587E-05 ; écart en DQ = 0.233339E-03
+       Itération 06 : écart en DZ = 0.396587E-05 ; écart en DQ = 0.233339E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335578E+00(003: 30972.22)
+ Err003 à  04:15:24:17,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223005E-06 ; écart en DQ = 0.547756E-04
+       Itération 06 : écart en DZ = 0.223005E-06 ; écart en DQ = 0.547756E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575603E-01(003: 30944.44)
+ Err003 à  04:15:24:18,21     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223040E-06 ; écart en DQ = 0.547988E-04
+       Itération 06 : écart en DZ = 0.223040E-06 ; écart en DQ = 0.547988E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575855E-01(003: 30944.44)
+ Err003 à  04:15:24:18,96     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223021E-06 ; écart en DQ = 0.547950E-04
+       Itération 06 : écart en DZ = 0.223021E-06 ; écart en DQ = 0.547950E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575812E-01(003: 30944.44)
+ Err003 à  04:15:24:19,86     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396512E-05 ; écart en DQ = 0.233614E-03
+       Itération 06 : écart en DZ = 0.396512E-05 ; écart en DQ = 0.233614E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335833E+00(003: 30972.22)
+ Err003 à  04:15:24:20,61     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396544E-05 ; écart en DQ = 0.233318E-03
+       Itération 06 : écart en DZ = 0.396544E-05 ; écart en DQ = 0.233318E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335538E+00(003: 30972.22)
+ Err003 à  04:15:24:22,11     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396509E-05 ; écart en DQ = 0.233610E-03
+       Itération 06 : écart en DZ = 0.396509E-05 ; écart en DQ = 0.233610E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335822E+00(003: 30972.22)
+ Err003 à  04:15:24:22,26     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.223002E-06 ; écart en DQ = 0.547909E-04
+       Itération 06 : écart en DZ = 0.223002E-06 ; écart en DQ = 0.547909E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575758E-01(003: 30944.44)
+ Err003 à  04:15:24:22,71     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222963E-06 ; écart en DQ = 0.547670E-04
+       Itération 06 : écart en DZ = 0.222963E-06 ; écart en DQ = 0.547670E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575493E-01(003: 30944.44)
+ Err003 à  04:15:24:23,61     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396494E-05 ; écart en DQ = 0.233295E-03
+       Itération 06 : écart en DZ = 0.396494E-05 ; écart en DQ = 0.233295E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335494E+00(003: 30972.22)
+ Err003 à  04:15:24:25,11     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396490E-05 ; écart en DQ = 0.233292E-03
+       Itération 06 : écart en DZ = 0.396490E-05 ; écart en DQ = 0.233292E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335486E+00(003: 30972.22)
+ Err003 à  04:15:24:25,41     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222918E-06 ; écart en DQ = 0.547582E-04
+       Itération 06 : écart en DZ = 0.222918E-06 ; écart en DQ = 0.547582E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575390E-01(003: 30944.44)
+ Err003 à  04:15:24:26,01     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222966E-06 ; écart en DQ = 0.547835E-04
+       Itération 06 : écart en DZ = 0.222966E-06 ; écart en DQ = 0.547835E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575667E-01(003: 30944.44)
+ Err003 à  04:15:24:27,66     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396462E-05 ; écart en DQ = 0.233278E-03
+       Itération 06 : écart en DZ = 0.396462E-05 ; écart en DQ = 0.233278E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335458E+00(003: 30972.22)
+ Err003 à  04:15:24:27,96     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222900E-06 ; écart en DQ = 0.547544E-04
+       Itération 06 : écart en DZ = 0.222900E-06 ; écart en DQ = 0.547544E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575343E-01(003: 30944.44)
+ Err003 à  04:15:24:28,86     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396444E-05 ; écart en DQ = 0.233269E-03
+       Itération 06 : écart en DZ = 0.396444E-05 ; écart en DQ = 0.233269E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335442E+00(003: 30972.22)
+ Err003 à  04:15:24:29,46     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222920E-06 ; écart en DQ = 0.547744E-04
+       Itération 06 : écart en DZ = 0.222920E-06 ; écart en DQ = 0.547744E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575560E-01(003: 30944.44)
+ Err003 à  04:15:24:31,11     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396431E-05 ; écart en DQ = 0.233262E-03
+       Itération 06 : écart en DZ = 0.396431E-05 ; écart en DQ = 0.233262E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335425E+00(003: 30972.22)
+ Err002 à  04:15:24:31,86 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.339553E-05 ; écart en DQ = 0.200081E-03
+       Itération 99 : écart en DZ = 0.570185E-06 ; écart en DQ = 0.333738E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.479067E-01(003: 30972.22)
+ Err002 à  04:15:24:32,61 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.338668E-05 ; écart en DQ = 0.199562E-03
+       Itération 99 : écart en DZ = 0.578880E-06 ; écart en DQ = 0.338863E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.486425E-01(003: 30972.22)
+ Err003 à  04:15:24:34,86     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396382E-05 ; écart en DQ = 0.233238E-03
+       Itération 06 : écart en DZ = 0.396382E-05 ; écart en DQ = 0.233238E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335380E+00(003: 30972.22)
+ Err003 à  04:15:24:35,61     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396383E-05 ; écart en DQ = 0.233238E-03
+       Itération 06 : écart en DZ = 0.396383E-05 ; écart en DQ = 0.233238E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335377E+00(003: 30972.22)
+ Err003 à  04:15:24:35,91     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222849E-06 ; écart en DQ = 0.547438E-04
+       Itération 06 : écart en DZ = 0.222849E-06 ; écart en DQ = 0.547438E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575204E-01(003: 30944.44)
+ Err003 à  04:15:24:36,36     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222886E-06 ; écart en DQ = 0.547672E-04
+       Itération 06 : écart en DZ = 0.222886E-06 ; écart en DQ = 0.547672E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575460E-01(003: 30944.44)
+ Err003 à  04:15:24:37,26     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396291E-05 ; écart en DQ = 0.233199E-03
+       Itération 06 : écart en DZ = 0.396291E-05 ; écart en DQ = 0.233199E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335316E+00(003: 30972.22)
+ Err003 à  04:15:24:37,86     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222847E-06 ; écart en DQ = 0.547432E-04
+       Itération 06 : écart en DZ = 0.222847E-06 ; écart en DQ = 0.547432E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575191E-01(003: 30944.44)
+ Err003 à  04:15:24:38,76     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396326E-05 ; écart en DQ = 0.233212E-03
+       Itération 06 : écart en DZ = 0.396326E-05 ; écart en DQ = 0.233212E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335331E+00(003: 30972.22)
+ Err003 à  04:15:24:39,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222815E-06 ; écart en DQ = 0.547369E-04
+       Itération 06 : écart en DZ = 0.222815E-06 ; écart en DQ = 0.547369E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575120E-01(003: 30944.44)
+ Err003 à  04:15:24:39,36     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222837E-06 ; écart en DQ = 0.547575E-04
+       Itération 06 : écart en DZ = 0.222837E-06 ; écart en DQ = 0.547575E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575347E-01(003: 30944.44)
+ Err003 à  04:15:24:39,81     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222830E-06 ; écart en DQ = 0.547395E-04
+       Itération 06 : écart en DZ = 0.222830E-06 ; écart en DQ = 0.547395E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575147E-01(003: 30944.44)
+ Err003 à  04:15:24:40,71     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.352619E-05 ; écart en DQ = 0.207485E-03
+       Itération 06 : écart en DZ = 0.352619E-05 ; écart en DQ = 0.207485E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.298338E+00(003: 30972.22)
+ Err003 à  04:15:24:41,16     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222796E-06 ; écart en DQ = 0.547332E-04
+       Itération 06 : écart en DZ = 0.222796E-06 ; écart en DQ = 0.547332E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575074E-01(003: 30944.44)
+ Err003 à  04:15:24:41,46     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222813E-06 ; écart en DQ = 0.547526E-04
+       Itération 06 : écart en DZ = 0.222813E-06 ; écart en DQ = 0.547526E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575288E-01(003: 30944.44)
+ Err003 à  04:15:24:41,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222823E-06 ; écart en DQ = 0.547381E-04
+       Itération 06 : écart en DZ = 0.222823E-06 ; écart en DQ = 0.547381E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575126E-01(003: 30944.44)
+ Err003 à  04:15:24:42,51     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.342387E-05 ; écart en DQ = 0.201460E-03
+       Itération 06 : écart en DZ = 0.342387E-05 ; écart en DQ = 0.201460E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.289674E+00(003: 30972.22)
+ Err003 à  04:15:24:43,26     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.360673E-05 ; écart en DQ = 0.212518E-03
+       Itération 06 : écart en DZ = 0.360672E-05 ; écart en DQ = 0.212518E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.305448E+00(003: 30972.22)
+ Err003 à  04:15:24:43,41     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222820E-06 ; écart en DQ = 0.547539E-04
+       Itération 06 : écart en DZ = 0.222820E-06 ; écart en DQ = 0.547539E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575296E-01(003: 30944.44)
+ Err003 à  04:15:24:43,86     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222807E-06 ; écart en DQ = 0.547349E-04
+       Itération 06 : écart en DZ = 0.222807E-06 ; écart en DQ = 0.547349E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575084E-01(003: 30944.44)
+ Err003 à  04:15:24:44,76     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396212E-05 ; écart en DQ = 0.233160E-03
+       Itération 06 : écart en DZ = 0.396212E-05 ; écart en DQ = 0.233160E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335239E+00(003: 30972.22)
+ Err003 à  04:15:24:45,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222814E-06 ; écart en DQ = 0.547523E-04
+       Itération 06 : écart en DZ = 0.222814E-06 ; écart en DQ = 0.547523E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575275E-01(003: 30944.44)
+ Err003 à  04:15:24:45,96     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.384815E-05 ; écart en DQ = 0.226448E-03
+       Itération 06 : écart en DZ = 0.384815E-05 ; écart en DQ = 0.226448E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.325586E+00(003: 30972.22)
+ Err003 à  04:15:24:48,21     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396187E-05 ; écart en DQ = 0.233148E-03
+       Itération 06 : écart en DZ = 0.396187E-05 ; écart en DQ = 0.233148E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335213E+00(003: 30972.22)
+ Err003 à  04:15:24:48,96     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.350543E-05 ; écart en DQ = 0.206272E-03
+       Itération 06 : écart en DZ = 0.350543E-05 ; écart en DQ = 0.206272E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.296574E+00(003: 30972.22)
+ Err003 à  04:15:24:49,71     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396214E-05 ; écart en DQ = 0.233158E-03
+       Itération 06 : écart en DZ = 0.396214E-05 ; écart en DQ = 0.233158E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335222E+00(003: 30972.22)
+ Err003 à  04:15:24:49,86     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222756E-06 ; écart en DQ = 0.547247E-04
+       Itération 06 : écart en DZ = 0.222756E-06 ; écart en DQ = 0.547247E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574955E-01(003: 30944.44)
+ Err003 à  04:15:24:50,76     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396195E-05 ; écart en DQ = 0.233150E-03
+       Itération 06 : écart en DZ = 0.396195E-05 ; écart en DQ = 0.233150E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335208E+00(003: 30972.22)
+ Err003 à  04:15:24:52,26     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.396166E-05 ; écart en DQ = 0.233137E-03
+       Itération 06 : écart en DZ = 0.396166E-05 ; écart en DQ = 0.233137E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.335186E+00(003: 30972.22)
+ Err003 à  04:15:24:52,26     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222734E-06 ; écart en DQ = 0.547203E-04
+       Itération 06 : écart en DZ = 0.222734E-06 ; écart en DQ = 0.547203E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574902E-01(003: 30944.44)
+ Err003 à  04:15:24:53,16     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.376427E-05 ; écart en DQ = 0.221517E-03
+       Itération 06 : écart en DZ = 0.376427E-05 ; écart en DQ = 0.221517E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.318478E+00(003: 30972.22)
+ Err003 à  04:15:24:53,91     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.382803E-05 ; écart en DQ = 0.225271E-03
+       Itération 06 : écart en DZ = 0.382803E-05 ; écart en DQ = 0.225271E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.323872E+00(003: 30972.22)
+ Err003 à  04:15:24:54,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222728E-06 ; écart en DQ = 0.547190E-04
+       Itération 06 : écart en DZ = 0.222728E-06 ; écart en DQ = 0.547190E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574882E-01(003: 30944.44)
+ Err002 à  04:15:24:54,96 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.396301E-05 ; écart en DQ = 0.233144E-03
+       Itération 99 : écart en DZ = 0.326419E-05 ; écart en DQ = 0.192081E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.276166E+00(003: 30972.22)
+ Err003 à  04:15:24:55,56     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222701E-06 ; écart en DQ = 0.547139E-04
+       Itération 06 : écart en DZ = 0.222701E-06 ; écart en DQ = 0.547139E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574822E-01(003: 30944.44)
+ Err003 à  04:15:24:55,86     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222737E-06 ; écart en DQ = 0.547371E-04
+       Itération 06 : écart en DZ = 0.222737E-06 ; écart en DQ = 0.547371E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575077E-01(003: 30944.44)
+ Err003 à  04:15:24:56,76     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.378513E-05 ; écart en DQ = 0.222751E-03
+       Itération 06 : écart en DZ = 0.378513E-05 ; écart en DQ = 0.222751E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.320242E+00(003: 30972.22)
+ Err003 à  04:15:24:57,06     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222697E-06 ; écart en DQ = 0.547128E-04
+       Itération 06 : écart en DZ = 0.222697E-06 ; écart en DQ = 0.547128E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574806E-01(003: 30944.44)
+ Err003 à  04:15:24:57,21     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222707E-06 ; écart en DQ = 0.547311E-04
+       Itération 06 : écart en DZ = 0.222707E-06 ; écart en DQ = 0.547311E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575010E-01(003: 30944.44)
+ Err003 à  04:15:24:57,36     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222727E-06 ; écart en DQ = 0.547186E-04
+       Itération 06 : écart en DZ = 0.222727E-06 ; écart en DQ = 0.547186E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574868E-01(003: 30944.44)
+ Err003 à  04:15:24:57,51     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222714E-06 ; écart en DQ = 0.547324E-04
+       Itération 06 : écart en DZ = 0.222714E-06 ; écart en DQ = 0.547324E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.575024E-01(003: 30944.44)
+ Err003 à  04:15:24:59,16     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.389508E-05 ; écart en DQ = 0.229229E-03
+       Itération 06 : écart en DZ = 0.389508E-05 ; écart en DQ = 0.229229E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.329548E+00(003: 30972.22)
+ Err003 à  04:15:24:59,61     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222692E-06 ; écart en DQ = 0.547281E-04
+       Itération 06 : écart en DZ = 0.222692E-06 ; écart en DQ = 0.547281E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574970E-01(003: 30944.44)
+ Err003 à  04:15:25:01,20     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.390732E-05 ; écart en DQ = 0.229950E-03
+       Itération 06 : écart en DZ = 0.390732E-05 ; écart en DQ = 0.229950E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.330579E+00(003: 30972.22)
+ Err003 à  04:15:25:01,35     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222669E-06 ; écart en DQ = 0.547074E-04
+       Itération 06 : écart en DZ = 0.222669E-06 ; écart en DQ = 0.547074E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574735E-01(003: 30944.44)
+ Err003 à  04:15:25:03        + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.379907E-05 ; écart en DQ = 0.223580E-03
+       Itération 06 : écart en DZ = 0.379907E-05 ; écart en DQ = 0.223580E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.321418E+00(003: 30972.22)
+ Err002 à  04:15:25:04,50 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.396214E-05 ; écart en DQ = 0.233101E-03
+       Itération 99 : écart en DZ = 0.336130E-05 ; écart en DQ = 0.197811E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.284379E+00(003: 30972.22)
+ Err003 à  04:15:25:04,95     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222650E-06 ; écart en DQ = 0.547199E-04
+       Itération 06 : écart en DZ = 0.222650E-06 ; écart en DQ = 0.547199E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574865E-01(003: 30944.44)
+ Err002 à  04:15:25:05,85 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.396203E-05 ; écart en DQ = 0.233096E-03
+       Itération 99 : écart en DZ = 0.335277E-05 ; écart en DQ = 0.197311E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.283657E+00(003: 30972.22)
+ Err003 à  04:15:25:06,30     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222644E-06 ; écart en DQ = 0.547186E-04
+       Itération 06 : écart en DZ = 0.222644E-06 ; écart en DQ = 0.547186E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574847E-01(003: 30944.44)
+ Err003 à  04:15:25:07,20     + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.349726E-05 ; écart en DQ = 0.205811E-03
+       Itération 06 : écart en DZ = 0.349726E-05 ; écart en DQ = 0.205811E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.295868E+00(003: 30972.22)
+ Err003 à  04:15:25:07,35     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222642E-06 ; écart en DQ = 0.547181E-04
+       Itération 06 : écart en DZ = 0.222642E-06 ; écart en DQ = 0.547181E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574839E-01(003: 30944.44)
+ Err002 à  04:15:25:08,25 + 0.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.396175E-05 ; écart en DQ = 0.233087E-03
+       Itération 99 : écart en DZ = 0.307348E-05 ; écart en DQ = 0.180860E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.260014E+00(003: 30972.22)
+ Err003 à  04:15:25:09        + 0.750 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.361351E-05 ; écart en DQ = 0.212660E-03
+       Itération 06 : écart en DZ = 0.361351E-05 ; écart en DQ = 0.212660E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.305707E+00(003: 30972.22)
+ Err003 à  04:15:25:09,15     + 0.150 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.222626E-06 ; écart en DQ = 0.547150E-04
+       Itération 06 : écart en DZ = 0.222626E-06 ; écart en DQ = 0.547150E-04
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.574800E-01(003: 30944.44)
+ Err002 à  04:15:52:41,54 + 3.940 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.129465E-06 ; écart en DQ = 0.143146E-05
+       Itération 99 : écart en DZ = 0.820639E-04 ; écart en DQ = 0.199701E-02
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+       Residu : 0.197081E+02(003: 33208.33)
+ Err003 à  04:19:08:09,60     + 3.950 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 14 : écart en DZ = 0.112034E-04 ; écart en DQ = 0.282101E-03
+       Itération 15 : écart en DZ = 0.112035E-04 ; écart en DQ = 0.282101E-03
+       Z : Pm   25556.67 du bief   8 ; Q : Pm   25453.00 du bief   8
+       Residu : 0.409437E+00(008: 25453.00)
+ Err001 à  04:19:08:13,55 + 3.950 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.590859E-04 ; écart en DQ = 0.147816E-02
+       Itération 08 : écart en DZ = 0.811359E-04 ; écart en DQ = 0.202754E-02
+       Z : Pm   25556.67 du bief   8 ; Q : Pm   25453.00 du bief   8
+ Err002 à  04:19:14:56,25 + 3.750 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.888670E-07 ; écart en DQ = 0.206016E-05
+       Itération 99 : écart en DZ = 0.512729E-07 ; écart en DQ = 0.118861E-05
+       Z : Pm   31713.00 du bief   8 ; Q : Pm   31640.00 du bief   8
+       Residu : 0.202706E-02(008: 31640.00)
+ Err001 à  04:19:15:00 + 3.700 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.335102E-03 ; écart en DQ = 0.785951E-02
+       Itération 08 : écart en DZ = 0.447700E-03 ; écart en DQ = 0.104939E-01
+       Z : Pm   31713.00 du bief   8 ; Q : Pm   31640.00 du bief   8
+ Err003 à  04:21:05:00        + 3.920 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 38 : écart en DZ = 0.247339E-04 ; écart en DQ = 0.532045E-03
+       Itération 39 : écart en DZ = 0.247342E-04 ; écart en DQ = 0.532045E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.154473E+01(003: 30944.44)
+ Err010 à  04:21:05:02,34           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   31041.67 du Bief 003
+       Vitesse = 10.857 Largeur =  104.287 Section =   224.72 Hauteur =  4.110
+ Err003 à  04:22:41:25,58     + 3.890 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 52 : écart en DZ = 0.184427E-04 ; écart en DQ = 0.386427E-03
+       Itération 53 : écart en DZ = 0.184426E-04 ; écart en DQ = 0.386427E-03
+       Z : Pm   31000.00 du bief   3 ; Q : Pm   30972.22 du bief   3
+       Residu : 0.111233E+01(003: 30972.22)
+ Err010 à  04:22:41:27,89           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.32E+01 au Pm   31250.00 du Bief 003
+       Vitesse = 14.881 Largeur =   76.283 Section =   167.02 Hauteur =  3.447
+ Err010 à  04:22:41:28,62           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   31250.00 du Bief 003
+       Vitesse = 10.366 Largeur =   89.126 Section =   214.27 Hauteur =  4.015
+ Err003 à  04:23:03:14        + 3.880 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 14 : écart en DZ = 0.234227E-04 ; écart en DQ = 0.570344E-03
+       Itération 15 : écart en DZ = 0.234228E-04 ; écart en DQ = 0.570344E-03
+       Z : Pm   31041.67 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.183228E+02(003: 31041.67)
+ Err003 à  04:23:03:16,31     + 0.770 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 14 : écart en DZ = 0.804115E-05 ; écart en DQ = 0.547245E-03
+       Itération 15 : écart en DZ = 0.804110E-05 ; écart en DQ = 0.547242E-03
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   31000.00 du bief   3
+       Residu : 0.518182E+00(003: 31041.67)
+ Err002 à  04:23:25:11,64 + 3.880 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.394846E-05 ; écart en DQ = 0.932877E-04
+       Itération 99 : écart en DZ = 0.118078E-05 ; écart en DQ = 0.279007E-04
+       Z : Pm   25868.20 du bief   8 ; Q : Pm   25764.00 du bief   8
+       Residu : 0.440690E-01(008: 25660.33)
+ Err010 à  04:23:25:19,34           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.50E+01 au Pm   25660.33 du Bief 008
+       Vitesse = 13.116 Largeur =   85.596 Section =    58.89 Hauteur =  1.465

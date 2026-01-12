@@ -1,0 +1,65 @@
+ Err003 à  04:04:22:11,40     + 4.380 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 08 : écart en DZ = 0.452719E-04 ; écart en DQ = 0.117137E-02
+       Itération 09 : écart en DZ = 0.452718E-04 ; écart en DQ = 0.117137E-02
+       Z : Pm   38541.00 du bief   4 ; Q : Pm   38478.00 du bief   4
+       Residu : 0.136026E+01(004: 38478.00)
+ Err003 à  04:04:22:14,88     + 0.870 : BOUCLAGE des itérations 
+       écart relatif (à Ymax et Qmax) constant : réduire le pas d'espace (?)
+       Itération 05 : écart en DZ = 0.344202E-05 ; écart en DQ = 0.338245E-03
+       Itération 06 : écart en DZ = 0.344201E-05 ; écart en DQ = 0.338244E-03
+       Z : Pm   38541.00 du bief   4 ; Q : Pm   38478.00 du bief   4
+       Residu : 0.232777E+00(004: 38478.00)
+ Err010 à  04:04:22:16,58           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  7.403 Largeur =   44.043 Section =    43.76 Hauteur =  1.581
+ Err010 à  04:14:54:05,31           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  4.522 Largeur =   45.942 Section =    23.77 Hauteur =  1.094
+ Err002 à  04:22:10:49,39 + 4.490 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.221442E-03 ; écart en DQ = 0.506999E-02
+       Itération 99 : écart en DZ = 0.217563E-03 ; écart en DQ = 0.507422E-02
+       Z : Pm   38541.00 du bief   4 ; Q : Pm   38541.00 du bief   4
+       Residu : 0.584480E+01(004: 38541.00)
+ Err002 à  04:22:10:52,06 + 0.890 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.113549E-05 ; écart en DQ = 0.973851E-04
+       Itération 99 : écart en DZ = 0.607965E-05 ; écart en DQ = 0.521121E-03
+       Z : Pm   38603.00 du bief   4 ; Q : Pm   38541.00 du bief   4
+       Residu : 0.326599E+00(004: 38541.00)
+ Err001 à  04:22:10:52,91 + 0.850 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.303373E-05 ; écart en DQ = 0.270685E-03
+       Itération 08 : écart en DZ = 0.383412E-05 ; écart en DQ = 0.341932E-03
+       Z : Pm   38603.00 du bief   4 ; Q : Pm   38541.00 du bief   4
+ Err002 à  04:22:39:27,64 + 4.460 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.339034E-04 ; écart en DQ = 0.595597E-03
+       Itération 99 : écart en DZ = 0.334062E-04 ; écart en DQ = 0.596365E-03
+       Z : Pm   38891.00 du bief   4 ; Q : Pm   38841.00 du bief   4
+       Residu : 0.879351E+00(004: 38841.00)
+ Err002 à  04:22:39:31,20 + 0.890 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.154262E-05 ; écart en DQ = 0.909161E-04
+       Itération 99 : écart en DZ = 0.306681E-05 ; écart en DQ = 0.178267E-03
+       Z : Pm   38891.00 du bief   4 ; Q : Pm   38841.00 du bief   4
+       Residu : 0.117342E+00(004: 38791.00)
+ Err010 à  04:22:39:32,90           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   34347.00 du Bief 008
+       Vitesse =  6.263 Largeur =   71.762 Section =    50.99 Hauteur =  1.362
+ Err002 à  04:23:13:10,15 + 4.420 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.773429E-04 ; écart en DQ = 0.206413E-02
+       Itération 99 : écart en DZ = 0.763458E-04 ; écart en DQ = 0.206524E-02
+       Z : Pm   38541.00 du bief   4 ; Q : Pm   38478.00 du bief   4
+       Residu : 0.236345E+01(004: 38478.00)
+ Err002 à  04:23:13:11,91 + 0.880 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.901810E-06 ; écart en DQ = 0.901914E-04
+       Itération 99 : écart en DZ = 0.140338E-05 ; écart en DQ = 0.140272E-03
+       Z : Pm   38541.00 du bief   4 ; Q : Pm   38478.00 du bief   4
+       Residu : 0.928916E-01(004: 38478.00)
+ Err010 à  04:23:13:13,61           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   38478.00 du Bief 004
+       Vitesse =  6.424 Largeur =   85.007 Section =    88.65 Hauteur =  1.967
