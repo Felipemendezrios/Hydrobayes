@@ -82,12 +82,12 @@
  Coefficient du schéma implicite : 0.650 Schéma : S B R
  Type des itérations : -1
  Coefficient de sous-relaxation :  0.00
- Pas de temps fixe :   300.00
+ Pas de temps fixe :   600.00
  Tirant d'eau minimum : 1.0000E-03
  Nombre maximum d'itérations sur les non-linéarites : 99
  Facteur de réduction du pas de temps en cas de non-convergence :  5
  Nombre maximum d'itérations sans réduction de la précision :  5
- Facteur de réduction de la précision :  2.000     en cote  2.000     en débit et  5.000     pour le résidu
+ Facteur de réduction de la précision : 1.0000E+04 en cote 1.0000E+04 en débit et 1.0000E+04 pour le résidu
  -------------------------------------------------------------------------------
                 Lois hauteur-surface des casiers
  Nœud : xx8
@@ -96,11 +96,11 @@
  -------------------------------------------------------------------------------
  
  Volumes des hydrogrammes ponctuels :
-      Volume de l'hydrogramme injecté au noeud xx1 : 64 776 602 m3
-      Volume de l'hydrogramme injecté au noeud xx2 : 1 089 360 m3
+      Volume de l'hydrogramme injecté au noeud xx1 : 142 E+6 m3
+      Volume de l'hydrogramme injecté au noeud xx2 : 2 239 920 m3
       Volume de l'hydrogramme injecté au noeud xx7 : 0 m3
-      Volume de l'hydrogramme injecté au noeud x14 : 25 719 095 m3
-      Volume total des apports ponctuels : 91 585 057 m3
+      Volume de l'hydrogramme injecté au noeud x14 : 50 338 327 m3
+      Volume total des apports ponctuels : 194 E+6 m3
  
  
  ---------------------- VOLUMES DES HYDROGRAMMES LATERAUX ----------------------
@@ -2754,74 +2754,138 @@ Ces aires devraient être nulles
 >>>> ERREUR dans la géométrie : le profil situé au pk  37399.000 du bief 8 a 4 points en lit majeur gauche plus bas que la cote du point RG
 >>>> ERREUR dans la géométrie : le profil situé au pk  37444.000 du bief 8 a 8 points en lit majeur droit plus bas que la cote du point RD
    Vérification des lits majeurs : OK (201 profils corrigés)
-                ligne d'eau initiale à  04:00:00:00
+                ligne d'eau initiale à  03:00:00:00
  
  
  
- ########  DATE :  04:00:00:00,00     (jjj:hh:mn:ss) (00 itérations)  ########
+ ########  DATE :  03:00:00:00,00     (jjj:hh:mn:ss) (00 itérations)  ########
  ===============================================================================
- BIEF   1 : 9 179 810 m3 [  0.18 ha (0.147E+03 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :  193.632                                Débit :  613.679
-    Noeud : xx2 Cote :  187.303                                Débit :  614.599
- BIEF   2 : 635 357 m3
-    Noeud : xx2 Cote :  187.303                                Débit :  624.569
-    Noeud : xx3 Cote :  185.990                                Débit :  624.240
- BIEF   3 : 3 974 632 m3 [  1.22 ha (0.338E+04 m3) inondés, 0 m3 déversés]
-    Noeud : xx3 Cote :  185.990                                Débit :  751.625
-    Noeud : xx4 Cote :  182.400                                Débit :  750.197
- BIEF   4 : 638 705 m3 [  3.02 ha (0.512E+04 m3) inondés, 0 m3 déversés]
-    Noeud : xx5 Cote :  188.539                                Débit :  134.682
-    Noeud : xx6 Cote :  185.999                                Débit :  133.059
- BIEF   5 : 106 099 m3 [  1.13 ha (0.224E+04 m3) inondés, 0 m3 déversés]
-    Noeud : xx6 Cote :  185.999                                Débit :  127.511
-    Noeud : xx3 Cote :  185.990                                Débit :  127.385
- BIEF   6 : 79 m3
-    Noeud : xx7 Cote :  185.270                                Débit :    0.000
-    Noeud : xx8 Cote :  185.270 (250.00 ha *** 8 175 000 m3)   Débit :    0.000
- BIEF   7 : 5 121 m3
-    Noeud : xx8 Cote :  185.270 (250.00 ha *** 8 175 000 m3)   Débit :    0.000
-    Noeud : xx6 Cote :  185.270                                Débit :    0.000
- BIEF   8 : 1 838 474 m3 [  0.24 ha (0.112E+04 m3) inondés, 0 m3 déversés]
-    Noeud : x14 Cote :  210.956                                Débit :  130.750
-    Noeud : xx5 Cote :  188.539                                Débit :  134.682
+ BIEF   1 : 17 108 296 m3 [ 37.70 ha (0.279E+06 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :  196.189                                Débit :  721.056
+    Noeud : xx2 Cote :  189.639                                Débit :  721.085
+ BIEF   2 : 1 402 070 m3 [  4.89 ha (0.272E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :  189.639                                Débit :  733.685
+    Noeud : xx3 Cote :  188.708                                Débit :  733.700
+ BIEF   3 : 6 695 501 m3 [ 39.30 ha (0.420E+06 m3) inondés, 0 m3 déversés]
+    Noeud : xx3 Cote :  188.708                                Débit :  984.678
+    Noeud : xx4 Cote :  182.400                                Débit :  984.762
+ BIEF   4 : 2 055 631 m3 [ 50.37 ha (0.551E+06 m3) inondés, 0 m3 déversés]
+    Noeud : xx5 Cote :  190.078                                Débit :  250.786
+    Noeud : xx6 Cote :  188.713                                Débit :  250.827
+ BIEF   5 : 440 978 m3 [ 14.22 ha (0.210E+06 m3) inondés, 0 m3 déversés]
+    Noeud : xx6 Cote :  188.713                                Débit :  250.968
+    Noeud : xx3 Cote :  188.708                                Débit :  250.978
+ BIEF   6 : 173 m3
+    Noeud : xx7 Cote :  188.713                                Débit :    0.000
+    Noeud : xx8 Cote :  188.713 (250.00 ha *** 15 000 000 m3)  Débit :    0.000
+ BIEF   7 : 28 290 m3 [  0.01 ha (0.271E+02 m3) inondés, 0 m3 déversés]
+    Noeud : xx8 Cote :  188.713 (250.00 ha *** 15 000 000 m3)  Débit :    0.140
+    Noeud : xx6 Cote :  188.713                                Débit :    0.141
+ BIEF   8 : 3 902 039 m3 [ 10.97 ha (0.312E+05 m3) inondés, 0 m3 déversés]
+    Noeud : x14 Cote :  212.439                                Débit :  250.786
+    Noeud : xx5 Cote :  190.078                                Débit :  250.786
  ===============================================================================
- Volume total du réseau : 24 553 278 m3
+ Volume total du réseau : 46 632 978 m3
  ===============================================================================
  
  
  
- ########  DATE :  05:00:00:00,00     (jjj:hh:mn:ss) (01 itérations)  ########
+ ########  DATE :  04:00:00:00,00     (jjj:hh:mn:ss) (01 itérations)  ########
  ===============================================================================
- BIEF   1 : 10 202 668 m3 [  1.17 ha (0.205E+04 m3) inondés, 0 m3 déversés]
-    Noeud : xx1 Cote :  193.966                                Débit :  730.968
-    Noeud : xx2 Cote :  187.621                                Débit :  723.529
- BIEF   2 : 759 002 m3
-    Noeud : xx2 Cote :  187.621                                Débit :  737.029
-    Noeud : xx3 Cote :  186.579                                Débit :  735.755
- BIEF   3 : 4 422 037 m3 [  8.54 ha (0.234E+05 m3) inondés, 0 m3 déversés]
-    Noeud : xx3 Cote :  186.579                                Débit : 1034.021
-    Noeud : xx4 Cote :  182.400                                Débit : 1028.304
- BIEF   4 : 1 008 181 m3 [ 12.76 ha (0.756E+05 m3) inondés, 0 m3 déversés]
-    Noeud : xx5 Cote :  189.397                                Débit :  315.432
-    Noeud : xx6 Cote :  186.598                                Débit :  315.639
- BIEF   5 : 145 769 m3 [  3.25 ha (0.142E+05 m3) inondés, 0 m3 déversés]
-    Noeud : xx6 Cote :  186.598                                Débit :  298.790
-    Noeud : xx3 Cote :  186.579                                Débit :  298.267
- BIEF   6 : 116 m3
-    Noeud : xx7 Cote :  186.598                                Débit :    0.000
-    Noeud : xx8 Cote :  186.598 (250.00 ha *** 11 494 375 m3)  Débit :   -0.000
- BIEF   7 : 10 900 m3
-    Noeud : xx8 Cote :  186.598 (250.00 ha *** 11 494 375 m3)  Débit :  -16.801
-    Noeud : xx6 Cote :  186.598                                Débit :  -16.849
- BIEF   8 : 3 072 354 m3 [  1.37 ha (0.612E+04 m3) inondés, 0 m3 déversés]
-    Noeud : x14 Cote :  211.863                                Débit :  302.696
-    Noeud : xx5 Cote :  189.397                                Débit :  315.432
+ BIEF   1 : 9 825 520 m3 [  0.35 ha (0.567E+03 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :  193.856                                Débit :  874.995
+    Noeud : xx2 Cote :  187.538                                Débit :  873.851
+ BIEF   2 : 746 073 m3
+    Noeud : xx2 Cote :  187.538                                Débit :  885.751
+    Noeud : xx3 Cote :  186.468                                Débit :  886.053
+ BIEF   3 : 4 299 182 m3 [  6.90 ha (0.138E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx3 Cote :  186.468                                Débit : 1184.131
+    Noeud : xx4 Cote :  182.400                                Débit : 1185.350
+ BIEF   4 : 999 497 m3 [ 12.29 ha (0.759E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx5 Cote :  189.442                                Débit :  293.314
+    Noeud : xx6 Cote :  186.496                                Débit :  294.044
+ BIEF   5 : 137 543 m3 [  2.75 ha (0.110E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx6 Cote :  186.496                                Débit :  297.964
+    Noeud : xx3 Cote :  186.468                                Débit :  298.077
+ BIEF   6 : 113 m3
+    Noeud : xx7 Cote :  186.496                                Débit :    0.000
+    Noeud : xx8 Cote :  186.496 (250.00 ha *** 11 240 237 m3)  Débit :    0.000
+ BIEF   7 : 10 185 m3
+    Noeud : xx8 Cote :  186.496 (250.00 ha *** 11 240 237 m3)  Débit :    3.908
+    Noeud : xx6 Cote :  186.496                                Débit :    3.919
+ BIEF   8 : 2 907 815 m3 [  1.17 ha (0.487E+04 m3) inondés, 0 m3 déversés]
+    Noeud : x14 Cote :  211.770                                Débit :  291.163
+    Noeud : xx5 Cote :  189.442                                Débit :  293.314
  ===============================================================================
- Volume total du réseau : 31 115 400 m3
+ Volume total du réseau : 30 166 164 m3
  ===============================================================================
- >>>> ATTENTION : résidu trop grand !!! Maximum (0.185018E-01) atteint à t =  04:08:36:34,97
+ 
+ 
+ 
+ ########  DATE :  05:00:00:00,00     (jjj:hh:mn:ss) (04 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 8 765 606 m3 [  0.06 ha (0.408E+02 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :  193.558                                Débit :  730.968
+    Noeud : xx2 Cote :  187.269                                Débit :  724.687
+ BIEF   2 : 669 191 m3
+    Noeud : xx2 Cote :  187.269                                Débit :  738.187
+    Noeud : xx3 Cote :  186.232                                Débit :  737.411
+ BIEF   3 : 4 109 639 m3 [  2.11 ha (0.505E+04 m3) inondés, 0 m3 déversés]
+    Noeud : xx3 Cote :  186.232                                Débit : 1041.653
+    Noeud : xx4 Cote :  182.400                                Débit : 1037.900
+ BIEF   4 : 988 310 m3 [ 11.52 ha (0.781E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx5 Cote :  189.526                                Débit :  315.322
+    Noeud : xx6 Cote :  186.275                                Débit :  316.295
+ BIEF   5 : 121 578 m3 [  1.80 ha (0.574E+04 m3) inondés, 0 m3 déversés]
+    Noeud : xx6 Cote :  186.275                                Débit :  304.534
+    Noeud : xx3 Cote :  186.232                                Débit :  304.243
+ BIEF   6 : 107 m3
+    Noeud : xx7 Cote :  186.275                                Débit :    0.000
+    Noeud : xx8 Cote :  186.275 (250.00 ha *** 10 686 999 m3)  Débit :   -0.000
+ BIEF   7 : 8 835 m3
+    Noeud : xx8 Cote :  186.275 (250.00 ha *** 10 686 999 m3)  Débit :  -11.736
+    Noeud : xx6 Cote :  186.275                                Débit :  -11.761
+ BIEF   8 : 3 003 768 m3 [  1.29 ha (0.557E+04 m3) inondés, 0 m3 déversés]
+    Noeud : x14 Cote :  211.818                                Débit :  302.696
+    Noeud : xx5 Cote :  189.526                                Débit :  315.322
+ ===============================================================================
+ Volume total du réseau : 28 354 033 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  05:02:00:00,00     (jjj:hh:mn:ss) (03 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 9 038 188 m3 [  0.13 ha (0.126E+03 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :  193.692                                Débit :  801.979
+    Noeud : xx2 Cote :  187.303                                Débit :  745.136
+ BIEF   2 : 677 216 m3
+    Noeud : xx2 Cote :  187.303                                Débit :  758.336
+    Noeud : xx3 Cote :  186.249                                Débit :  755.894
+ BIEF   3 : 4 123 332 m3 [  2.21 ha (0.531E+04 m3) inondés, 0 m3 déversés]
+    Noeud : xx3 Cote :  186.249                                Débit : 1052.126
+    Noeud : xx4 Cote :  182.400                                Débit : 1049.490
+ BIEF   4 : 974 041 m3 [ 11.36 ha (0.737E+05 m3) inondés, 0 m3 déversés]
+    Noeud : xx5 Cote :  189.486                                Débit :  305.434
+    Noeud : xx6 Cote :  186.289                                Débit :  303.628
+ BIEF   5 : 122 624 m3 [  1.87 ha (0.605E+04 m3) inondés, 0 m3 déversés]
+    Noeud : xx6 Cote :  186.289                                Débit :  296.475
+    Noeud : xx3 Cote :  186.249                                Débit :  296.233
+ BIEF   6 : 107 m3
+    Noeud : xx7 Cote :  186.289                                Débit :    0.000
+    Noeud : xx8 Cote :  186.289 (250.00 ha *** 10 721 574 m3)  Débit :   -0.000
+ BIEF   7 : 8 908 m3
+    Noeud : xx8 Cote :  186.289 (250.00 ha *** 10 721 574 m3)  Débit :   -7.138
+    Noeud : xx6 Cote :  186.289                                Débit :   -7.153
+ BIEF   8 : 3 034 026 m3 [  1.30 ha (0.581E+04 m3) inondés, 0 m3 déversés]
+    Noeud : x14 Cote :  211.893                                Débit :  321.108
+    Noeud : xx5 Cote :  189.486                                Débit :  305.434
+ ===============================================================================
+ Volume total du réseau : 28 700 015 m3
+ ===============================================================================
+ >>>> ATTENTION : résidu trop grand !!! Maximum (0.347787E+02) atteint à t =  03:06:36:52,99
                   La solution calculée est probablement fausse autour de cette date.
- Nombre total d'itérations :    81393
- Nombre total de pas de temps :    24063
- Date simulation : 12/01/2026 (10:54:19) Durée : 00:00:10 CPU : 00:00:09,944
+ Nombre total d'itérations :   151467
+ Nombre total de pas de temps :    46131
+ Date simulation : 14/01/2026 (14:50:11) Durée : 00:00:20 CPU : 00:00:19,471
  ****************************** FIN NORMALE DE MAGE ****************************
