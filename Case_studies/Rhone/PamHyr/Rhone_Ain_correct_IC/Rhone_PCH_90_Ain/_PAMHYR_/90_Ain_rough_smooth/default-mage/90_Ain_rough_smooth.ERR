@@ -1,0 +1,17 @@
+ Err010 à  00:00:05:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.40E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  8.982 Largeur =   43.952 Section =    22.72 Hauteur =  1.070
+ Err010 à  00:00:01:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  6.354 Largeur =   51.845 Section =    26.21 Hauteur =  1.143
+ Err002 à  00:02:15:54,45 + 4.230 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.879117E-05 ; écart en DQ = 0.121068E-03
+       Itération 99 : écart en DZ = 0.168095E-04 ; écart en DQ = 0.231314E-03
+       Z : Pm   38991.00 du bief   4 ; Q : Pm   38941.00 du bief   4
+       Residu : 0.463709E+00(004: 38941.00)
+ Err001 à  00:02:15:58,65 + 4.200 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.331680E-01 ; écart en DQ = 0.481894E+00
+       Itération 08 : écart en DZ = 0.295066E+00 ; écart en DQ = 0.488466E+01
+       Z : Pm   38891.00 du bief   4 ; Q : Pm   38941.00 du bief   4
