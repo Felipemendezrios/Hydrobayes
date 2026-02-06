@@ -1,0 +1,27 @@
+---
+# Synthetic case
+
+This is a simple case of a confluence of two rectangular canals flowing only in the main channel without floodplain. 
+The model will simulate water surface elevation (WSE), which will be used as the real observation of the synthetic data built using a specified spatial friction and boundary conditions. Two event will be computed to get these synthetic data.
+
+This case introduces a multi-reach and multi-event scenario. 
+
+Afterwards, degraded model will be proposed to get the model to be calibrated.
+
+---
+## Boundary conditions:
+- Upstream MR: QdT with uniform flow of 0.10 m3/s
+- Downstream MR: QdZ 
+- Upstream TR: QdT with uniform flow of 0.07 m3/s
+---
+## Change log
+
+2026-01-19: Add a default bief
+
+---
+
+## Copyright
+
+© Felipe-Alberto Mendezrios - 2026
+
+All right reserved.

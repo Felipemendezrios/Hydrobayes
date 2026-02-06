@@ -1,0 +1,405 @@
+  INRAE
+  Centre Auvergne-Rhône-Alpes Est                   5 rue de La Doua - CS 20244
+                                                    69625 Villeurbanne - FRANCE
+ 
+ 
+ 
+                    MM      MM     AA     GGGGGGGGGG EEEEEEEEEE
+                    MMM    MMM    AAAA    GGGGGGGGGG EEEEEEEEEE
+                    MMMM  MMMM   AA  AA   GG         EE
+                    MM MMMM MM  AA    AA  GG         EE
+                    MM  MM  MM AAAAAAAAAA GG  GGGGGG EEEEEE
+                    MM      MM AAAAAAAAAA GG  GGGGGG EEEEEE
+                    MM      MM AA      AA GG      GG EE
+                    MM      MM AA      AA GG      GG EE
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+                    MM      MM AA      AA GGGGGGGGGG EEEEEEEEEE
+ 
+                            Exécution du programme MAGE
+                    Auteur : Jean-Baptiste Faure - INRAE - 1989-2022, Theophile Terraz - INRAE - 2022-2024
+ 
+                Dépôt APP : IDDN.FR.001.180002.000.S.P.2013.000.30200
+                Version : 8.3.6 - 2024-05-17 pour linux
+                Dernier correctif : 4b84831 Update .gitlab-ci.yml file
+                Date du dernier correctif : 2025-07-28 16:35:42 +0200
+                Date de compilation : 2025-07-28_17-09-32 - Compilateur : GCC version 9.4.0
+ 
+ Copyright (C) 2023 INRAE
+ 
+ Mage is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later version.
+ 
+ Alternatively, you can redistribute it and/or
+ modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation; either version 2 of
+ the License, or (at your option) any later version.
+ 
+ Mage is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ or the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public
+ License and a copy of the GNU General Public License along with
+ Mage. If not, see <http://www.gnu.org/licenses/>.
+ 
+                        20 Points maximum pour décrire la géométrie d'un casier
+                        15 Ouvrages élémentaires maximum par section singulière
+                           Précision des réels : 15 chiffres (8 octets) - Fichier BIN complet
+                           Parallélisation OpenMP inactive
+ 
+ 
+ 
+ 
+ Ligne de commande de la simulation : /home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage synthetique_simplified.REP
+ 
+ ------------------------------------------------------------------------------
+ Copie du répertoire utilisé pour cette simulation (fichier : synthetique_simplified.REP)
+ 
+ NUM                                          Nom du fichier des paramètres NUMériques
+ PAR                                          Nom du fichier des PARamètres numériques
+ NET ../120_40/synthetique_simplified.NET     Nom du fichier définissant la topologie du réseau
+ HYD synthetique_simplified.HYD               Nom du fichier des HYDrogrammes amont
+ RUG synthetique_simplified.RUG               Nom du fichier des rugosités
+ AVA synthetique_simplified.AVA               Nom du fichier des lois Q(Z) AVAl
+ DEV synthetique_simplified.DEV               Nom du fichier des déversements latéraux
+ LAT synthetique_simplified.LAT               Nom du fichier des hydrogrammes LATéraux
+ TRA synthetique_simplified.TRA               Nom du fichier de sortie formaté
+ BIN synthetique_simplified.BIN               Nom du fichier de stockage BINaire
+ GRA                                          Nom du fichier de stockage GRAnulo
+ ERR synthetique_simplified.ERR               Nom du fichier des messages d'ERReur
+ >>>> État Initial permanent calculé par MAGE
+ ------------------------------------------------------------------------------
+ Nombre total de biefs :   3
+ Nombre total de noeuds :   4
+ Nombre total de sections de calcul :    48
+ Nombre total de sections singulières :   0
+ Réseau ramifié
+ Longueur totale du réseau =      45.00 m
+ Coefficient du schéma implicite : 0.700 Schéma : S B R
+ Type des itérations : -1
+ Coefficient de sous-relaxation :  0.00
+ Pas de temps fixe :   300.00
+ Tirant d'eau minimum : 1.0000E-03
+ Nombre maximum d'itérations sur les non-linéarites : 99
+ Facteur de réduction du pas de temps en cas de non-convergence :  2
+ Nombre maximum d'itérations sans réduction de la précision : 10
+ Facteur de réduction de la précision : 1.0000E+04 en cote 1.0000E+04 en débit et 1.0000E+04 pour le résidu
+ 
+ Volumes des hydrogrammes ponctuels :
+      Volume de l'hydrogramme injecté au noeud xx0 : 1 800 m3
+      Volume de l'hydrogramme injecté au noeud xx2 : 1 260 m3
+      Volume total des apports ponctuels : 3 060 m3
+ 
+ 
+ ---------------------- VOLUMES DES HYDROGRAMMES LATERAUX ----------------------
+ Volume total des apports latéraux : 0 m3
+ 
+ Déversements latéraux :
+ Bief   1 droit   Pm      0.00 a     18.00 hors réseau (coeff débit :  0.000)
+ Bief   1 gauche  Pm      0.00 a     18.00 hors réseau (coeff débit :  0.000)
+ Bief   2 droit   Pm      0.00 a     20.00 hors réseau (coeff débit :  0.000)
+ Bief   2 gauche  Pm      0.00 a     20.00 hors réseau (coeff débit :  0.000)
+ Bief   3 droit   Pm     18.00 a     25.00 hors réseau (coeff débit :  0.000)
+ Bief   3 gauche  Pm     18.00 a     25.00 hors réseau (coeff débit :  0.000)
+ 
+ ------------------------------------------------------------------------------
+ 
+                              Analyse de la géométrie
+ 
+                        Recherche des marches d'escalier aux noeuds
+ 
+ Ecart maximum des cotes de fond à la moyenne
+ Filtre : écart absolu >  0.001 m
+ 
+ 
+                     Recherche des ruptures de pente dans les biefs
+ 
+ Filtre : pente_max > 2 * pente_min et pente_Amont ou pente_Aval > 0,5%
+    Bief  Abscisse       Pente amont   Pente aval
+ 
+ 
+               Recherche des variations importantes de largeur du lit mineur
+ 
+ Filtre : variation de largeur > 20%
+ Largeur moyenne à la cote de débordement mineur-moyen du bief 001 :      1.000 m
+ Largeur moyenne à la cote de débordement mineur-moyen du bief 002 :      1.000 m
+ Largeur moyenne à la cote de débordement mineur-moyen du bief 003 :      1.000 m
+ 
+ 
+               Vérification du calcul des paramètres géométriques
+ Seuils de détection : 0,1 m pour la largeur et le périmètre, 1,0 m  pour la section
+ Échantillonage sur  50 niveaux
+ 
+ Les profils ci-dessous sont probablement non standard car non situé dans un plan vertical.
+ Autrement dit leur trace sur un plan horizontal n'est pas un segment de droite.
+ Si c'est bien le cas, les calculs en XYZ sont a priori meilleurs.
+ 
+ Bief, Pk, écarts max LC/XYZ et cote correspondante pour Largeur, Périmètre et Section mouillée
+ Seconde ligne : valeurs LC / XYZ
+  1         0.0000      1.9459      1.1389      1.9459      1.1389      0.2425      1.3189
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         1.0000      1.9459      1.1378      1.9459      1.1378      0.2425      1.3178
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         2.0000      1.9459      1.1368      1.9459      1.1368      0.2425      1.3168
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         3.0000      1.9459      1.1357      1.9459      1.1357      0.2425      1.3157
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         4.0000      1.9459      1.1347      1.9459      1.1347      0.2425      1.3147
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         5.0000      1.9459      1.1336      1.9459      1.1336      0.2425      1.3136
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         6.0000      1.9459      1.1326      1.9459      1.1326      0.2425      1.3126
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         7.0000      1.9459      1.1315      1.9459      1.1315      0.2425      1.3115
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         8.0000      1.9459      1.1305      1.9459      1.1305      0.2425      1.3105
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1         9.0000      1.9455      1.1294      1.9455      1.1294      0.2426      1.3095
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  1        10.0000      1.9459      1.1284      1.9459      1.1284      0.2425      1.3084
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1        11.0000      1.9455      1.1273      1.9455      1.1273      0.2426      1.3074
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  1        12.0000      1.9459      1.1263      1.9459      1.1263      0.2425      1.3063
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1        13.0000      1.9455      1.1252      1.9455      1.1252      0.2426      1.3053
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  1        14.0000      1.9459      1.1242      1.9459      1.1242      0.2425      1.3042
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1        15.0000      1.9455      1.1231      1.9455      1.1231      0.2426      1.3032
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  1        16.0000      1.9459      1.1221      1.9459      1.1221      0.2425      1.3021
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  1        17.0000      1.9455      1.1210      1.9455      1.1210      0.2426      1.3011
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  1        18.0000      1.9459      1.1200      1.9459      1.1200      0.2425      1.3000
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         0.0000      1.9459      1.1402      1.9459      1.1402      0.2425      1.3202
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         1.0000      1.9459      1.1392      1.9459      1.1392      0.2425      1.3192
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         2.0000      1.9459      1.1382      1.9459      1.1382      0.2425      1.3182
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         3.0000      1.9459      1.1372      1.9459      1.1372      0.2425      1.3172
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         4.0000      1.9459      1.1362      1.9459      1.1362      0.2425      1.3162
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         5.0000      1.9455      1.1351      1.9455      1.1351      0.2426      1.3152
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  2         6.0000      1.9459      1.1341      1.9459      1.1341      0.2425      1.3141
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         7.0000      1.9459      1.1331      1.9459      1.1331      0.2425      1.3131
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         8.0000      1.9459      1.1321      1.9459      1.1321      0.2425      1.3121
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2         9.0000      1.9459      1.1311      1.9459      1.1311      0.2425      1.3111
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        10.0000      1.9459      1.1301      1.9459      1.1301      0.2425      1.3101
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        11.0000      1.9459      1.1291      1.9459      1.1291      0.2425      1.3091
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        12.0000      1.9459      1.1281      1.9459      1.1281      0.2425      1.3081
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        13.0000      1.9459      1.1271      1.9459      1.1271      0.2425      1.3071
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        14.0000      1.9459      1.1261      1.9459      1.1261      0.2425      1.3061
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        15.0000      1.9455      1.1250      1.9455      1.1250      0.2426      1.3051
+                      1.0545      3.0000      1.2945      3.2401      0.4277      0.6703
+  2        16.0000      1.9459      1.1240      1.9459      1.1240      0.2425      1.3040
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        17.0000      1.9459      1.1230      1.9459      1.1230      0.2425      1.3030
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        18.0000      1.9459      1.1220      1.9459      1.1220      0.2425      1.3020
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        19.0000      1.9459      1.1210      1.9459      1.1210      0.2425      1.3010
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  2        20.0000      1.9459      1.1200      1.9459      1.1200      0.2425      1.3000
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        18.0000      1.9459      1.1200      1.9459      1.1200      0.2425      1.3000
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        19.0000      1.9449      1.1190      1.9449      1.1190      0.2425      1.2990
+                      1.0551      3.0000      1.2951      3.2400      0.4277      0.6702
+  3        20.0000      1.9459      1.1179      1.9459      1.1179      0.2425      1.2979
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        21.0000      1.9459      1.1169      1.9459      1.1169      0.2425      1.2969
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        22.0000      1.9459      1.1158      1.9459      1.1158      0.2425      1.2958
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        23.0000      1.9459      1.1148      1.9459      1.1148      0.2425      1.2948
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        24.0000      1.9459      1.1137      1.9459      1.1137      0.2425      1.2937
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+  3        25.0000      1.9459      1.1127      1.9459      1.1127      0.2425      1.2927
+                      1.0541      3.0000      1.2941      3.2400      0.4275      0.6700
+ 
+ 
+               Vérification de la cote du fond des lits majeurs
+Pour chaque profil on vérifie si les cotes de fond des lits majeurs gauche et droit
+sont supérieures aux cotes de débordement correspondantes
+Si ce n'est pas le cas une étiquette !!! est ajoutée à la fin de la ligne
+Les colonnes Aire gche et Aire droite indiquent les surfaces mouillées des lits majeurs à leur cote de berge respective
+Ces aires devraient être nulles
+ 
+ Bief       Pk       Zfd gauche  Zbg gauche  Aire gche   Zfd droit   Zbg droit  Aire droite
+  1         0.0000      1.1339      1.1339      0.0000      1.1339      1.1339      0.0000
+  1         1.0000      1.1328      1.1328      0.0000      1.1328      1.1328      0.0000
+  1         2.0000      1.1318      1.1318      0.0000      1.1318      1.1318      0.0000
+  1         3.0000      1.1307      1.1307      0.0000      1.1307      1.1307      0.0000
+  1         4.0000      1.1297      1.1297      0.0000      1.1297      1.1297      0.0000
+  1         5.0000      1.1286      1.1286      0.0000      1.1286      1.1286      0.0000
+  1         6.0000      1.1276      1.1276      0.0000      1.1276      1.1276      0.0000
+  1         7.0000      1.1265      1.1265      0.0000      1.1265      1.1265      0.0000
+  1         8.0000      1.1255      1.1255      0.0000      1.1255      1.1255      0.0000
+  1         9.0000      1.1244      1.1244      0.0000      1.1244      1.1244      0.0000
+  1        10.0000      1.1234      1.1234      0.0000      1.1234      1.1234      0.0000
+  1        11.0000      1.1223      1.1223      0.0000      1.1223      1.1223      0.0000
+  1        12.0000      1.1213      1.1213      0.0000      1.1213      1.1213      0.0000
+  1        13.0000      1.1202      1.1202      0.0000      1.1202      1.1202      0.0000
+  1        14.0000      1.1192      1.1192      0.0000      1.1192      1.1192      0.0000
+  1        15.0000      1.1181      1.1181      0.0000      1.1181      1.1181      0.0000
+  1        16.0000      1.1171      1.1171      0.0000      1.1171      1.1171      0.0000
+  1        17.0000      1.1160      1.1160      0.0000      1.1160      1.1160      0.0000
+  1        18.0000      1.1150      1.1150      0.0000      1.1150      1.1150      0.0000
+  2         0.0000      1.1352      1.1352      0.0000      1.1352      1.1352      0.0000
+  2         1.0000      1.1342      1.1342      0.0000      1.1342      1.1342      0.0000
+  2         2.0000      1.1332      1.1332      0.0000      1.1332      1.1332      0.0000
+  2         3.0000      1.1322      1.1322      0.0000      1.1322      1.1322      0.0000
+  2         4.0000      1.1312      1.1312      0.0000      1.1312      1.1312      0.0000
+  2         5.0000      1.1301      1.1301      0.0000      1.1301      1.1301      0.0000
+  2         6.0000      1.1291      1.1291      0.0000      1.1291      1.1291      0.0000
+  2         7.0000      1.1281      1.1281      0.0000      1.1281      1.1281      0.0000
+  2         8.0000      1.1271      1.1271      0.0000      1.1271      1.1271      0.0000
+  2         9.0000      1.1261      1.1261      0.0000      1.1261      1.1261      0.0000
+  2        10.0000      1.1251      1.1251      0.0000      1.1251      1.1251      0.0000
+  2        11.0000      1.1241      1.1241      0.0000      1.1241      1.1241      0.0000
+  2        12.0000      1.1231      1.1231      0.0000      1.1231      1.1231      0.0000
+  2        13.0000      1.1221      1.1221      0.0000      1.1221      1.1221      0.0000
+  2        14.0000      1.1211      1.1211      0.0000      1.1211      1.1211      0.0000
+  2        15.0000      1.1200      1.1200      0.0000      1.1200      1.1200      0.0000
+  2        16.0000      1.1190      1.1190      0.0000      1.1190      1.1190      0.0000
+  2        17.0000      1.1180      1.1180      0.0000      1.1180      1.1180      0.0000
+  2        18.0000      1.1170      1.1170      0.0000      1.1170      1.1170      0.0000
+  2        19.0000      1.1160      1.1160      0.0000      1.1160      1.1160      0.0000
+  2        20.0000      1.1150      1.1150      0.0000      1.1150      1.1150      0.0000
+  3        18.0000      1.1150      1.1150      0.0000      1.1150      1.1150      0.0000
+  3        19.0000      1.1139      1.1139      0.0000      1.1139      1.1139      0.0000
+  3        20.0000      1.1129      1.1129      0.0000      1.1129      1.1129      0.0000
+  3        21.0000      1.1119      1.1119      0.0000      1.1119      1.1119      0.0000
+  3        22.0000      1.1108      1.1108      0.0000      1.1108      1.1108      0.0000
+  3        23.0000      1.1098      1.1098      0.0000      1.1098      1.1098      0.0000
+  3        24.0000      1.1087      1.1087      0.0000      1.1087      1.1087      0.0000
+  3        25.0000      1.1077      1.1077      0.0000      1.1077      1.1077      0.0000
+ 
+ 
+ ==> Vérification détaillée des lits majeurs...
+                ligne d'eau initiale à  00:00:00:00
+ 
+ 
+ 
+ ########  DATE :  00:00:00:00        (jjj:hh:mn:ss) (00 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:01:00:00        (jjj:hh:mn:ss) (02 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:02:00:00        (jjj:hh:mn:ss) (01 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:03:00:00        (jjj:hh:mn:ss) (01 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:04:00:00        (jjj:hh:mn:ss) (01 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ 
+ 
+ 
+ ########  DATE :  00:05:00:00        (jjj:hh:mn:ss) (01 itérations)  ########
+ ===============================================================================
+ BIEF   1 : 11 m3 [  0.00 ha (0.587E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx0 Cote :    1.288                                Débit :    0.100
+    Noeud : xx1 Cote :    1.287                                Débit :    0.100
+ BIEF   2 : 12 m3 [  0.00 ha (0.650E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx2 Cote :    1.288                                Débit :    0.070
+    Noeud : xx1 Cote :    1.287                                Débit :    0.070
+ BIEF   3 : 4 m3 [  0.00 ha (0.246E+01 m3) inondés, 0 m3 déversés]
+    Noeud : xx1 Cote :    1.287                                Débit :    0.170
+    Noeud : xx3 Cote :    1.287                                Débit :    0.170
+ ===============================================================================
+ Volume total du réseau : 27 m3
+ ===============================================================================
+ Nombre total d'itérations :       83
+ Nombre total de pas de temps :       60
+ Date simulation : 20/01/2026 (20:36:38) Durée : 00:00:00 CPU : 00:00:00,011
+ ****************************** FIN NORMALE DE MAGE ****************************

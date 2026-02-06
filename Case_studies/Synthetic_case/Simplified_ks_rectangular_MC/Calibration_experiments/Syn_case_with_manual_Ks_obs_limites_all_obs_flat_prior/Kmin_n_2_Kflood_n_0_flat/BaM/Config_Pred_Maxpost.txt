@@ -1,0 +1,16 @@
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/Calibration_experiments/Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior/Kmin_n_2_Kflood_n_0_flat/BaM/X1.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/Calibration_experiments/Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior/Kmin_n_2_Kflood_n_0_flat/BaM/X2.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/Calibration_experiments/Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior/Kmin_n_2_Kflood_n_0_flat/BaM/X3.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/Calibration_experiments/Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior/Kmin_n_2_Kflood_n_0_flat/BaM/X4.pred" ! Files containing spaghettis for each input variable (size nX)
+334                                                        ! Nobs, number of observations per spaghetti (common to all files!)
+1,1,1,1                                                    ! Nspag, number of spaghettis for each input variable (size nX)
+.false.                                                    ! Propagate parametric uncertainty?
+.false.,.false.,.false.,.false.,.false.                    ! Propagate remnant uncertainty for each output variable? (size nY)
+-1                                                         ! Nsim[prior]. If <=0: posterior sampling (nsim is given by mcmc sample); if >0: sample nsim replicates from prior distribution
+"Maxpost_WSE.spag","Maxpost_Discharge.spag","Maxpost_Velocity.spag","Maxpost_Y_Kmin.spag","Maxpost_Y_Kmoy.spag" ! Files containing spaghettis for each output variable (size nY)
+.true.,.true.,.true.,.true.,.true.                         ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nY)
+.true.,.true.,.true.,.true.,.true.                         ! Post-processing: create envelops? (size nY)
+"Maxpost_WSE.env","Maxpost_Discharge.env","Maxpost_Velocity.env","Maxpost_Y_Kmin.env","Maxpost_Y_Kmoy.env" ! Post-processing: name of envelop files (size nY)
+.true.                                                     ! Print progress in console during computations?
+.false.                                                    ! Do state prediction? (size nState)
+                                                           !  Files containing spaghettis for each state variable (size nState)
+                                                           ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nState)
+.false.                                                    ! Post-processing: create envelops? (size nState)
+                                                           ! Post-processing: name of envelop files (size nState)
