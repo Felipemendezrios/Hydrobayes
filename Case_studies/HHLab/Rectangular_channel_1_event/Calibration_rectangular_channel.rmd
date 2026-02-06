@@ -1,0 +1,347 @@
+---
+title: "Rectangular channel in hydraulic flume"
+author: "Felipe"
+date: "`r Sys.Date()`"
+output: html_document
+bibliography: biblio.bib
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.align = "center"
+)
+```
+
+# Experimental set up
+
+A rectangular channel set up was used for this case study, this case never flows in floodplain. All the information about the case of study could be consulted here: the paper [Proust et al., (2022)](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/shallow-mixing-layers-over-hydraulically-smooth-bottom-in-a-tilted-open-channel/1E7D46915C8BCD807E30C1F0B1E17225&ved=2ahUKEwj_0Oax162PAxUpNvsDHWKaDosQFnoECBwQAQ&usg=AOvVaw2EI5uRyB-SEpsj14bvVBfI) and the numerical data [Dataset Proust et al., (2024)](https://doi.org/10.57745/EQURJN):
+
+Here the features of the experiment:
+
+- Length: 18 m 
+- Width: 3 m 
+- Slope : 1.04 x 10-3
+- Material : glass, same friction everywhere
+- Flow conditions : uniform flows with a total discharge of 14, 30, 60, 120 L/s  
+- Water level measurements: 161 measures from 0.50 m to 16.50 m
+
+```{r}
+knitr::include_graphics("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Rectangular_channel.png")
+```
+
+# Main features for the estimation
+- This is the simplest experiment available in a controlled environment. Although it is not a realistic case, it helps establish the methodology that can be applied in other situations.
+- Only the friction coefficient in the main channel is estimated
+- Floodplain friction is considered "fixed", so it will not be estimated
+- Several polynomial degrees have been performed
+- Four events are used for the calibration varying the flow conditions
+- Measurement of WSE were averaged for each cross-section to compare with the simulations. All averaged depth values were converted to elevation using the downstream as the reference datum.
+- Uncertainty of the observations was calculated using a regression function passing through the water depth and then a standard deviation was calculated for all observations.
+No measurements of the downstream threshold were reported. Therefore, the last available measurements were taken to define the downstream boundary condition in the model.
+
+# Laboratory measurements
+
+Check calibration data:
+
+```{r}
+load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/HHLab/smooth_bed/data_HHLab_all_cases.RData")
+
+function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Functions/", full.names = TRUE)
+for (i in function_list) {
+  source(i)
+}
+
+library(dplyr)
+library(ggplot2)
+
+WSE_all_data <- all_data_calibration$WSE
+
+WSE_all_data_with_id <- lapply(names(WSE_all_data), function(case_name) {
+  WSE_all_data[[case_name]] %>%
+    mutate(ID = case_name)
+})
+WSE_combined <- bind_rows(WSE_all_data_with_id)
+
+
+WSE_combined[, -c(1, 6)] <- WSE_combined[, -c(1, 6)] * 1000
+
+ydx_plot <- CalData_plot(
+  data = WSE_combined,
+  scales_free = "free_y",
+  y_label = "Water depth from riverbed (mm)",
+  title_label = "Observed water depth in the main channel at several flow conditions events",
+  col_label = "Events",
+  plot_water_depth = TRUE,
+  wrap = FALSE
+)
+ydx_plot +
+  scale_color_discrete(
+    labels = c(
+      "Q = 14 L/s",
+      "Q = 30 L/s",
+      "Q = 60 L/s",
+      "Q = 120 L/s"
+    )
+  )
+
+
+zdx_plot <- CalData_plot(
+  data = WSE_combined,
+  scales_free = "free_y",
+  y_label = "Water surface elevation (mm)",
+  title_label = "Observed WSE in the main channel",
+  col_label = NULL,
+  plot_water_depth = FALSE,
+  wrap = FALSE
+)
+
+zdx_plot +
+  scale_color_discrete(
+    labels = c(
+      "Q = 14 L/s",
+      "Q = 30 L/s",
+      "Q = 60 L/s",
+      "Q = 120 L/s",
+      "riverbed"
+    )
+  )
+```
+
+First, a sample of all previously shown measurements was taken to be used in all the tested cases. Then, a guiding question was formulated to trigger the experiment and help provide an answer.
+
+## Calibration data
+```{r}
+id <- "4_WSE_main_channel_real_uncertainty"
+path <- file.path("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/HHLab/Rectangular_channel/Calibration_experiments", id)
+
+knitr::include_graphics(file.path(path, "CalData_plot.png"))
+```
+
+
+# Questions:
+
+To answer all the questions, the experiment below is performed varying the degrees of the Legendre polynomial from 0 to 3.
+
+1. **Could the methodology be used to estimate the friction coefficient of the glass without any prior information?**
+
+    **Answer:** the methodology can estimate the friction using only WSE measurements at a few positions. No prior information is required because friction does not vary in the longitudinal direction, so the WSE profile remains nearly parallel to the riverbed. 
+
+
+1. **What happens if the degree of the Legendre polynomial increases?Could the methodology then estimate more than a single friction constant in longitudinal?**
+
+    **Answer:** increasing the degree of the Legendre polynomial introduces more degrees of freedom, allowing greater spatial variation of friction during calibration. The results indicate that even as the degree increases, the MAP estimation tends to converge toward a constant friction. However, the higher the degree, the more instabilities are observed at the boundaries.   
+
+2. **How to select the best estimation considering the Bayesian method for estimating the parameters of a model?**
+
+    **Answer:** the DIC criterion is designed for comparing Bayesian estimations, and previous studies support its use. In this case, the results show that the best estimation corresponds to degree 0, i.e. constant friction along the longitudinal direction, which was expected since the material of the hydraulic flume is glass throughout.
+
+
+# Experiment: `4_WSE_main_channel_real_uncertainty`
+
+First,  a plot of the DIC criterion will be shown. Then the friction estimations obtained with the MAP estimator, along with the simulated WSE, will be presented for all degrees higher than 0. 
+
+## DIC criterion
+
+In this case, the best estimation indicates that the friction is constant with any variation from upstream to downstream. That's why, all calibration results will be presented for this polynomial degree.
+
+```{r}
+knitr::include_graphics(file.path(path, "DIC.png"))
+```
+
+## Degree 0 of the Legendre polynomial: constant friction
+
+## Check MCMC
+
+### All MCMC samples
+
+```{r}
+id_polynomial <- 0
+path_polynomial <- file.path(path, paste0("n_", id_polynomial), "Calibration")
+path_fig <- file.path(path_polynomial, "post_traitement")
+knitr::include_graphics(file.path(path_fig, "MCMC_not_cooked.png"))
+knitr::include_graphics(file.path(path_fig, "densityplot_not_cooked.png"))
+```
+
+### MCMC cooked
+
+```{r}
+knitr::include_graphics(file.path(path_fig, "MCMC_Cooked.png"))
+knitr::include_graphics(file.path(path_fig, "densityplot_Cooked.png"))
+```
+
+### Corelation plot of MCMC cooked
+```{r}
+knitr::include_graphics(file.path(path_fig, "corelation_cooked.png"))
+```
+
+## Check summary
+
+```{r}
+getSummary <- read.table(
+  file = file.path(path_polynomial, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom[, c(1, 2)],
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm"
+)
+```
+
+## Estimation of the friction coefficient
+
+```{r}
+knitr::include_graphics(file.path(path_fig, "kmin.png"))
+```
+
+## Residuals
+### In termes of WSE
+```{r}
+knitr::include_graphics(file.path(path_fig, "Plot_Z_residuals.png"))
+```
+
+### In termes of discharge
+```{r}
+knitr::include_graphics(file.path(path_fig, "Q_residuals.png"))
+```
+
+## Partial conclusions
+- Using only WSE observations in a rectangular channel, it is possible to accurately and precisely estimate  the friction of the hydraulic flume's material, assuming the friction remains constant along the longitudinal direction.
+- Convergence reached quickly during the exploration of the parameters
+- Any corelation between the parameters of the model and the error model is detected
+
+## Degree 1 of the Legendre polynomial
+
+```{r}
+id_polynomial <- 1
+path_polynomial <- file.path(path, paste0("n_", id_polynomial), "Calibration")
+path_fig <- file.path(path_polynomial, "post_traitement")
+```
+## Check summary
+
+```{r}
+getSummary <- read.table(
+  file = file.path(path_polynomial, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom[, c(1, 2, 3)],
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm"
+)
+```
+
+## Estimation of the friction coefficient
+```{r}
+knitr::include_graphics(file.path(path_fig, "kmin.png"))
+```
+
+## Residuals
+### In termes of WSE
+```{r}
+knitr::include_graphics(file.path(path_fig, "Plot_Z_residuals.png"))
+```
+
+## Degree 2 of the Legendre polynomial
+
+```{r}
+id_polynomial <- 2
+path_polynomial <- file.path(path, paste0("n_", id_polynomial), "Calibration")
+path_fig <- file.path(path_polynomial, "post_traitement")
+```
+
+## Check summary
+
+```{r}
+getSummary <- read.table(
+  file = file.path(path_polynomial, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom[, c(1, 2, 3, 4)],
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm"
+)
+```
+
+## Estimation of the friction coefficient
+
+```{r}
+knitr::include_graphics(file.path(path_fig, "kmin.png"))
+```
+
+## Residuals
+### In termes of WSE
+```{r}
+knitr::include_graphics(file.path(path_fig, "Plot_Z_residuals.png"))
+```
+
+## Degree 3 of the Legendre polynomial
+
+## Check summary
+
+```{r}
+getSummary <- read.table(
+  file = file.path(path_polynomial, "Results_Summary.txt"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# Values of error model in meter for WSE, in m3/s for discharge and m/s for velocity.
+knitr::kable(getSummary,
+  align = "c"
+)
+
+# Zoom into the MAP and standard deviation of the error model
+getSummary_zoom <- getSummary[c(11, 16), ]
+getSummary_zoom[, c("Y1_intercept")] <- getSummary_zoom[, c("Y1_intercept")] * 1000 # Convert to mm for WSE
+
+knitr::kable(getSummary_zoom[, c(1, 2, 3, 4, 5)],
+  align = "c",
+  caption = "Zoom into the MAP and standard deviation of the error model: WSE in mm"
+)
+```
+
+## Estimation of the friction coefficient
+
+```{r}
+knitr::include_graphics(file.path(path_fig, "kmin.png"))
+```
+
+## Residuals
+### In termes of WSE
+```{r}
+knitr::include_graphics(file.path(path_fig, "Plot_Z_residuals.png"))
+```
