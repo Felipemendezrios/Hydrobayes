@@ -1,0 +1,40 @@
+"MAGE_ZQV"                                                 ! Model ID - type getCatalogue() in RBaM to see available models
+4                                                          ! nX: number of input variables
+5                                                          ! nY: number of output variables
+9                                                          ! nPar: number of parameters theta
+"Kmin_Rhone"                                               ! Parameter name
+35                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kmin_Ai_SR1_a0"                                           ! Parameter name
+15                                                         ! Initial guess
+"Uniform"                                                  ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+8,40                                                       ! Prior parameters
+"Kmin_Ai_SR1_a1"                                           ! Parameter name
+0                                                          ! Initial guess
+"FlatPrior"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kmin_Ai_SR1_a2"                                           ! Parameter name
+0                                                          ! Initial guess
+"FlatPrior"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kmin_Ai_SR1_a3"                                           ! Parameter name
+0                                                          ! Initial guess
+"FlatPrior"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kmin_Cassier"                                             ! Parameter name
+35                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kflood_Rh_SR1_a0"                                         ! Parameter name
+15                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kflood_Ai_SR1_a0"                                         ! Parameter name
+15                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kflood_Cassier"                                           ! Parameter name
+15                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters

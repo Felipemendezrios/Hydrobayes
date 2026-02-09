@@ -106,9 +106,6 @@ interpolation_specific_points <- function(total_points = 100,
                                           specific_nodes) {
     if (total_points <= length(specific_nodes)) stop("Total points defined is lower or equal to the specific points required. Please either increase the number of total_points or avoid to used interpolation function")
 
-    # Order specific_nodes
-    specific_nodes <- sort(specific_nodes)
-
     # Calculate the intervals between the specific points
     intervals <- diff(specific_nodes)
     # Distribute the number of points proportionally to each interval
@@ -139,7 +136,7 @@ interpolation_specific_points <- function(total_points = 100,
 }
 
 # Function to assign reach to a grid
-assign_reach_from_a_grid <- function(reach_KP_boundaries, grid, Logical_decreasing) {
+assign_reach_from_a_grid <- function(reach_KP_boundaries, grid) {
     grid_with_reaches <- data.frame(
         reaches = rep(NA, length(grid)),
         grid = rep(NA, length(grid))
@@ -151,43 +148,26 @@ assign_reach_from_a_grid <- function(reach_KP_boundaries, grid, Logical_decreasi
         grid_with_reaches$reaches[which(all_set)] <- reach_KP_boundaries$reach[1]
         grid_with_reaches$grid[which(all_set)] <- grid
     } else {
-        if (Logical_decreasing) {
-            # Include end (right) and exclude start (left)
-            for (i in 1:nrow(reach_KP_boundaries)) {
-                if (i != nrow(reach_KP_boundaries)) {
-                    idx_position_reaches <- which(
-                        grid > reach_KP_boundaries$KP_start[i] &
-                            grid <= reach_KP_boundaries$KP_end[i]
-                    )
-                } else {
-                    idx_position_reaches <- which(
-                        grid >= reach_KP_boundaries$KP_start[i] &
-                            grid <= reach_KP_boundaries$KP_end[i]
-                    )
-                }
-
-                grid_with_reaches$reaches[idx_position_reaches] <- reach_KP_boundaries$reach[i]
-                grid_with_reaches$grid[idx_position_reaches] <- grid[idx_position_reaches]
+        # Include start (left) and exclude end (right)
+        for (i in 1:nrow(reach_KP_boundaries)) {
+            if (i != nrow(reach_KP_boundaries)) {
+                idx_position_reaches <- which(
+                    (grid >= reach_KP_boundaries$KP_start[i] &
+                        grid < reach_KP_boundaries$KP_end[i]) | (grid <= reach_KP_boundaries$KP_start[i] &
+                        grid > reach_KP_boundaries$KP_end[i])
+                )
+            } else {
+                idx_position_reaches <- which(
+                    (grid >= reach_KP_boundaries$KP_start[i] &
+                        grid <= reach_KP_boundaries$KP_end[i]) |
+                        (grid <= reach_KP_boundaries$KP_start[i] &
+                            grid >= reach_KP_boundaries$KP_end[i])
+                )
             }
-        } else {
-            # Include start (left) and exclude end (right)
-            for (i in 1:nrow(reach_KP_boundaries)) {
-                if (i != nrow(reach_KP_boundaries)) {
-                    idx_position_reaches <- which(
-                        grid >= reach_KP_boundaries$KP_start[i] &
-                            grid < reach_KP_boundaries$KP_end[i]
-                    )
-                } else {
-                    idx_position_reaches <- which(
-                        grid >= reach_KP_boundaries$KP_start[i] &
-                            grid <= reach_KP_boundaries$KP_end[i]
-                    )
-                }
 
 
-                grid_with_reaches$reaches[idx_position_reaches] <- reach_KP_boundaries$reach[i]
-                grid_with_reaches$grid[idx_position_reaches] <- grid[idx_position_reaches]
-            }
+            grid_with_reaches$reaches[idx_position_reaches] <- reach_KP_boundaries$reach[i]
+            grid_with_reaches$grid[idx_position_reaches] <- grid[idx_position_reaches]
         }
     }
 
@@ -376,7 +356,7 @@ CalData_plot <- function(
     y_label,
     title_label,
     col_label = NULL,
-    plot_water_depth = TRUE,
+    plot_water_depth = FALSE,
     wrap = TRUE) {
     plot_CalData <-
         ggplot(data = data, aes(
@@ -386,9 +366,9 @@ CalData_plot <- function(
         )) +
         geom_line(
             aes(
-                y = Z_thalweg,
-                col = "Thalweg"
-            )
+                y = Z_thalweg
+            ),
+            col = "black"
         )
 
     if (any(data$Yu != 0)) {
@@ -417,6 +397,17 @@ CalData_plot <- function(
         plot_CalData <- plot_CalData +
             facet_wrap(~name_event, scales = scales_free, ncol = 1)
     }
+
+    plot_CalData <- plot_CalData +
+        theme(
+            strip.text = element_text(size = 12, face = "bold"),
+            axis.title.x = element_text(size = 13), # x-axis title
+            axis.title.y = element_text(size = 13), # y-axis title
+            axis.text.x = element_text(size = 12, hjust = 1), # x-axis ticks
+            axis.text.y = element_text(size = 12), # y-axis ticks
+            legend.title = element_text(size = 14, face = "bold"),
+            legend.text = element_text(size = 12)
+        )
     return(plot_CalData)
 }
 get_specific_SR_points <- function(SR_properties) {
@@ -444,8 +435,8 @@ SR_constructor <- function(SR_key_HM,
     for (id_XR in seq_along(SR_key_HM)) {
         # Get KP boundaries of all SR at a XR
         SR_KP_boundaries_list <- SR_KP_boundaries_structure[[id_XR]]
-        RUG_min_boundary_KP <- min(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_start)
-        RUG_max_boundary_KP <- max(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_end)
+        RUG_min_boundary_KP <- min(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_start, Key_Info_XR_MR[[id_XR]]$RUGFile$KP_end)
+        RUG_max_boundary_KP <- max(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_start, Key_Info_XR_MR[[id_XR]]$RUGFile$KP_end)
 
         # Check if KP boundaries of each SR respect the KP boundaries of XR
         if (min(unlist(SR_KP_boundaries_list)) != RUG_min_boundary_KP ||
@@ -470,35 +461,19 @@ SR_constructor <- function(SR_key_HM,
             # Starting with KP and reach
             boundaries <- SR_KP_boundaries_list[[id_SR]]
 
-            if (Key_Info_XR_MR[[id_XR]]$Logical_decreasing) {
-                # If logical_decreasing is TRUE, boundaries must be reordered to the calculation
-                boundaries <- sort(boundaries)
-                # Include end (right) and exclude start (left)
-                if (id_SR != length(SR_KP_boundaries_list)) {
-                    position_match <- which(
-                        data_KP > boundaries[1] &
-                            data_KP <= boundaries[2]
-                    )
-                } else {
-                    position_match <- which(
-                        data_KP >= boundaries[1] &
-                            data_KP <= boundaries[2]
-                    )
-                }
+            # Include start (left) and exclude end (right)
+            if (id_SR != length(SR_KP_boundaries_list)) {
+                position_match <- which(
+                    data_KP >= min(boundaries) &
+                        data_KP < max(boundaries)
+                )
             } else {
-                # Include start (left) and exclude end (right)
-                if (id_SR != length(SR_KP_boundaries_list)) {
-                    position_match <- which(
-                        data_KP >= boundaries[1] &
-                            data_KP < boundaries[2]
-                    )
-                } else {
-                    position_match <- which(
-                        data_KP >= boundaries[1] &
-                            data_KP <= boundaries[2]
-                    )
-                }
+                position_match <- which(
+                    data_KP >= min(boundaries) &
+                        data_KP <= max(boundaries)
+                )
             }
+
 
             SR[[id_XR]][[id_SR]]$KP <- data_KP[position_match]
             SR[[id_XR]][[id_SR]]$reach <- data_reaches[position_match]
@@ -606,29 +581,53 @@ copy_folder <- function(source, destination) {
 # Module 1 : set directory paths
 ############################################
 
+RUN_ONLY_AIN <- FALSE
+
 # Set directory
 dir_workspace <- here::here()
 
 # Common for observation and calibration folders: names of the experiment
-Experiment_id <- c(
-    "test_1"
-)
+if (RUN_ONLY_AIN) {
+    Experiment_id <- c(
+        "test_AIN"
+    )
+} else {
+    Experiment_id <- c(
+        "test_1"
+    )
+}
+
+
 # Experiments input data to be used during calibration setting
-all_cal_case <- c(
-    "Kmin_n_4_Kflood_fix.r"
-)
+if (RUN_ONLY_AIN) {
+    all_cal_case <- c(
+        "Kmin_n_4_Kflood_fix_just_Ain.r"
+    )
+} else {
+    all_cal_case <- c(
+        "Kmin_n_4_Kflood_fix.r"
+    )
+}
 
 # Folder related to the observations (careful with the order!)
-all_events <- c(
-    "AIN_90",
-    "RHONE_525",
-    "RHONE_750"
-)
+
+if (RUN_ONLY_AIN) {
+    all_events <- c(
+        "AIN_90"
+    )
+} else {
+    all_events <- c(
+        "AIN_90",
+        "RHONE_525",
+        "RHONE_750"
+    )
+}
 
 dir_exe_BaM <- "/home/famendezrios/Documents/Git/BaM/makefile/"
 MAGE_executable <- "/home/famendezrios/Documents/Softwares/pamhyr2/mage8/mage"
-file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Calibration_experiments"
-MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/model_mage/"
+command_line_MAGE <- "-fp=2 -LC=0 -eps=5"
+file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Real_Condition_model/Calibration_experiments"
+MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Real_Condition_model/model_mage"
 mage_projet_name <- "Rhone_PCH_Ain"
 
 if (!dir.exists(MAGE_main_folder)) stop("MAGE_main_folder does not exist")
@@ -636,8 +635,41 @@ if (!dir.exists(MAGE_main_folder)) stop("MAGE_main_folder does not exist")
 # End module 1: set directories paths
 ############################################
 
+
 ############################################
-# Module 2: calibration data
+# Module 2 : hydraulic model (HM) environment
+############################################
+# Input information about reaches and boundaries KP of the HM.
+# MR : Model reach interpreted by the HM.
+# This input information must be coherent with HM specifications.
+
+# KP start and end must be reliable to the model.
+
+Input_MR <- data.frame(
+    reach = c(1, 2, 3, 4, 5, 6, 7, 8),
+    KP_start = c(55900, 36250, 34500, 37491, 41211, 0, 20, 22333),
+    KP_end = c(36250, 34500, 26750, 41211, 41461, 20, 40, 37491)
+)
+
+
+# First layer: XR
+# ###########################################
+# All reaches in the model (MR) defined within the same coordinate reference
+
+# Must be careful with the order, the order of the reaches must be given upstream to downstream
+Input_XR <- list(
+    Rhone = c(1, 2, 3),
+    Ain = c(8, 4, 5),
+    Cassier = c(6, 7)
+)
+
+############################################
+# End module 2 : hydraulic model (HM) environment
+############################################
+
+
+############################################
+# Module 3: calibration data
 ############################################
 
 sd_WSE_fixed <- 0.05 # 5 cm
@@ -651,322 +683,684 @@ load("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data
 
 # Traitement to each event used during calibration
 # Read key information of event
-key_info_event_extraction <- read.table("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/Boundary_conditions/Specific_boundary_conditions/Dates_start_end_extraction.csv", header = TRUE, sep = ",")
+do_real_conditions <- TRUE
 
-#####################################################################
-# Case AIN 90
-#####################################################################
-init_model_date <- key_info_event_extraction %>%
-    filter(id_case == "AIN_90") %>%
-    pull(model_start)
+if (do_real_conditions) {
+    key_info_event_extraction <- read.table("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/Boundary_conditions/Specific_boundary_conditions/Dates_start_end_extraction.csv", header = TRUE, sep = ",")
 
-init_model_date <- as.POSIXct(
-    init_model_date,
-    tz = "UTC",
-    format = "%Y-%m-%d %H:%M:%S"
-)
-WSE_Ain_90_raw <- all_WSE_Ain %>%
-    filter(id_case == 90) %>%
-    mutate(
-        id_reach_CAL = case_when(
-            id_reach == "PCH_PGA" ~ 8,
-            id_reach == "PGA_CAIN" ~ 4,
-            id_reach == "CAIN_Confluence" ~ 5
-        ),
-        time_mage = difftime(time, init_model_date, units = c("secs")),
-        Yu = sd_WSE_fixed,
-        event = 1,
-        name_event = "AIN_90"
+    #####################################################################
+    # Case AIN 90
+    #####################################################################
+    init_model_date <- key_info_event_extraction %>%
+        filter(id_case == "AIN_90") %>%
+        pull(model_start)
+
+    init_model_date <- as.POSIXct(
+        init_model_date,
+        tz = "UTC",
+        format = "%Y-%m-%d %H:%M:%S"
     )
-#################################
-# Check if time are within the simulation period
-PARFile <- readLines(file.path(MAGE_main_folder, "AIN_90", "Rhone_PCH_Ain.PAR"), n = 7)
-end_par_file <- PARFile[3]
-timestep_bin_par_file <- PARFile[7]
-
-# Get the mage time in seconds
-duration <- sub("^final_time\\s+", "", end_par_file)
-parts <- as.numeric(strsplit(duration, ":")[[1]])
-
-end_time_sim <- parts[1] * 86400 + # days
-    parts[2] * 3600 + # hours
-    parts[3] * 60 + # minutes
-    parts[4] # seconds
-
-if (nrow(WSE_Ain_90_raw %>% filter(WSE_Ain_90_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
-
-# Round each value in time_mage to the nearest multiple of timestep_bin
-
-timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
-WSE_Ain_90_raw$time_mage_nearest <- round(WSE_Ain_90_raw$time_mage / timestep_bin) * timestep_bin
-
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set (random 70%)
-WSE_Ain_90_Cal <- WSE_Ain_90_raw %>%
-    group_by(id_reach) %>%
-    slice_sample(prop = 0.7) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(KP) # Because order is upstream to downstream and KP is increasing
-
-# If KP duplicated, take it off
-if (any(duplicated(WSE_Ain_90_Cal$KP))) {
-    WSE_Ain_90_Cal <- WSE_Ain_90_Cal[-which(duplicated(WSE_Ain_90_Cal$KP)), ]
-}
-
-# 2. Validation set = rest (30%)
-WSE_Ain_90_Val <- WSE_Ain_90_raw %>%
-    anti_join(WSE_Ain_90_Cal, by = colnames(WSE_Ain_90_raw)) %>%
-    mutate(set = "validation")
-
-# 3. Combine into a single data frame
-WSE_Ain_90 <- bind_rows(WSE_Ain_90_Cal, WSE_Ain_90_Val) %>% arrange(KP)
-
-ggplot(WSE_Ain_90, aes(x = time_mage, y = WSE, col = set)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-ggplot(WSE_Ain_90_Cal, aes(x = time_mage, y = WSE, col = id_reach)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-
-#####################################################################
-# Case Rhone 525
-#####################################################################
-init_model_date <- key_info_event_extraction %>%
-    filter(id_case == "RHONE_525") %>%
-    pull(model_start)
-
-init_model_date <- as.POSIXct(
-    init_model_date,
-    tz = "UTC",
-    format = "%Y-%m-%d %H:%M:%S"
-)
-WSE_Rhone_525_raw <- all_WSE_Rhone %>%
-    filter(id_case == 525) %>%
-    mutate(
-        id_reach_CAL = case_when(
-            id_reach == "ANT_JNS" ~ 3,
-            id_reach == "BOU_ANT" ~ 2,
-            id_reach == "LGN_BOU" ~ 1
-        ),
-        time_mage = difftime(time, init_model_date, units = c("secs")),
-        Yu = sd_WSE_fixed,
-        event = 2,
-        name_event = "RHONE_525"
-    )
-#################################
-# Check if time are within the simulation period
-PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_525", "Rhone_PCH_Ain.PAR"), n = 7)
-end_par_file <- PARFile[3]
-timestep_bin_par_file <- PARFile[7]
-
-# Get the mage time in seconds
-duration <- sub("^final_time\\s+", "", end_par_file)
-parts <- as.numeric(strsplit(duration, ":")[[1]])
-
-end_time_sim <- parts[1] * 86400 + # days
-    parts[2] * 3600 + # hours
-    parts[3] * 60 + # minutes
-    parts[4] # seconds
-
-if (nrow(WSE_Rhone_525_raw %>% filter(WSE_Rhone_525_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
-
-# Round each value in time_mage to the nearest multiple of timestep_bin
-
-timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
-WSE_Rhone_525_raw$time_mage_nearest <- round(WSE_Rhone_525_raw$time_mage / timestep_bin) * timestep_bin
-
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set (random 70%)
-WSE_Rhone_525_Cal <- WSE_Rhone_525_raw %>%
-    group_by(id_reach) %>%
-    slice_sample(prop = 0.7) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(desc(KP)) # Because the order is from upstream to downstream
-
-# If KP duplicated, take it off
-if (any(duplicated(WSE_Rhone_525_Cal$KP))) {
-    WSE_Rhone_525_Cal <- WSE_Rhone_525_Cal[-which(duplicated(WSE_Rhone_525_Cal$KP)), ]
-}
-
-# 2. Validation set = rest (30%)
-WSE_Rhone_525_Val <- WSE_Rhone_525_raw %>%
-    anti_join(WSE_Rhone_525_Cal, by = colnames(WSE_Rhone_525_raw)) %>%
-    mutate(set = "validation")
-
-# 3. Combine into a single data frame
-WSE_Rhone_525 <- bind_rows(WSE_Rhone_525_Cal, WSE_Rhone_525_Val) %>% arrange(desc(KP))
-
-ggplot(WSE_Rhone_525, aes(x = KP, y = WSE, col = set)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-
-ggplot(WSE_Rhone_525_Cal, aes(x = KP, y = WSE, col = id_reach)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-
-#####################################################################
-# Case Rhone 750
-#####################################################################
-init_model_date <- key_info_event_extraction %>%
-    filter(id_case == "RHONE_750") %>%
-    pull(model_start)
-
-init_model_date <- as.POSIXct(
-    init_model_date,
-    tz = "UTC",
-    format = "%Y-%m-%d %H:%M:%S"
-)
-WSE_Rhone_750_raw <- all_WSE_Rhone %>%
-    filter(id_case == 750) %>%
-    mutate(
-        id_reach_CAL = case_when(
-            id_reach == "ANT_JNS" ~ 3,
-            id_reach == "BOU_ANT" ~ 2,
-            id_reach == "LGN_BOU" ~ 1
-        ),
-        time_mage = difftime(time, init_model_date, units = c("secs")),
-        Yu = sd_WSE_fixed,
-        event = 3,
-        name_event = "RHONE_750"
-    )
-#################################
-# Check if time are within the simulation period
-PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_750", "Rhone_PCH_Ain.PAR"), n = 7)
-end_par_file <- PARFile[3]
-timestep_bin_par_file <- PARFile[7]
-
-# Get the mage time in seconds
-duration <- sub("^final_time\\s+", "", end_par_file)
-parts <- as.numeric(strsplit(duration, ":")[[1]])
-
-end_time_sim <- parts[1] * 86400 + # days
-    parts[2] * 3600 + # hours
-    parts[3] * 60 + # minutes
-    parts[4] # seconds
-
-if (nrow(WSE_Rhone_750_raw %>% filter(WSE_Rhone_750_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
-
-# Round each value in time_mage to the nearest multiple of timestep_bin
-
-timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
-WSE_Rhone_750_raw$time_mage_nearest <- round(WSE_Rhone_750_raw$time_mage / timestep_bin) * timestep_bin
-
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set (random 70%)
-WSE_Rhone_750_Cal <- WSE_Rhone_750_raw %>%
-    group_by(id_reach) %>%
-    slice_sample(prop = 0.7) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(desc(KP)) # Because the order is from upstream to downstream
-
-# If KP duplicated, take it off
-if (any(duplicated(WSE_Rhone_750_Cal$KP))) {
-    WSE_Rhone_750_Cal <- WSE_Rhone_750_Cal[-which(duplicated(WSE_Rhone_750_Cal$KP)), ]
-}
-
-# 2. Validation set = rest (30%)
-WSE_Rhone_750_Val <- WSE_Rhone_750_raw %>%
-    anti_join(WSE_Rhone_750_Cal, by = colnames(WSE_Rhone_750_raw)) %>%
-    mutate(set = "validation")
-
-# 3. Combine into a single data frame
-WSE_Rhone_750 <- bind_rows(WSE_Rhone_750_Cal, WSE_Rhone_750_Val) %>% arrange(desc(KP))
-
-ggplot(WSE_Rhone_750, aes(x = KP, y = WSE, col = set)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-
-ggplot(WSE_Rhone_750_Cal, aes(x = KP, y = WSE, col = id_reach)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu,
-        ymax = WSE + qnorm(0.975) * Yu
-    ))
-
-
-# !!!!!!!!!!!!
-# Ensure that order should be in coherence with mage model set up!!!!!!!!!!!!
-# !!!!!!!!!!!!
-
-## just to know the order of calibration data
-Cal_measures <-
-    list(
-        AIN_90 =
-            data.frame(
-                event = WSE_Ain_90_Cal$event,
-                reach = WSE_Ain_90_Cal$id_reach_CAL,
-                x = WSE_Ain_90_Cal$KP,
-                t = WSE_Ain_90_Cal$time_mage
+    WSE_Ain_90_raw <- all_WSE_Ain %>%
+        filter(id_case == 90) %>%
+        mutate(
+            id_reach_CAL = case_when(
+                id_reach == "PCH_PGA" ~ 8,
+                id_reach == "PGA_CAIN" ~ 4,
+                id_reach == "CAIN_Confluence" ~ 5
             ),
-        RHONE_525 =
-            data.frame(
-                event = WSE_Rhone_525_Cal$event,
-                reach = WSE_Rhone_525_Cal$id_reach_CAL,
-                x = WSE_Rhone_525_Cal$KP,
-                t = WSE_Rhone_525_Cal$time_mage
-            ),
-        RHONE_750 =
-            data.frame(
-                event = WSE_Rhone_750_Cal$event,
-                reach = WSE_Rhone_750_Cal$id_reach_CAL,
-                x = WSE_Rhone_750_Cal$KP,
-                t = WSE_Rhone_750_Cal$time_mage
+            time_mage = difftime(time, init_model_date, units = c("secs")),
+            Yu = sd_WSE_fixed,
+            event = 1,
+            name_event = "AIN_90"
+        )
+    #################################
+    # Check if time are within the simulation period
+    PARFile <- readLines(file.path(MAGE_main_folder, "AIN_90", "Rhone_PCH_Ain.PAR"), n = 7)
+    end_par_file <- PARFile[3]
+    timestep_bin_par_file <- PARFile[7]
+
+    # Get the mage time in seconds
+    duration <- sub("^final_time\\s+", "", end_par_file)
+    parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+    end_time_sim <- parts[1] * 86400 + # days
+        parts[2] * 3600 + # hours
+        parts[3] * 60 + # minutes
+        parts[4] # seconds
+
+    if (nrow(WSE_Ain_90_raw %>% filter(WSE_Ain_90_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+    # Round each value in time_mage to the nearest multiple of timestep_bin
+
+    timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+    WSE_Ain_90_raw$time_mage_nearest <- round(WSE_Ain_90_raw$time_mage / timestep_bin) * timestep_bin
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set (random 70%)
+    WSE_Ain_90_Cal <- WSE_Ain_90_raw %>%
+        group_by(id_reach) %>%
+        slice_sample(prop = 0.9) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP) # Because order is upstream to downstream and KP is increasing
+
+    # If KP duplicated, take it off
+    if (any(duplicated(WSE_Ain_90_Cal$KP))) {
+        WSE_Ain_90_Cal <- WSE_Ain_90_Cal[-which(duplicated(WSE_Ain_90_Cal$KP)), ]
+    }
+
+    # Remove the WSE at the nodes
+    nodes_extraction <- Input_MR %>%
+        filter(reach %in%
+            Input_XR$Ain) %>%
+        select(-reach)
+
+    nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+    if (length(which(WSE_Ain_90_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+        WSE_Ain_90_Cal <- WSE_Ain_90_Cal[-which(WSE_Ain_90_Cal$KP %in% nodes_to_remove_cal), ]
+    }
+
+    # 2. Validation set = rest (30%)
+    WSE_Ain_90_Val <- WSE_Ain_90_raw %>%
+        anti_join(WSE_Ain_90_Cal, by = colnames(WSE_Ain_90_raw)) %>%
+        mutate(set = "validation")
+
+    # 3. Combine into a single data frame
+    WSE_Ain_90 <- bind_rows(WSE_Ain_90_Cal, WSE_Ain_90_Val) %>% arrange(KP)
+
+    ggplot(WSE_Ain_90, aes(x = time_mage, y = WSE, col = set)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+    ggplot(WSE_Ain_90_Cal, aes(x = time_mage, y = WSE, col = id_reach)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+
+    if (!RUN_ONLY_AIN) {
+        #####################################################################
+        # Case Rhone 525
+        #####################################################################
+        init_model_date <- key_info_event_extraction %>%
+            filter(id_case == "RHONE_525") %>%
+            pull(model_start)
+
+        init_model_date <- as.POSIXct(
+            init_model_date,
+            tz = "UTC",
+            format = "%Y-%m-%d %H:%M:%S"
+        )
+        WSE_Rhone_525_raw <- all_WSE_Rhone %>%
+            filter(id_case == 525) %>%
+            mutate(
+                id_reach_CAL = case_when(
+                    id_reach == "ANT_JNS" ~ 3,
+                    id_reach == "BOU_ANT" ~ 2,
+                    id_reach == "LGN_BOU" ~ 1
+                ),
+                time_mage = difftime(time, init_model_date, units = c("secs")),
+                Yu = sd_WSE_fixed,
+                event = 2,
+                name_event = "RHONE_525"
             )
+        #################################
+        # Check if time are within the simulation period
+        PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_525", "Rhone_PCH_Ain.PAR"), n = 7)
+        end_par_file <- PARFile[3]
+        timestep_bin_par_file <- PARFile[7]
+
+        # Get the mage time in seconds
+        duration <- sub("^final_time\\s+", "", end_par_file)
+        parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+        end_time_sim <- parts[1] * 86400 + # days
+            parts[2] * 3600 + # hours
+            parts[3] * 60 + # minutes
+            parts[4] # seconds
+
+        if (nrow(WSE_Rhone_525_raw %>% filter(WSE_Rhone_525_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+        # Round each value in time_mage to the nearest multiple of timestep_bin
+
+        timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+        WSE_Rhone_525_raw$time_mage_nearest <- round(WSE_Rhone_525_raw$time_mage / timestep_bin) * timestep_bin
+
+        #################################
+        set.seed(2026) #  # for reproducibility
+        # 1. Calibration set (random 70%)
+        WSE_Rhone_525_Cal <- WSE_Rhone_525_raw %>%
+            group_by(id_reach) %>%
+            slice_sample(prop = 0.9) %>%
+            ungroup() %>%
+            mutate(set = "calibration") %>%
+            arrange(desc(KP)) # Because the order is from upstream to downstream
+
+        # If KP duplicated, take it off
+        if (any(duplicated(WSE_Rhone_525_Cal$KP))) {
+            WSE_Rhone_525_Cal <- WSE_Rhone_525_Cal[-which(duplicated(WSE_Rhone_525_Cal$KP)), ]
+        }
+
+        # Remove the WSE at the nodes
+        nodes_extraction <- Input_MR %>%
+            filter(reach %in%
+                Input_XR$Rhone) %>%
+            select(-reach)
+
+        nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+        if (length(which(WSE_Rhone_525_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+            WSE_Rhone_525_Cal <- WSE_Rhone_525_Cal[-which(WSE_Rhone_525_Cal$KP %in% nodes_to_remove_cal), ]
+        }
+
+        # 2. Validation set = rest (30%)
+        WSE_Rhone_525_Val <- WSE_Rhone_525_raw %>%
+            anti_join(WSE_Rhone_525_Cal, by = colnames(WSE_Rhone_525_raw)) %>%
+            mutate(set = "validation")
+
+        # 3. Combine into a single data frame
+        WSE_Rhone_525 <- bind_rows(WSE_Rhone_525_Cal, WSE_Rhone_525_Val) %>% arrange(desc(KP))
+
+        ggplot(WSE_Rhone_525, aes(x = KP, y = WSE, col = set)) +
+            geom_point() +
+            geom_errorbar(aes(
+                ymin = WSE - qnorm(0.975) * Yu,
+                ymax = WSE + qnorm(0.975) * Yu
+            ))
+
+
+        ggplot(WSE_Rhone_525_Cal, aes(x = KP, y = WSE, col = id_reach)) +
+            geom_point() +
+            geom_errorbar(aes(
+                ymin = WSE - qnorm(0.975) * Yu,
+                ymax = WSE + qnorm(0.975) * Yu
+            ))
+
+
+        #####################################################################
+        # Case Rhone 750
+        #####################################################################
+        init_model_date <- key_info_event_extraction %>%
+            filter(id_case == "RHONE_750") %>%
+            pull(model_start)
+
+        init_model_date <- as.POSIXct(
+            init_model_date,
+            tz = "UTC",
+            format = "%Y-%m-%d %H:%M:%S"
+        )
+        WSE_Rhone_750_raw <- all_WSE_Rhone %>%
+            filter(id_case == 750) %>%
+            mutate(
+                id_reach_CAL = case_when(
+                    id_reach == "ANT_JNS" ~ 3,
+                    id_reach == "BOU_ANT" ~ 2,
+                    id_reach == "LGN_BOU" ~ 1
+                ),
+                time_mage = difftime(time, init_model_date, units = c("secs")),
+                Yu = sd_WSE_fixed,
+                event = 3,
+                name_event = "RHONE_750"
+            )
+        #################################
+        # Check if time are within the simulation period
+        PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_750", "Rhone_PCH_Ain.PAR"), n = 7)
+        end_par_file <- PARFile[3]
+        timestep_bin_par_file <- PARFile[7]
+
+        # Get the mage time in seconds
+        duration <- sub("^final_time\\s+", "", end_par_file)
+        parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+        end_time_sim <- parts[1] * 86400 + # days
+            parts[2] * 3600 + # hours
+            parts[3] * 60 + # minutes
+            parts[4] # seconds
+
+        if (nrow(WSE_Rhone_750_raw %>% filter(WSE_Rhone_750_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+        # Round each value in time_mage to the nearest multiple of timestep_bin
+
+        timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+        WSE_Rhone_750_raw$time_mage_nearest <- round(WSE_Rhone_750_raw$time_mage / timestep_bin) * timestep_bin
+
+        #################################
+        set.seed(2026) #  # for reproducibility
+        # 1. Calibration set (random 70%)
+        WSE_Rhone_750_Cal <- WSE_Rhone_750_raw %>%
+            group_by(id_reach) %>%
+            slice_sample(prop = 0.9) %>%
+            ungroup() %>%
+            mutate(set = "calibration") %>%
+            arrange(desc(KP)) # Because the order is from upstream to downstream
+
+        # If KP duplicated, take it off
+        if (any(duplicated(WSE_Rhone_750_Cal$KP))) {
+            WSE_Rhone_750_Cal <- WSE_Rhone_750_Cal[-which(duplicated(WSE_Rhone_750_Cal$KP)), ]
+        }
+
+        # Remove the WSE at the nodes
+        nodes_extraction <- Input_MR %>%
+            filter(reach %in%
+                Input_XR$Rhone) %>%
+            select(-reach)
+
+        nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+        if (length(which(WSE_Rhone_750_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+            WSE_Rhone_750_Cal <- WSE_Rhone_750_Cal[-which(WSE_Rhone_750_Cal$KP %in% nodes_to_remove_cal), ]
+        }
+
+
+        # 2. Validation set = rest (30%)
+        WSE_Rhone_750_Val <- WSE_Rhone_750_raw %>%
+            anti_join(WSE_Rhone_750_Cal, by = colnames(WSE_Rhone_750_raw)) %>%
+            mutate(set = "validation")
+
+        # 3. Combine into a single data frame
+        WSE_Rhone_750 <- bind_rows(WSE_Rhone_750_Cal, WSE_Rhone_750_Val) %>% arrange(desc(KP))
+
+        ggplot(WSE_Rhone_750, aes(x = KP, y = WSE, col = set)) +
+            geom_point() +
+            geom_errorbar(aes(
+                ymin = WSE - qnorm(0.975) * Yu,
+                ymax = WSE + qnorm(0.975) * Yu
+            ))
+
+
+        ggplot(WSE_Rhone_750_Cal, aes(x = KP, y = WSE, col = id_reach)) +
+            geom_point() +
+            geom_errorbar(aes(
+                ymin = WSE - qnorm(0.975) * Yu,
+                ymax = WSE + qnorm(0.975) * Yu
+            ))
+
+        # !!!!!!!!!!!!
+        # Ensure that order should be in coherence with mage model set up!!!!!!!!!!!!
+        # !!!!!!!!!!!!
+
+        ## just to know the order of calibration data
+        Cal_measures <-
+            list(
+                AIN_90 =
+                    data.frame(
+                        event = WSE_Ain_90_Cal$event,
+                        reach = WSE_Ain_90_Cal$id_reach_CAL,
+                        x = WSE_Ain_90_Cal$KP,
+                        t = WSE_Ain_90_Cal$time_mage
+                    ),
+                RHONE_525 =
+                    data.frame(
+                        event = WSE_Rhone_525_Cal$event,
+                        reach = WSE_Rhone_525_Cal$id_reach_CAL,
+                        x = WSE_Rhone_525_Cal$KP,
+                        t = WSE_Rhone_525_Cal$time_mage
+                    ),
+                RHONE_750 =
+                    data.frame(
+                        event = WSE_Rhone_750_Cal$event,
+                        reach = WSE_Rhone_750_Cal$id_reach_CAL,
+                        x = WSE_Rhone_750_Cal$KP,
+                        t = WSE_Rhone_750_Cal$time_mage
+                    )
+            )
+
+
+        # All available data
+        WSE_data <- rbind(
+            WSE_Ain_90,
+            WSE_Rhone_525,
+            WSE_Rhone_750
+        )
+        # All calibration data
+        observed_data <- rbind(
+            WSE_Ain_90_Cal,
+            WSE_Rhone_525_Cal,
+            WSE_Rhone_750_Cal
+        )
+    } else {
+        # All available data
+        WSE_data <-
+            WSE_Ain_90
+        # All calibration data
+        observed_data <-
+            WSE_Ain_90_Cal
+    }
+} else {
+    #####################################################################
+    # Case AIN 90
+    #####################################################################
+
+    WSE_Ain_90_raw <- all_WSE_Ain %>%
+        filter(id_case == 90) %>%
+        mutate(
+            id_reach_CAL = case_when(
+                id_reach == "PCH_PGA" ~ 8,
+                id_reach == "PGA_CAIN" ~ 4,
+                id_reach == "CAIN_Confluence" ~ 5
+            ),
+            time_mage = 2 * 60 * 60 - 600, # 2 hours in seconds - 600 seconds
+            Yu = sd_WSE_fixed,
+            event = 1,
+            name_event = "AIN_90"
+        )
+    #################################
+    # Check if time are within the simulation period
+    PARFile <- readLines(file.path(MAGE_main_folder, "AIN_90", "Rhone_PCH_Ain.PAR"), n = 7)
+    end_par_file <- PARFile[3]
+    timestep_bin_par_file <- PARFile[7]
+
+    # Get the mage time in seconds
+    duration <- sub("^final_time\\s+", "", end_par_file)
+    parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+    end_time_sim <- parts[1] * 86400 + # days
+        parts[2] * 3600 + # hours
+        parts[3] * 60 + # minutes
+        parts[4] # seconds
+
+    if (nrow(WSE_Ain_90_raw %>% filter(WSE_Ain_90_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+    # Round each value in time_mage to the nearest multiple of timestep_bin
+
+    timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+    WSE_Ain_90_raw$time_mage_nearest <- round(WSE_Ain_90_raw$time_mage / timestep_bin) * timestep_bin
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set (random 70%)
+    WSE_Ain_90_Cal <- WSE_Ain_90_raw %>%
+        group_by(id_reach) %>%
+        slice_sample(prop = 0.9) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP) # Because order is upstream to downstream and KP is increasing
+
+    # If KP duplicated, take it off
+    if (any(duplicated(WSE_Ain_90_Cal$KP))) {
+        WSE_Ain_90_Cal <- WSE_Ain_90_Cal[-which(duplicated(WSE_Ain_90_Cal$KP)), ]
+    }
+
+    # Remove the WSE at the nodes
+    nodes_extraction <- Input_MR %>%
+        filter(reach %in%
+            Input_XR$Ain) %>%
+        select(-reach)
+
+    nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+    if (length(which(WSE_Ain_90_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+        WSE_Ain_90_Cal <- WSE_Ain_90_Cal[-which(WSE_Ain_90_Cal$KP %in% nodes_to_remove_cal), ]
+    }
+
+    # 2. Validation set = rest (30%)
+    WSE_Ain_90_Val <- WSE_Ain_90_raw %>%
+        anti_join(WSE_Ain_90_Cal, by = colnames(WSE_Ain_90_raw)) %>%
+        mutate(set = "validation")
+
+    # 3. Combine into a single data frame
+    WSE_Ain_90 <- bind_rows(WSE_Ain_90_Cal, WSE_Ain_90_Val) %>% arrange(KP)
+
+    ggplot(WSE_Ain_90, aes(x = KP, y = WSE, col = set)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+    ggplot(WSE_Ain_90_Cal, aes(x = KP, y = WSE, col = id_reach)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+
+    #####################################################################
+    # Case Rhone 525
+    #####################################################################
+    limits <- c(55900, 26750)
+    all_WSE_Rhone_ST_modified <- all_WSE_Rhone
+
+    all_WSE_Rhone_ST_modified$KP <- limits[1] + limits[2] - all_WSE_Rhone_ST_modified$KP
+
+    WSE_Rhone_525_raw <- all_WSE_Rhone_ST_modified %>%
+        filter(id_case == 525) %>%
+        mutate(
+            id_reach_CAL = case_when(
+                id_reach == "ANT_JNS" ~ 3,
+                id_reach == "BOU_ANT" ~ 2,
+                id_reach == "LGN_BOU" ~ 1
+            ),
+            time_mage = 2 * 60 * 60 - 600, # 2 hours in seconds - 600 seconds
+            Yu = sd_WSE_fixed,
+            event = 2,
+            name_event = "RHONE_525"
+        )
+    #################################
+    # Check if time are within the simulation period
+    PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_525", "Rhone_PCH_Ain.PAR"), n = 7)
+    end_par_file <- PARFile[3]
+    timestep_bin_par_file <- PARFile[7]
+
+    # Get the mage time in seconds
+    duration <- sub("^final_time\\s+", "", end_par_file)
+    parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+    end_time_sim <- parts[1] * 86400 + # days
+        parts[2] * 3600 + # hours
+        parts[3] * 60 + # minutes
+        parts[4] # seconds
+
+    if (nrow(WSE_Rhone_525_raw %>% filter(WSE_Rhone_525_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+    # Round each value in time_mage to the nearest multiple of timestep_bin
+
+    timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+    WSE_Rhone_525_raw$time_mage_nearest <- round(WSE_Rhone_525_raw$time_mage / timestep_bin) * timestep_bin
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set (random 70%)
+    WSE_Rhone_525_Cal <- WSE_Rhone_525_raw %>%
+        group_by(id_reach) %>%
+        slice_sample(prop = 0.9) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(desc(KP)) # Because the order is from upstream to downstream
+
+    # If KP duplicated, take it off
+    if (any(duplicated(WSE_Rhone_525_Cal$KP))) {
+        WSE_Rhone_525_Cal <- WSE_Rhone_525_Cal[-which(duplicated(WSE_Rhone_525_Cal$KP)), ]
+    }
+
+    # Remove the WSE at the nodes
+    nodes_extraction <- Input_MR %>%
+        filter(reach %in%
+            Input_XR$Rhone) %>%
+        select(-reach)
+
+    nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+    if (length(which(WSE_Rhone_525_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+        WSE_Rhone_525_Cal <- WSE_Rhone_525_Cal[-which(WSE_Rhone_525_Cal$KP %in% nodes_to_remove_cal), ]
+    }
+
+    # 2. Validation set = rest (30%)
+    WSE_Rhone_525_Val <- WSE_Rhone_525_raw %>%
+        anti_join(WSE_Rhone_525_Cal, by = colnames(WSE_Rhone_525_raw)) %>%
+        mutate(set = "validation")
+
+    # 3. Combine into a single data frame
+    WSE_Rhone_525 <- bind_rows(WSE_Rhone_525_Cal, WSE_Rhone_525_Val) %>% arrange(desc(KP))
+
+    ggplot(WSE_Rhone_525, aes(x = KP, y = WSE, col = set)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+
+    ggplot(WSE_Rhone_525_Cal, aes(x = KP, y = WSE, col = id_reach)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+
+    #####################################################################
+    # Case Rhone 750
+    #####################################################################
+
+    WSE_Rhone_750_raw <- all_WSE_Rhone_ST_modified %>%
+        filter(id_case == 750) %>%
+        mutate(
+            id_reach_CAL = case_when(
+                id_reach == "ANT_JNS" ~ 3,
+                id_reach == "BOU_ANT" ~ 2,
+                id_reach == "LGN_BOU" ~ 1
+            ),
+            time_mage = 2 * 60 * 60 - 600, # 2 hours in seconds - 600 seconds
+            Yu = sd_WSE_fixed,
+            event = 3,
+            name_event = "RHONE_750"
+        )
+    #################################
+    # Check if time are within the simulation period
+    PARFile <- readLines(file.path(MAGE_main_folder, "RHONE_750", "Rhone_PCH_Ain.PAR"), n = 7)
+    end_par_file <- PARFile[3]
+    timestep_bin_par_file <- PARFile[7]
+
+    # Get the mage time in seconds
+    duration <- sub("^final_time\\s+", "", end_par_file)
+    parts <- as.numeric(strsplit(duration, ":")[[1]])
+
+    end_time_sim <- parts[1] * 86400 + # days
+        parts[2] * 3600 + # hours
+        parts[3] * 60 + # minutes
+        parts[4] # seconds
+
+    if (nrow(WSE_Rhone_750_raw %>% filter(WSE_Rhone_750_raw$time_mage > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
+
+    # Round each value in time_mage to the nearest multiple of timestep_bin
+
+    timestep_bin <- as.numeric(sub("^timestep_bin\\s+", "", timestep_bin_par_file))
+    WSE_Rhone_750_raw$time_mage_nearest <- round(WSE_Rhone_750_raw$time_mage / timestep_bin) * timestep_bin
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set (random 70%)
+    WSE_Rhone_750_Cal <- WSE_Rhone_750_raw %>%
+        group_by(id_reach) %>%
+        slice_sample(prop = 0.9) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(desc(KP)) # Because the order is from upstream to downstream
+
+    # If KP duplicated, take it off
+    if (any(duplicated(WSE_Rhone_750_Cal$KP))) {
+        WSE_Rhone_750_Cal <- WSE_Rhone_750_Cal[-which(duplicated(WSE_Rhone_750_Cal$KP)), ]
+    }
+
+    # Remove the WSE at the nodes
+    nodes_extraction <- Input_MR %>%
+        filter(reach %in%
+            Input_XR$Rhone) %>%
+        select(-reach)
+
+    nodes_to_remove_cal <- unique(c(nodes_extraction$KP_start, nodes_extraction$KP_end))
+    if (length(which(WSE_Rhone_750_Cal$KP %in% nodes_to_remove_cal)) != 0) {
+        WSE_Rhone_750_Cal <- WSE_Rhone_750_Cal[-which(WSE_Rhone_750_Cal$KP %in% nodes_to_remove_cal), ]
+    }
+
+
+    # 2. Validation set = rest (30%)
+    WSE_Rhone_750_Val <- WSE_Rhone_750_raw %>%
+        anti_join(WSE_Rhone_750_Cal, by = colnames(WSE_Rhone_750_raw)) %>%
+        mutate(set = "validation")
+
+    # 3. Combine into a single data frame
+    WSE_Rhone_750 <- bind_rows(WSE_Rhone_750_Cal, WSE_Rhone_750_Val) %>% arrange(desc(KP))
+
+    ggplot(WSE_Rhone_750, aes(x = KP, y = WSE, col = set)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+
+    ggplot(WSE_Rhone_750_Cal, aes(x = KP, y = WSE, col = id_reach)) +
+        geom_point() +
+        geom_errorbar(aes(
+            ymin = WSE - qnorm(0.975) * Yu,
+            ymax = WSE + qnorm(0.975) * Yu
+        ))
+
+    # !!!!!!!!!!!!
+    # Ensure that order should be in coherence with mage model set up!!!!!!!!!!!!
+    # !!!!!!!!!!!!
+
+    ## just to know the order of calibration data
+    Cal_measures <-
+        list(
+            AIN_90 =
+                data.frame(
+                    event = WSE_Ain_90_Cal$event,
+                    reach = WSE_Ain_90_Cal$id_reach_CAL,
+                    x = WSE_Ain_90_Cal$KP,
+                    t = WSE_Ain_90_Cal$time_mage
+                ),
+            RHONE_525 =
+                data.frame(
+                    event = WSE_Rhone_525_Cal$event,
+                    reach = WSE_Rhone_525_Cal$id_reach_CAL,
+                    x = WSE_Rhone_525_Cal$KP,
+                    t = WSE_Rhone_525_Cal$time_mage
+                ),
+            RHONE_750 =
+                data.frame(
+                    event = WSE_Rhone_750_Cal$event,
+                    reach = WSE_Rhone_750_Cal$id_reach_CAL,
+                    x = WSE_Rhone_750_Cal$KP,
+                    t = WSE_Rhone_750_Cal$time_mage
+                )
+        )
+
+
+    # All available data
+    WSE_data <- rbind(
+        WSE_Ain_90,
+        WSE_Rhone_525,
+        WSE_Rhone_750
     )
+    # All calibration data
+    observed_data <- rbind(
+        WSE_Ain_90_Cal,
+        WSE_Rhone_525_Cal,
+        WSE_Rhone_750_Cal
+    )
+}
+
+
 
 # Scaled values of WSE, discharge and uncertainties
 factor_scaled <- 1
-
-# All available data
-WSE_data <- rbind(
-    WSE_Ain_90,
-    WSE_Rhone_525,
-    WSE_Rhone_750
-)
-
-# All calibration data
-observed_data <- rbind(
-    WSE_Ain_90_Cal,
-    WSE_Rhone_525_Cal,
-    WSE_Rhone_750_Cal
-)
 
 X <- observed_data[, c(
     "event",
     "id_reach_CAL",
     "KP",
-    "time_mage"
+    "time_mage_nearest"
 )] %>%
     rename(
         "reach" = "id_reach_CAL",
         "x" = "KP",
-        "t" = "time_mage"
+        "t" = "time_mage_nearest"
     )
 
 # Assign manually uncertainty values in meters
@@ -1007,33 +1401,76 @@ CalData_plot_export <- CalData_plot(
     data = CalData_plot_df,
     scales_free = "free",
     y_label = "Water surface elevation (m)",
-    title_label = "WSE observations",
-    col_label = "Events",
+    title_label = NULL,
+    col_label = "Hydraulic reaches",
     plot_water_depth = FALSE,
     wrap = TRUE
 )
+
+# Customize the plot
+CalData_plot_export <- CalData_plot_export +
+    facet_wrap(
+        ~name_event,
+        labeller = labeller(
+            name_event = c(
+                "AIN_90" = "Ain tributary: discharge of 90 m³/s",
+                "RHONE_525" = "Rhone river: discharge of 525 m³/s",
+                "RHONE_750" = "Rhone river: discharge of 750 m³/s"
+            )
+        ),
+        scales = "free",
+        ncol = 1
+    )
+
+
+# Plot by main reach
+
+observed_data_by_reach <- observed_data %>%
+    mutate(
+        name_event_simple = ifelse(grepl("^AIN", name_event), "Ain",
+            ifelse(grepl("^RHONE", name_event), "Rhone", NA)
+        )
+    )
+
+CalData_plot_df_2 <- data.frame(
+    x = X$x,
+    WSE = Y$WSE * factor_scaled,
+    Yu = Yu$Yu_z * factor_scaled,
+    Z_thalweg = observed_data_by_reach$Z_thalweg * factor_scaled,
+    ID = factor(X$event),
+    reach_name = observed_data_by_reach$id_reach,
+    reach_number = observed_data_by_reach$id_reach_CAL,
+    name_event = observed_data_by_reach$name_event_simple
+)
+
+CalData_plot_export_2 <- CalData_plot(
+    data = CalData_plot_df_2,
+    scales_free = "free",
+    y_label = "Water surface elevation (m)",
+    title_label = NULL,
+    col_label = "Hydraulic reaches",
+    plot_water_depth = FALSE,
+    wrap = TRUE
+)
+
+# Customize the plot
+CalData_plot_export_2 <-
+    CalData_plot_export_2 +
+    facet_wrap(
+        ~name_event,
+        labeller = labeller(
+            name_event = c(
+                "Ain" = "Ain tributary: discharge of 90 m³/s",
+                "Rhone" = "Rhone river: discharge of 525 and 750 m³/s"
+            )
+        ),
+        scales = "free",
+        ncol = 1
+    )
+
 ############################################
 # End module 2: calibration data
 ############################################
-
-############################################
-# Module 3 : hydraulic model (HM) environment
-############################################
-# Input information about reaches and boundaries KP of the HM.
-# MR : Model reach interpreted by the HM.
-# This input information must be coherent with HM specifications.
-
-# KP start and end must be reliable to the model. To define KP range, it must be from upstream (start) from upstream to downstream (end)
-
-Input_MR <- data.frame(
-    reach = c(1, 2, 3, 4, 5, 6, 7, 8),
-    KP_start = c(55900, 36250, 34500, 37491, 41211, 0, 20, 22333),
-    KP_end = c(36250, 34500, 26750, 41211, 41461, 20, 40, 37491)
-)
-############################################
-# End module 3 : hydraulic model (HM) environment
-############################################
-
 
 ############################################
 # Module 4: calibration setting
@@ -1099,8 +1536,8 @@ prior_error_model <- get_init_prior(remant_error_list)
 
 
 # Logical to trigger some functionalities
-do_calibration <- FALSE
-# do_calibration <- TRUE
+# do_calibration <- FALSE
+do_calibration <- TRUE
 
 ############################################
 # End module 4: calibration setting
@@ -1118,14 +1555,19 @@ if (!dir.exists(path_experiment)) {
     dir.create(path_experiment)
 }
 
-ggsave(file.path(path_experiment, "CalData_plot.png"),
+ggsave(file.path(path_experiment, "CalData_plot_WSE_observed.png"),
     plot = CalData_plot_export,
-    width = 20,
+    width = 30,
     height = 20,
     units = "cm"
 )
 
-wood_first <- mage_projet_name == "CWMQ"
+ggsave(file.path(path_experiment, "CalData_plot_by_main_reach.png"),
+    plot = CalData_plot_export_2,
+    width = 30,
+    height = 20,
+    units = "cm"
+)
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Source the input data for the experiments
@@ -1190,7 +1632,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     for (id_multi_event in seq_along(RUGFile_paths)) {
         write_RUGFile(
             RUG_path = RUGFile_paths[id_multi_event],
-            RUGFile_data = RUGFile,
+            RUGFile_data = RUGFile_Mage_Final,
             RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
         )
     }
@@ -1201,7 +1643,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
     xtra <- xtraModelInfo(
         fname = "Config_setup.txt",
         object = list(
-            exeFile = MAGE_executable,
+            exeFile = paste0(MAGE_executable, " ", command_line_MAGE),
+            # commandLine = command_line_MAGE,
             version = "8",
             mageDir = mageDir,
             repFile = paste0(mage_projet_name, ".REP"),
@@ -1243,14 +1686,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
     }
 
     mcmcOptions_user <- mcmcOptions(
-        nCycles = 50,
-        nAdapt = 50,
+        nCycles = 10,
+        nAdapt = 10,
         manualMode = TRUE,
         thetaStd = jump_MCMC_theta_param,
         gammaStd = jump_MCMC_error_model
     )
     mcmcCooking_user <- mcmcCooking(
-        burn = 0.2,
+        burn = 0.1,
         nSlim = 1
     )
     mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
@@ -1306,6 +1749,7 @@ K_plot <- function(
     n_param_Kmin,
     n_param_Kflood,
     covariate_discretization,
+    SR_reaches,
     MAP_param_vector,
     main_channel = TRUE) {
     if (main_channel) {
@@ -1318,19 +1762,23 @@ K_plot <- function(
     k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc[, indx])))
 
     k_estimated_MCMC$KP <- covariate_discretization[[1]]
+    k_estimated_MCMC$reaches_nb <- SR_reaches$value
+    k_estimated_MCMC$reaches_sr <- SR_reaches$id_river
 
     # Convert to long format
     df_MCMC_sampling <- tidyr::pivot_longer(
         k_estimated_MCMC,
-        cols = -KP,
+        cols = -c(reaches_nb, reaches_sr, KP),
         values_to = "Value"
     ) %>%
-        select(KP, Value) %>%
+        select(reaches_nb, reaches_sr, KP, Value) %>%
         mutate(ID = "MCMC Sampling")
 
     k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_param_vector[indx]
 
     df_MAP <- data.frame(
+        reaches_nb = SR_reaches$value,
+        reaches_sr = SR_reaches$id_river,
         KP = covariate_discretization[[1]],
         Value = k_estimated_MAP,
         ID = "MAP"
@@ -1339,7 +1787,7 @@ K_plot <- function(
     # Get 95% uncertainty for envelope curve : create ribbon data from MCMC
     df_envelope <- df_MCMC_sampling %>%
         filter(ID == "MCMC Sampling") %>%
-        group_by(KP) %>%
+        group_by(KP, reaches_sr, reaches_nb) %>%
         summarise(
             ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
             ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
@@ -1372,7 +1820,8 @@ K_plot <- function(
         theme(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
-        )
+        ) +
+        facet_wrap(~reaches_sr, scales = "free", ncol = 1)
 
 
     return(list(df_MAP, K_plot, df_envelope))
@@ -1734,12 +2183,25 @@ for (id_cal_case in 1:length(all_cal_case)) {
         # Get MAP simulation: from current analysis without burning and slim
         MAP_param_matrix <- as.numeric(results_MCMC_sampling[which.max(results_MCMC_sampling$LogPost), 1:(length(Kmin_prior) + length(Kflood_prior))])
     }
+
+    SR_reaches <- do.call(
+        rbind,
+        lapply(names(SR_reaches), function(river) {
+            data.frame(
+                value = SR_reaches[[river]]$SR1,
+                id_river = river
+            )
+        })
+    )
+
+
     Kmin_calculations <- K_plot(
         matrix_spatialisation = Z_MatrixKmin,
         mcmc = mcmc,
         n_param_Kmin = length(Kmin_prior),
         n_param_Kflood = length(Kflood_prior),
         covariate_discretization = covariate_grid,
+        SR_reaches = SR_reaches,
         MAP_param_vector = MAP_param_matrix,
         main_channel = TRUE
     )
@@ -1782,7 +2244,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         n_param_Kflood = length(Kflood_prior),
         covariate_discretization = covariate_grid,
         MAP_param_vector = MAP_param_matrix,
-        main_channel = FALSE
+        main_channel = FALSE,
     )
     df_MAP_Kflood <- Kflood_calculations[[1]]
     Kflood_plot <- Kflood_calculations[[2]]

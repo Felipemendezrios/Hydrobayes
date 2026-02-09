@@ -1,0 +1,2 @@
+Kmin_Rh_SR1_a Kmin_Rh_SR1_a Kmin_Rh_SR1_a Kmin_Rh_SR1_a Kmin_Rh_SR1_a Kmin_Ai_SR1_a Kmin_Ai_SR1_a Kmin_Ai_SR1_a Kmin_Ai_SR1_a Kmin_Ai_SR1_a Y1_intercept  Y2_intercept  Y3_intercept  Y4_intercept  Y5_intercept  LogPost       
+  0.150000E+02  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.150000E+02  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.500000E-03  0.100000E+02  0.100000E+02  0.150000E+02  0.150000E+02 -0.421963E+06

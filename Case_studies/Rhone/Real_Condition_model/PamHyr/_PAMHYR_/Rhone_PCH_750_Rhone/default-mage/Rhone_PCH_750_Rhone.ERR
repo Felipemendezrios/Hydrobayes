@@ -1,0 +1,277 @@
+ Err010 à  03:00:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  6.872 Largeur =   95.872 Section =    90.54 Hauteur =  1.909
+ Err010 à  03:00:02:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   37399.00 du Bief 008
+       Vitesse =  5.442 Largeur =   93.870 Section =    70.67 Hauteur =  1.699
+ Err002 à  03:05:56:33,09 + 3.900 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.233033E-04 ; écart en DQ = 0.416277E-03
+       Itération 99 : écart en DZ = 0.259096E-04 ; écart en DQ = 0.463600E-03
+       Z : Pm   30916.67 du bief   3 ; Q : Pm   30944.44 du bief   3
+       Residu : 0.184706E+01(003: 30944.44)
+ Err001 à  03:06:36:52,99 + 3.940 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 08 : écart en DZ = 0.590524E-06 ; écart en DQ = 0.115073E-04
+       Itération 09 : écart en DZ = 0.607514E-06 ; écart en DQ = 0.118383E-04
+       Z : Pm   33208.33 du bief   3 ; Q : Pm   33250.00 du bief   3
+ Err001 à  03:06:36:54,55 + 0.780 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.297369E-04 ; écart en DQ = 0.160304E-02
+       Itération 08 : écart en DZ = 0.467805E-04 ; écart en DQ = 0.252036E-02
+       Z : Pm   33208.33 du bief   3 ; Q : Pm   33250.00 du bief   3
+ Err001 à  03:06:43:01,24 + 3.940 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.118969E-04 ; écart en DQ = 0.202349E-03
+       Itération 08 : écart en DZ = 0.141718E-04 ; écart en DQ = 0.241046E-03
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err001 à  03:06:43:02,02 + 0.780 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.482945E-02 ; écart en DQ = 0.195530E+00
+       Itération 08 : écart en DZ = 0.108385E-01 ; écart en DQ = 0.443931E+00
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err002 à  03:08:56:52 + 4.000 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.244797E-05 ; écart en DQ = 0.515120E-04
+       Itération 99 : écart en DZ = 0.403319E-05 ; écart en DQ = 0.845931E-04
+       Z : Pm   30458.33 du bief   3 ; Q : Pm   30416.67 du bief   3
+       Residu : 0.205524E+01(003: 30416.67)
+ Err002 à  03:08:56:56 + 4.000 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.215163E-05 ; écart en DQ = 0.452814E-04
+       Itération 99 : écart en DZ = 0.351359E-05 ; écart en DQ = 0.736726E-04
+       Z : Pm   30458.33 du bief   3 ; Q : Pm   30416.67 du bief   3
+       Residu : 0.178998E+01(003: 30416.67)
+ Err002 à  03:08:56:60 + 4.000 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.380233E-05 ; écart en DQ = 0.798577E-04
+       Itération 99 : écart en DZ = 0.420593E-05 ; écart en DQ = 0.883054E-04
+       Z : Pm   30458.33 du bief   3 ; Q : Pm   30416.67 du bief   3
+       Residu : 0.214816E+01(003: 30416.67)
+ Err001 à  03:10:50:52 + 4.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.588842E-03 ; écart en DQ = 0.123348E-01
+       Itération 08 : écart en DZ = 0.136839E-02 ; écart en DQ = 0.286937E-01
+       Z : Pm   30458.33 du bief   3 ; Q : Pm   30416.67 du bief   3
+ Err001 à  03:11:05:12 + 4.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.130412E-05 ; écart en DQ = 0.276001E-04
+       Itération 08 : écart en DZ = 0.133019E-05 ; écart en DQ = 0.281513E-04
+       Z : Pm   33875.00 du bief   3 ; Q : Pm   33937.50 du bief   3
+ Err001 à  03:11:05:12 + 0.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.271052E-04 ; écart en DQ = 0.178185E-02
+       Itération 08 : écart en DZ = 0.380365E-04 ; écart en DQ = 0.249846E-02
+       Z : Pm   33875.00 du bief   3 ; Q : Pm   33937.50 du bief   3
+ Err001 à  03:12:13:55,41 + 3.990 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.815526E-05 ; écart en DQ = 0.217263E-03
+       Itération 08 : écart en DZ = 0.100302E-04 ; écart en DQ = 0.267132E-03
+       Z : Pm   30688.00 du bief   8 ; Q : Pm   30534.00 du bief   8
+ Err001 à  03:12:40:59,70 + 3.980 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.116969E-05 ; écart en DQ = 0.263863E-04
+       Itération 08 : écart en DZ = 0.127740E-05 ; écart en DQ = 0.288158E-04
+       Z : Pm   33750.00 du bief   3 ; Q : Pm   33812.50 du bief   3
+ Err001 à  03:12:40:59,70 + 0.790 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.197283E-01 ; écart en DQ = 0.148564E+01
+       Itération 08 : écart en DZ = 0.103395E+00 ; écart en DQ = 0.722410E+01
+       Z : Pm   33750.00 du bief   3 ; Q : Pm   33812.50 du bief   3
+ Err001 à  03:12:41:00,45 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.331335E-02 ; écart en DQ = 0.251553E+00
+       Itération 08 : écart en DZ = 0.822010E-02 ; écart en DQ = 0.613260E+00
+       Z : Pm   33750.00 du bief   3 ; Q : Pm   33812.50 du bief   3
+ Err002 à  03:13:11:27,56 + 3.980 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.110327E-03 ; écart en DQ = 0.254453E-02
+       Itération 99 : écart en DZ = 0.106644E-03 ; écart en DQ = 0.255998E-02
+       Z : Pm   33812.50 du bief   3 ; Q : Pm   33875.00 du bief   3
+       Residu : 0.109466E+02(003: 33875.00)
+ Err001 à  03:13:11:29,93 + 0.790 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.177975E-04 ; écart en DQ = 0.129777E-02
+       Itération 08 : écart en DZ = 0.264687E-04 ; écart en DQ = 0.192930E-02
+       Z : Pm   33812.50 du bief   3 ; Q : Pm   33875.00 du bief   3
+ Err001 à  03:15:31:10,92 + 3.940 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.714145E-05 ; écart en DQ = 0.125107E-03
+       Itération 08 : écart en DZ = 0.842991E-05 ; écart en DQ = 0.147677E-03
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err001 à  03:15:31:10,92 + 0.780 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.217672E-02 ; écart en DQ = 0.900113E-01
+       Itération 08 : écart en DZ = 0.504218E-02 ; écart en DQ = 0.207579E+00
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err001 à  03:18:18:34,05 + 3.890 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.881237E-06 ; écart en DQ = 0.160803E-04
+       Itération 08 : écart en DZ = 0.977168E-06 ; écart en DQ = 0.178309E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+ Err010 à  03:18:18:34,82           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   31000.00 du Bief 003
+       Vitesse = 12.724 Largeur =  102.918 Section =   207.78 Hauteur =  3.919
+ Err010 à  03:18:18:35,55           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.42E+01 au Pm   30944.44 du Bief 003
+       Vitesse = 23.059 Largeur =  133.027 Section =   414.59 Hauteur =  5.657
+ Err001 à  03:19:52:20,04 + 3.890 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.231214E-05 ; écart en DQ = 0.421640E-04
+       Itération 08 : écart en DZ = 0.255619E-05 ; écart en DQ = 0.466150E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+ Err010 à  03:19:52:20,81           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.61E+01 au Pm   30944.44 du Bief 003
+       Vitesse = 32.837 Largeur =  129.175 Section =   380.86 Hauteur =  5.399
+ Err001 à  03:19:52:28,29 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.157551E-05 ; écart en DQ = 0.295260E-04
+       Itération 08 : écart en DZ = 0.175011E-05 ; écart en DQ = 0.327984E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+ Err010 à  03:19:52:29,04           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.41E+01 au Pm   32750.00 du Bief 003
+       Vitesse = 14.442 Largeur =  121.987 Section =   152.02 Hauteur =  1.696
+ Err001 à  03:19:52:36,54 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.183760E-05 ; écart en DQ = 0.344538E-04
+       Itération 08 : écart en DZ = 0.203973E-05 ; écart en DQ = 0.382441E-04
+       Z : Pm   30972.22 du bief   3 ; Q : Pm   30944.44 du bief   3
+ Err010 à  03:19:52:37,29           : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.38E+01 au Pm   32437.50 du Bief 003
+       Vitesse = 15.029 Largeur =  100.565 Section =   161.28 Hauteur =  2.638
+ Err001 à  03:22:44:02,42 + 3.910 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.130289E-05 ; écart en DQ = 0.253994E-04
+       Itération 08 : écart en DZ = 0.134773E-05 ; écart en DQ = 0.262732E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:02,42 + 0.780 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.976442E-04 ; écart en DQ = 0.514796E-02
+       Itération 08 : écart en DZ = 0.163743E-03 ; écart en DQ = 0.861768E-02
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:18,17 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.143269E-05 ; écart en DQ = 0.284170E-04
+       Itération 08 : écart en DZ = 0.148452E-05 ; écart en DQ = 0.294445E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:18,17 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.158619E-03 ; écart en DQ = 0.861738E-02
+       Itération 08 : écart en DZ = 0.278914E-03 ; écart en DQ = 0.151110E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:26,42 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.183508E-05 ; écart en DQ = 0.363905E-04
+       Itération 08 : écart en DZ = 0.190056E-05 ; écart en DQ = 0.376885E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:26,42 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.218025E-03 ; écart en DQ = 0.118208E-01
+       Itération 08 : écart en DZ = 0.381639E-03 ; écart en DQ = 0.206126E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:30,17 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.223786E-03 ; écart en DQ = 0.121324E-01
+       Itération 08 : écart en DZ = 0.391346E-03 ; écart en DQ = 0.211332E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:34,67 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.152067E-05 ; écart en DQ = 0.301608E-04
+       Itération 08 : écart en DZ = 0.157549E-05 ; écart en DQ = 0.312476E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:34,67 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.175015E-03 ; écart en DQ = 0.950317E-02
+       Itération 08 : écart en DZ = 0.307394E-03 ; écart en DQ = 0.166405E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:42,92 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.979165E-06 ; écart en DQ = 0.194259E-04
+       Itération 08 : écart en DZ = 0.101500E-05 ; écart en DQ = 0.201368E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:42,92 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.947091E-04 ; écart en DQ = 0.515596E-02
+       Itération 08 : écart en DZ = 0.167529E-03 ; écart en DQ = 0.910538E-02
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:51,17 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.111441E-05 ; écart en DQ = 0.221076E-04
+       Itération 08 : écart en DZ = 0.115498E-05 ; écart en DQ = 0.229121E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:51,17 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.109433E-03 ; écart en DQ = 0.595390E-02
+       Itération 08 : écart en DZ = 0.193452E-03 ; écart en DQ = 0.105052E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:59,42 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.116482E-05 ; écart en DQ = 0.231069E-04
+       Itération 08 : écart en DZ = 0.120711E-05 ; écart en DQ = 0.239456E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:44:59,42 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.114812E-03 ; écart en DQ = 0.624498E-02
+       Itération 08 : écart en DZ = 0.202956E-03 ; écart en DQ = 0.110176E-01
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:45:07,67 + 3.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.615319E-06 ; écart en DQ = 0.122097E-04
+       Itération 08 : écart en DZ = 0.638038E-06 ; écart en DQ = 0.126605E-04
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err001 à  03:22:45:07,67 + 0.750 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.435651E-04 ; écart en DQ = 0.237552E-02
+       Itération 08 : écart en DZ = 0.774431E-04 ; écart en DQ = 0.421967E-02
+       Z : Pm   33166.67 du bief   3 ; Q : Pm   33208.33 du bief   3
+ Err002 à  04:05:44:59,44 + 3.940 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.239261E-05 ; écart en DQ = 0.417749E-04
+       Itération 99 : écart en DZ = 0.134581E-04 ; écart en DQ = 0.232414E-03
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+       Residu : 0.850575E+00(003: 30916.67)
+ Err001 à  04:05:45:03,34 + 3.900 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.482131E-05 ; écart en DQ = 0.840105E-04
+       Itération 08 : écart en DZ = 0.569965E-05 ; écart en DQ = 0.993146E-04
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err001 à  04:05:45:03,34 + 0.780 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.151268E-02 ; écart en DQ = 0.619085E-01
+       Itération 08 : écart en DZ = 0.306176E-02 ; écart en DQ = 0.124940E+00
+       Z : Pm   30888.89 du bief   3 ; Q : Pm   30916.67 du bief   3
+ Err001 à  04:12:10:52,65 + 4.050 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 38 : écart en DZ = 0.545617E-06 ; écart en DQ = 0.109103E-04
+       Itération 39 : écart en DZ = 0.556130E-06 ; écart en DQ = 0.111204E-04
+       Z : Pm   33937.50 du bief   3 ; Q : Pm   34000.00 du bief   3
+ Err001 à  04:12:10:52,65 + 0.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.319600E-05 ; écart en DQ = 0.200023E-03
+       Itération 08 : écart en DZ = 0.435190E-05 ; écart en DQ = 0.272342E-03
+       Z : Pm   33937.50 du bief   3 ; Q : Pm   34000.00 du bief   3
+ Err001 à  04:20:10:12,27 + 4.090 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.673660E-04 ; écart en DQ = 0.155118E-02
+       Itération 08 : écart en DZ = 0.893410E-04 ; écart en DQ = 0.205465E-02
+       Z : Pm   25556.67 du bief   8 ; Q : Pm   25453.00 du bief   8
+ Err001 à  04:22:31:16,76 + 4.040 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 24 : écart en DZ = 0.547012E-06 ; écart en DQ = 0.109148E-04
+       Itération 25 : écart en DZ = 0.557575E-06 ; écart en DQ = 0.111255E-04
+       Z : Pm   33937.50 du bief   3 ; Q : Pm   34000.00 du bief   3
+ Err001 à  04:22:31:16,76 + 0.800 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.686880E-05 ; écart en DQ = 0.428283E-03
+       Itération 08 : écart en DZ = 0.933234E-05 ; écart en DQ = 0.581779E-03
+       Z : Pm   33937.50 du bief   3 ; Q : Pm   34000.00 du bief   3
+ Err001 à  05:00:36:46,02 + 4.020 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.672302E-04 ; écart en DQ = 0.145902E-02
+       Itération 08 : écart en DZ = 0.900827E-04 ; écart en DQ = 0.195255E-02
+       Z : Pm   25556.67 du bief   8 ; Q : Pm   25453.00 du bief   8
+ Err001 à  05:01:18:42,60 + 4.020 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.662935E-05 ; écart en DQ = 0.144870E-03
+       Itération 08 : écart en DZ = 0.738262E-05 ; écart en DQ = 0.161302E-03
+       Z : Pm   26409.67 du bief   8 ; Q : Pm   26285.00 du bief   8
