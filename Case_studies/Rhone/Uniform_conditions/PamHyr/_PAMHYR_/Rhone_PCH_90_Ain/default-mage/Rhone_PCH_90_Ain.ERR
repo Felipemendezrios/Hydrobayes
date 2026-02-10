@@ -1,5 +1,0 @@
- Err001 à  00:01:06:01,88 + 4.360 : DIVERGENCE des itérations (Debord)
-       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
-       Itération 07 : écart en DZ = 0.816504E-05 ; écart en DQ = 0.172607E-03
-       Itération 08 : écart en DZ = 0.986609E-05 ; écart en DQ = 0.208534E-03
-       Z : Pm   38941.00 du bief   4 ; Q : Pm   38891.00 du bief   4
