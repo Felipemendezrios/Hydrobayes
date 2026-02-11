@@ -60,12 +60,12 @@ WSE_synthetic_temp <- rbind(data_case_1, data_case_2) %>%
 
 # Perturb the simulated data to used it afterward as observations
 set.seed(2026) # reproducibility
-WSE_synthetic_temp$Yu <- 0.001
+WSE_synthetic_temp$Yu_WSE <- 0.001
 WSE_synthetic_temp$WSE <-
     rnorm(
         n = nrow(WSE_synthetic_temp),
         mean = WSE_synthetic_temp$WSE_real_obs,
-        sd = WSE_synthetic_temp$Yu
+        sd = WSE_synthetic_temp$Yu_WSE
     )
 
 
@@ -74,7 +74,7 @@ WSE_synthetic_temp$WSE <-
 ##################################
 ## MAIN REACH UPSTREAM
 ##################################
-file_bathy <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/model_mage/5_1/net/"
+file_bathy <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/model_mage/5_1/net/"
 Bathy_ST1 <- readLines(file.path(file_bathy, "Reach_001.ST"))
 Bathy_ST1 <- Bathy_ST1[-1]
 
@@ -282,7 +282,7 @@ wse_obs_sim <- ggplot(WSE_synthetic_simplified, aes(x = KP, y = WSE)) +
     geom_point(aes(x = KP, y = WSE_real_obs, color = "real obs")) +
     # Error bars
     geom_errorbar(aes(
-        ymin = WSE - 1.96 * Yu, ymax = WSE + 1.96 * Yu,
+        ymin = WSE - 1.96 * Yu_WSE, ymax = WSE + 1.96 * Yu_WSE,
         color = "Calibration Data"
     )) +
     scale_color_manual(
