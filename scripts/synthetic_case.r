@@ -210,7 +210,6 @@ WSE_Event_2 <- assign_calibration_and_validation_data(
 
 CalData_event_2 <- WSE_Event_2 %>% filter(set == "calibration")
 
-
 ggplot(WSE_Event_2, aes(x = KP, y = WSE, col = set)) +
     geom_point() +
     geom_errorbar(aes(
@@ -435,12 +434,17 @@ if (!dir.exists(path_experiment)) {
 
 for (name in names(plots_CalData)) {
     plot <- plots_CalData[[name]]
-    if (!is.null(plot)) { # ne sauvegarde que si ce n'est pas NULL
+    if (!is.null(plot)) {
         ggsave(file.path(path_experiment, paste0(name, ".png")),
             plot = plot,
             width = 30,
             height = 20,
             units = "cm"
+        )
+
+        save(
+            file = file.path(path_experiment, paste0(name, ".RData")),
+            plot
         )
     }
 }
@@ -452,3 +456,106 @@ for (name in names(plots_CalData)) {
 ############################################
 # Module 4: calibration setting
 ############################################
+
+######################################################
+# Set Remnant error model
+# Structural error information
+remant_error_list <- list(
+    # WSE
+    remnantErrorModel(
+        fname = "Config_RemnantSigma.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 0.0005,
+            prior.dist = "FlatPrior"
+        ))
+    ),
+    # Q
+    remnantErrorModel(
+        fname = "Config_RemnantSigma2.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 10,
+            prior.dist = "LogNormal",
+            prior.par = c(log(10), 0.2)
+        ))
+    ),
+    # V
+    remnantErrorModel(
+        fname = "Config_RemnantSigma3.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 10,
+            prior.dist = "LogNormal",
+            prior.par = c(log(10), 0.2)
+        ))
+    ),
+    # Kmin
+    remnantErrorModel(
+        fname = "Config_RemnantSigma4.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 15,
+            prior.dist = "LogNormal",
+            prior.par = c(log(15), 0.2)
+        ))
+    ),
+    # Kflood
+    remnantErrorModel(
+        fname = "Config_RemnantSigma5.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 15,
+            prior.dist = "LogNormal",
+            prior.par = c(log(15), 0.2)
+        ))
+    )
+)
+
+
+if (Experiment_id == "Syn_case_rec_5_3_with_Ks_obs_limites_all_obs_flat_prior" | Experiment_id == "Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior") {
+    remant_error_list[[4]] <- remnantErrorModel(
+        fname = "Config_RemnantSigma4.txt",
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 1,
+            prior.dist = "FlatPrior"
+        ))
+    )
+}
+
+# Get initial prior of structural error
+prior_error_model <- get_init_prior(remant_error_list)
+
+############################################
+# End module 4: calibration setting
+############################################
+
+############################################
+# Module 5: BaM environment
+############################################
+
+Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
+    Input_Typology = Input_Typology,
+    Input_Model_Reach = Input_Model_Reach,
+    total_points_discretization = 100
+)
+
+############################################
+# Module 6: Calibration
+############################################
+
+Estimation_Mage(
+    Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
+    Input_Typology = Input_Typology,
+    path_experiment = path_experiment,
+    file_main_path = file_main_path,
+    all_cal_case = all_cal_case,
+    do_calibration = TRUE
+)
