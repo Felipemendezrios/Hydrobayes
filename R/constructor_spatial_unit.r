@@ -29,7 +29,7 @@ RUGFile_constructor_SR_correction <- function(Key_Info_XR_MR) {
 
 
 SR_constructor <- function(SR_key_HM,
-                           Key_Info_XR_MR) {
+                           Key_Info_Typology_Model_Reach) {
     # Initialize structure by fixing layer 1 : XR
     # Layer 2 : Kmin or Kmoy is handle outside this function
     SR <- vector(mode = "list", length = length(SR_key_HM))
@@ -46,8 +46,8 @@ SR_constructor <- function(SR_key_HM,
     for (id_XR in seq_along(SR_key_HM)) {
         # Get KP boundaries of all SR at a XR
         SR_KP_boundaries_list <- SR_KP_boundaries_structure[[id_XR]]
-        RUG_min_boundary_KP <- min(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_start)
-        RUG_max_boundary_KP <- max(Key_Info_XR_MR[[id_XR]]$RUGFile$KP_end)
+        RUG_min_boundary_KP <- min(Key_Info_Typology_Model_Reach[[id_XR]]$RUGFile$KP_start)
+        RUG_max_boundary_KP <- max(Key_Info_Typology_Model_Reach[[id_XR]]$RUGFile$KP_end)
 
         # Check if KP boundaries of each SR respect the KP boundaries of XR
         if (min(unlist(SR_KP_boundaries_list)) != RUG_min_boundary_KP ||
@@ -60,8 +60,8 @@ SR_constructor <- function(SR_key_HM,
                 max(unlist(SR_KP_boundaries_list))
             )))
         }
-        data_KP <- Key_Info_XR_MR[[id_XR]]$KP_grid
-        data_reaches <- Key_Info_XR_MR[[id_XR]]$reach
+        data_KP <- Key_Info_Typology_Model_Reach[[id_XR]]$KP_grid
+        data_reaches <- Key_Info_Typology_Model_Reach[[id_XR]]$reach
 
         # Adding layer 3 : declare all SRs into the structure
         SR[[id_XR]] <- vector("list", length(SR_KP_boundaries_list))
@@ -72,7 +72,7 @@ SR_constructor <- function(SR_key_HM,
             # Starting with KP and reach
             boundaries <- SR_KP_boundaries_list[[id_SR]]
 
-            if (Key_Info_XR_MR[[id_XR]]$Logical_decreasing) {
+            if (Key_Info_Typology_Model_Reach[[id_XR]]$Logical_decreasing) {
                 # If logical_decreasing is TRUE, boundaries must be reordered to the calculation
                 boundaries <- sort(boundaries)
                 # Include end (right) and exclude start (left)
