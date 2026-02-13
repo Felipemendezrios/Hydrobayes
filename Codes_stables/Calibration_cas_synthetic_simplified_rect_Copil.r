@@ -1399,7 +1399,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     mod_polynomials[[counter_model]] <- model(
         ID = "MAGE_ZQV",
         nX = 4,
-        nY = 5, ,
+        nY = 5,
         par = theta_param,
         xtra = xtra
     )
