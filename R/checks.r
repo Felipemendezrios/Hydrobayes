@@ -2,8 +2,6 @@ check_mage_folder <- function(name_folder) {
     if (!dir.exists(name_folder)) stop("Check the path to the Mage main folder. It does not exist")
 }
 
-
-
 check_simulation_time <- function(
     MAGE_main_folder,
     mage_projet_name,
