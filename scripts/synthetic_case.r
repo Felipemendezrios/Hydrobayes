@@ -557,5 +557,55 @@ Estimation_Mage(
     path_experiment = path_experiment,
     file_main_path = file_main_path,
     all_cal_case = all_cal_case,
-    do_calibration = TRUE
+    do_calibration = FALSE
 )
+
+# Plot DIC
+
+plotDIC <- plot_DIC(path_experiment)
+ggsave(
+    file.path(
+        path_experiment,
+        "DIC.png"
+    ),
+    plotDIC,
+    width = 20,
+    height = 20,
+    units = "cm"
+)
+
+save(
+    plotDIC,
+    file = file.path(
+        path_experiment,
+        "DIC.RData"
+    )
+)
+
+###############
+# Theoretical values
+####################
+file_RUGFILE_synt_obs <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Synthetic_case/Real_RUGFile_rect.txt"
+Real_Ks_simulated <- read_fortran_data(
+    file_path = file_RUGFILE_synt_obs,
+    col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
+    skip = 1
+)
+
+Kmin_literature <- data.frame(
+    x_start = Real_Ks_simulated$KP_start,
+    x_end = Real_Ks_simulated$KP_end,
+    mean_value = Real_Ks_simulated$Kmin,
+    reaches_sr = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
+)
+
+Kmin_segment_layer <- segment_layer_reference(
+    K_literature = Kmin_literature,
+    mean_col = "mean_value",
+    min_col = NULL,
+    max_col = NULL
+)
+
+####################
+# End theoretical values
+####################
