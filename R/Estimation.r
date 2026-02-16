@@ -248,8 +248,8 @@ constructor_RUGFile_covariate_grid <- function(
     ########################
     # Get discretization of the covariate, same in Kmin or Kflood
     ########################
-    covariate_grid_lists <- lapply(Key_Info_Typology_Model_Reach, function(SR) {
-        SR$KP_grid
+    covariate_grid_lists <- lapply(Key_Info_Typology_Model_Reach, function(SU) {
+        SU$KP_grid
     })
     covariate_grid <- data.frame(covariate = unlist(covariate_grid_lists))
     rownames(covariate_grid) <- NULL
@@ -280,33 +280,33 @@ constructor_RUGFile_covariate_grid <- function(
 
 
 constructor_spatialization_matrix <- function(
-    K_SR) {
+    K_SU) {
     # Get Z file for all XR in Kmin
-    Z_all_K_SR <- lapply(K_SR, function(channel) {
-        lapply(channel, function(SR) {
-            SR$Z
+    Z_all_K_SU <- lapply(K_SU, function(channel) {
+        lapply(channel, function(SU) {
+            SU$Z
         })
     })
 
     # Get the reaches of the Z file for all XR in Kmin
-    reaches_Z_all_K_SR <- lapply(K_SR, function(channel) {
-        lapply(channel, function(SR) {
-            SR$reach
+    reaches_Z_all_K_SU <- lapply(K_SU, function(channel) {
+        lapply(channel, function(SU) {
+            SU$reach
         })
     })
 
     # Flatten the nested list of matrices
-    flat_K_SR <- unlist(Z_all_K_SR, recursive = FALSE)
-    reaches_flat_K_SR <- cbind(unlist(unlist(reaches_Z_all_K_SR, recursive = FALSE)))
-    rownames(reaches_flat_K_SR) <- NULL
+    flat_K_SU <- unlist(Z_all_K_SU, recursive = FALSE)
+    reaches_flat_K_SU <- cbind(unlist(unlist(reaches_Z_all_K_SU, recursive = FALSE)))
+    rownames(reaches_flat_K_SU) <- NULL
 
     # Pass the flattened list to block_diagonal_matrix
-    Z_MatrixK_not_ordered <- do.call(block_diagonal_matrix, flat_K_SR)
+    Z_MatrixK_not_ordered <- do.call(block_diagonal_matrix, flat_K_SU)
 
     Z_MatrixK <- as.matrix(
         data.frame(
             cbind(
-                reaches_flat_K_SR,
+                reaches_flat_K_SU,
                 Z_MatrixK_not_ordered
             )
         ) %>%
@@ -324,7 +324,8 @@ Estimation_Mage <- function(
     file_main_path,
     all_cal_case,
     do_calibration) {
-    mod_polynomials <- list()
+    mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
+
     counter_model <- 1
 
     for (id_cal_case in 1:length(all_cal_case)) {
@@ -381,47 +382,47 @@ Estimation_Mage <- function(
         RUGFile_Mage_Final <- constructor_results$RUGFile_Mage_Final
         covariate_grid <- constructor_results$covariate_grid
         ############################################
-        # Kmin environment (encapsulated in Kmin_SR)
+        # Kmin environment (encapsulated in Kmin_SU)
         ############################################
 
         # Check if size is respected between ID and Kmin
-        if (length(Input_Typology) != length(Input_Kmin_Key_SR_MR)) stop("Size must be equal between Input_Kmin_Key_SR_MR and Input_Typology")
+        if (length(Input_Typology) != length(Input_Kmin_Key_SU_MR)) stop("Size must be equal between Input_Kmin_Key_SU_MR and Input_Typology")
 
-        # Assign properties of each SR in XR structure
-        Kmin_SR <- SR_constructor(
-            SR_key_HM = Input_Kmin_Key_SR_MR,
+        # Assign properties of each SU in XR structure
+        Kmin_SU <- SU_constructor(
+            SU_key_HM = Input_Kmin_Key_SU_MR,
             Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
         )
 
-        Z_MatrixKmin <- constructor_spatialization_matrix(K_SR = Kmin_SR)
+        Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
 
         # Check size between RUGFile_Mage_Final and Z_file
         if (nrow(RUGFile_Mage_Final) != nrow(Z_MatrixKmin)) stop("RUGFile_Mage_Final must have the same size as Z file (spatialisation)")
 
-        Kmin_prior <- extract_priors(Kmin_SR)
+        Kmin_prior <- extract_priors(Kmin_SU)
         ############################################
         # End Kmin environment
         ############################################
 
         ############################################
-        # Kflood environment (encapsulated in Kflood_SR)
+        # Kflood environment (encapsulated in Kflood_SU)
         ############################################
 
         # Check if size is respected between ID and Kflood
-        if (length(Input_Typology) != length(Input_Kflood_Key_SR_MR)) stop("Size must be equal between Input_Kflood_Key_SR_MR and Input_Typology")
+        if (length(Input_Typology) != length(Input_Kflood_Key_SU_MR)) stop("Size must be equal between Input_Kflood_Key_SU_MR and Input_Typology")
 
-        # Assign properties of each SR in XR structure
-        Kflood_SR <- SR_constructor(
-            SR_key_HM = Input_Kflood_Key_SR_MR,
+        # Assign properties of each SU in XR structure
+        Kflood_SU <- SU_constructor(
+            SU_key_HM = Input_Kflood_Key_SU_MR,
             Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
         )
 
-        Z_MatrixKflood <- constructor_spatialization_matrix(K_SR = Kflood_SR)
+        Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
 
         # Check size between RUGFile_Mage_Final and Z_file
         if (nrow(RUGFile_Mage_Final) != nrow(Z_MatrixKflood)) stop("RUGFile_Mage_Final must have the same size as Z file (spatialisation)")
 
-        Kflood_prior <- extract_priors(Kflood_SR)
+        Kflood_prior <- extract_priors(Kflood_SU)
 
         ############################################
         # End Kflood environment
@@ -546,12 +547,20 @@ Estimation_Mage <- function(
                 wait = FALSE
             )
         }
+        # Save results
+        list_Z_MatrixKmin[[id_cal_case]] <- Z_MatrixKmin
+        list_Z_MatrixKflood[[id_cal_case]] <- Z_MatrixKflood
+        list_Kmin_prior[[id_cal_case]] <- Kmin_prior
+        list_Kflood_prior[[id_cal_case]] <- Kflood_prior
+        list_Kmin_SU[[id_cal_case]] <- Kmin_SU
+        list_Kflood_SU[[id_cal_case]] <- Kflood_SU
     }
-    # return(list(
-    #     Z_MatrixKmin = Z_MatrixKmin,
-    #     Z_MatrixKflood = Z_MatrixKflood,
-    #     mcmc = mcmc,
-    #     Kmin_prior = Kmin_prior,
-    #     Kflood_prior = Kflood_prior
-    # ))
+    return(list(
+        Z_MatrixKmin = list_Z_MatrixKmin,
+        Z_MatrixKflood = list_Z_MatrixKflood,
+        Kmin_prior = list_Kmin_prior,
+        Kflood_prior = list_Kflood_prior,
+        Kmin_SU = list_Kmin_SU,
+        Kflood_SU = list_Kflood_SU
+    ))
 }

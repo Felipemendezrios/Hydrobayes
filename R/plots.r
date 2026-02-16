@@ -289,7 +289,7 @@ K_plot <- function(
     mcmc,
     n_param_Kmin,
     n_param_Kflood,
-    SR_reaches,
+    SU_reaches,
     MAP_param_vector,
     main_channel = TRUE) {
     if (main_channel) {
@@ -302,25 +302,25 @@ K_plot <- function(
 
     k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc[, indx])))
 
-    k_estimated_MCMC$KP <- SR_reaches$KP
-    k_estimated_MCMC$reaches_nb <- SR_reaches$reach
-    k_estimated_MCMC$reaches_sr <- SR_reaches$id_river
+    k_estimated_MCMC$KP <- SU_reaches$KP
+    k_estimated_MCMC$reaches_nb <- SU_reaches$reach
+    k_estimated_MCMC$reaches_SU <- SU_reaches$id_river
 
     # Convert to long format
     df_MCMC_sampling <- tidyr::pivot_longer(
         k_estimated_MCMC,
-        cols = -c(reaches_nb, reaches_sr, KP),
+        cols = -c(reaches_nb, reaches_SU, KP),
         values_to = "Value"
     ) %>%
-        select(reaches_nb, reaches_sr, KP, Value) %>%
+        select(reaches_nb, reaches_SU, KP, Value) %>%
         mutate(ID = "MCMC Sampling")
 
     k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_param_vector[indx]
 
     df_MAP <- data.frame(
-        reaches_nb = SR_reaches$reach,
-        reaches_sr = SR_reaches$id_river,
-        KP = SR_reaches$KP,
+        reaches_nb = SU_reaches$reach,
+        reaches_SU = SU_reaches$id_river,
+        KP = SU_reaches$KP,
         Value = k_estimated_MAP,
         ID = "MAP"
     )
@@ -328,7 +328,7 @@ K_plot <- function(
     # Get 95% uncertainty for envelope curve : create ribbon data from MCMC
     df_envelope <- df_MCMC_sampling %>%
         filter(ID == "MCMC Sampling") %>%
-        group_by(KP, reaches_sr, reaches_nb) %>%
+        group_by(KP, reaches_SU, reaches_nb) %>%
         summarise(
             ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
             ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
@@ -363,7 +363,7 @@ K_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         ) +
-        facet_wrap(~reaches_sr, scales = "free", ncol = 1)
+        facet_wrap(~reaches_SU, scales = "free", ncol = 1)
 
 
     return(list(df_MAP, K_plot, df_envelope))
@@ -505,7 +505,7 @@ segment_layer_reference <- function(
     max_col = NULL) {
     # ---- CHECK REQUIRED BASE COLUMNS ----
 
-    required_cols <- c("x_start", "x_end", "reaches_sr")
+    required_cols <- c("x_start", "x_end", "reaches_SU")
 
     missing_required <- setdiff(required_cols, names(K_literature))
 
@@ -580,7 +580,7 @@ segment_layer_reference <- function(
                 x_start = row$x_start,
                 x_end = row$x_end,
                 y_value = row[[mean_col]],
-                reaches_sr = row$reaches_sr,
+                reaches_SU = row$reaches_SU,
                 line_type = "mean"
             )
         )
@@ -594,7 +594,7 @@ segment_layer_reference <- function(
                     x_start = row$x_start,
                     x_end = row$x_end,
                     y_value = row[[min_col]],
-                    reaches_sr = row$reaches_sr,
+                    reaches_SU = row$reaches_SU,
                     line_type = "min"
                 )
             )
@@ -609,7 +609,7 @@ segment_layer_reference <- function(
                     x_start = row$x_start,
                     x_end = row$x_end,
                     y_value = row[[max_col]],
-                    reaches_sr = row$reaches_sr,
+                    reaches_SU = row$reaches_SU,
                     line_type = "max"
                 )
             )

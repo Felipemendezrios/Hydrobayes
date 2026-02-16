@@ -2,7 +2,7 @@ last <- function(data) {
     utils::tail(data, n = 1)
 }
 
-# Assuming Kflood_SR is your nested list
+# Assuming Kflood_SU is your nested list
 extract_priors <- function(nested_list) {
     priors <- list()
 
