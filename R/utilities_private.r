@@ -124,3 +124,19 @@ convert_9999_to_NA <- function(values) {
     values[values == -9999] <- NA
     return(values)
 }
+
+read_fortran_data <- function(file_path, col_widths_RUGFile, skip = 0) {
+    # Read the file with the fixed-width format
+    data <- read.fwf(file_path, widths = col_widths_RUGFile, header = FALSE, skip = skip)
+    data <- data[, -3]
+    colnames(data) <-
+        c(
+            "",
+            "id_reach",
+            "KP_start",
+            "KP_end",
+            "Kmin",
+            "Kflood"
+        )
+    return(data)
+}
