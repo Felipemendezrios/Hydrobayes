@@ -551,7 +551,7 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 # Module 6: Calibration
 ############################################
 
-Estimation_Mage(
+results_estimation <- Estimation_Mage(
     Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
     Input_Typology = Input_Typology,
     path_experiment = path_experiment,
@@ -560,8 +560,15 @@ Estimation_Mage(
     do_calibration = FALSE
 )
 
-# Plot DIC
+list_Z_MatrixKmin <- results_estimation$Z_MatrixKmin
+list_Z_MatrixKflood <- results_estimation$Z_MatrixKflood
+list_Kmin_prior <- results_estimation$Kmin_prior
+list_Kflood_prior <- results_estimation$Kflood_prior
+list_Kmin_SU <- results_estimation$Kmin_SU
+list_Kflood_SU <- results_estimation$Kflood_SU
 
+
+# Plot DIC
 plotDIC <- plot_DIC(path_experiment)
 ggsave(
     file.path(
@@ -596,7 +603,7 @@ Kmin_literature <- data.frame(
     x_start = Real_Ks_simulated$KP_start,
     x_end = Real_Ks_simulated$KP_end,
     mean_value = Real_Ks_simulated$Kmin,
-    reaches_sr = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
+    reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
 )
 
 Kmin_segment_layer <- segment_layer_reference(
@@ -609,3 +616,22 @@ Kmin_segment_layer <- segment_layer_reference(
 ####################
 # End theoretical values
 ####################
+
+################################
+# POSTPROCESS CALIBRATION WORKFLOW
+################################
+postprocess_calibration(
+    all_cal_case = all_cal_case,
+    file_main_path = file_main_path,
+    path_experiment = path_experiment,
+    all_events = all_events,
+    final_calibration = TRUE,
+    list_Kmin_prior = list_Kmin_prior,
+    list_Kflood_prior = list_Kflood_prior,
+    list_Kmin_SU = list_Kmin_SU,
+    list_Kflood_SU = list_Kflood_SU,
+    list_Z_MatrixKmin = list_Z_MatrixKmin,
+    list_Z_MatrixKflood = list_Z_MatrixKflood,
+    Kmin_segment_layer = Kmin_segment_layer,
+    Kflood_segment_layer = NULL
+)
