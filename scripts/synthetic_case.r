@@ -550,6 +550,7 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
+command_line_MAGE <- ""
 
 results_estimation <- Estimation_Mage(
     Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
@@ -557,7 +558,8 @@ results_estimation <- Estimation_Mage(
     path_experiment = path_experiment,
     file_main_path = file_main_path,
     all_cal_case = all_cal_case,
-    do_calibration = FALSE
+    do_calibration = FALSE,
+    command_line_MAGE = ""
 )
 
 list_Z_MatrixKmin <- results_estimation$Z_MatrixKmin
@@ -566,6 +568,7 @@ list_Kmin_prior <- results_estimation$Kmin_prior
 list_Kflood_prior <- results_estimation$Kflood_prior
 list_Kmin_SU <- results_estimation$Kmin_SU
 list_Kflood_SU <- results_estimation$Kflood_SU
+list_mod_polynomials <- results_estimation$mod_polynomials
 
 
 # Plot DIC
@@ -620,18 +623,106 @@ Kmin_segment_layer <- segment_layer_reference(
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-postprocess_calibration(
-    all_cal_case = all_cal_case,
-    file_main_path = file_main_path,
-    path_experiment = path_experiment,
-    all_events = all_events,
-    final_calibration = TRUE,
-    list_Kmin_prior = list_Kmin_prior,
-    list_Kflood_prior = list_Kflood_prior,
-    list_Kmin_SU = list_Kmin_SU,
-    list_Kflood_SU = list_Kflood_SU,
-    list_Z_MatrixKmin = list_Z_MatrixKmin,
-    list_Z_MatrixKflood = list_Z_MatrixKflood,
-    Kmin_segment_layer = Kmin_segment_layer,
-    Kflood_segment_layer = NULL
-)
+synthetic_case <- TRUE
+if (synthetic_case) {
+    real_synt_data <- WSE_synthetic_simplified %>%
+        mutate(X1_obs = ifelse((id_reach_CAL == 1 | id_reach_CAL == 3) & id_case == "5_1",
+            1,
+            ifelse((id_reach_CAL == 2) & id_case == "3_2", 2, NA)
+        )) %>%
+        tidyr::drop_na(X1_obs)
+}
+
+for (id_cal_case in 1:length(all_cal_case)) {
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
+
+    results_postprocess <- postprocess_calibration(
+        paths = paths,
+        X_input = X,
+        Y_observations = Y,
+        Yu_observations = Yu,
+        type = "dx",
+        final_calibration = TRUE,
+        Kmin_prior = list_Kmin_prior[[id_cal_case]],
+        Kflood_prior = list_Kflood_prior[[id_cal_case]],
+        Kmin_SU = list_Kmin_SU[[id_cal_case]],
+        Kflood_SU = list_Kflood_SU[[id_cal_case]],
+        Z_MatrixKmin = list_Z_MatrixKmin[[id_cal_case]],
+        Z_MatrixKflood = list_Z_MatrixKflood[[id_cal_case]],
+        mod_polynomials = list_mod_polynomials[[id_cal_case]],
+        Kmin_segment_layer = Kmin_segment_layer,
+        Kflood_segment_layer = NULL,
+        command_line_MAGE = command_line_MAGE,
+        dir_workspace = dir_workspace
+    )
+
+    residuals <- results_postprocess$residuals
+    plot_Kmin_without_obs <- results_postprocess$plots_param$Kmin$plot_without_obs
+    plot_Kmin_with_obs <- results_postprocess$plots_param$Kmin$plot_with_obs
+    plot_Kflood_without_obs <- results_postprocess$plots_param$Kflood$plot_without_obs
+    plot_Kflood_with_obs <- results_postprocess$plots_param$Kflood$plot_with_obs
+
+    plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
+
+
+    for (i in seq_along(plots_MAP_output_variables)) {
+        ggsave(
+            filename = file.path(
+                paths$path_post,
+                paste0("plot_obs_sim_MAP_Y", i, ".png")
+            ),
+            plot = plots_MAP_output_variables[[i]],
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    save(plots_MAP_output_variables,
+        file = file.path(paths$path_post_data, "plots_MAP_output_variables.RData")
+    )
+    if (synthetic_case) {
+        plot_output_with_synthetic_data <-
+            plots_MAP_output_variables[[1]] +
+            geom_point(
+                data = real_synt_data,
+                aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.4, shape = 2
+            ) +
+            scale_color_manual(
+                values =
+                    c(
+                        "sim" = "blue",
+                        "obs" = "red",
+                        "synthetic data" = "black"
+                    )
+            ) +
+            facet_wrap(
+                ~X1_obs,
+                # labeller = labeller(
+                #     X1_obs = c(
+                #         "1" = "Main reach (MR)",
+                #         "2" = "Tributary (TR)"
+                #     )
+                # ),
+                scales = "free",
+                ncol = 1
+            )
+        save(plot_output_with_synthetic_data,
+            file = file.path(paths$path_post_data, "plot_output_with_synthetic_data.RData")
+        )
+        ggsave(
+            filename = file.path(
+                paths$path_post,
+                paste0("plot_output_with_synthetic_data_Y", i, ".png")
+            ),
+            plot = plot_output_with_synthetic_data,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+}

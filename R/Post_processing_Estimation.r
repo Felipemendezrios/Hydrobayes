@@ -59,19 +59,15 @@ plot_mcmc_diagnostics <- function(
     } else {
         "Results_MCMC.txt"
     }
-
-
     fullpath <- file.path(path_temp_plots, file)
-
 
     if (!file.exists(fullpath)) {
         stop("MCMC file not found: ", fullpath)
     }
 
-
     mcmc <- RBaM::readMCMC(fullpath)
 
-
+    # Plots MCMC
     trace <- patchwork::wrap_plots(
         RBaM::tracePlot(mcmc),
         ncol = 3
@@ -107,6 +103,17 @@ plot_mcmc_diagnostics <- function(
         units = "cm"
     )
 
+    png(
+        file.path(
+            path_post,
+            paste0("corelation_cooked_", tools::file_path_sans_ext(file), ".png")
+        ),
+        width = 800,
+        height = 800,
+        res = 120
+    )
+    pairs(mcmc)
+    dev.off()
 
     return(mcmc)
 }
@@ -123,11 +130,11 @@ extract_MAP_parameters <- function(
     Kmin_prior,
     Kflood_prior) {
     Fix_Kmin <- sum(
-        sapply(Kmin_prior, function(x) x$prior$dist == "FIX")
+        get_prior_distribution(Kmin_prior) == "FIX"
     )
 
     Fix_Kflood <- sum(
-        sapply(Kflood_prior, function(x) x$prior$dist == "FIX")
+        get_prior_distribution(Kflood_prior) == "FIX"
     )
 
     if (final_calibration) {
@@ -193,7 +200,8 @@ compute_K <- function(
                 id_river = river
             )
         })
-    )
+    ) %>% arrange(reach)
+
     if (do_main_channel) {
         if (n_param_Kmin_to_estimate == 0) {
             return(stop("Any parameter is estimated in the main channel. Please verify the parameters in the main channel"))
@@ -231,25 +239,126 @@ compute_K <- function(
 # ============================================================
 
 compute_residuals <- function(
-    path_temp_plots) {
-    CalData <- read.table(
-        file.path(
-            path_temp_plots,
-            "CalibrationData.txt"
-        ),
-        header = TRUE
-    )
+    path_temp_plots,
+    final_calibration,
+    path_model_mage = NULL,
+    Z_matrixKmin = NULL,
+    Z_matrixKflood = NULL,
+    SU_Kmin = NULL,
+    SU_Kflood = NULL,
+    MAP = NULL,
+    mod_polynomials = NULL,
+    dir_workspace = NULL,
+    X = NULL,
+    command_line_MAGE = "") {
+    if (final_calibration) {
+        residuals <- read.table(
+            file.path(
+                path_temp_plots,
+                "Results_Residuals.txt"
+            ),
+            header = TRUE
+        )
+    } else {
+        # I need to pass information of MAP run model and get results if final_calibration !=TRUE
+        if (is.null(path_model_mage)) {
+            stop("If there are not the final calibration results, path_model_mage must be given as input")
+        }
+        # Residuals file is not ready, so I need to create by myself with MAP estimation from sampled data while MCMC is turning
+        # Get data format from mage results
+        temporal_dir <- tempdir()
 
-    residuals <- read.table(
-        file.path(
-            path_temp_plots,
-            "Results_Residuals.txt"
-        ),
-        header = TRUE
-    )
+        files <- list.files(temporal_dir, full.names = TRUE)
 
-    # Colonnes X_obs
-    X_obs_cols <- grep("^X[0-9]+_obs$", colnames(residuals), value = TRUE)
+        exclude_file <- file.path(temporal_dir, "vscode-R")
+
+        # List all files in the temp directory
+        files <- list.files(temporal_dir, full.names = TRUE)
+        # Exclude the specific file
+        files_to_delete <- setdiff(files, exclude_file)
+
+        # Remove remaining files if any
+        if (length(files_to_delete) > 0) {
+            unlink(files_to_delete, recursive = TRUE)
+        }
+
+        file.copy(
+            from = path_model_mage,
+            to = temporal_dir, recursive = TRUE
+        )
+        temp_path <- file.path(temporal_dir, basename(path_model_mage))
+
+        path_RUGFile <- file.path(
+            temp_path,
+            list.files(temp_path)[grep(list.files(temp_path), pattern = ".RUG")]
+        )
+        MAP_RUGFile <- lapply(path_RUGFile, function(file) {
+            read_fortran_data(
+                file_path = file,
+                col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
+                skip = 1
+            )
+        })
+
+        param_MAP_values <- get_param_vector_MAP_values(
+            SU_Kmin = SU_Kmin,
+            SU_Kflood = SU_Kflood,
+            MAP = MAP
+        )
+
+        values_Kmin_RUGFile <- Z_matrixKmin %*% param_MAP_values[1:ncol(Z_matrixKmin)]
+        values_Kflood_RUGFile <- Z_matrixKflood %*% param_MAP_values[(ncol(Z_matrixKmin) + 1):(ncol(Z_matrixKmin) + ncol(Z_matrixKflood))]
+
+        for (i in seq_along(MAP_RUGFile)) {
+            MAP_RUGFile[[i]]$Kflood <- values_Kflood_RUGFile
+            MAP_RUGFile[[i]]$Kmin <- values_Kmin_RUGFile
+
+            write_RUGFile(
+                RUG_path = path_RUGFile[i],
+                RUGFile_data = MAP_RUGFile[[i]],
+                RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
+            )
+        }
+
+        REPFile <- list.files(temp_path)[grep(list.files(temp_path), pattern = ".REP")]
+
+        REPFile <- str_remove(REPFile, pattern = ".REP")
+        if (length(unique(REPFile)) != 1) {
+            stop("names of the REPfile must be identical in all the mage projects")
+        }
+        REPFile <- unique(REPFile)
+
+        for (id_temp_path in temp_path) {
+            setwd(id_temp_path)
+            system2(MAGE_executable,
+                args = c(
+                    file.path(REPFile),
+                    command_line_MAGE
+                ),
+                wait = TRUE
+            )
+        }
+
+        runModel(
+            workspace = temporal_dir,
+            mod = mod_polynomials,
+            X = X,
+            stout = NULL
+        )
+
+        sim <- read.table(file.path(temporal_dir, "Y.txt"), header = TRUE)
+        colnames(sim) <- paste0("Y", 1:ncol(sim), "_sim")
+
+        # The standard deviation from a single run stdres = std_calibration_data
+        u_res <- data.frame(matrix(NA, nrow = nrow(sim), ncol = ncol(sim)))
+        colnames(u_res) <- paste0("Y", 1:ncol(u_res), "_stdres")
+
+        res <- obs - sim
+        colnames(res) <- paste0("Y", 1:ncol(res), "_res")
+
+        residuals <- cbind(sim, res, u_res)
+        setwd(dir_workspace)
+    }
 
     # Colonnes Y_sim
     Y_sim_cols <- grep("^Y[0-9]+_sim$", colnames(residuals), value = TRUE)
@@ -260,17 +369,12 @@ compute_residuals <- function(
     # Colonnes Y_stdres
     Y_stdres_cols <- grep("^Y[0-9]+_stdres$", colnames(residuals), value = TRUE)
 
-    res <- data.frame(
-        residuals[, c(
-            X_obs_cols,
-            Y_sim_cols,
-            Y_res_cols,
-            Y_stdres_cols
-        )],
-        CalData[, c(
-            grep("^Yu_", colnames(CalData), value = TRUE)
-        )]
-    )
+    res <- residuals[, c(
+        Y_sim_cols,
+        Y_res_cols,
+        Y_stdres_cols
+    )]
+
     return(res)
 }
 
@@ -308,155 +412,216 @@ plot_K_and_ref <- function(
 # ============================================================
 
 postprocess_calibration <- function(
-    all_cal_case,
-    file_main_path,
-    path_experiment,
-    all_events,
+    paths,
+    X_input,
+    Y_observations,
+    Yu_observations,
+    type = "dx",
     final_calibration = TRUE,
-    list_Kmin_prior,
-    list_Kflood_prior,
-    list_Kmin_SU,
-    list_Kflood_SU,
-    list_Z_MatrixK,
-    list_Z_MatrixKflood,
+    Kmin_prior,
+    Kflood_prior,
+    Kmin_SU,
+    Kflood_SU,
+    Z_MatrixKmin,
+    Z_MatrixKflood,
+    mod_polynomials = NULL,
     Kmin_segment_layer = NULL,
-    Kflood_segment_layer = NULL) {
-    for (id_cal_case in 1:length(all_cal_case)) {
-        message("Processing: ", all_cal_case[[id_cal_case]])
+    Kflood_segment_layer = NULL,
+    dir_workspace = NULL,
+    command_line_MAGE = "") {
+    message("Processing: ", basename(dirname(paths$path_temp_plots)))
 
-        # Load experiments
-        exp <- load_experiment(
-            file_main_path = file_main_path,
-            cal_case = all_cal_case[[id_cal_case]],
-            path_experiment = path_experiment,
-            all_events = all_events
+    # MCMC
+    mcmc <- plot_mcmc_diagnostics(
+        path_temp_plots = paths$path_temp_plots,
+        path_post = paths$path_post,
+        final_calibration = final_calibration
+    )
+
+    # Count number of parameters different to FIX distribution
+    n_param_Kmin_to_estimate <- sum(
+        get_prior_distribution(Kmin_prior) != "FIX"
+    )
+
+    n_param_Kflood_to_estimate <- sum(
+        get_prior_distribution(Kflood_prior) != "FIX"
+    )
+
+    # MAP
+    MAP <- extract_MAP_parameters(
+        path_temp_plots = paths$path_temp_plots,
+        final_calibration = final_calibration,
+        Kmin_prior = Kmin_prior,
+        Kflood_prior = Kflood_prior
+    )
+
+    # Kmin
+    if (n_param_Kmin_to_estimate) {
+        Kmin <- compute_K(
+            Z_MatrixK = Z_MatrixKmin,
+            mcmc = mcmc,
+            Kmin_prior = Kmin_prior,
+            Kflood_prior = Kflood_prior,
+            K_SU = Kmin_SU,
+            MAP = MAP,
+            do_main_channel = TRUE,
+            n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
+            n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
         )
 
-        # MCMC
-        mcmc <- plot_mcmc_diagnostics(
-            path_temp_plots = exp$path_temp_plots,
-            path_post = exp$path_post,
-            final_calibration = final_calibration
+        ls_spatial_friction_Kmin <- list(
+            df_envelope = Kmin[[3]],
+            df_MAP = Kmin[[1]]
+        )
+        save(ls_spatial_friction_Kmin,
+            file = file.path(paths$path_post_data, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
         )
 
-        # Count number of parameters different to FIX distribution
-
-        n_param_Kmin_to_estimate <- sum(
-            sapply(list_Kmin_prior[[id_cal_case]], function(x) x$prior$dist != "FIX")
-        )
-
-        n_param_Kflood_to_estimate <- sum(
-            sapply(list_Kflood_prior[[id_cal_case]], function(x) x$prior$dist != "FIX")
-        )
-
-        # MAP
-        MAP <- extract_MAP_parameters(
-            path_temp_plots = exp$path_temp_plots,
-            final_calibration = final_calibration,
-            Kmin_prior = list_Kmin_prior[[id_cal_case]],
-            Kflood_prior = list_Kflood_prior[[id_cal_case]]
-        )
-
-        # Kmin
-        if (n_param_Kmin_to_estimate) {
-            Kmin <- compute_K(
-                Z_MatrixK = list_Z_MatrixKmin[[id_cal_case]],
-                mcmc = mcmc,
-                Kmin_prior = list_Kmin_prior[[id_cal_case]],
-                Kflood_prior = list_Kflood_prior[[id_cal_case]],
-                K_SU = list_Kmin_SU[[id_cal_case]],
-                MAP = MAP,
-                do_main_channel = TRUE,
-                n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
-                n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
-            )
-
-            if (!is.null(Kmin_segment_layer)) {
-                final_plot_Kmin <- plot_K_and_ref(
-                    K_results = Kmin,
-                    Kmin_segment_layer = Kmin_segment_layer,
-                    path_post = exp$path_post,
-                    path_post_data = exp$path_post_data
-                )
-            } else {
-                final_plot_Kmin <- Kmin$plot
-            }
-
-            ggplot2::ggsave(
-                file.path(exp$path_post, "Kmin.png"),
-                final_plot_Kmin,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-
-            save(
-                final_plot_Kmin,
-                file = file.path(
-                    exp$path_post_data,
-                    "Plot_friction_estimation_plot_Kmin_plot.RData"
-                )
+        if (!is.null(Kmin_segment_layer)) {
+            final_plot_Kmin <- plot_K_and_ref(
+                K_results = Kmin,
+                K_segment_layer = Kmin_segment_layer,
+                path_post = paths$path_post,
+                path_post_data = paths$path_post_data
             )
         } else {
-            Kmin <- NULL
-            warning("Any parameter is estimated in the main channel. Kmin returned is NULL")
-        }
-        # Kflood
-        if (n_param_Kflood_to_estimate != 0) {
-            Kflood <- compute_K(
-                Z_MatrixK = list_Z_MatrixKflood[[id_cal_case]],
-                mcmc = mcmc,
-                Kmin_prior = list_Kmin_prior[[id_cal_case]],
-                Kflood_prior = list_Kflood_prior[[id_cal_case]],
-                K_SU = list_Kflood_SU[[id_cal_case]],
-                MAP = MAP,
-                do_main_channel = FALSE,
-                n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
-                n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
-            )
-
-            if (!is.null(Kflood_segment_layer)) {
-                final_plot_Kflood <- plot_K_and_ref(
-                    K_results = Kflood,
-                    K_segment_layer = Kflood_segment_layer,
-                    path_post = exp$path_post,
-                    path_post_data = exp$path_post_data
-                )
-            } else {
-                final_plot_Kflood <- Kflood$plot
-            }
-
-            ggplot2::ggsave(
-                file.path(exp$path_post, "Kflood.png"),
-                final_plot_Kflood,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-
-            save(
-                final_plot_Kflood,
-                file = file.path(
-                    exp$path_post_data,
-                    "Plot_friction_estimation_plot_Kflood_plot.RData"
-                )
-            )
-        } else {
-            Kflood <- NULL
-            warning("Any parameter is estimated in the floodplain. Kflood returned is NULL")
+            final_plot_Kmin <- Kmin$plot
         }
 
-        # Residuals
-        residuals <- compute_residuals(
-            path_temp_plots = exp$path_temp_plots
+        ggplot2::ggsave(
+            file.path(paths$path_post, "Kmin.png"),
+            final_plot_Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
 
         save(
-            residuals,
+            final_plot_Kmin,
             file = file.path(
-                exp$path_post_data,
-                "Data_Z_sim_vs_obs.RData"
+                paths$path_post_data,
+                "Plot_friction_estimation_plot_Kmin_plot.RData"
             )
         )
+    } else {
+        final_plot_Kmin <- Kmin <- NULL
+        warning("Any parameter is estimated in the main channel. Kmin returned is NULL")
     }
+    # Kflood
+    if (n_param_Kflood_to_estimate != 0) {
+        Kflood <- compute_K(
+            Z_MatrixK = Z_MatrixKflood,
+            mcmc = mcmc,
+            Kmin_prior = Kmin_prior,
+            Kflood_prior = Kflood_prior,
+            K_SU = Kflood_SU,
+            MAP = MAP,
+            do_main_channel = FALSE,
+            n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
+            n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
+        )
+
+        ls_spatial_friction_Kflood <- list(
+            df_envelope = Kflood[[3]],
+            df_MAP = Kflood[[1]]
+        )
+        save(ls_spatial_friction_Kflood,
+            file = file.path(paths$path_post_data, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
+        )
+
+        if (!is.null(Kflood_segment_layer)) {
+            final_plot_Kflood <- plot_K_and_ref(
+                K_results = Kflood,
+                K_segment_layer = Kflood_segment_layer,
+                path_post = paths$path_post,
+                path_post_data = paths$path_post_data
+            )
+        } else {
+            final_plot_Kflood <- Kflood$plot
+        }
+
+        ggplot2::ggsave(
+            file.path(paths$path_post, "Kflood.png"),
+            final_plot_Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+
+        save(
+            final_plot_Kflood,
+            file = file.path(
+                paths$path_post_data,
+                "Plot_friction_estimation_plot_Kflood_plot.RData"
+            )
+        )
+    } else {
+        final_plot_Kflood <- Kflood <- NULL
+        warning("Any parameter is estimated in the floodplain. Kflood returned is NULL")
+    }
+
+    # Residuals
+    residuals <- compute_residuals(
+        path_temp_plots = paths$path_temp_plots,
+        final_calibration = final_calibration,
+        path_model_mage = paths$path_model_mage,
+        Z_matrixKmin = Z_MatrixKmin,
+        Z_matrixKflood = Z_MatrixKflood,
+        SU_Kmin = Kmin_SU,
+        SU_Kflood = Kflood_SU,
+        MAP = MAP,
+        mod_polynomials = mod_polynomials,
+        command_line_MAGE = command_line_MAGE,
+        dir_workspace = dir_workspace
+    )
+
+    colnames(X_input) <- paste0("X", 1:ncol(Y_observations), "_obs")
+    colnames(Y_observations) <- paste0("Y", 1:ncol(Y_observations), "_obs")
+    colnames(Yu_observations) <- paste0("Yu", 1:ncol(Yu_observations), "_obs")
+    obs_sim_residuals <- cbind(
+        X_input,
+        Y_observations,
+        Yu_observations,
+        residuals
+    )
+    save(
+        obs_sim_residuals,
+        file = file.path(
+            paths$path_post_data,
+            "Data_Z_sim_vs_obs.RData"
+        )
+    )
+
+    # Plot for each output variable
+    plots <- plot_obs_sim_MAP(
+        all_obs_simulations = obs_sim_residuals,
+        type = type
+    )
+
+    return(
+        list(
+            data_param = list(
+                Kmin = list(
+                    df_MAP = Kmin[[1]],
+                    envelop = Kmin[[3]]
+                ),
+                Kflood = list(
+                    df_MAP = Kflood[[1]],
+                    envelop = Kflood[[3]]
+                )
+            ),
+            residuals = residuals,
+            plots_param = list(
+                Kmin = list(
+                    plot_without_obs = Kmin[[2]],
+                    plot_with_obs = final_plot_Kmin
+                ),
+                Kflood = list(
+                    plot_without_obs = Kflood[[2]],
+                    plot_with_obs = final_plot_Kflood
+                )
+            ),
+            plots_MAP_output_variables = plots
+        )
+    )
 }
