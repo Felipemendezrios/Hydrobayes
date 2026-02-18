@@ -140,3 +140,51 @@ read_fortran_data <- function(file_path, col_widths_RUGFile, skip = 0) {
         )
     return(data)
 }
+
+get_prior_distribution <- function(K_prior) {
+    sapply(K_prior, function(x) x$prior$dist)
+}
+
+get_param_vector_MAP_values <- function(SU_Kmin, SU_Kflood, MAP) {
+    param_MAP_values <- vector("list", sum(lengths(SU_Kmin)) + sum(lengths(SU_Kflood)))
+    names_all <- c(
+        unlist(lapply(names(SU_Kmin), function(l1) {
+            paste0("Kmin_", l1, "_", names(SU_Kmin[[l1]]))
+        })),
+        unlist(lapply(names(SU_Kflood), function(l1) {
+            paste0("Kflood_", l1, "_", names(SU_Kflood[[l1]]))
+        }))
+    )
+    names(param_MAP_values) <- names_all
+
+    counter <- 1
+    MAP_idx <- 1
+    SU_Kmin_Kflood <- c(SU_Kmin, SU_Kflood)
+
+    for (id_reach in SU_Kmin_Kflood) { # Browse the id reach (tributary, main channel, etc) in the Kmin and Kflood
+        for (id_SU in id_reach) { # Browse the spatial unit (SU) of the id_reach
+            # id_SU <- SU_Kmin[[3]][[1]]
+            # idea: keep the order of the config model !
+
+            # Get initial values of all parameters
+            param_temp <- get_init_prior(extract_priors(id_SU), FIX_dist = TRUE)
+            # If prior distribution is FIX, then keep the initial value.
+            # Otherwise, modify by the MAP value to calculate residuals
+            idx <- which(get_prior_distribution(id_SU$prior) != "FIX")
+
+            # Get the number of distribution different to FIX distribution to move indicator in the MAP variable
+            n <- length(idx)
+
+            if (n != 0) {
+                param_temp[idx] <- MAP[MAP_idx:(MAP_idx + n - 1)]
+            }
+
+            MAP_idx <- MAP_idx + n
+
+            param_MAP_values[[counter]] <- param_temp
+
+            counter <- counter + 1
+        }
+    }
+    return(unlist(param_MAP_values))
+}
