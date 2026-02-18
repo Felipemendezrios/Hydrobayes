@@ -370,67 +370,80 @@ K_plot <- function(
 }
 
 # Plot the simulation of ZQdX
-ZQdX_sim <- function(
-    sim_event_mm_m3_s,
-    Q_input = NULL,
-    Qplot = TRUE,
-    title_label,
-    ylabel) {
-    if (Qplot == TRUE && is.null(Q_input)) {
-        stop("Q_input must be provided if Qplot is TRUE")
+plot_obs_sim_MAP <- function(all_obs_simulations, type) {
+    # Replace -9999 by NA
+    all_obs_simulations <- convert_9999_to_NA(all_obs_simulations)
+
+    # Number of variables Y
+    n_Y <- sum(grepl("^Y\\d+_obs$", colnames(all_obs_simulations)))
+
+    if (type == "dx") {
+        base_plot <- ggplot(all_obs_simulations, aes(x = X3_obs))
+    } else if (type == "dt") {
+        base_plot <- ggplot(all_obs_simulations, aes(x = X4_obs))
     }
 
-    # Replace -9999 and -1e9 with NA
-    sim_event_mm_m3_s[sim_event_mm_m3_s == -9999] <- NA
-    sim_event_mm_m3_s[sim_event_mm_m3_s == -1e9] <- NA
-
-    ZQplot <- ggplot(sim_event_mm_m3_s, aes(x = X3_obs)) +
-        labs(title = title_label, x = "Streamwise position (meters)", y = ylabel) +
+    base_plot <- base_plot +
         theme_bw() +
         theme(plot.title = element_text(hjust = 0.5))
-    if (Qplot == TRUE) {
-        ZQplot <- ZQplot +
-            geom_point(aes(y = Y2_sim, col = "sim")) +
-            scale_color_manual(values = c("sim" = "blue", "boundary\nconditions" = "red")) +
-            facet_wrap(~X1_obs, ncol = 2)
 
-        # Create a data frame for the horizontal lines
-        hline_data <- data.frame(
-            X1_obs = 1:length(Q_input),
-            yintercept = Q_input,
-            linetype = 1:length(Q_input), # or use named linetypes like c("solid", "dashed", "dotted")
-            col = "boundary\nconditions" # same color for all lines
+    plot <- list()
+    for (i in 1:n_Y) {
+        plot[[i]] <- base_plot + labs(
+            title = paste0("Variable Y", i),
+            x = type,
+            y = paste0("Y", i)
         )
 
-        ZQplot <- ZQplot +
-            geom_hline(
-                data = hline_data,
-                aes(yintercept = yintercept, linetype = factor(linetype), color = col),
-                show.legend = TRUE
-            )
+        obs_col <- paste0("Y", i, "_obs")
+        sim_col <- paste0("Y", i, "_sim")
+        yu_col <- paste0("Yu", i, "_obs")
 
-        ZQplot <- ZQplot +
-            scale_linetype_manual(values = c("1" = "dashed", "2" = "solid", "3" = "dotted", "4" = "twodash")) +
-            labs(colour = NULL, linetype = "boundary\ncondition\nevents")
-    } else {
-        ZQplot <- ZQplot +
-            geom_point(aes(y = Y1_sim, col = "sim")) +
-            geom_point(aes(y = Y1_obs, col = "obs"))
+        # check existence and non-NA content
+        has_obs <- obs_col %in% colnames(all_obs_simulations) && any(!is.na(all_obs_simulations[[obs_col]]))
+        has_sim <- sim_col %in% colnames(all_obs_simulations) && any(!is.na(all_obs_simulations[[sim_col]]))
+        has_yu <- yu_col %in% colnames(all_obs_simulations) && any(!is.na(all_obs_simulations[[yu_col]]))
+        # skip if nothing exists
+        if (!has_obs && !has_sim) next
 
-        if (any(sim_event_mm_m3_s$Yu_z != 0)) {
-            ZQplot <- ZQplot +
-                geom_errorbar(aes(
-                    ymin = Y1_obs - qnorm(0.975) * Yu_z,
-                    ymax = Y1_obs + qnorm(0.975) * Yu_z, col = "obs"
-                ))
+        # observations
+        if (has_obs) {
+            plot[[i]] <- plot[[i]] +
+                geom_point(aes(
+                    y = .data[[obs_col]],
+                    color = "obs"
+                ), size = 2)
         }
 
-        ZQplot <- ZQplot +
+        # simulations
+        if (has_sim) {
+            plot[[i]] <- plot[[i]] +
+                geom_line(aes(
+                    y = .data[[sim_col]],
+                    color = "sim"
+                ), linewidth = 1)
+        }
+
+        # uncertainty → blue error bars (only if obs exists)
+        if (has_obs && has_yu) {
+            plot[[i]] <- plot[[i]] +
+                geom_errorbar(
+                    aes(
+                        ymin = .data[[obs_col]] - qnorm(0.975) * .data[[yu_col]],
+                        ymax = .data[[obs_col]] + qnorm(0.975) * .data[[yu_col]],
+                        color = "obs"
+                    ),
+                    width = 0.2
+                )
+        }
+        plot[[i]] <- plot[[i]] +
             scale_color_manual(values = c("sim" = "blue", "obs" = "red")) +
             labs(colour = NULL) +
-            facet_wrap(~X1_obs, ncol = 2)
+            facet_wrap(~X1_obs, ncol = 2, scales = "free")
     }
-    return(ZQplot)
+
+
+    return(plot)
 }
 
 plot_DIC <- function(
