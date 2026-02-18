@@ -263,16 +263,16 @@ constructor_RUGFile_covariate_grid <- function(
     })
 
     # Row-bind all RUGFile data frames into a single data frame
-    RUGFile_Mage_Final <- do.call(rbind, all_RUGFiles) %>% arrange(id_reach)
+    skeleton_RUGFile_Mage <- do.call(rbind, all_RUGFiles) %>% arrange(id_reach)
     # Remove row names
-    rownames(RUGFile_Mage_Final) <- NULL
+    rownames(skeleton_RUGFile_Mage) <- NULL
     #######################################
     # End RUGFile
     #######################################
 
     return(
         list(
-            RUGFile_Mage_Final = RUGFile_Mage_Final,
+            skeleton_RUGFile_Mage = skeleton_RUGFile_Mage,
             covariate_grid = covariate_grid
         )
     )
@@ -323,7 +323,8 @@ Estimation_Mage <- function(
     path_experiment,
     file_main_path,
     all_cal_case,
-    do_calibration) {
+    do_calibration,
+    command_line_MAGE = "") {
     mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
 
     counter_model <- 1
@@ -379,7 +380,7 @@ Estimation_Mage <- function(
 
         constructor_results <- constructor_RUGFile_covariate_grid(Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach)
 
-        RUGFile_Mage_Final <- constructor_results$RUGFile_Mage_Final
+        skeleton_RUGFile_Mage <- constructor_results$skeleton_RUGFile_Mage
         covariate_grid <- constructor_results$covariate_grid
         ############################################
         # Kmin environment (encapsulated in Kmin_SU)
@@ -396,8 +397,8 @@ Estimation_Mage <- function(
 
         Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
 
-        # Check size between RUGFile_Mage_Final and Z_file
-        if (nrow(RUGFile_Mage_Final) != nrow(Z_MatrixKmin)) stop("RUGFile_Mage_Final must have the same size as Z file (spatialisation)")
+        # Check size between skeleton_RUGFile_Mage and Z_file
+        if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKmin)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
 
         Kmin_prior <- extract_priors(Kmin_SU)
         ############################################
@@ -419,8 +420,8 @@ Estimation_Mage <- function(
 
         Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
 
-        # Check size between RUGFile_Mage_Final and Z_file
-        if (nrow(RUGFile_Mage_Final) != nrow(Z_MatrixKflood)) stop("RUGFile_Mage_Final must have the same size as Z file (spatialisation)")
+        # Check size between skeleton_RUGFile_Mage and Z_file
+        if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKflood)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
 
         Kflood_prior <- extract_priors(Kflood_SU)
 
@@ -441,11 +442,11 @@ Estimation_Mage <- function(
 
         RUGFile_paths <- paste0(mageDir, mage_projet_name, ".RUG")
 
-        # j is a index for multi-events
+        # id_multi_event is a index for multi-events
         for (id_multi_event in seq_along(RUGFile_paths)) {
             write_RUGFile(
                 RUG_path = RUGFile_paths[id_multi_event],
-                RUGFile_data = RUGFile_Mage_Final,
+                RUGFile_data = skeleton_RUGFile_Mage,
                 RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
             )
         }
@@ -457,7 +458,6 @@ Estimation_Mage <- function(
             fname = "Config_setup.txt",
             object = list(
                 exeFile = paste0(MAGE_executable, " ", command_line_MAGE),
-                # commandLine = command_line_MAGE,
                 version = "8",
                 mageDir = mageDir,
                 repFile = paste0(mage_projet_name, ".REP"),
@@ -561,6 +561,7 @@ Estimation_Mage <- function(
         Kmin_prior = list_Kmin_prior,
         Kflood_prior = list_Kflood_prior,
         Kmin_SU = list_Kmin_SU,
-        Kflood_SU = list_Kflood_SU
+        Kflood_SU = list_Kflood_SU,
+        mod_polynomials = mod_polynomials
     ))
 }
