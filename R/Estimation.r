@@ -324,7 +324,14 @@ Estimation_Mage <- function(
     file_main_path,
     all_cal_case,
     do_calibration,
-    command_line_MAGE = "") {
+    ID_model_BaM,
+    nX_BaM,
+    nY_BaM,
+    command_line_MAGE = "",
+    nCycles = 100,
+    nAdapt = 100,
+    burn = 0.5,
+    nSlim = 10) {
     mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
 
     counter_model <- 1
@@ -473,9 +480,9 @@ Estimation_Mage <- function(
         theta_param <- c(Kmin_prior, Kflood_prior)
 
         mod_polynomials[[counter_model]] <- model(
-            ID = "MAGE_ZQV",
-            nX = 4,
-            nY = 5,
+            ID = ID_model_BaM,
+            nX = nX_BaM,
+            nY = nY_BaM,
             par = theta_param,
             xtra = xtra
         )
@@ -499,15 +506,15 @@ Estimation_Mage <- function(
         }
 
         mcmcOptions_user <- mcmcOptions(
-            nCycles = 100,
-            nAdapt = 100,
+            nCycles = nCycles,
+            nAdapt = nAdapt,
             manualMode = TRUE,
             thetaStd = jump_MCMC_theta_param,
             gammaStd = jump_MCMC_error_model
         )
         mcmcCooking_user <- mcmcCooking(
-            burn = 0.5,
-            nSlim = 10
+            burn = burn,
+            nSlim = nSlim
         )
         mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
 

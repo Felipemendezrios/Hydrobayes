@@ -38,6 +38,7 @@ load_experiment <- function(file_main_path, cal_case, path_experiment, all_event
     )
 
     return(list(
+        path_polynomial = path_polynomial,
         path_temp_plots = path_temp_plots,
         path_post = path_post,
         path_post_data = path_post_data,

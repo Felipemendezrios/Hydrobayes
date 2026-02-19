@@ -22,3 +22,31 @@ check_simulation_time <- function(
 
     if (nrow(Observations %>% filter(Observations$time > end_time_sim)) != 0) stop("There are some observed data beyond the simulation time period")
 }
+
+check_type_pred <- function(type) {
+    if (!any(type %in% c("ZdX", "QdXT", "VdXT", "ZdT"))) stop(paste0(type, " must be either ZdX, or QdXT, or VdXT, or ZdT"))
+}
+
+check_dX <- function(df_event) {
+    if (!identical(df_event$tmin, df_event$tmax)) stop("tmin and tmax must be identical")
+}
+
+check_dT <- function(df_event) {
+    if (!identical(df_event$xmin, df_event$xmax)) stop("xmin and xmax must be identical")
+}
+
+check_dXT <- function(df_event) {
+    if (!identical(df_event$xmin, df_event$xmax) | !identical(df_event$tmin, df_event$tmax)) stop("Both xmin, xmax and tmin, tmax must be identical")
+}
+
+check_calibration_case <- function(path) {
+    if (!dir.exists(path)) stop(paste0("Calibration case is not performed yet: ", basename(path)))
+
+    if (!file.exists(file.path(
+        path,
+        "BaM",
+        "Results_Cooking.txt"
+    ))) {
+        stop("Results_Cooking.txt file is missing. Calibration is not performed yet")
+    }
+}

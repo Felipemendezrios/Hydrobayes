@@ -550,7 +550,6 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
-command_line_MAGE <- ""
 
 results_estimation <- Estimation_Mage(
     Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
@@ -559,7 +558,14 @@ results_estimation <- Estimation_Mage(
     file_main_path = file_main_path,
     all_cal_case = all_cal_case,
     do_calibration = FALSE,
-    command_line_MAGE = ""
+    command_line_MAGE = command_line_MAGE,
+    nCycles = nCycles,
+    nAdapt = nAdapt,
+    burn = burn,
+    nSlim = nSlim,
+    ID_model_BaM = ID_model_BaM,
+    nX_BaM = nX_BaM,
+    nY_BaM = nY_BaM
 )
 
 list_Z_MatrixKmin <- results_estimation$Z_MatrixKmin
@@ -623,6 +629,8 @@ Kmin_segment_layer <- segment_layer_reference(
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
+
+# Add synthetic data
 synthetic_case <- TRUE
 if (synthetic_case) {
     real_synt_data <- WSE_synthetic_simplified %>%
@@ -633,7 +641,9 @@ if (synthetic_case) {
         tidyr::drop_na(X1_obs)
 }
 
+
 for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
     paths <- load_experiment(
         file_main_path = file_main_path,
         cal_case = all_cal_case[[id_cal_case]],
@@ -685,6 +695,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     save(plots_MAP_output_variables,
         file = file.path(paths$path_post_data, "plots_MAP_output_variables.RData")
     )
+    # Specific case of synthetic case
     if (synthetic_case) {
         plot_output_with_synthetic_data <-
             plots_MAP_output_variables[[1]] +
@@ -725,4 +736,71 @@ for (id_cal_case in 1:length(all_cal_case)) {
             units = "cm"
         )
     }
+}
+
+################################
+# Prediction
+################################
+
+# Define the calculation grid:
+# It must respect the information in the ST File for the space and Time simulation for the time
+
+# ZdX: t fixed and x variable (SWOT, measure wse, drone, etc)
+# QdXT: t fixed and x fixed (gaugings)
+# VdXT: t fixed and x fixed (radar)
+# ZdT: t variable, x fixed (hydrometric stations)
+
+# Grid is possible to be spatial and temporal, in prediction step, this is not a problem.
+# But i need to fixed time or space to vary the other one ! (could be improved in the future)
+
+# In this case, prediction will be performed only at the time and space of calibration data
+info_events_reaches <- list(
+    # 1st event: WSE.
+    event_1 = list(
+        type = "ZdX",
+        SU1 = data.frame(
+            event = c(1),
+            reach = c(1, 3),
+            xmin = c(0, 18),
+            xmax = c(18, 25),
+            tmin = c(10800, 10800),
+            tmax = c(10800, 10800),
+            nb_discretization = c(100, 100)
+        )
+    ),
+    # 2nd event: WSE
+    event_2 = list(
+        type = "ZdX",
+        SU2 = data.frame(
+            event = c(2),
+            reach = c(2),
+            xmin = (0),
+            xmax = c(20),
+            tmin = c(10800),
+            tmax = c(10800),
+            nb_discretization = c(100)
+        )
+    )
+)
+
+X_pred <- grid_user(info_events_reaches)
+
+
+
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
+
+    (paths = paths,
+    X_pred = X_pred,
+    nX,
+    nY)
+
+
+
 }
