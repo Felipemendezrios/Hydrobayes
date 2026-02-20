@@ -50,3 +50,7 @@ check_calibration_case <- function(path) {
         stop("Results_Cooking.txt file is missing. Calibration is not performed yet")
     }
 }
+
+check_calibration_done <- function(path) {
+    if (!file.exists(file.path(path, "Results_Cooking.txt"))) stop("MCMC is still running or calculation is not going to the end. Verify if calibration is already finished or verify that calibration has not error messages. Please put final_results = FALSE as input")
+}
