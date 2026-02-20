@@ -327,6 +327,7 @@ Estimation_Mage <- function(
     ID_model_BaM,
     nX_BaM,
     nY_BaM,
+    dir_exe_BaM,
     command_line_MAGE = "",
     nCycles = 100,
     nAdapt = 100,
