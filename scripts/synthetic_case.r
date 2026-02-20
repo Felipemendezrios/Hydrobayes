@@ -814,3 +814,52 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nsim_prior = 500
     )
 }
+
+##########################################
+### Plots
+##########################################
+
+# Desired level order
+desired_order <- c("Total", "Parametric", "Maxpost", "Observations")
+
+all_prediction_case <- c("ParamU", "Maxpost", "TotalU")
+
+
+
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
+
+    results_postprocess <- postprocess_prediction(
+        paths = paths,
+        Kmin_prior = list_Kmin_prior[[id_cal_case]],
+        Kflood_prior = list_Kflood_prior[[id_cal_case]],
+        ###############
+        X_input = X,
+        Y_observations = Y,
+        Yu_observations = Yu,
+        type = "dx",
+        Kmin_SU = list_Kmin_SU[[id_cal_case]],
+        Kflood_SU = list_Kflood_SU[[id_cal_case]],
+        Z_MatrixKmin = list_Z_MatrixKmin[[id_cal_case]],
+        Z_MatrixKflood = list_Z_MatrixKflood[[id_cal_case]],
+        mod_polynomials = list_mod_polynomials[[id_cal_case]],
+        Kmin_segment_layer = Kmin_segment_layer,
+        Kflood_segment_layer = NULL,
+        command_line_MAGE = command_line_MAGE,
+        dir_workspace = dir_workspace
+    )
+
+    residuals <- results_postprocess$residuals
+    plot_Kmin_without_obs <- results_postprocess$plots_param$Kmin$plot_without_obs
+    plot_Kmin_with_obs <- results_postprocess$plots_param$Kmin$plot_with_obs
+    plot_Kflood_without_obs <- results_postprocess$plots_param$Kflood$plot_without_obs
+    plot_Kflood_with_obs <- results_postprocess$plots_param$Kflood$plot_with_obs
+
+    plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
+}
