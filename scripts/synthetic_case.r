@@ -565,7 +565,8 @@ results_estimation <- Estimation_Mage(
     nSlim = nSlim,
     ID_model_BaM = ID_model_BaM,
     nX_BaM = nX_BaM,
-    nY_BaM = nY_BaM
+    nY_BaM = nY_BaM,
+    dir_exe_BaM = dir_exe_BaM
 )
 
 list_Z_MatrixKmin <- results_estimation$Z_MatrixKmin
@@ -786,7 +787,6 @@ info_events_reaches <- list(
 X_pred <- grid_user(info_events_reaches)
 
 
-
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
     paths <- load_experiment(
@@ -796,11 +796,21 @@ for (id_cal_case in 1:length(all_cal_case)) {
         all_events = all_events
     )
 
-    (paths = paths,
-    X_pred = X_pred,
-    nX,
-    nY)
+    # Load data and model used during calibration
+    load(file.path(paths$path_post_data, "BaM_objects.RData"))
 
-
-
+    # Run prediction
+    prediction_MAGE(
+        cal_case = all_cal_case[[id_cal_case]],
+        paths = paths,
+        prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
+        nY = nY_BaM,
+        nX = nX_BaM,
+        CalData = data$data,
+        do_prediction = TRUE,
+        X_pred = X_pred,
+        dir_exe_BaM = dir_exe_BaM,
+        mod = mod,
+        nsim_prior = 500
+    )
 }
