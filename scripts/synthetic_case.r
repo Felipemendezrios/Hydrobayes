@@ -59,6 +59,8 @@ file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroB
 MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/model_mage"
 mage_projet_name <- "synt_rect"
 
+do_plot_calibration <- FALSE
+
 check_mage_folder(name_folder = MAGE_main_folder)
 ############################################
 # End module 1: set directories paths
@@ -148,6 +150,7 @@ WSE_Event_1 <- assign_calibration_and_validation_data(
 )
 
 CalData_event_1 <- WSE_Event_1 %>% filter(set == "calibration")
+
 ggplot(WSE_Event_1, aes(x = KP, y = WSE, col = set)) +
     geom_point() +
     geom_errorbar(aes(
@@ -387,67 +390,70 @@ if (Experiment_id == "Syn_case_rec_5_3_with_Ks_obs_limites_all_obs_flat_prior") 
 
 CalData <- cbind(X, Y, Yu)
 
-plots_CalData <- plot_CalData(
-    CalData = CalData,
-    scales_free = "free",
-    wrap = TRUE
-)
-# Customize the plot
-plots_CalData$plot_WSE <- plots_CalData$plot_WSE +
-    facet_wrap(
-        ~event,
-        labeller = as_labeller(
-            c(
-                "1" = "Main~reach:~discharge~of~5~m^3/s",
-                "2" = "Tributary:~discharge~of~1~m^3/s"
-            ),
-            label_parsed
-        ),
-        scales = "free",
-        ncol = 1
-    )
-
-plots_CalData$plot_Kmin <- plots_CalData$plot_Kmin +
-    facet_wrap(
-        ~event,
-        labeller = as_labeller(
-            c(
-                "1" = "Main~reach:~discharge~of~5~m^3/s",
-                "2" = "Tributary:~discharge~of~1~m^3/s"
-            ),
-            label_parsed
-        ),
-        scales = "free",
-        ncol = 1
-    )
-
-
-plot_WSE_Thalweg <- plots_CalData$plot_WSE +
-    geom_line(data = observed_data, aes(x = KP, y = Z_thalweg), color = "black")
-
-plots_CalData$plot_WSE_Thalweg <- plot_WSE_Thalweg
 path_experiment <- file.path(file_main_path, Experiment_id)
 
-if (!dir.exists(path_experiment)) {
-    dir.create(path_experiment)
-}
-
-for (name in names(plots_CalData)) {
-    plot <- plots_CalData[[name]]
-    if (!is.null(plot)) {
-        ggsave(file.path(path_experiment, paste0(name, ".png")),
-            plot = plot,
-            width = 30,
-            height = 20,
-            units = "cm"
+if (do_plot_calibration) {
+    plots_CalData <- plot_CalData(
+        CalData = CalData,
+        scales_free = "free",
+        wrap = TRUE
+    )
+    # Customize the plot
+    plots_CalData$plot_WSE <- plots_CalData$plot_WSE +
+        facet_wrap(
+            ~event,
+            labeller = as_labeller(
+                c(
+                    "1" = "Main~reach:~discharge~of~5~m^3/s",
+                    "2" = "Tributary:~discharge~of~1~m^3/s"
+                ),
+                label_parsed
+            ),
+            scales = "free",
+            ncol = 1
         )
 
-        save(
-            file = file.path(path_experiment, paste0(name, ".RData")),
-            plot
+    plots_CalData$plot_Kmin <- plots_CalData$plot_Kmin +
+        facet_wrap(
+            ~event,
+            labeller = as_labeller(
+                c(
+                    "1" = "Main~reach:~discharge~of~5~m^3/s",
+                    "2" = "Tributary:~discharge~of~1~m^3/s"
+                ),
+                label_parsed
+            ),
+            scales = "free",
+            ncol = 1
         )
+
+    plot_WSE_Thalweg <- plots_CalData$plot_WSE +
+        geom_line(data = observed_data, aes(x = KP, y = Z_thalweg), color = "black")
+
+    plots_CalData$plot_WSE_Thalweg <- plot_WSE_Thalweg
+
+    if (!dir.exists(path_experiment)) {
+        dir.create(path_experiment)
+    }
+
+    for (name in names(plots_CalData)) {
+        plot <- plots_CalData[[name]]
+        if (!is.null(plot)) {
+            ggsave(file.path(path_experiment, paste0(name, ".png")),
+                plot = plot,
+                width = 30,
+                height = 20,
+                units = "cm"
+            )
+
+            save(
+                file = file.path(path_experiment, paste0(name, ".RData")),
+                plot
+            )
+        }
     }
 }
+
 ############################################
 # End module 2: calibration data
 ############################################
@@ -579,25 +585,28 @@ list_mod_polynomials <- results_estimation$mod_polynomials
 
 
 # Plot DIC
-plotDIC <- plot_DIC(path_experiment)
-ggsave(
-    file.path(
-        path_experiment,
-        "DIC.png"
-    ),
-    plotDIC,
-    width = 20,
-    height = 20,
-    units = "cm"
-)
-
-save(
-    plotDIC,
-    file = file.path(
-        path_experiment,
-        "DIC.RData"
+if (do_plot_calibration) {
+    plotDIC <- plot_DIC(path_experiment)
+    ggsave(
+        file.path(
+            path_experiment,
+            "DIC.png"
+        ),
+        plotDIC,
+        width = 20,
+        height = 20,
+        units = "cm"
     )
-)
+
+    save(
+        plotDIC,
+        file = file.path(
+            path_experiment,
+            "DIC.RData"
+        )
+    )
+}
+
 
 ###############
 # Theoretical values
@@ -680,62 +689,63 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
 
-
-    for (i in seq_along(plots_MAP_output_variables)) {
-        ggsave(
-            filename = file.path(
-                paths$path_post,
-                paste0("plot_obs_sim_MAP_Y", i, ".png")
-            ),
-            plot = plots_MAP_output_variables[[i]],
-            width = 20,
-            height = 20,
-            units = "cm"
-        )
-    }
-    save(plots_MAP_output_variables,
-        file = file.path(paths$path_post_data, "plots_MAP_output_variables.RData")
-    )
-    # Specific case of synthetic case
-    if (synthetic_case) {
-        plot_output_with_synthetic_data <-
-            plots_MAP_output_variables[[1]] +
-            geom_point(
-                data = real_synt_data,
-                aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.4, shape = 2
-            ) +
-            scale_color_manual(
-                values =
-                    c(
-                        "sim" = "blue",
-                        "obs" = "red",
-                        "synthetic data" = "black"
-                    )
-            ) +
-            facet_wrap(
-                ~X1_obs,
-                # labeller = labeller(
-                #     X1_obs = c(
-                #         "1" = "Main reach (MR)",
-                #         "2" = "Tributary (TR)"
-                #     )
-                # ),
-                scales = "free",
-                ncol = 1
+    if (do_plot_calibration) {
+        for (i in seq_along(plots_MAP_output_variables)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_post,
+                    paste0("plot_obs_sim_MAP_Y", i, ".png")
+                ),
+                plot = plots_MAP_output_variables[[i]],
+                width = 20,
+                height = 20,
+                units = "cm"
             )
-        save(plot_output_with_synthetic_data,
-            file = file.path(paths$path_post_data, "plot_output_with_synthetic_data.RData")
+        }
+        save(plots_MAP_output_variables,
+            file = file.path(paths$path_post_data, "plots_MAP_output_variables.RData")
         )
-        ggsave(
-            filename = file.path(
-                paths$path_post,
-                paste0("plot_output_with_synthetic_data_Y", i, ".png")
-            ),
-            plot = plot_output_with_synthetic_data,
-            width = 20,
-            height = 20,
-            units = "cm"
-        )
+        # Specific case of synthetic case
+        if (synthetic_case) {
+            plot_output_with_synthetic_data <-
+                plots_MAP_output_variables[[1]] +
+                geom_point(
+                    data = real_synt_data,
+                    aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.4, shape = 2
+                ) +
+                scale_color_manual(
+                    values =
+                        c(
+                            "sim" = "blue",
+                            "obs" = "red",
+                            "synthetic data" = "black"
+                        )
+                ) +
+                facet_wrap(
+                    ~X1_obs,
+                    # labeller = labeller(
+                    #     X1_obs = c(
+                    #         "1" = "Main reach (MR)",
+                    #         "2" = "Tributary (TR)"
+                    #     )
+                    # ),
+                    scales = "free",
+                    ncol = 1
+                )
+            save(plot_output_with_synthetic_data,
+                file = file.path(paths$path_post_data, "plot_output_with_synthetic_data.RData")
+            )
+            ggsave(
+                filename = file.path(
+                    paths$path_post,
+                    paste0("plot_output_with_synthetic_data_Y", i, ".png")
+                ),
+                plot = plot_output_with_synthetic_data,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
     }
 }
 
@@ -785,7 +795,7 @@ info_events_reaches <- list(
 )
 
 X_pred <- grid_user(info_events_reaches)
-
+X_pred_grid <- list()
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -800,14 +810,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
     load(file.path(paths$path_post_data, "BaM_objects.RData"))
 
     # Run prediction
-    prediction_MAGE(
+    X_pred_grid[[id_cal_case]] <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
         prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
         nY = nY_BaM,
         nX = nX_BaM,
         CalData = data$data,
-        do_prediction = TRUE,
+        do_prediction = FALSE,
         X_pred = X_pred,
         dir_exe_BaM = dir_exe_BaM,
         mod = mod,
@@ -824,8 +834,6 @@ desired_order <- c("Total", "Parametric", "Maxpost", "Observations")
 
 all_prediction_case <- c("ParamU", "Maxpost", "TotalU")
 
-
-
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
     paths <- load_experiment(
@@ -839,10 +847,12 @@ for (id_cal_case in 1:length(all_cal_case)) {
         paths = paths,
         Kmin_prior = list_Kmin_prior[[id_cal_case]],
         Kflood_prior = list_Kflood_prior[[id_cal_case]],
-        ###############
+        grid = X_pred_grid[[id_cal_case]],
+        conf_level = 0.95,
         X_input = X,
         Y_observations = Y,
         Yu_observations = Yu,
+        ###############
         type = "dx",
         Kmin_SU = list_Kmin_SU[[id_cal_case]],
         Kflood_SU = list_Kflood_SU[[id_cal_case]],

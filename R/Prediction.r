@@ -285,4 +285,5 @@ prediction_MAGE <- function(
             do_prediction = do_prediction
         )
     }
+    return(X_pred_grid = X)
 }

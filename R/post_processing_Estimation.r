@@ -243,14 +243,15 @@ compute_residuals <- function(
     path_temp_plots,
     final_calibration,
     path_model_mage = NULL,
-    Z_matrixKmin = NULL,
-    Z_matrixKflood = NULL,
+    Z_MatrixKmin = NULL,
+    Z_MatrixKflood = NULL,
     SU_Kmin = NULL,
     SU_Kflood = NULL,
     MAP = NULL,
     mod_polynomials = NULL,
     dir_workspace = NULL,
     X = NULL,
+    Y = NULL,
     command_line_MAGE = "") {
     if (final_calibration) {
         residuals <- read.table(
@@ -307,8 +308,8 @@ compute_residuals <- function(
             MAP = MAP
         )
 
-        values_Kmin_RUGFile <- Z_matrixKmin %*% param_MAP_values[1:ncol(Z_matrixKmin)]
-        values_Kflood_RUGFile <- Z_matrixKflood %*% param_MAP_values[(ncol(Z_matrixKmin) + 1):(ncol(Z_matrixKmin) + ncol(Z_matrixKflood))]
+        values_Kmin_RUGFile <- Z_MatrixKmin %*% param_MAP_values[1:ncol(Z_MatrixKmin)]
+        values_Kflood_RUGFile <- Z_MatrixKflood %*% param_MAP_values[(ncol(Z_MatrixKmin) + 1):(ncol(Z_MatrixKmin) + ncol(Z_MatrixKflood))]
 
         for (i in seq_along(MAP_RUGFile)) {
             MAP_RUGFile[[i]]$Kflood <- values_Kflood_RUGFile
@@ -354,6 +355,8 @@ compute_residuals <- function(
         u_res <- data.frame(matrix(NA, nrow = nrow(sim), ncol = ncol(sim)))
         colnames(u_res) <- paste0("Y", 1:ncol(u_res), "_stdres")
 
+        # Get observations
+        obs <- convert_9999_to_NA(Y)
         res <- obs - sim
         colnames(res) <- paste0("Y", 1:ncol(res), "_res")
 
@@ -566,14 +569,16 @@ postprocess_calibration <- function(
         path_temp_plots = paths$path_temp_plots,
         final_calibration = final_calibration,
         path_model_mage = paths$path_model_mage,
-        Z_matrixKmin = Z_MatrixKmin,
-        Z_matrixKflood = Z_MatrixKflood,
+        Z_MatrixKmin = Z_MatrixKmin,
+        Z_MatrixKflood = Z_MatrixKflood,
         SU_Kmin = Kmin_SU,
         SU_Kflood = Kflood_SU,
         MAP = MAP,
         mod_polynomials = mod_polynomials,
-        command_line_MAGE = command_line_MAGE,
-        dir_workspace = dir_workspace
+        dir_workspace = dir_workspace,
+        X = X_input,
+        Y = Y_observations,
+        command_line_MAGE = command_line_MAGE
     )
 
     colnames(X_input) <- paste0("X", 1:ncol(Y_observations), "_obs")
