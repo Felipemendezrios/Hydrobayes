@@ -59,3 +59,19 @@ check_suffix_pred <- function(file, idx) {
     # Check if all lists are empty
     if (length(file) == 0) stop(paste0("No files found for prediction number : ", idx))
 }
+
+check_data_unc <- function(data) {
+    required <- c("xaxis", "min", "max", "id_pred", "event", "sim_value", "reach", "SU")
+
+    if (any(!required %in% colnames(data))) stop("Column names must have xaxis, min, max, id_pred, event, sim_value, reach and SU")
+}
+
+check_experiment_exist <- function(path) {
+    if (!file.exists(path)) {
+        stop(paste0(
+            "The experiment input data named : '",
+            basename(path),
+            "' does not exist"
+        ))
+    }
+}
