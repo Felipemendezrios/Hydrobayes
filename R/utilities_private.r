@@ -127,7 +127,7 @@ convert_9999_to_NA <- function(values) {
 
 read_fortran_data <- function(file_path, col_widths_RUGFile, skip = 0) {
     # Read the file with the fixed-width format
-    data <- read.fwf(file_path, widths = col_widths_RUGFile, header = FALSE, skip = skip)
+    data <- utils::read.fwf(file_path, widths = col_widths_RUGFile, header = FALSE, skip = skip)
     data <- data[, -3]
     colnames(data) <-
         c(
@@ -187,4 +187,68 @@ get_param_vector_MAP_values <- function(SU_Kmin, SU_Kflood, MAP) {
         }
     }
     return(unlist(param_MAP_values))
+}
+
+remnantErrorModel_default <- function(name) {
+    RBaM::remnantErrorModel(
+        fname = name,
+        funk = "Constant",
+        par = list(parameter(
+            name = "intercept",
+            init = 0.01,
+            prior.dist = "Exponential",
+            prior.par = c(0, 0.01) # 0 is the threshold and 0.01 is the scale
+        ))
+    )
+}
+
+
+# Set paths
+
+load_experiment <- function(file_main_path, cal_case, path_experiment, all_events) {
+    path_input <- file.path(file_main_path, "Experiments_Input_Data", cal_case)
+
+    if (!file.exists(path_input)) {
+        stop("Experiment input file does not exist: ", cal_case)
+    }
+
+    source(path_input)
+
+    path_polynomial <- file.path(
+        path_experiment,
+        sub("\\.r$", "", cal_case)
+    )
+
+    path_BaM_folder <- file.path(path_polynomial, "BaM")
+
+    path_plot_folder <- file.path(path_BaM_folder, "post_traitement")
+
+    path_RData <- file.path(path_plot_folder, "RData")
+
+    dir.create(path_plot_folder, showWarnings = FALSE)
+    dir.create(path_RData, showWarnings = FALSE)
+
+    path_model_HM <- file.path(
+        path_polynomial,
+        "model_mage"
+    )
+
+    path_model_HM_events <- paste0(
+        file.path(
+            path_model_HM,
+            all_events
+        ),
+        "/"
+    )
+
+
+    return(list(
+        path_experiment = path_input,
+        path_polynomial = path_polynomial,
+        path_BaM_folder = path_BaM_folder,
+        path_plot_folder = path_plot_folder,
+        path_RData = path_RData,
+        path_model_HM_events = path_model_HM_events,
+        path_model_HM = path_model_HM
+    ))
 }
