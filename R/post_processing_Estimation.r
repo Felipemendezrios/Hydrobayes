@@ -1,132 +1,5 @@
-# ============================================================
-# POSTPROCESS CALIBRATION WORKFLOW
-# ============================================================
-
-
-# ============================================================
-# 1. LOAD EXPERIMENT
-# ============================================================
-
-load_experiment <- function(file_main_path, cal_case, path_experiment, all_events) {
-    path_input <- file.path(file_main_path, "Experiments_Input_Data", cal_case)
-
-    if (!file.exists(path_input)) {
-        stop("Experiment input file does not exist: ", cal_case)
-    }
-
-    source(path_input)
-
-    path_polynomial <- file.path(
-        path_experiment,
-        sub("\\.r$", "", cal_case)
-    )
-
-    path_temp_plots <- file.path(path_polynomial, "BaM")
-
-    path_post <- file.path(path_temp_plots, "post_traitement")
-
-    path_post_data <- file.path(path_post, "RData")
-
-    dir.create(path_post, showWarnings = FALSE)
-    dir.create(path_post_data, showWarnings = FALSE)
-
-    path_model_mage <- paste0(
-        path_polynomial,
-        "/model_mage/",
-        all_events,
-        "/"
-    )
-
-    return(list(
-        path_polynomial = path_polynomial,
-        path_temp_plots = path_temp_plots,
-        path_post = path_post,
-        path_post_data = path_post_data,
-        path_model_mage = path_model_mage
-    ))
-}
-
-
-# ============================================================
-# 2. MCMC DIAGNOSTICS
-# ============================================================
-
-plot_mcmc_diagnostics <- function(
-    path_temp_plots,
-    path_post,
-    final_calibration) {
-    file <- if (final_calibration) {
-        "Results_Cooking.txt"
-    } else {
-        "Results_MCMC.txt"
-    }
-    fullpath <- file.path(path_temp_plots, file)
-
-    if (!file.exists(fullpath)) {
-        stop("MCMC file not found: ", fullpath)
-    }
-
-    mcmc <- RBaM::readMCMC(fullpath)
-
-    # Plots MCMC
-    trace <- patchwork::wrap_plots(
-        RBaM::tracePlot(mcmc),
-        ncol = 3
-    )
-
-
-    ggplot2::ggsave(
-        file.path(
-            path_post,
-            paste0("MCMC_", tools::file_path_sans_ext(file), ".png")
-        ),
-        trace,
-        width = 20,
-        height = 20,
-        units = "cm"
-    )
-
-
-    density <- patchwork::wrap_plots(
-        RBaM::densityPlot(mcmc),
-        ncol = 3
-    )
-
-
-    ggplot2::ggsave(
-        file.path(
-            path_post,
-            paste0("density_", tools::file_path_sans_ext(file), ".png")
-        ),
-        density,
-        width = 20,
-        height = 20,
-        units = "cm"
-    )
-
-    png(
-        file.path(
-            path_post,
-            paste0("corelation_cooked_", tools::file_path_sans_ext(file), ".png")
-        ),
-        width = 800,
-        height = 800,
-        res = 120
-    )
-    pairs(mcmc)
-    dev.off()
-
-    return(mcmc)
-}
-
-
-
-# ============================================================
-# 3. EXTRACT MAP
-# ============================================================
-
 extract_MAP_parameters <- function(
-    path_temp_plots,
+    path_BaM_folder,
     final_calibration,
     Kmin_prior,
     Kflood_prior) {
@@ -141,7 +14,7 @@ extract_MAP_parameters <- function(
     if (final_calibration) {
         summary <- read.table(
             file.path(
-                path_temp_plots,
+                path_BaM_folder,
                 "Results_Summary.txt"
             ),
             header = TRUE
@@ -158,7 +31,7 @@ extract_MAP_parameters <- function(
     } else {
         res <- read.table(
             file.path(
-                path_temp_plots,
+                path_BaM_folder,
                 "Results_MCMC.txt"
             ),
             header = TRUE
@@ -172,15 +45,8 @@ extract_MAP_parameters <- function(
             ]
         )
     }
-
     return(MAP)
 }
-
-
-
-# ============================================================
-# 4. COMPUTE K
-# ============================================================
 
 compute_K <- function(
     Z_MatrixK,
@@ -225,7 +91,6 @@ compute_K <- function(
         main_channel = do_main_channel
     )
 
-
     return(list(
         df_MAP = res[[1]],
         plot = res[[2]],
@@ -233,16 +98,10 @@ compute_K <- function(
     ))
 }
 
-
-
-# ============================================================
-# 5. COMPUTE RESIDUALS
-# ============================================================
-
 compute_residuals <- function(
-    path_temp_plots,
+    path_BaM_folder,
     final_calibration,
-    path_model_mage = NULL,
+    path_model_HM_events = NULL,
     Z_MatrixKmin = NULL,
     Z_MatrixKflood = NULL,
     SU_Kmin = NULL,
@@ -256,15 +115,15 @@ compute_residuals <- function(
     if (final_calibration) {
         residuals <- read.table(
             file.path(
-                path_temp_plots,
+                path_BaM_folder,
                 "Results_Residuals.txt"
             ),
             header = TRUE
         )
     } else {
         # I need to pass information of MAP run model and get results if final_calibration !=TRUE
-        if (is.null(path_model_mage)) {
-            stop("If there are not the final calibration results, path_model_mage must be given as input")
+        if (is.null(path_model_HM_events)) {
+            stop("If there are not the final calibration results, path_model_HM_events must be given as input")
         }
         # Residuals file is not ready, so I need to create by myself with MAP estimation from sampled data while MCMC is turning
         # Get data format from mage results
@@ -285,10 +144,10 @@ compute_residuals <- function(
         }
 
         file.copy(
-            from = path_model_mage,
+            from = path_model_HM_events,
             to = temporal_dir, recursive = TRUE
         )
-        temp_path <- file.path(temporal_dir, basename(path_model_mage))
+        temp_path <- file.path(temporal_dir, basename(path_model_HM_events))
 
         path_RUGFile <- file.path(
             temp_path,
@@ -382,39 +241,7 @@ compute_residuals <- function(
     return(res)
 }
 
-
-# ============================================================
-# 6. PLOT K with referenced values
-# ============================================================
-
-plot_K_and_ref <- function(
-    K_results,
-    K_segment_layer,
-    path_post,
-    path_post_data) {
-    final_plot <-
-        K_results$plot +
-
-        K_segment_layer +
-
-        ggplot2::scale_linetype_manual(
-            name = "Reference values",
-            values = c(
-                "mean" = "dashed",
-                "min" = "dashed",
-                "max" = "dashed"
-            ),
-            labels = c("synthetic data")
-        )
-    return(final_plot)
-}
-
-
-
-# ============================================================
 # MAIN FUNCTION
-# ============================================================
-
 postprocess_calibration <- function(
     paths,
     X_input,
@@ -433,12 +260,12 @@ postprocess_calibration <- function(
     Kflood_segment_layer = NULL,
     dir_workspace = NULL,
     command_line_MAGE = "") {
-    message("Processing: ", basename(dirname(paths$path_temp_plots)))
+    message("Processing: ", basename(dirname(paths$path_BaM_folder)))
 
     # MCMC
     mcmc <- plot_mcmc_diagnostics(
-        path_temp_plots = paths$path_temp_plots,
-        path_post = paths$path_post,
+        path_BaM_folder = paths$path_BaM_folder,
+        path_plot_folder = paths$path_plot_folder,
         final_calibration = final_calibration
     )
 
@@ -453,14 +280,14 @@ postprocess_calibration <- function(
 
     # MAP
     MAP <- extract_MAP_parameters(
-        path_temp_plots = paths$path_temp_plots,
+        path_BaM_folder = paths$path_BaM_folder,
         final_calibration = final_calibration,
         Kmin_prior = Kmin_prior,
         Kflood_prior = Kflood_prior
     )
 
     # Kmin
-    if (n_param_Kmin_to_estimate) {
+    if (n_param_Kmin_to_estimate != 0) {
         Kmin <- compute_K(
             Z_MatrixK = Z_MatrixKmin,
             mcmc = mcmc,
@@ -478,22 +305,22 @@ postprocess_calibration <- function(
             df_MAP = Kmin[[1]]
         )
         save(ls_spatial_friction_Kmin,
-            file = file.path(paths$path_post_data, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
+            file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
         )
 
         if (!is.null(Kmin_segment_layer)) {
             final_plot_Kmin <- plot_K_and_ref(
                 K_results = Kmin,
                 K_segment_layer = Kmin_segment_layer,
-                path_post = paths$path_post,
-                path_post_data = paths$path_post_data
+                path_plot_folder = paths$path_plot_folder,
+                path_RData = paths$path_RData
             )
         } else {
             final_plot_Kmin <- Kmin$plot
         }
 
         ggplot2::ggsave(
-            file.path(paths$path_post, "Kmin.png"),
+            file.path(paths$path_plot_folder, "Kmin.png"),
             final_plot_Kmin,
             width = 20,
             height = 20,
@@ -503,7 +330,7 @@ postprocess_calibration <- function(
         save(
             final_plot_Kmin,
             file = file.path(
-                paths$path_post_data,
+                paths$path_RData,
                 "Plot_friction_estimation_plot_Kmin_plot.RData"
             )
         )
@@ -530,22 +357,22 @@ postprocess_calibration <- function(
             df_MAP = Kflood[[1]]
         )
         save(ls_spatial_friction_Kflood,
-            file = file.path(paths$path_post_data, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
+            file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
         )
 
         if (!is.null(Kflood_segment_layer)) {
             final_plot_Kflood <- plot_K_and_ref(
                 K_results = Kflood,
                 K_segment_layer = Kflood_segment_layer,
-                path_post = paths$path_post,
-                path_post_data = paths$path_post_data
+                path_plot_folder = paths$path_plot_folder,
+                path_RData = paths$path_RData
             )
         } else {
             final_plot_Kflood <- Kflood$plot
         }
 
         ggplot2::ggsave(
-            file.path(paths$path_post, "Kflood.png"),
+            file.path(paths$path_plot_folder, "Kflood.png"),
             final_plot_Kflood,
             width = 20,
             height = 20,
@@ -555,7 +382,7 @@ postprocess_calibration <- function(
         save(
             final_plot_Kflood,
             file = file.path(
-                paths$path_post_data,
+                paths$path_RData,
                 "Plot_friction_estimation_plot_Kflood_plot.RData"
             )
         )
@@ -566,9 +393,9 @@ postprocess_calibration <- function(
 
     # Residuals
     residuals <- compute_residuals(
-        path_temp_plots = paths$path_temp_plots,
+        path_BaM_folder = paths$path_BaM_folder,
         final_calibration = final_calibration,
-        path_model_mage = paths$path_model_mage,
+        path_model_HM_events = paths$path_model_HM_events,
         Z_MatrixKmin = Z_MatrixKmin,
         Z_MatrixKflood = Z_MatrixKflood,
         SU_Kmin = Kmin_SU,
@@ -593,7 +420,7 @@ postprocess_calibration <- function(
     save(
         obs_sim_residuals,
         file = file.path(
-            paths$path_post_data,
+            paths$path_RData,
             "Data_Z_sim_vs_obs.RData"
         )
     )

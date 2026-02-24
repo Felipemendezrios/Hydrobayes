@@ -644,3 +644,188 @@ segment_layer_reference <- function(
 
     return(K_segment_layer)
 }
+
+
+
+plot_mcmc_diagnostics <- function(
+    path_BaM_folder,
+    path_plot_folder,
+    final_calibration) {
+    file <- if (final_calibration) {
+        "Results_Cooking.txt"
+    } else {
+        "Results_MCMC.txt"
+    }
+    fullpath <- file.path(path_BaM_folder, file)
+
+    if (!file.exists(fullpath)) {
+        stop("MCMC file not found: ", fullpath)
+    }
+
+    mcmc <- RBaM::readMCMC(fullpath)
+
+    # Plots MCMC
+    trace <- patchwork::wrap_plots(
+        RBaM::tracePlot(mcmc),
+        ncol = 3
+    )
+
+    ggplot2::ggsave(
+        file.path(
+            path_plot_folder,
+            paste0("MCMC_", tools::file_path_sans_ext(file), ".png")
+        ),
+        trace,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
+    density <- patchwork::wrap_plots(
+        RBaM::densityPlot(mcmc),
+        ncol = 3
+    )
+
+    ggplot2::ggsave(
+        file.path(
+            path_plot_folder,
+            paste0("density_", tools::file_path_sans_ext(file), ".png")
+        ),
+        density,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
+    png(
+        file.path(
+            path_plot_folder,
+            paste0("corelation_cooked_", tools::file_path_sans_ext(file), ".png")
+        ),
+        width = 800,
+        height = 800,
+        res = 120
+    )
+    pairs(mcmc)
+    dev.off()
+
+    return(mcmc)
+}
+
+
+plot_K_and_ref <- function(
+    K_results,
+    K_segment_layer,
+    path_plot_folder,
+    path_RData) {
+    final_plot <-
+        K_results$plot +
+
+        K_segment_layer +
+
+        ggplot2::scale_linetype_manual(
+            name = "Reference values",
+            values = c(
+                "mean" = "dashed",
+                "min" = "dashed",
+                "max" = "dashed"
+            ),
+            labels = c("synthetic data")
+        )
+    return(final_plot)
+}
+
+
+plot_obs_sim_unc <- function(
+    data_output_var,
+    any_obs_Y,
+    wrap = "event_SU" # event_reach_HM
+    ) {
+    check_data_unc(data_output_var)
+
+    if (!any_obs_Y) {
+        data_output_var <- data_output_var %>%
+            filter(id_pred != "Total")
+    }
+    all_data_unc_obs <- data_output_var %>%
+        filter(!id_pred %in% c("Maxpost", "Prior", "Observations"))
+    # Plot simulation uncertainties ribbons
+    sim_obs_plot <-
+        ggplot(
+            data = all_data_unc_obs,
+            aes(
+                x = xaxis,
+                ymin = min,
+                ymax = max,
+            ), alpha = 0.65
+        ) +
+        geom_ribbon(
+            aes(fill = id_pred),
+            alpha = 0.65
+        ) +
+        theme_bw() +
+        labs(
+            fill = "Uncertainties",
+            color = "Data"
+        ) +
+        theme(
+            strip.text = element_text(size = 12),
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5),
+            legend.position = "bottom"
+        )
+
+    # Check if Maxpost is available
+    if (any(levels(data_output_var$id_pred) == "Maxpost")) {
+        sim_obs_plot <- sim_obs_plot +
+            geom_line(
+                data = data_output_var %>% filter(id_pred == "Maxpost"),
+                aes(y = sim_value, color = id_pred)
+            )
+    }
+
+    # Plot observations
+    sim_obs_plot <- sim_obs_plot +
+        # Add observations
+        geom_point(
+            data = data_output_var %>% filter(id_pred == "Observations"),
+            aes(y = sim_value, col = id_pred)
+        ) +
+        geom_errorbar(
+            data = data_output_var %>% filter(id_pred == "Observations"),
+            aes(
+                col = id_pred
+            ),
+            na.rm = TRUE
+        ) +
+        scale_fill_manual(
+            values = c(
+                "Parametric" = "pink",
+                "Total" = "red"
+            )
+        ) +
+        scale_color_manual(
+            values = c(
+                "Observations" = "black",
+                "Maxpost" = "blue"
+            )
+        )
+
+    if (wrap == "event_SU") {
+        sim_obs_plot <- sim_obs_plot +
+            facet_wrap(~ event + SU,
+                scales = "free",
+                ncol = 1
+            )
+    } else if (wrap == "event_reach_HM") {
+        # Plot by reach (HM)
+        sim_obs_plot <- sim_obs_plot +
+            facet_wrap(
+                ~ event + reach,
+                scales = "free",
+                ncol = 2
+            )
+    }
+    return(sim_obs_plot)
+}
