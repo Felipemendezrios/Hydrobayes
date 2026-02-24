@@ -115,13 +115,13 @@ postprocess_prediction <- function(
     suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
     desired_order = c("Total", "Parametric", "Maxpost", "Observations")) {
     # Check if Results_Cooking.txt file exists
-    check_calibration_done(path = paths$path_temp_plots)
+    check_calibration_done(path = paths$path_BaM_folder)
     if (!type %in% c("dX", "dT")) stop(paste0("Type must be either dX or dT. You tapped : ", type))
-    message("Processing: ", basename(dirname(paths$path_temp_plots)))
+    message("Processing: ", basename(dirname(paths$path_BaM_folder)))
 
     all_data_pred <- get_all_data_pred(
         X_grid = grid,
-        path = paths$path_temp_plots,
+        path = paths$path_BaM_folder,
         patterns = suffix_patterns
     )
 
@@ -162,127 +162,81 @@ postprocess_prediction <- function(
         xlabel <- "Time (hours)"
     }
 
+
     for (i in seq_along(Y_observations)) {
+        # Flag to indicate if calibration data is presented of each output variable to plot total or parametric uncertainty. Particular case for Kmin and Kflood, they are not really structural error model, but only parametric.
+        any_obs_Y <- any(!is.na(convert_9999_to_NA(Y_observations[i])) & !colnames(Y_observations)[i] %in% c("Kmin", "Kflood"))
+
         all_data_output <- all_data %>%
             # Get information of each output
-            filter(variable == clean_suffix_patterns[i])
-
-
-        all_data_unc_obs <- all_data_output %>%
-            filter(!id_pred %in% c("Maxpost", "Prior", "Observations"))
-
-        # Plot simulation uncertainties ribbons
-        sim_obs_plot <-
-            ggplot(
-                data = all_data_unc_obs,
-                aes(
-                    x = xaxis,
-                    ymin = q2.5,
-                    ymax = q97.5,
-                ), alpha = 0.65
-            ) +
-            geom_ribbon(
-                aes(fill = id_pred),
-                alpha = 0.65
-            ) +
-            facet_wrap(~ event + SU,
-                scales = "free",
-                ncol = 1
-            ) +
-            theme_bw() +
-            labs(
-                x = xlabel,
-                y = clean_suffix_patterns[i],
-                title = paste0("Comparison of simulations and observations by event and SU of :\n", clean_suffix_patterns[i]),
-                fill = "Uncertainties",
-                color = "Data"
-            ) +
-            theme(
-                strip.text = element_text(size = 12),
-                axis.text.x = element_text(angle = 45, hjust = 1),
-                plot.title = element_text(hjust = 0.5),
-                legend.title = element_text(hjust = 0.5),
-                legend.position = "bottom"
+            filter(variable == clean_suffix_patterns[i]) %>%
+            rename(
+                sim_value = value,
+                min = q2.5,
+                max = q97.5
             )
-        # Check if Maxpost is available
-        if (any(levels(all_data_output$id_pred) == "Maxpost")) {
-            sim_obs_plot <- sim_obs_plot +
-                geom_line(
-                    data = all_data_output %>% filter(id_pred == "Maxpost"),
-                    aes(y = value, color = id_pred)
-                )
-        }
-        # Plot observations
-        sim_obs_plot <- sim_obs_plot +
-            # Add observations
-            geom_point(
-                data = all_data_output %>% filter(id_pred == "Observations"),
-                aes(y = value, col = id_pred)
-            ) +
-            geom_errorbar(
-                data = all_data_output %>% filter(id_pred == "Observations"),
-                aes(
-                    col = id_pred
-                ),
-                na.rm = TRUE
-            ) +
-            scale_fill_manual(
-                values = c(
-                    "Parametric" = "pink",
-                    "Total" = "red"
-                )
-            ) +
-            scale_color_manual(
-                values = c(
-                    "Observations" = "black",
-                    "Maxpost" = "blue"
-                )
+
+        # Plot observation and simulation with uncertainties
+        plot_unc_by_SU <- plot_obs_sim_unc(
+            data_output_var = all_data_output,
+            any_obs_Y = any_obs_Y,
+            wrap = "event_SU"
+        )
+
+        plot_unc_by_SU <- plot_unc_by_SU +
+            labs(
+                title = paste0("Comparison of simulations and observations by event and SU of:\n", clean_suffix_patterns[i]),
+                x = xlabel,
+                y = clean_suffix_patterns[i]
             )
 
         # Save
         ggsave(
             file.path(
-                paths$path_post,
+                paths$path_plot_folder,
                 paste0("sim_vs_obs_by_SU_", clean_suffix_patterns[i], "_with_uncertainties.png")
             ),
-            sim_obs_plot,
+            plot_unc_by_SU,
             width = 17,
             height = 22,
             units = "cm",
             dpi = 300
         )
 
-        save(sim_obs_plot,
+        save(plot_unc,
             file = file.path(
-                paths$path_post_data,
+                paths$path_RData,
                 paste0("sim_obs_plot_by_SU_", clean_suffix_patterns[i], ".RData")
             )
         )
 
-        # Plot by reach (mage)
-        sim_obs_plot_by_reaches <- sim_obs_plot +
-            facet_wrap(
-                ~ event + reach,
-                scales = "free",
-                ncol = 2
+        plot_unc_by_reach <- plot_obs_sim_unc(
+            data_output_var = all_data_output,
+            any_obs_Y = any_obs_Y,
+            wrap = "event_reach_HM"
+        )
+        plot_unc_by_reach <- plot_unc_by_reach +
+            labs(
+                title = paste0("Comparison of simulations and observations by event and reach of :\n", clean_suffix_patterns[i]),
+                x = xlabel,
+                y = clean_suffix_patterns[i]
             )
-
         ggsave(
             file.path(
-                paths$path_post,
-                paste0("sim_vs_obs_by_reaches_mage_", clean_suffix_patterns[i], "_with_uncertainties.png")
+                paths$path_plot_folder,
+                paste0("sim_vs_obs_by_reaches_", clean_suffix_patterns[i], "_with_uncertainties.png")
             ),
-            sim_obs_plot_by_reaches,
+            plot_unc_by_reach,
             width = 17,
             height = 26,
             units = "cm",
             dpi = 300
         )
 
-        save(sim_obs_plot_by_reaches,
+        save(plot_unc_by_reach,
             file = file.path(
-                paths$path_post_data,
-                paste0("sim_obs_plot_by_reaches_mage_", clean_suffix_patterns[i], ".RData")
+                paths$path_RData,
+                paste0("plot_unc_by_reach_", clean_suffix_patterns[i], ".RData")
             )
         )
         ############################
@@ -299,91 +253,88 @@ postprocess_prediction <- function(
                 by = c("event", "reach", "x", "t", "variable")
             ) %>%
             mutate(
-                residual = value - Maxpost,
-                residual_low = q2.5 - Maxpost,
-                residual_high = q97.5 - Maxpost
+                sim_value = value - Maxpost,
+                min = q2.5 - Maxpost,
+                max = q97.5 - Maxpost
             )
 
         var_output_data_res <- all_data_res %>%
             # Get information of each output
-            filter(variable == clean_suffix_patterns[i])
+            filter(variable == clean_suffix_patterns[i]) %>%
+            # Remove Maxpost because it is the referent
+            filter(id_pred != "Maxpost")
 
-        all_unc_var_output_res <- var_output_data_res %>%
-            filter(!id_pred %in% c("Maxpost", "Prior", "Observations"))
-        # Set residual plot
-        res_sim_obs_plot <-
-            ggplot(
-                data = all_unc_var_output_res,
-                aes(
-                    x = xaxis,
-                    y = residual,
-                    ymin = residual_low,
-                    ymax = residual_high
-                )
-            ) +
-            # Residual uncertainty bands as ribbon
-            geom_ribbon(
-                aes(fill = id_pred),
-                alpha = 0.65
-            ) +
-            facet_wrap(~ event + SU,
-                scales = "free",
-                ncol = 1
-            ) +
-            theme_bw() +
+        # Plot residuals with uncertainties
+        plot_unc_res_by_SU <- plot_obs_sim_unc(
+            data_output_var = var_output_data_res,
+            any_obs_Y = any_obs_Y,
+            wrap = "event_SU"
+        )
+
+        plot_unc_res_by_SU <- plot_unc_res_by_SU +
+            geom_hline(yintercept = 0, linetype = "dashed", color = "grey50") +
             labs(
+                title = paste0(
+                    "Residuals with uncertainties by event and SU of :\n",
+                    clean_suffix_patterns[i]
+                ),
                 x = xlabel,
                 y = clean_suffix_patterns[i],
-                title = paste0("Residuals with uncertainties by event and SU of :\n", clean_suffix_patterns[i]),
-                fill = "Uncertainties",
                 color = "Residuals \n(obs-sim)"
-            ) +
-            theme(
-                strip.text = element_text(size = 12),
-                axis.text.x = element_text(angle = 45, hjust = 1),
-                plot.title = element_text(hjust = 0.5),
-                legend.title = element_text(hjust = 0.5),
-                legend.position = "bottom"
-            )
-
-        # Plot observations
-        res_sim_obs_plot <- res_sim_obs_plot +
-            geom_hline(yintercept = 0, linetype = "dashed", color = "grey50") +
-            # Add observations
-            geom_point(
-                data = var_output_data_res %>% filter(id_pred == "Observations"),
-                aes(col = id_pred)
-            ) +
-            geom_errorbar(
-                data = var_output_data_res %>% filter(id_pred == "Observations"),
-                aes(
-                    col = id_pred
-                ),
-                na.rm = TRUE
-            ) +
-            scale_fill_manual(
-                values = c(
-                    "Parametric" = "pink",
-                    "Total" = "red"
-                )
-            ) +
-            scale_color_manual(
-                values = c(
-                    "Observations" = "black"
-                )
             )
 
         # Save plot and data
         ggsave(
-            filename = file.path(paths$path_post, paste0("residual_", clean_suffix_patterns[i], "_with_uncertainties.png")),
-            plot = res_sim_obs_plot,
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("residual_by_SU_", clean_suffix_patterns[i], "_with_uncertainties.png")
+            ),
+            plot = plot_unc_res_by_SU,
             dpi = 300,
             width = 20,
             height = 17,
             units = "cm"
         )
-        save(res_sim_obs_plot,
-            file = file.path(paths$path_post_data, paste0("res_sim_obs_plot_", clean_suffix_patterns[i], "_with_uncertainties.RData"))
+        save(plot_unc_res_by_SU,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_unc_res_by_SU_", clean_suffix_patterns[i], "_with_uncertainties.RData")
+            )
+        )
+
+        plot_unc_res_by_reach <- plot_obs_sim_unc(
+            data_output_var = var_output_data_res,
+            any_obs_Y = any_obs_Y,
+            wrap = "event_reach_HM"
+        )
+        plot_unc_res_by_reach <- plot_unc_res_by_reach +
+            geom_hline(yintercept = 0, linetype = "dashed", color = "grey50") +
+            labs(
+                title = paste0(
+                    "Residuals with uncertainties by event and reach of :\n",
+                    clean_suffix_patterns[i]
+                ),
+                x = xlabel,
+                y = clean_suffix_patterns[i],
+                color = "Residuals \n(obs-sim)"
+            )
+        # Save plot and data
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("residual_by_reach_", clean_suffix_patterns[i], "_with_uncertainties.png")
+            ),
+            plot = plot_unc_res_by_reach,
+            dpi = 300,
+            width = 20,
+            height = 17,
+            units = "cm"
+        )
+        save(plot_unc_res_by_reach,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_unc_res_by_reach_", clean_suffix_patterns[i], "_with_uncertainties.RData")
+            )
         )
     }
 }
