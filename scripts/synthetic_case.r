@@ -13,7 +13,6 @@ for (i in function_list) {
 #############################################
 # Load libraries
 #############################################
-
 library(RBaM)
 library(dplyr)
 library(patchwork)
@@ -21,6 +20,7 @@ library(tidyr)
 library(ggplot2)
 library(stringr)
 library(lubridate)
+library(utils)
 #############################################
 # End load libraries
 #############################################
@@ -59,7 +59,6 @@ file_main_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroB
 MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/model_mage"
 mage_projet_name <- "synt_rect"
 
-do_plot_calibration <- FALSE
 
 check_mage_folder(name_folder = MAGE_main_folder)
 ############################################
@@ -227,30 +226,6 @@ ggplot(CalData_event_2, aes(x = KP, y = WSE, col = factor(set))) +
         ymin = WSE - qnorm(0.975) * Yu_WSE,
         ymax = WSE + qnorm(0.975) * Yu_WSE
     ))
-
-# !!!!!!!!!!!!
-# Ensure that order should be in coherence with mage model set up!!!!!!!!!!!!
-# !!!!!!!!!!!!
-
-## just to know the order of calibration data
-Cal_measures <-
-    list(
-        X5_MR_1_TR =
-            data.frame(
-                event = CalData_event_1$event,
-                reach = CalData_event_1$id_reach_CAL,
-                x = CalData_event_1$KP,
-                t = CalData_event_1$time
-            ),
-        X3_MR_2_TR =
-            data.frame(
-                event = CalData_event_2$event,
-                reach = CalData_event_2$id_reach_CAL,
-                x = CalData_event_2$KP,
-                t = CalData_event_2$time
-            )
-    )
-
 
 # All available data
 WSE_data <- rbind(
@@ -466,9 +441,10 @@ if (do_plot_calibration) {
 ######################################################
 # Set Remnant error model
 # Structural error information
+# Put remnantErrorModel_default on the output variable without calibration data
 remant_error_list <- list(
     # WSE
-    remnantErrorModel(
+    RBaM::remnantErrorModel(
         fname = "Config_RemnantSigma.txt",
         funk = "Constant",
         par = list(parameter(
@@ -478,63 +454,15 @@ remant_error_list <- list(
         ))
     ),
     # Q
-    remnantErrorModel(
-        fname = "Config_RemnantSigma2.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 10,
-            prior.dist = "LogNormal",
-            prior.par = c(log(10), 0.2)
-        ))
-    ),
+    remnantErrorModel_default(name = "Config_RemnantSigma2.txt"),
     # V
-    remnantErrorModel(
-        fname = "Config_RemnantSigma3.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 10,
-            prior.dist = "LogNormal",
-            prior.par = c(log(10), 0.2)
-        ))
-    ),
+    remnantErrorModel_default(name = "Config_RemnantSigma3.txt"),
+    # Both Kmin and Kflood, they must always be forced to 0. Information will be passed by pseudo-obs
     # Kmin
-    remnantErrorModel(
-        fname = "Config_RemnantSigma4.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 15,
-            prior.dist = "LogNormal",
-            prior.par = c(log(15), 0.2)
-        ))
-    ),
+    remnantErrorModel_default(name = "Config_RemnantSigma4.txt"),
     # Kflood
-    remnantErrorModel(
-        fname = "Config_RemnantSigma5.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 15,
-            prior.dist = "LogNormal",
-            prior.par = c(log(15), 0.2)
-        ))
-    )
+    remnantErrorModel_default(name = "Config_RemnantSigma5.txt")
 )
-
-
-if (Experiment_id == "Syn_case_rec_5_3_with_Ks_obs_limites_all_obs_flat_prior" | Experiment_id == "Syn_case_with_manual_Ks_obs_limites_all_obs_flat_prior") {
-    remant_error_list[[4]] <- remnantErrorModel(
-        fname = "Config_RemnantSigma4.txt",
-        funk = "Constant",
-        par = list(parameter(
-            name = "intercept",
-            init = 1,
-            prior.dist = "FlatPrior"
-        ))
-    )
-}
 
 # Get initial prior of structural error
 prior_error_model <- get_init_prior(remant_error_list)
@@ -556,33 +484,65 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
+mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
 
-results_estimation <- Estimation_Mage(
-    Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
-    Input_Typology = Input_Typology,
-    path_experiment = path_experiment,
-    file_main_path = file_main_path,
-    all_cal_case = all_cal_case,
-    do_calibration = FALSE,
-    command_line_MAGE = command_line_MAGE,
-    nCycles = nCycles,
-    nAdapt = nAdapt,
-    burn = burn,
-    nSlim = nSlim,
-    ID_model_BaM = ID_model_BaM,
-    nX_BaM = nX_BaM,
-    nY_BaM = nY_BaM,
-    dir_exe_BaM = dir_exe_BaM
-)
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
 
-list_Z_MatrixKmin <- results_estimation$Z_MatrixKmin
-list_Z_MatrixKflood <- results_estimation$Z_MatrixKflood
-list_Kmin_prior <- results_estimation$Kmin_prior
-list_Kflood_prior <- results_estimation$Kflood_prior
-list_Kmin_SU <- results_estimation$Kmin_SU
-list_Kflood_SU <- results_estimation$Kflood_SU
-list_mod_polynomials <- results_estimation$mod_polynomials
+    results_estimation <- Estimation_Mage(
+        paths = paths,
+        Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
+        Input_Typology = Input_Typology,
+        MAGE_main_folder = MAGE_main_folder,
+        do_calibration = do_calibration,
+        command_line_MAGE = command_line_MAGE,
+        ID_model_BaM = ID_model_BaM,
+        nX_BaM = nX_BaM,
+        nY_BaM = nY_BaM,
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.5, nSlim = 10),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 100, nCycles = 100),
+        mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
+        remant_error_list = remant_error_list
+    )
+    if (do_calibration) {
+        script_path <- file.path(paths$path_BaM_folder, "run_BaM.sh")
 
+        writeLines(
+            c(
+                "#!/bin/bash",
+                paste(
+                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                    "-cf",
+                    shQuote(file.path(paths$path_BaM_folder, "Config_BaM.txt"))
+                )
+            ),
+            script_path
+        )
+
+        Sys.chmod(script_path, "0755")
+        # Run outside of Vscodium. To kill a job : pkill -f BaM
+        system2(
+            "nohup",
+            args = c("bash", script_path),
+            wait = FALSE
+        )
+    }
+    list_Z_MatrixKmin[[id_cal_case]] <- results_estimation$Z_MatrixKmin
+    list_Z_MatrixKflood[[id_cal_case]] <- results_estimation$Z_MatrixKflood
+    list_Kmin_prior[[id_cal_case]] <- results_estimation$Kmin_prior
+    list_Kflood_prior[[id_cal_case]] <- results_estimation$Kflood_prior
+    list_Kmin_SU[[id_cal_case]] <- results_estimation$Kmin_SU
+    list_Kflood_SU[[id_cal_case]] <- results_estimation$Kflood_SU
+    mod_polynomials[[id_cal_case]] <- results_estimation$mod
+}
+
+# Keep going to correct paths, factor everthing that i can, create for prediction bash file as in calibration
 
 # Plot DIC
 if (do_plot_calibration) {
@@ -636,10 +596,6 @@ Kmin_segment_layer <- segment_layer_reference(
 # End theoretical values
 ####################
 
-################################
-# POSTPROCESS CALIBRATION WORKFLOW
-################################
-
 # Add synthetic data
 synthetic_case <- TRUE
 if (synthetic_case) {
@@ -651,6 +607,9 @@ if (synthetic_case) {
         tidyr::drop_na(X1_obs)
 }
 
+################################
+# POSTPROCESS CALIBRATION WORKFLOW
+################################
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -667,14 +626,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
         Y_observations = Y,
         Yu_observations = Yu,
         type = "dx",
-        final_calibration = TRUE,
+        final_calibration = FALSE,
         Kmin_prior = list_Kmin_prior[[id_cal_case]],
         Kflood_prior = list_Kflood_prior[[id_cal_case]],
         Kmin_SU = list_Kmin_SU[[id_cal_case]],
         Kflood_SU = list_Kflood_SU[[id_cal_case]],
         Z_MatrixKmin = list_Z_MatrixKmin[[id_cal_case]],
         Z_MatrixKflood = list_Z_MatrixKflood[[id_cal_case]],
-        mod_polynomials = list_mod_polynomials[[id_cal_case]],
+        mod_polynomials = mod_polynomials[[id_cal_case]],
         Kmin_segment_layer = Kmin_segment_layer,
         Kflood_segment_layer = NULL,
         command_line_MAGE = command_line_MAGE,
@@ -693,7 +652,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         for (i in seq_along(plots_MAP_output_variables)) {
             ggsave(
                 filename = file.path(
-                    paths$path_post,
+                    paths$path_plot_folder,
                     paste0("plot_obs_sim_MAP_Y", i, ".png")
                 ),
                 plot = plots_MAP_output_variables[[i]],
@@ -703,7 +662,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
             )
         }
         save(plots_MAP_output_variables,
-            file = file.path(paths$path_post_data, "plots_MAP_output_variables.RData")
+            file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
         )
         # Specific case of synthetic case
         if (synthetic_case) {
@@ -733,11 +692,11 @@ for (id_cal_case in 1:length(all_cal_case)) {
                     ncol = 1
                 )
             save(plot_output_with_synthetic_data,
-                file = file.path(paths$path_post_data, "plot_output_with_synthetic_data.RData")
+                file = file.path(paths$path_RData, "plot_output_with_synthetic_data.RData")
             )
             ggsave(
                 filename = file.path(
-                    paths$path_post,
+                    paths$path_plot_folder,
                     paste0("plot_output_with_synthetic_data_Y", i, ".png")
                 ),
                 plot = plot_output_with_synthetic_data,
@@ -807,19 +766,19 @@ for (id_cal_case in 1:length(all_cal_case)) {
     )
 
     # Load data and model used during calibration
-    load(file.path(paths$path_post_data, "BaM_objects.RData"))
+    load(file.path(paths$path_RData, "BaM_objects.RData"))
 
     # Run prediction
     X_pred_grid[[id_cal_case]] <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
         prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
-        nY = nY_BaM,
+        nY = nY_BaM, # i can read it from mod
         nX = nX_BaM,
         CalData = data$data,
-        do_prediction = FALSE,
+        do_prediction = do_prediction,
         X_pred = X_pred,
-        dir_exe_BaM = dir_exe_BaM,
+        dir_exe_BaM = dir_exe_BaM, # to check
         mod = mod,
         nsim_prior = 500
     )
@@ -828,11 +787,6 @@ for (id_cal_case in 1:length(all_cal_case)) {
 ##########################################
 ### Plots
 ##########################################
-
-# Desired level order
-desired_order <- c("Total", "Parametric", "Maxpost", "Observations")
-
-all_prediction_case <- c("ParamU", "Maxpost", "TotalU")
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -845,31 +799,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     results_postprocess <- postprocess_prediction(
         paths = paths,
-        Kmin_prior = list_Kmin_prior[[id_cal_case]],
-        Kflood_prior = list_Kflood_prior[[id_cal_case]],
-        grid = X_pred_grid[[id_cal_case]],
-        conf_level = 0.95,
+        type = "dX",
         X_input = X,
         Y_observations = Y,
         Yu_observations = Yu,
-        ###############
-        type = "dx",
-        Kmin_SU = list_Kmin_SU[[id_cal_case]],
-        Kflood_SU = list_Kflood_SU[[id_cal_case]],
-        Z_MatrixKmin = list_Z_MatrixKmin[[id_cal_case]],
-        Z_MatrixKflood = list_Z_MatrixKflood[[id_cal_case]],
-        mod_polynomials = list_mod_polynomials[[id_cal_case]],
-        Kmin_segment_layer = Kmin_segment_layer,
-        Kflood_segment_layer = NULL,
-        command_line_MAGE = command_line_MAGE,
-        dir_workspace = dir_workspace
+        conf_level = 0.95,
+        grid = X_pred_grid[[id_cal_case]],
+        Input_Typology = Input_Typology,
+        suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
+        desired_order = c("Total", "Parametric", "Maxpost", "Observations")
     )
-
-    residuals <- results_postprocess$residuals
-    plot_Kmin_without_obs <- results_postprocess$plots_param$Kmin$plot_without_obs
-    plot_Kmin_with_obs <- results_postprocess$plots_param$Kmin$plot_with_obs
-    plot_Kflood_without_obs <- results_postprocess$plots_param$Kflood$plot_without_obs
-    plot_Kflood_with_obs <- results_postprocess$plots_param$Kflood$plot_with_obs
-
-    plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
 }
