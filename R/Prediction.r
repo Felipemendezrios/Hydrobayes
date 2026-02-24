@@ -275,7 +275,7 @@ prediction_MAGE <- function(
             doParametric_logical = configs$doParametric_logical[i],
             doStructural_logical = configs$doStructural_logical[[i]],
             prediction_file_idx = prediction_file[i],
-            workspace_user = paths$path_temp_plots,
+            workspace_user = paths$path_BaM_folder,
             data = data,
             dir_exe_BaM = dir_exe_BaM,
             remant_error_list = remant_error_list,
