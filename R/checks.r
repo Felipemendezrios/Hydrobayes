@@ -55,7 +55,7 @@ check_calibration_done <- function(path) {
     if (!file.exists(file.path(path, "Results_Cooking.txt"))) stop("MCMC is still running or calculation is not going to the end. Verify if calibration is already finished or verify that calibration has not error messages. Please put final_results = FALSE as input")
 }
 
-check_suffix_pred <- function(file) {
+check_suffix_pred <- function(file, idx) {
     # Check if all lists are empty
-    if (length(file) == 0) stop(paste0("No files found for prediction of : ", basename(file)))
+    if (length(file) == 0) stop(paste0("No files found for prediction number : ", idx))
 }

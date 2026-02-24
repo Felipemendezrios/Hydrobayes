@@ -94,7 +94,7 @@ get_all_CalData_pred <- function(
                 "q2.5" = (Y_observations[, i] - z_val * Yu_observations[, i]),
                 "q97.5" = (Y_observations[, i] + z_val * Yu_observations[, i]),
                 value = Y_observations[, i],
-                variable = clean_suffix_patterns[i],
+                variable = suffix_patterns[i],
                 id_pred = "Observations"
             )
         all_CalData <- rbind(all_CalData, CalData)
@@ -106,28 +106,18 @@ get_all_CalData_pred <- function(
 postprocess_prediction <- function(
     paths,
     type = "dX", # dX ou dT
-    Kmin_prior,
-    Kflood_prior,
     X_input,
     Y_observations,
     Yu_observations,
     conf_level = 0.95,
     grid,
+    Input_Typology,
     suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
     desired_order = c("Total", "Parametric", "Maxpost", "Observations")) {
     # Check if Results_Cooking.txt file exists
     check_calibration_done(path = paths$path_temp_plots)
     if (!type %in% c("dX", "dT")) stop(paste0("Type must be either dX or dT. You tapped : ", type))
     message("Processing: ", basename(dirname(paths$path_temp_plots)))
-
-    # Count number of parameters different to FIX distribution
-    n_param_Kmin_to_estimate <- sum(
-        get_prior_distribution(Kmin_prior) != "FIX"
-    )
-
-    n_param_Kflood_to_estimate <- sum(
-        get_prior_distribution(Kflood_prior) != "FIX"
-    )
 
     all_data_pred <- get_all_data_pred(
         X_grid = grid,
