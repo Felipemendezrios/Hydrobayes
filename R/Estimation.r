@@ -318,258 +318,211 @@ constructor_spatialization_matrix <- function(
 }
 
 Estimation_Mage <- function(
+    paths,
     Key_Info_Typology_Model_Reach,
     Input_Typology,
-    path_experiment,
-    file_main_path,
-    all_cal_case,
+    MAGE_main_folder,
     do_calibration,
+    command_line_MAGE = "",
     ID_model_BaM,
     nX_BaM,
     nY_BaM,
     dir_exe_BaM,
-    command_line_MAGE = "",
-    nCycles = 100,
-    nAdapt = 100,
-    burn = 0.5,
-    nSlim = 10) {
-    mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
+    mcmcCooking = RBaM::mcmcCooking(),
+    mcmcOptions = RBaM::mcmcOptions(),
+    mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
+    remant_error_list) {
+    # Check if experiment exists
+    check_experiment_exist(path = paths$path_experiment)
+    # Source all input information of the experiment
+    source(paths$path_experiment)
 
-    counter_model <- 1
-
-    for (id_cal_case in 1:length(all_cal_case)) {
-        # Source the input data for the experiments
-        path_Experiment_Input_Data <- file.path(file_main_path, "Experiments_Input_Data", all_cal_case[id_cal_case])
-        if (!file.exists(path_Experiment_Input_Data)) {
-            stop(paste0(
-                "The experiment input data named : '",
-                all_cal_case[id_cal_case],
-                "' does not exist"
-            ))
-        }
-        source(path_Experiment_Input_Data)
-        path_polynomial <- file.path(
-            path_experiment,
-            sub("\\.r$", "", all_cal_case[id_cal_case])
-        )
-        # Path to save results
-        workspace_user <- file.path(path_polynomial, "BaM")
-        path_post_traitement <- file.path(workspace_user, "post_traitement")
-        path_post_traitement_data <- file.path(path_post_traitement, "RData")
-        if (!dir.exists(path_polynomial)) {
-            dir.create(path_polynomial)
-        } else {
-            if (do_calibration) {
-                file.remove(list.files(path_polynomial, full.names = TRUE, recursive = TRUE))
-            }
-        }
-        MAGE_polynomial_subfolder <- file.path(path_polynomial, "model_mage")
-
-        if (!dir.exists(MAGE_polynomial_subfolder)) {
-            dir.create(MAGE_polynomial_subfolder)
-        }
-        # Copy Main MAGE folder to local folder for calibration
-        copy_folder(MAGE_main_folder, MAGE_polynomial_subfolder)
-
-        if (!dir.exists(workspace_user)) {
-            dir.create(workspace_user)
-        } else {
-            if (do_calibration) {
-                file.remove(list.files(workspace_user, full.names = TRUE, recursive = TRUE))
-            }
-        }
-        if (!dir.exists(path_post_traitement)) {
-            dir.create(path_post_traitement)
-        }
-
-        if (!dir.exists(path_post_traitement_data)) {
-            dir.create(path_post_traitement_data)
-        }
-
-        constructor_results <- constructor_RUGFile_covariate_grid(Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach)
-
-        skeleton_RUGFile_Mage <- constructor_results$skeleton_RUGFile_Mage
-        covariate_grid <- constructor_results$covariate_grid
-        ############################################
-        # Kmin environment (encapsulated in Kmin_SU)
-        ############################################
-
-        # Check if size is respected between ID and Kmin
-        if (length(Input_Typology) != length(Input_Kmin_Key_SU_MR)) stop("Size must be equal between Input_Kmin_Key_SU_MR and Input_Typology")
-
-        # Assign properties of each SU in XR structure
-        Kmin_SU <- SU_constructor(
-            SU_key_HM = Input_Kmin_Key_SU_MR,
-            Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
-        )
-
-        Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
-
-        # Check size between skeleton_RUGFile_Mage and Z_file
-        if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKmin)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
-
-        Kmin_prior <- extract_priors(Kmin_SU)
-        ############################################
-        # End Kmin environment
-        ############################################
-
-        ############################################
-        # Kflood environment (encapsulated in Kflood_SU)
-        ############################################
-
-        # Check if size is respected between ID and Kflood
-        if (length(Input_Typology) != length(Input_Kflood_Key_SU_MR)) stop("Size must be equal between Input_Kflood_Key_SU_MR and Input_Typology")
-
-        # Assign properties of each SU in XR structure
-        Kflood_SU <- SU_constructor(
-            SU_key_HM = Input_Kflood_Key_SU_MR,
-            Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
-        )
-
-        Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
-
-        # Check size between skeleton_RUGFile_Mage and Z_file
-        if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKflood)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
-
-        Kflood_prior <- extract_priors(Kflood_SU)
-
-        ############################################
-        # End Kflood environment
-        ############################################
-
-        if (!(nrow(covariate_grid) == nrow(Z_MatrixKmin) && nrow(covariate_grid) == nrow(Z_MatrixKflood))) {
-            stop("Number of rows of covariate_grid must be equal to both Z_MatrixKmin and Z_MatrixKflood")
-        }
-
-        # Write covariate discretization, available for Kmin and Kflood:
-        write.table(
-            covariate_grid,
-            file = file.path(workspace_user, "grid_covariate_non_normalized.txt"), row.names = F
-        )
-        mageDir <- c(paste0(path_polynomial, "/model_mage/", all_events, "/"))
-
-        RUGFile_paths <- paste0(mageDir, mage_projet_name, ".RUG")
-
-        # id_multi_event is a index for multi-events
-        for (id_multi_event in seq_along(RUGFile_paths)) {
-            write_RUGFile(
-                RUG_path = RUGFile_paths[id_multi_event],
-                RUGFile_data = skeleton_RUGFile_Mage,
-                RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
-            )
-        }
-
-        zFileKmin <- file.path(workspace_user, "Zfile_Kmin.txt")
-        zFileKmoy <- file.path(workspace_user, "Zfile_Kflood.txt")
-
-        xtra <- xtraModelInfo(
-            fname = "Config_setup.txt",
-            object = list(
-                exeFile = paste0(MAGE_executable, " ", command_line_MAGE),
-                version = "8",
-                mageDir = mageDir,
-                repFile = paste0(mage_projet_name, ".REP"),
-                zKmin = Z_MatrixKmin,
-                zFileKmin = zFileKmin,
-                doExpKmin = FALSE,
-                zKmoy = Z_MatrixKflood,
-                zFileKmoy = zFileKmoy,
-                doExpKmoy = FALSE
-            )
-        )
-
-        theta_param <- c(Kmin_prior, Kflood_prior)
-
-        mod_polynomials[[counter_model]] <- model(
-            ID = ID_model_BaM,
-            nX = nX_BaM,
-            nY = nY_BaM,
-            par = theta_param,
-            xtra = xtra
-        )
-        mod <- mod_polynomials[[counter_model]]
-
-        prior_theta_param <- get_init_prior(theta_param)
-
-        data <- dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(workspace_user))
-
-        jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
-            prior_theta_param[(prior_theta_param != 0)] * 0.1,
-            jump_MCMC_theta_param_user
-        )
-
-        jump_MCMC_error_model <- list()
-        for (ind in 1:length(prior_error_model)) {
-            jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > threshold_jump_MCMC_error_model,
-                prior_error_model[[ind]][(prior_error_model[[ind]] != 0)] * 0.1,
-                jump_MCMC_error_model_user
-            )
-        }
-
-        mcmcOptions_user <- mcmcOptions(
-            nCycles = nCycles,
-            nAdapt = nAdapt,
-            manualMode = TRUE,
-            thetaStd = jump_MCMC_theta_param,
-            gammaStd = jump_MCMC_error_model
-        )
-        mcmcCooking_user <- mcmcCooking(
-            burn = burn,
-            nSlim = nSlim
-        )
-        mcmcSummary_user <- mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt")
-
-        # Save all data used during calibration for prediction
-        save(mod, data, remant_error_list,
-            mcmcOptions_user, mcmcCooking_user,
-            mcmcSummary_user, workspace_user,
-            file = file.path(path_post_traitement_data, "BaM_objects.RData")
-        )
-        BaM(
-            mod = mod,
-            data = data,
-            remnant = remant_error_list,
-            mcmc = mcmcOptions_user,
-            cook = mcmcCooking_user,
-            summary = mcmcSummary_user,
-            residuals = residualOptions(),
-            pred = NULL,
-            doCalib = TRUE,
-            doPred = FALSE,
-            na.value = -9999,
-            run = FALSE,
-            preClean = FALSE,
-            workspace = workspace_user,
-            # dir.exe = file.path(find.package("RBaM"), "bin"),
-            # name.exe = "BaM",
-            predMaster_fname = "Config_Pred_Master.txt"
-        )
-        counter_model <- counter_model + 1
-
-        dir_cf <- file.path(workspace_user, "Config_BaM.txt")
-
+    if (!dir.exists(paths$path_polynomial)) {
+        dir.create(paths$path_polynomial)
+    } else {
         if (do_calibration) {
-            system2(
-                command = file.path(dir_exe_BaM, "BaM"),
-                args = c("-cf", file.path(workspace_user, "Config_BaM.txt")),
-                wait = FALSE
-            )
+            file.remove(list.files(paths$path_polynomial, full.names = TRUE, recursive = TRUE))
         }
-        # Save results
-        list_Z_MatrixKmin[[id_cal_case]] <- Z_MatrixKmin
-        list_Z_MatrixKflood[[id_cal_case]] <- Z_MatrixKflood
-        list_Kmin_prior[[id_cal_case]] <- Kmin_prior
-        list_Kflood_prior[[id_cal_case]] <- Kflood_prior
-        list_Kmin_SU[[id_cal_case]] <- Kmin_SU
-        list_Kflood_SU[[id_cal_case]] <- Kflood_SU
     }
+    paths$path_model_HM <- file.path(paths$path_polynomial, "model_mage")
+
+    if (!dir.exists(paths$path_model_HM)) {
+        dir.create(paths$path_model_HM)
+    }
+    # Copy Main MAGE folder to local folder for calibration
+    copy_folder(MAGE_main_folder, paths$path_model_HM)
+
+    if (!dir.exists(paths$path_BaM_folder)) {
+        dir.create(paths$path_BaM_folder)
+    } else {
+        if (do_calibration) {
+            file.remove(list.files(paths$path_BaM_folder, full.names = TRUE, recursive = TRUE))
+        }
+    }
+    if (!dir.exists(paths$path_plot_folder)) {
+        dir.create(paths$path_plot_folder)
+    }
+
+    if (!dir.exists(paths$path_RData)) {
+        dir.create(paths$path_RData)
+    }
+
+    constructor_RUGFile_and_covariate <- constructor_RUGFile_covariate_grid(Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach)
+
+    skeleton_RUGFile_Mage <- constructor_RUGFile_and_covariate$skeleton_RUGFile_Mage
+    covariate_grid <- constructor_RUGFile_and_covariate$covariate_grid
+    ############################################
+    # Kmin environment (encapsulated in Kmin_SU)
+    ############################################
+
+    # Check if size is respected between ID and Kmin
+    if (length(Input_Typology) != length(Input_Kmin_Key_SU_MR)) stop("Size must be equal between Input_Kmin_Key_SU_MR and Input_Typology")
+
+    # Assign properties of each SU in XR structure
+    Kmin_SU <- SU_constructor(
+        SU_key_HM = Input_Kmin_Key_SU_MR,
+        Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
+    )
+
+    Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
+
+    # Check size between skeleton_RUGFile_Mage and Z_file
+    if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKmin)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
+
+    Kmin_prior <- extract_priors(Kmin_SU)
+    ############################################
+    # End Kmin environment
+    ############################################
+
+    ############################################
+    # Kflood environment (encapsulated in Kflood_SU)
+    ############################################
+
+    # Check if size is respected between ID and Kflood
+    if (length(Input_Typology) != length(Input_Kflood_Key_SU_MR)) stop("Size must be equal between Input_Kflood_Key_SU_MR and Input_Typology")
+
+    # Assign properties of each SU in XR structure
+    Kflood_SU <- SU_constructor(
+        SU_key_HM = Input_Kflood_Key_SU_MR,
+        Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
+    )
+
+    Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
+
+    # Check size between skeleton_RUGFile_Mage and Z_file
+    if (nrow(skeleton_RUGFile_Mage) != nrow(Z_MatrixKflood)) stop("skeleton_RUGFile_Mage must have the same size as Z file (spatialisation)")
+
+    Kflood_prior <- extract_priors(Kflood_SU)
+
+    ############################################
+    # End Kflood environment
+    ############################################
+
+    if (!(nrow(covariate_grid) == nrow(Z_MatrixKmin) && nrow(covariate_grid) == nrow(Z_MatrixKflood))) {
+        stop("Number of rows of covariate_grid must be equal to both Z_MatrixKmin and Z_MatrixKflood")
+    }
+
+    # Write covariate discretization, available for Kmin and Kflood:
+    write.table(
+        covariate_grid,
+        file = file.path(paths$path_BaM_folder, "grid_covariate_non_normalized.txt"), row.names = F
+    )
+
+    RUGFile_paths <- paste0(paths$path_model_HM_events, mage_projet_name, ".RUG")
+
+    # id_multi_event is a index for multi-events
+    for (id_multi_event in seq_along(RUGFile_paths)) {
+        write_RUGFile(
+            RUG_path = RUGFile_paths[id_multi_event],
+            RUGFile_data = skeleton_RUGFile_Mage,
+            RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
+        )
+    }
+
+    zFileKmin <- file.path(paths$path_BaM_folder, "Zfile_Kmin.txt")
+    zFileKmoy <- file.path(paths$path_BaM_folder, "Zfile_Kflood.txt")
+
+    xtra <- RBaM::xtraModelInfo(
+        fname = "Config_setup.txt",
+        object = list(
+            exeFile = paste0(MAGE_executable, " ", command_line_MAGE),
+            version = "8",
+            mageDir = paths$path_model_HM_events,
+            repFile = paste0(mage_projet_name, ".REP"),
+            zKmin = Z_MatrixKmin,
+            zFileKmin = zFileKmin,
+            doExpKmin = FALSE,
+            zKmoy = Z_MatrixKflood,
+            zFileKmoy = zFileKmoy,
+            doExpKmoy = FALSE
+        )
+    )
+
+    theta_param <- c(Kmin_prior, Kflood_prior)
+
+    mod <- RBaM::model(
+        ID = ID_model_BaM,
+        nX = nX_BaM,
+        nY = nY_BaM,
+        par = theta_param,
+        xtra = xtra
+    )
+    prior_theta_param <- get_init_prior(theta_param)
+
+    data <- RBaM::dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(paths$path_BaM_folder))
+
+    jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
+        prior_theta_param[(prior_theta_param != 0)] * 0.1,
+        jump_MCMC_theta_param_user
+    )
+
+    jump_MCMC_error_model <- list()
+    for (ind in 1:length(prior_error_model)) {
+        jump_MCMC_error_model[[ind]] <- ifelse(prior_error_model[[ind]] > threshold_jump_MCMC_error_model,
+            prior_error_model[[ind]][(prior_error_model[[ind]] != 0)] * 0.1,
+            jump_MCMC_error_model_user
+        )
+    }
+
+    mcmcOptions <- RBaM::mcmcOptions(
+        nCycles = mcmcOptions$nCycles,
+        nAdapt = mcmcOptions$nAdapt,
+        manualMode = TRUE,
+        thetaStd = jump_MCMC_theta_param,
+        gammaStd = jump_MCMC_error_model
+    )
+
+    # Save all data used during calibration for prediction
+    save(mod, data, remant_error_list,
+        mcmcOptions, mcmcCooking,
+        mcmcSummary,
+        file = file.path(paths$path_RData, "BaM_objects.RData")
+    )
+    BaM(
+        mod = mod,
+        data = data,
+        remnant = remant_error_list,
+        mcmc = mcmcOptions,
+        cook = mcmcCooking,
+        summary = mcmcSummary,
+        residuals = residualOptions(),
+        pred = NULL,
+        doCalib = TRUE,
+        doPred = FALSE,
+        na.value = -9999,
+        run = FALSE,
+        preClean = FALSE,
+        workspace = paths$path_BaM_folder,
+        predMaster_fname = "Config_Pred_Master.txt"
+    )
+
     return(list(
-        Z_MatrixKmin = list_Z_MatrixKmin,
-        Z_MatrixKflood = list_Z_MatrixKflood,
-        Kmin_prior = list_Kmin_prior,
-        Kflood_prior = list_Kflood_prior,
-        Kmin_SU = list_Kmin_SU,
-        Kflood_SU = list_Kflood_SU,
-        mod_polynomials = mod_polynomials
+        Z_MatrixKmin = Z_MatrixKmin,
+        Z_MatrixKflood = Z_MatrixKflood,
+        Kmin_prior = Kmin_prior,
+        Kflood_prior = Kflood_prior,
+        Kmin_SU = Kmin_SU,
+        Kflood_SU = Kflood_SU,
+        mod_polynomials = mod
     ))
 }
