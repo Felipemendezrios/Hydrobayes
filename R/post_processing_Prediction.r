@@ -203,7 +203,7 @@ postprocess_prediction <- function(
             dpi = 300
         )
 
-        save(plot_unc,
+        save(plot_unc_by_SU,
             file = file.path(
                 paths$path_RData,
                 paste0("sim_obs_plot_by_SU_", clean_suffix_patterns[i], ".RData")
