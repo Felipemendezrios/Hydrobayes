@@ -163,69 +163,19 @@ copy_model_directory <- function(mod, prediction_file, idx) {
     mod$xtra$fname <- sub("\\.txt$", paste0("_", prediction_file[idx], ".txt"), mod$xtra$fname)
     mod
 }
-# Function to run prediction and BaM
-run_prediction_and_bam <- function(
-    mod, X, pred_var_name, pred_confi_file_name, prediction_file_idx, dir_exe_BaM,
-    priorNsim_int, doParametric_logical, doStructural_logical,
-    workspace_user, data, remant_error_list, mcmcOptions_user,
-    mcmcCooking_user, mcmcSummary_user, do_prediction) {
-    pred_list <- prediction(
-        X = X,
-        spagFiles = pred_var_name,
-        data.dir = workspace_user,
-        fname = pred_confi_file_name,
-        priorNsim = priorNsim_int,
-        doParametric = doParametric_logical,
-        doStructural = doStructural_logical
-    )
-
-    BaM(
-        mod = mod,
-        data = data,
-        remnant = remant_error_list,
-        mcmc = mcmcOptions_user,
-        cook = mcmcCooking_user,
-        summary = mcmcSummary_user,
-        residuals = residualOptions(),
-        pred = pred_list,
-        doCalib = FALSE,
-        doPred = TRUE,
-        na.value = -9999,
-        run = FALSE,
-        preClean = FALSE,
-        workspace = workspace_user,
-        predMaster_fname = paste0("Config_Pred_Master_", prediction_file_idx, ".txt")
-    )
-
-    cf_file <- file.path(workspace_user, paste0("Config_BaM_", prediction_file_idx, ".txt"))
-    if (file.exists(file.path(workspace_user, "Config_BaM.txt"))) {
-        invisible(file.rename(
-            from = file.path(workspace_user, "Config_BaM.txt"),
-            to = cf_file
-        ))
-    }
-
-    if (do_prediction) {
-        system2(
-            command = file.path(dir_exe_BaM, "BaM"),
-            args = c("-cf", cf_file),
-            wait = FALSE
-        )
-        Sys.sleep(0.1)
-    }
-}
 
 prediction_MAGE <- function(
     cal_case,
     paths,
     prediction_file,
-    nY,
-    nX,
-    CalData,
+    data,
     do_prediction,
-    dir_exe_BaM,
     X_pred,
     mod,
+    remant_error_list,
+    mcmcOptions = RBaM::mcmcOptions(),
+    mcmcCooking = RBaM::mcmcCooking(),
+    mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
     nsim_prior = 500) {
     # Check calibration
     check_calibration_case(paths$path_polynomial)
@@ -234,10 +184,13 @@ prediction_MAGE <- function(
     vars <- initialize_variables()
     n_prediction <- length(prediction_file)
 
+    nX <- mod$nX
+    nY <- mod$nY
+
     # Add calibration data to grid
     data_to_add_grid <- Add_calData_grid_user(
         X_pred = X_pred,
-        Caldata = CalData,
+        Caldata = data$data,
         nX = nX,
         nY = nY
     )
@@ -265,25 +218,60 @@ prediction_MAGE <- function(
         vars$pred_var_name <- rbind(vars$pred_var_name, pred_var_name_temps)
     }
 
+    cf_file <- c()
     for (i in 1:n_prediction) {
-        run_prediction_and_bam(
-            mod = vars$mod_list[[i]],
+        pred_list <- prediction(
             X = X,
-            pred_var_name = vars$pred_var_name[, i],
-            pred_confi_file_name = configs$pred_confi_file_name[i],
-            priorNsim_int = configs$priorNsim_int[i],
-            doParametric_logical = configs$doParametric_logical[i],
-            doStructural_logical = configs$doStructural_logical[[i]],
-            prediction_file_idx = prediction_file[i],
-            workspace_user = paths$path_BaM_folder,
-            data = data,
-            dir_exe_BaM = dir_exe_BaM,
-            remant_error_list = remant_error_list,
-            mcmcOptions_user = mcmcOptions_user,
-            mcmcCooking_user = mcmcCooking_user,
-            mcmcSummary_user = mcmcSummary_user,
-            do_prediction = do_prediction
+            spagFiles = vars$pred_var_name[, i],
+            data.dir = paths$path_BaM_folder,
+            fname = configs$pred_confi_file_name[i],
+            priorNsim = configs$priorNsim_int[i],
+            doParametric = configs$doParametric_logical[i],
+            doStructural = configs$doStructural_logical[[i]],
         )
+
+        BaM(
+            mod = vars$mod_list[[i]],
+            data = data,
+            remnant = remant_error_list,
+            mcmc = mcmcOptions,
+            cook = mcmcCooking,
+            summary = mcmcSummary,
+            residuals = RBaM::residualOptions(),
+            pred = pred_list,
+            doCalib = FALSE,
+            doPred = TRUE,
+            na.value = -9999,
+            run = FALSE,
+            preClean = FALSE,
+            workspace = paths$path_BaM_folder,
+            predMaster_fname = paste0("Config_Pred_Master_", prediction_file[i], ".txt")
+        )
+        cf_file[i] <- file.path(
+            paths$path_BaM_folder,
+            paste0(
+                "Config_BaM_",
+                prediction_file[i],
+                ".txt"
+            )
+        )
+        template_file <- file.path(
+            paths$path_BaM_folder,
+            "Config_BaM.txt"
+        )
+
+        if (file.exists(template_file)) {
+            invisible(file.copy(
+                from = template_file,
+                to = cf_file[i],
+                overwrite = TRUE
+            ))
+        }
     }
-    return(X_pred_grid = X)
+    return(
+        list(
+            X_pred_grid = X,
+            cf_file = cf_file
+        )
+    )
 }
