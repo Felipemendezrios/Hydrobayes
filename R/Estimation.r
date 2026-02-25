@@ -505,7 +505,7 @@ Estimation_Mage <- function(
         mcmc = mcmcOptions,
         cook = mcmcCooking,
         summary = mcmcSummary,
-        residuals = residualOptions(),
+        residuals = RBaM::residualOptions(),
         pred = NULL,
         doCalib = TRUE,
         doPred = FALSE,
