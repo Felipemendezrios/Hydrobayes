@@ -12,9 +12,8 @@ scripts/Case_studies/HHLab/Rectangular_channel/Calibration_experiments/
 scripts/Case_studies/HHLab/Rectangular_channel/PamHyr/_PAMHYR_/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/Calibration/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/PamHyr/_PAMHYR_/
-scripts/Case_studies/Synthetic_case/Simplified_ks/
-scripts/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/Calibration_experiments/
-scripts/Case_studies/Synthetic_case/Simplified_ks_rectangular_MC/PamHyr/_PAMHYR_/
+scripts/Case_studies/Synthetic_case/Rectangular_MC/PamHyr/
+scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments/
 scripts/Case_studies/Rhone/Uniform_conditions/PamHyr/_PAMHYR_/
 scripts/Case_studies/Rhone/Uniform_conditions/Calibration_experiments/
 scripts/Case_studies/Rhone/Real_Condition_model/PamHyr/_PAMHYR_/
