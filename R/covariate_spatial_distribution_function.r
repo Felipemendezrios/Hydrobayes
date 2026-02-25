@@ -54,3 +54,31 @@ getCovariate_piecewise <- function(KP_grid, shiftPoints) {
     colnames(covariate_matrix) <- NULL
     return(covariate_matrix)
 }
+
+# Function to get covariate in Legendre polynomial
+getCovariate_Legendre <- function(max_polynomial_degree, ...) {
+    if (!(max_polynomial_degree >= 0 && max_polynomial_degree == floor(max_polynomial_degree))) stop("max_polynomial_degree must be a positive integer")
+
+    # Capture the first argument passed via ...
+    args <- list(...)
+    # Check if required arguments are present
+    if (!("covariate_discretization" %in% names(args))) {
+        stop("covariate_discretization must be provided as a named argument")
+    }
+    # Extract covariate_discretization
+    covariate_discretization <- args$covariate_discretization
+
+    Z <- matrix(
+        data = 0,
+        nrow = length(covariate_discretization),
+        ncol = max_polynomial_degree + 1 # Because degrees start at 0
+    )
+    for (polynomial_degree in seq(0, max_polynomial_degree)) {
+        Z[, polynomial_degree + 1] <- getlegendre(
+            polynomial_degree = polynomial_degree,
+            covariate_discretization = covariate_discretization
+        )
+    }
+
+    return(Z)
+}
