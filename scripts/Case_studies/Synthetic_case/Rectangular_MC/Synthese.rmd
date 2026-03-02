@@ -1,0 +1,492 @@
+
+---
+title: "Synthesis: synthetic case"
+author: "Felipe"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 2.5,
+  fig.height = 2.5,
+  dpi = 300
+)
+```
+
+```{r load-packages, message = FALSE, include= FALSE}
+library(ggplot2)
+library(dplyr)
+
+main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments"
+data_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data"
+```
+```{r}
+function_list <- list.files("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/R/", full.names = TRUE)
+for (i in function_list) {
+  source(i)
+}
+
+plot_DIC_guided <- function(
+    dir_polynomial,
+    DIC_criterion = "DIC3") {
+  all_files <- unlist(
+    lapply(dir_polynomial, list.files,
+      recursive = TRUE,
+      full.names = TRUE
+    )
+  )
+
+  DIC_path_Files <- all_files[grep(all_files, pattern = "Results_DIC.txt")]
+  if (length(DIC_path_Files) == 0) stop("Any Results_DIC.txt file was found")
+  DIC_results <- c()
+
+  for (i in 1:length(DIC_path_Files)) {
+    DIC_by_degree <- read.table(DIC_path_Files[i], col.names = c("Criteria", "Value"))
+    # Match the criterion chosen
+    DIC_by_degree <- DIC_by_degree[which(DIC_by_degree[, 1] == DIC_criterion), ]
+    # Assign the polynomial degree
+    extraction <- strsplit(DIC_path_Files[i], "/")[[1]][15]
+    # # Extraire le chiffre après le underscore
+    # chiffre <- sub(".*_(\\d+)", "\\1", extraction)
+
+    # # Convertir en numérique (optionnel)
+    DIC_by_degree$case <- extraction
+
+    DIC_results <- rbind(DIC_results, DIC_by_degree)
+  }
+  min_local <- DIC_results[which.min(DIC_results$Value), ]
+
+  # Vérifier la présence des motifs
+  if (!all(str_detect(DIC_results$case, "Kmin_n_"))) {
+    stop("Erreur : certaines lignes n'ont pas 'Kmin_n_' !")
+  }
+
+  if (!all(str_detect(DIC_results$case, "Kflood_n_"))) {
+    stop("Erreur : certaines lignes n'ont pas 'Kflood_n_' !")
+  }
+
+  DIC_plot <- ggplot(DIC_results, aes(x = factor(case), y = Value, col = factor(Criteria))) +
+    geom_point(size = 3) +
+    geom_point(data = min_local, aes(x = , factor(case), y = Value), col = "blue", size = 3) +
+    annotate("segment",
+      x = factor(min_local$Degree), y = min_local$Value * 1.005, xend = factor(min_local$Degree), yend = min_local$Value * 1.002,
+      linewidth = 2, linejoin = "mitre",
+      arrow = arrow(type = "closed", length = unit(0.01, "npc"))
+    ) +
+    theme_bw() +
+    labs(
+      x = "Calibration case",
+      y = "Value",
+      col = "Criterion",
+      title = "DIC criterion :",
+      subtitle = "Comparison of several polynomial degrees"
+    ) +
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5)
+    )
+
+  return(DIC_plot)
+}
+```
+
+# Synthetic case 
+
+## Description
+### Geometry and reaches distribution
+- Rectangular and prismatic channel 
+- Hydraulic model: 3 reaches
+- Calibration method: 2 typologies (Main channel (MC) and tributary (TR))
+  - MC: 1 Spatial Unit (SU)
+  - TR: 1 SU
+- Spatial distributed friction: piecewise function (random)
+```{r}
+knitr::include_graphics(file.path(data_folder, "data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/plan.png"))
+knitr::include_graphics(file.path(data_folder, "data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/decoupage.png"))
+```
+```{r,fig.width = 4.5,fig.height = 3}
+file_RUGFILE_synt_obs <- file.path(data_folder, "processed_data/Synthetic_case/Rectangular_MC/TRUE_RUGFile.RUG")
+Real_Ks_simulated <- read_fortran_data(
+  file_path = file_RUGFILE_synt_obs,
+  col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
+  skip = 1
+)
+
+Kmin_literature <- data.frame(
+  x_start = Real_Ks_simulated$KP_start,
+  x_end = Real_Ks_simulated$KP_end,
+  mean_value = Real_Ks_simulated$Kmin,
+  reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
+)
+
+Kmin_segment_layer <- segment_layer_reference(
+  K_literature = Kmin_literature,
+  mean_col = "mean_value",
+  min_col = NULL,
+  max_col = NULL
+)
+ggplot() +
+  Kmin_segment_layer +
+  ggplot2::scale_linetype_manual(
+    name = "Reference values",
+    values = c(
+      "mean" = "dashed",
+      "min" = "dashed",
+      "max" = "dashed"
+    ),
+    labels = c("synthetic data")
+  ) +
+  labs(
+    x = "Streamwise position (m)",
+    y = "Friction coefficient"
+  ) +
+  theme_bw() +
+  facet_wrap(~reaches_SU, scales = "free", ncol = 1)
+```
+
+### Modelling
+- Uniform and steady flow 
+- Two modelled events: 
+  - Case 1: 5 m3/s in MC and 1 m3/s in TR
+  - Case 2: 3 m3/s in MC and 2 m3/s in TR
+- Generated true observed data : 2 Water surface elevations (WSE) 
+  - Event 1: WSE in MC
+  - Event 2: WSE in TR
+
+```{r,fig.width = 6.5,fig.height = 4.5}
+load(file.path(data_folder, "processed_data/Synthetic_case/Rectangular_MC/High_uncertainty/WSE_synthetic_rectangular_MC.RData"))
+
+Input_Typology <- list(
+  Main_Reach = c(1, 3),
+  Tributary = c(2)
+)
+Input_Model_Reach <- data.frame(
+  reach = c(1, 2, 3),
+  KP_start = c(0, 0, 18),
+  KP_end = c(18, 20, 25)
+)
+WSE_synthetic_simplified_raw_event_1 <- WSE_synthetic_simplified %>%
+  filter(id_case == "5_1", id_reach_CAL %in% Input_Typology[[1]]) %>%
+  mutate(
+    id_reach = case_when(
+      id_reach_CAL == 1 ~ "Main reach upstream",
+      id_reach_CAL == 2 ~ "Tributary",
+      id_reach_CAL == 3 ~ "Main reach downstream"
+    ),
+    event = 1,
+    name_event = "5_MR_1_TR"
+  )
+
+WSE_synthetic_simplified_Cal_event_1 <- WSE_synthetic_simplified_raw_event_1 %>%
+  group_by(id_reach_CAL) %>%
+  # slice_sample(prop = 0.8) %>%
+  ungroup() %>%
+  mutate(set = "calibration") %>%
+  arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+  mutate(Reach_groupped_Cal = NA_character_)
+
+
+WSE_Event_1 <- assign_calibration_and_validation_data(
+  Input_Typology = Input_Typology,
+  Input_Model_Reach = Input_Model_Reach,
+  CalData = WSE_synthetic_simplified_Cal_event_1,
+  All_observations = WSE_synthetic_simplified_raw_event_1
+)
+
+CalData_event_1 <- WSE_Event_1 %>% filter(set == "calibration")
+
+#####################################################################
+# Event 2: WSE in the tributary
+#####################################################################
+
+WSE_synthetic_simplified_raw_event_2 <- WSE_synthetic_simplified %>%
+  filter(id_case == "3_2", id_reach_CAL %in% Input_Typology[[2]]) %>%
+  mutate(
+    id_reach = case_when(
+      id_reach_CAL == 1 ~ "Main reach upstream",
+      id_reach_CAL == 2 ~ "Tributary",
+      id_reach_CAL == 3 ~ "Main reach downstream"
+    ),
+    event = 2,
+    name_event = "3_MR_2_TR"
+  )
+#################################
+set.seed(2026) #  # for reproducibility
+# 1. Calibration set
+WSE_synthetic_simplified_Cal_event_2 <- WSE_synthetic_simplified_raw_event_2 %>%
+  group_by(id_reach_CAL) %>%
+  # slice_sample(prop = 0.7) %>%
+  ungroup() %>%
+  mutate(set = "calibration") %>%
+  arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+  mutate(Reach_groupped_Cal = NA_character_)
+
+
+WSE_Event_2 <- assign_calibration_and_validation_data(
+  Input_Typology = Input_Typology,
+  Input_Model_Reach = Input_Model_Reach,
+  CalData = WSE_synthetic_simplified_Cal_event_2,
+  All_observations = WSE_synthetic_simplified_raw_event_2
+)
+
+CalData_event_2 <- WSE_Event_2 %>% filter(set == "calibration")
+WSE_data <- rbind(
+  WSE_Event_1,
+  WSE_Event_2
+)
+# All calibration data
+observed_data <- rbind(
+  CalData_event_1,
+  CalData_event_2
+)
+
+
+ggplot(WSE_data, aes(x = KP)) +
+  geom_point(aes(y = WSE_real_obs)) +
+  # geom_point(aes(y = WSE,col=factor('perturbed')) )+
+  # geom_errorbar(aes(
+  #   ymin = WSE - qnorm(0.975) * Yu_WSE,
+  #   ymax = WSE + qnorm(0.975) * Yu_WSE
+  # )) +
+  facet_wrap(~event,
+    labeller = as_labeller(
+      c(
+        "1" = "Main~reach:~discharge~of~5~m^3/s",
+        "2" = "Tributary:~discharge~of~1~m^3/s"
+      ),
+      label_parsed
+    ),
+    ncol = 1,
+    scales = "free"
+  ) +
+  labs(
+    y = "WSE",
+    title = "Simulated WSE (true values)"
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.title.x = element_text(size = 13), # x-axis title
+    axis.title.y = element_text(size = 13), # y-axis title
+    axis.text.x = element_text(size = 12, hjust = 1), # x-axis ticks
+    axis.text.y = element_text(size = 12), # y-axis ticks
+    legend.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 12),
+    plot.title = element_text(
+      size = 16,
+      hjust = 0.5
+    )
+  )
+```
+
+Then, the true observed data are perturbed to obtain the observed data to use during calibration 
+```{r,fig.width = 6.5,fig.height = 4.5}
+WSE_high_u <- WSE_data %>%
+  mutate(Yu_WSE = 0.05)
+
+WSE_low_u <- WSE_data %>%
+  mutate(Yu_WSE = 0.01)
+
+
+ggplot(WSE_high_u, aes(x = KP)) +
+  geom_point(aes(y = WSE_real_obs, col = factor("True"))) +
+  geom_point(aes(y = WSE, col = factor("Perturbed \n (0.05)"))) +
+  geom_errorbar(aes(
+    ymin = WSE - qnorm(0.975) * Yu_WSE,
+    ymax = WSE + qnorm(0.975) * Yu_WSE,
+    color = factor("Perturbed \n (0.05)")
+  )) +
+  geom_point(data = WSE_low_u, aes(y = WSE, col = factor("Perturbed \n (0.01)"))) +
+  geom_errorbar(
+    data = WSE_low_u,
+    aes(
+      ymin = WSE - qnorm(0.975) * Yu_WSE,
+      ymax = WSE + qnorm(0.975) * Yu_WSE,
+      color =  factor("Perturbed \n (0.01)")
+    )
+  ) +
+  facet_wrap(~event,
+    labeller = as_labeller(
+      c(
+        "1" = "Main~reach:~discharge~of~5~m^3/s",
+        "2" = "Tributary:~discharge~of~1~m^3/s"
+      ),
+      label_parsed,
+    ),
+    ncol = 1,
+    scales = "free"
+  ) +
+  labs(
+    y = "WSE",
+    title = "Generated observations",
+    col = "Simulations"
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.title.x = element_text(size = 13), # x-axis title
+    axis.title.y = element_text(size = 13), # y-axis title
+    axis.text.x = element_text(size = 12, hjust = 1), # x-axis ticks
+    axis.text.y = element_text(size = 12), # y-axis ticks
+    legend.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 12),
+    plot.title = element_text(
+      size = 16,
+      hjust = 0.5
+    )
+  )
+```
+
+## Estimation scenarios
+All scenarios has pseudo observation of friction in the main channel. 
+
+### Case 1: High uncertainty in WSE and Kmin
+```{r,fig.width = 6.5,fig.height = 4.5}
+case <- "2_WSE_KMIN_high"
+DIC <- "Kmin_n_0_Kflood_n_0"
+piecewise <- "Piecewise_Kmin_n_0_Kflood_n_0"
+
+# General
+thalweg <- "plot_WSE_Thalweg.png"
+Kmin <- "plot_Kmin.png"
+plot_DIC <- "DIC.png"
+Kmin_MAP_plot <- "BaM/post_traitement/plot_Kmin_with_true_values_generated_obs.png"
+WSE_MAP_plot <- "BaM/post_traitement/plot_output_with_synthetic_data_Y1.png"
+WSE_u_plot <- "BaM/post_traitement/sim_vs_obs_by_SU_WSE_with_uncertainties.png"
+
+knitr::include_graphics(file.path(main_folder, case, thalweg))
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+
+knitr::include_graphics(file.path(main_folder, case, plot_DIC))
+```
+
+### Result (DIC): n=0
+
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, DIC, Kmin_MAP_plot))
+
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_MAP_plot))
+# knitr::include_graphics("")
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_u_plot))
+```
+
+
+### Result (piecewise): n=0
+
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, piecewise, Kmin_MAP_plot))
+
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_MAP_plot))
+
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_u_plot))
+```
+
+### Case 2: Low uncertainty in WSE and high uncertainty in Kmin
+```{r,fig.width = 6.5,fig.height = 4.5}
+case <- "2_WSE_low_KMIN_high"
+DIC <- "Kmin_n_1_Kflood_n_0"
+piecewise <- "Piecewise_Kmin_n_0_Kflood_n_0"
+
+knitr::include_graphics(file.path(main_folder, case, thalweg))
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+knitr::include_graphics(file.path(main_folder, case, plot_DIC))
+```
+
+### Result (DIC): n=1
+
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, DIC, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_u_plot))
+```
+
+
+### Result (piecewise): n=0
+
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, piecewise, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_u_plot))
+```
+
+
+### Case 3: High uncertainty in WSE and Low uncertainty in Kmin
+
+```{r,fig.width = 6.5,fig.height = 4.5}
+case <- "2_WSE_high_KMIN_low"
+DIC <- "Kmin_n_6_Kflood_n_0"
+piecewise <- "Piecewise_Kmin_n_0_Kflood_n_0"
+
+knitr::include_graphics(file.path(main_folder, case, thalweg))
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+
+knitr::include_graphics(file.path(main_folder, case, plot_DIC))
+```
+
+### Result (DIC): n=6
+
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, DIC, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, DIC, WSE_u_plot))
+```
+
+
+### Result (piecewise): n=0
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, piecewise, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_u_plot))
+```
+
+### Result (piecewise): n=0 with pseudo obs spatial distributed
+```{r,fig.width = 4.5,fig.height = 3}
+case <- "2_WSE_KMIN_low_distributed"
+
+plot_DIC_guided(dir_polynomial = c(
+  file.path(main_folder, "2_WSE_high_KMIN_low", DIC),
+  file.path(main_folder, "2_WSE_high_KMIN_low", piecewise),
+  file.path(main_folder, case, piecewise)
+))
+
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+knitr::include_graphics(file.path(main_folder, case, piecewise, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_u_plot))
+```
+
+
+### Case 4: Low uncertainty in WSE and Low uncertainty in Kmin
+
+```{r,fig.width = 6.5,fig.height = 4.5}
+case <- "2_WSE_KMIN_low"
+DIC <- "Kmin_n_5_Kflood_n_0"
+piecewise <- "Piecewise_Kmin_n_0_Kflood_n_0"
+
+knitr::include_graphics(file.path(main_folder, case, thalweg))
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+knitr::include_graphics(file.path(main_folder, case, plot_DIC))
+```
+
+### Result (DIC):Piecewise n=0 with pseudo obs spatial distributed
+```{r,fig.width = 4.5,fig.height = 3}
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+
+case <- "2_WSE_KMIN_low_distributed"
+
+plot_DIC_guided(dir_polynomial = c(
+  file.path(main_folder, "2_WSE_KMIN_low", piecewise),
+  file.path(main_folder, case, piecewise)
+))
+
+knitr::include_graphics(file.path(main_folder, case, Kmin))
+knitr::include_graphics(file.path(main_folder, case, piecewise, Kmin_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_MAP_plot))
+knitr::include_graphics(file.path(main_folder, case, piecewise, WSE_u_plot))
+```
+
