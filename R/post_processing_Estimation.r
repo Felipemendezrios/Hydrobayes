@@ -286,8 +286,39 @@ postprocess_calibration <- function(
         Kflood_prior = Kflood_prior
     )
 
+    CalData <- convert_9999_to_NA(cbind(X_input, Y_observations, Yu_observations))
     # Kmin
     if (n_param_Kmin_to_estimate != 0) {
+        res_summary <- do.call(
+            rbind,
+            lapply(names(Kmin_SU), function(section_name) {
+                section <- Kmin_SU[[section_name]]
+
+                do.call(
+                    rbind,
+                    lapply(names(section), function(su_name) {
+                        SU <- section[[su_name]]
+
+                        data.frame(
+                            section = section_name,
+                            SU      = su_name,
+                            reach   = unique(SU$reach),
+                            KP_min  = tapply(SU$KP, SU$reach, min),
+                            KP_max  = tapply(SU$KP, SU$reach, max)
+                        )
+                    })
+                )
+            })
+        )
+        CalData_updated <- CalData %>%
+            left_join(res_summary, by = "reach") %>%
+            mutate(
+                match_interval = x >= KP_min & x <= KP_max,
+                reaches_SU = ifelse(match_interval, section, NA),
+                id_SU = ifelse(match_interval, SU, NA)
+            ) %>%
+            select(-c(match_interval, KP_min, KP_max, section, SU))
+
         Kmin <- compute_K(
             Z_MatrixK = Z_MatrixKmin,
             mcmc = mcmc,
@@ -454,7 +485,8 @@ postprocess_calibration <- function(
                     plot_with_obs = final_plot_Kflood
                 )
             ),
-            plots_MAP_output_variables = plots
+            plots_MAP_output_variables = plots,
+            CalData_updated = CalData_updated
         )
     )
 }
