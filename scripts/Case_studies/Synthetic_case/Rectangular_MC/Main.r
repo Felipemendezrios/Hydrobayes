@@ -54,29 +54,26 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_low_KMIN_high: WSE has low unc, KMin is overall distributed
 
 Experiment_id <- c(
-    # "2_WSE_KMIN_high" #ok
-    #    "2_WSE_KMIN_low" # In process
-    # "2_WSE_high_KMIN_low" # In process
-
-    # "2_WSE_low_KMIN_high" # in process: need to change name of folders after finishing (actual name 2_WSE_1_KMIN_low_unc)
+    # "2_WSE_KMIN_high" # ok
+    # "2_WSE_low_KMIN_high" #ok
+    # "2_WSE_KMIN_low" # ok
+    # "2_WSE_high_KMIN_low" # ok
+    "2_WSE_high_KMIN_low_distributed" # only tested in piecewise function
+    # "2_WSE_KMIN_low_distributed" # only tested in piecewise function
 )
 
 # Experiments input data to be used during calibration setting
-function_covariate <- "Legendre" # Legendre piecewise
+all_cal_case <- c(
+    # "Kmin_n_0_Kflood_n_0.r",
+    # "Kmin_n_1_Kflood_n_0.r",
+    # "Kmin_n_2_Kflood_n_0.r",
+    # "Kmin_n_3_Kflood_n_0.r",
+    # "Kmin_n_4_Kflood_n_0.r",
+    # "Kmin_n_5_Kflood_n_0.r",
+    # "Kmin_n_6_Kflood_n_0.r",
+    "Piecewise_Kmin_n_0_Kflood_n_0.r"
+)
 
-if (function_covariate == "Legendre") {
-    all_cal_case <- c(
-        "Kmin_n_0_Kflood_n_0.r",
-        "Kmin_n_1_Kflood_n_0.r",
-        "Kmin_n_2_Kflood_n_0.r",
-        "Kmin_n_3_Kflood_n_0.r",
-        "Kmin_n_4_Kflood_n_0.r"
-    )
-} else if (function_covariate == "piecewise") {
-    all_cal_case <- c(
-        ".r",
-    )
-}
 
 
 # Folder related to the observations (careful with the order!)
@@ -133,7 +130,7 @@ Input_Typology <- list(
 # Processed data
 if (Experiment_id %in% c("2_WSE_KMIN_high", "2_WSE_high_KMIN_low")) {
     load("data/processed_data/Synthetic_case/Rectangular_MC/High_uncertainty/WSE_synthetic_rectangular_MC.RData")
-} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_high_KMIN_low")) {
+} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_low_KMIN_high", "2_WSE_high_KMIN_low_distributed", "2_WSE_KMIN_low_distributed")) {
     load("data/processed_data/Synthetic_case/Rectangular_MC/Low_uncertainty/WSE_synthetic_rectangular_MC.RData")
 } else {
     stop("Experiment id in not correct")
@@ -349,9 +346,15 @@ if (Experiment_id %in% c("2_WSE_KMIN_high", "2_WSE_low_KMIN_high")) {
         select(-min_x, -max_x)
 
     Yu$Yu_Kmin <- toto_updated$Yu_Kmin
-} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_high_KMIN_low")) {
-    Y$Kmin <- -9999
-    Yu$Yu_Kmin <- -9999
+} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_high_KMIN_low", "2_WSE_high_KMIN_low_distributed", "2_WSE_KMIN_low_distributed")) {
+    # Add boundaries values of ks for the rest
+    if (Experiment_id %in% c("2_WSE_high_KMIN_low_distributed", "2_WSE_KMIN_low_distributed")) {
+        Y$Kmin <- ifelse(X$reach == 1 | X$reach == 3, 34, 28)
+        Yu$Yu_Kmin <- ifelse(X$reach == 1 | X$reach == 3, 8, 8)
+    } else {
+        Y$Kmin <- -9999
+        Yu$Yu_Kmin <- -9999
+    }
 
     all_obs_idx <- which(X$reach == 1 | X$reach == 3)
 
@@ -579,8 +582,6 @@ for (id_cal_case in 1:length(all_cal_case)) {
     list_mod_polynomials[[id_cal_case]] <- results_estimation$mod
 }
 
-# Keep going to correct paths, factor everthing that i can, create for prediction bash file as in calibration
-
 # Plot DIC
 if (do_plot_calibration) {
     plotDIC <- plot_DIC(path_experiment)
@@ -590,7 +591,7 @@ if (do_plot_calibration) {
             "DIC.png"
         ),
         plotDIC,
-        width = 20,
+        width = 30,
         height = 20,
         units = "cm"
     )
@@ -678,15 +679,72 @@ for (id_cal_case in 1:length(all_cal_case)) {
         dir_workspace = dir_workspace
     )
 
+    CalData_updated <- results_postprocess$CalData_updated
     residuals <- results_postprocess$residuals
     plot_Kmin_without_obs <- results_postprocess$plots_param$Kmin$plot_without_obs
+
     plot_Kmin_with_obs <- results_postprocess$plots_param$Kmin$plot_with_obs
+    if (any(!is.na(CalData_updated[, c("Kmin")]))) {
+        plot_Kmin_with_obs <- plot_Kmin_with_obs +
+            geom_point(
+                data = CalData_updated,
+                aes(x = x, y = Kmin, col = "Pseudo \nobs"),
+                alpha = 0.3
+            ) +
+            geom_errorbar(
+                data = CalData_updated,
+                aes(x = x, ymin = Kmin - 1.96 * Yu_Kmin, ymax = Kmin + 1.96 * Yu_Kmin, col = "Pseudo \nobs"),
+                alpha = 0.3
+            ) +
+            scale_color_manual(values = c(
+                "MAP" = "black",
+                "Pseudo \nobs" = "blue"
+            ))
+    }
+
     plot_Kflood_without_obs <- results_postprocess$plots_param$Kflood$plot_without_obs
     plot_Kflood_with_obs <- results_postprocess$plots_param$Kflood$plot_with_obs
+    if (any(!is.na(CalData_updated[, c("Kflood")]))) {
+        plot_Kflood_with_obs <- plot_Kflood_with_obs +
+            geom_point(
+                data = CalData_updated, aes(x = x, y = Kflood, col = "Pseudo \nobs"), alpha = 0.3
+            ) +
+            geom_errorbar(data = CalData_updated, aes(x = x, ymin = Kflood - 1.96 * Yu_Kflood, ymax = Kflood + 1.96 * Yu_Kflood, col = "Pseudo \nobs"), alpha = 0.3) +
+            scale_color_manual(values = c(
+                "MAP" = "black",
+                "Pseudo \nobs" = "blue"
+            ))
+    }
 
     plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
 
     if (do_plot_calibration) {
+        if (!is.null(plot_Kmin_with_obs)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_Kmin_with_true_values_generated_obs.png")
+                ),
+                plot = plot_Kmin_with_obs,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        if (!is.null(plot_Kflood_with_obs)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_Kflood_with_true_values_generated_obs.png")
+                ),
+                plot = plot_Kflood_with_obs,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+
+
         for (i in seq_along(plots_MAP_output_variables)) {
             ggsave(
                 filename = file.path(
@@ -702,13 +760,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
         save(plots_MAP_output_variables,
             file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
         )
+
         # Specific case of synthetic case
         if (synthetic_case) {
             plot_output_with_synthetic_data <-
                 plots_MAP_output_variables[[1]] +
                 geom_point(
                     data = real_synt_data,
-                    aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.4, shape = 2
+                    aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.7, shape = 2
                 ) +
                 scale_color_manual(
                     values =
@@ -735,7 +794,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
             ggsave(
                 filename = file.path(
                     paths$path_plot_folder,
-                    paste0("plot_output_with_synthetic_data_Y", i, ".png")
+                    paste0("plot_output_with_synthetic_data_Y1.png")
                 ),
                 plot = plot_output_with_synthetic_data,
                 width = 20,
@@ -745,7 +804,6 @@ for (id_cal_case in 1:length(all_cal_case)) {
         }
     }
 }
-
 ################################
 # Prediction
 ################################
