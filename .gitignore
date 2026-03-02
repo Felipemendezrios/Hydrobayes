@@ -19,3 +19,7 @@ scripts/Case_studies/Rhone/Uniform_conditions/Calibration_experiments/
 scripts/Case_studies/Rhone/Real_Condition_model/PamHyr/_PAMHYR_/
 scripts/Case_studies/Rhone/Real_Condition_model/Calibration_experiments/
 scripts/Backup/
+data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/decoupage.png
+data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/network_synthetic_case.svg
+data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/plan.png
+nohup.out
