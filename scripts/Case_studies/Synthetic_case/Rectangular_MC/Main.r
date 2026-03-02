@@ -58,8 +58,8 @@ Experiment_id <- c(
     # "2_WSE_low_KMIN_high" #ok
     # "2_WSE_KMIN_low" # ok
     # "2_WSE_high_KMIN_low" # ok
-    "2_WSE_high_KMIN_low_distributed" # only tested in piecewise function
-    # "2_WSE_KMIN_low_distributed" # only tested in piecewise function
+    "2_WSE_high_KMIN_low_distributed" # ok only tested in piecewise function
+    # "2_WSE_KMIN_low_distributed" # ok only tested in piecewise function
 )
 
 # Experiments input data to be used during calibration setting
@@ -128,9 +128,9 @@ Input_Typology <- list(
 # Module 3: calibration data
 ############################################
 # Processed data
-if (Experiment_id %in% c("2_WSE_KMIN_high", "2_WSE_high_KMIN_low")) {
+if (Experiment_id %in% c("2_WSE_KMIN_high", "2_WSE_high_KMIN_low", "2_WSE_high_KMIN_low_distributed")) {
     load("data/processed_data/Synthetic_case/Rectangular_MC/High_uncertainty/WSE_synthetic_rectangular_MC.RData")
-} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_low_KMIN_high", "2_WSE_high_KMIN_low_distributed", "2_WSE_KMIN_low_distributed")) {
+} else if (Experiment_id %in% c("2_WSE_KMIN_low", "2_WSE_low_KMIN_high", "2_WSE_KMIN_low_distributed")) {
     load("data/processed_data/Synthetic_case/Rectangular_MC/Low_uncertainty/WSE_synthetic_rectangular_MC.RData")
 } else {
     stop("Experiment id in not correct")
