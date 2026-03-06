@@ -1,0 +1,56 @@
+# Rhone synthetic case
+
+This is the syntetic case of the Rhône case from Lagnieu to Jons with the Ain tributary confluence donwstream.
+
+Geometry values are estimated from the real model. Median values of width and elevation were estimated for the Rhone and Ain separately to get a value of riverbed and left and right banks. 
+
+Concerning the slope, it was estimated simulating with the real model a high discharge event. Energy slope, friction slope and riverbed slope were considered quite similar in high dischage event to estimate a mean value, which will be considered as constant along to the Rhône and Ain tributary.
+
+## Description of the synthetic geometry:
+
+### Ain:
+- So_Ain: 0.0008852672
+- dz_cross_section = 3.55 m (thalweg to elevation of the banks)
+- width_rg = 70.00888 m
+- width_riverbed = 55.49580 m 
+- width_rd = 102.7914 m
+
+### Rhone:
+
+- So_Rhône: 0.0004131376
+- dz_cross_section = 6.5 m (thalweg to elevation of the banks)
+- width_rg = 14.98196 m
+- width_riverbed = 68.30419 m 
+- width_rd = 114.8833 m
+
+## Boundary conditions (referenced values):
+
+- LAG (Rhône): https://hydro.eaufrance.fr/stationhydro/V163002002/synthese -> event 1: Q(t)(mean) = 475 m3/s and event 2: Q(january) = 555 m3/s
+- PCH (AIN): https://hydro.eaufrance.fr/stationhydro/V294201001/synthese -> event 1: Q(t)(mean) = 119 m3/s and event 2: Q(january) =  174 m3/s
+- JNS (Aval): automatic Q(Z) 
+
+## Distribution of reaches:
+
+Model is divided in three reaches: Rhone (LAG - ANT), AIN (PCH-ANT) and Rhone after confluence (ANT-JNS). 
+
+The raw cross sections given at the model are at the extremes of the reaches, all cross sections in the middle of a reach have been interpolated. 
+
+# FEEDBACK
+
+This synthetic case make me realize these points:
+
+- To run interpolation tool of PamHyr2, it seems that in the geometry tab, the two cross sections must be ordered from downstream to upstream, if not, any interpolation is done.
+- In the same geometry tab, once the interpolation is done. It seems that it is necessary to order it again to put cross section from upstream to downstream. I realized that internal calculation in mage considers first cross section as upstream. How do I realize it?. Setting the initial conditions manually. Plotting water surface elevation of initial conditions, I realized that calculation will be influenced by the order of the cross sections. 
+
+
+## Change log
+
+2026-03-04: Add a default bief
+
+---
+
+## Copyright
+
+© Felipe-Alberto Mendezrios - 2026
+
+All right reserved.
