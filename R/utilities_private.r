@@ -2,6 +2,67 @@ last <- function(data) {
     utils::tail(data, n = 1)
 }
 
+get_ST_fortran <- function(
+    path_ST, skip = 1) {
+    bathy <- readLines(file.path(path_ST))
+    bathy <- bathy[-c(1:skip)]
+
+    # Remove headers and get xyz values
+
+    fields <- strsplit(trimws(bathy), "\\s+")
+    n_fields <- lengths(fields)
+
+    is_header <- n_fields >= 5
+
+    is_end <- sapply(fields, function(x) {
+        length(x) >= 3 && all(x[1:3] == "999.9990")
+    })
+
+    is_xyz <- (n_fields %in% c(3, 4)) & !is_end
+
+    block_id <- cumsum(is_header) # each header starts a new block
+    block_id[is_end] <- NA # remove end marker lines
+
+    # keep only headers
+    header_lines <- fields[is_header]
+
+    # get first and before-last values
+    header_info <- t(sapply(header_lines, function(x) {
+        first_val <- x[1]
+        before_last <- x[length(x) - 1]
+        c(profile_id = first_val, KP = before_last)
+    }))
+
+    header_info <- as.data.frame(header_info, stringsAsFactors = FALSE)
+
+    xyz_list <- lapply(which(is_xyz), function(i) {
+        nums <- as.numeric(fields[[i]][1:3])
+        lbl <- if (length(fields[[i]]) >= 4) fields[[i]][4] else NA
+        blk <- block_id[i] # which header/block this line belongs to
+        c(nums, label = lbl, block = blk)
+    })
+
+    xyz_df <- as.data.frame(do.call(rbind, xyz_list), stringsAsFactors = FALSE)
+    colnames(xyz_df) <- c("X", "Y", "Z", "label", "block")
+    xyz_df$profile_id <- header_info$profile_id[as.numeric(xyz_df$block)]
+    xyz_df$KP <- header_info$KP[as.numeric(xyz_df$block)]
+
+    # optional: remove temporary block column
+    xyz_df$block <- NULL
+
+    # Convert numeric columns
+    xyz_df$X <- as.numeric(xyz_df$X)
+    xyz_df$Y <- as.numeric(xyz_df$Y)
+    xyz_df$Z <- as.numeric(xyz_df$Z)
+    xyz_df$profile_id <- as.numeric(xyz_df$profile_id)
+    xyz_df$KP <- as.numeric(xyz_df$KP)
+    return(list(
+        xyz_df = xyz_df,
+        header_info = header_info
+    ))
+}
+
+
 Cross_sections_interpolation_and_export_rectangular_channel <- function(
     So,
     Pk,
