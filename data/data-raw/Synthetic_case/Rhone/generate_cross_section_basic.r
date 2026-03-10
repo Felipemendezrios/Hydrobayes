@@ -20,7 +20,18 @@ RHONE_headers <- lapply(all_header_info, as.numeric)
 RHONE_XYZ <- all_xyz_df
 
 geom_RHONE <- results_geom_rect$Rhone
+# Modification to the median values (10%) (Rhône)
+factor_amplification_Rhone <- 1.1
+geom_RHONE$width$median_width <- round(geom_RHONE$width$median_width * factor_amplification_Rhone, digits = 3)
+geom_RHONE$riverbed$median_dz <- round(geom_RHONE$riverbed$median_dz * factor_amplification_Rhone, digits = 3)
+
+
+# Modification to the median values (10%) (Ain)
+factor_amplification_Ain <- 1.10
 geom_AIN <- results_geom_rect$AIN
+geom_AIN$width$median_width <- round(geom_AIN$width$median_width * factor_amplification_Ain, digits = 3)
+geom_AIN$riverbed$median_dz <- round(geom_AIN$riverbed$median_dz * factor_amplification_Ain, digits = 3)
+
 
 dz_rhone <- geom_RHONE$riverbed$median_dz[1] - geom_RHONE$riverbed$median_dz[2]
 # Rhone
@@ -66,9 +77,9 @@ interpolate_kp <- function(kp_query, positions_interface) {
         slope <- Cross_sections_boundary$So
 
         # Calculate the interpolated values
-        x <- kp_query
-        y <- y0
-        z <- z0 + (x0 - x) * slope
+        x <- round(kp_query, digits = 3)
+        y <- round(y0, digits = 3)
+        z <- round(z0 + (x0 - x) * slope, digits = 3)
 
         # Add the interpolated results to the matrix
         if (i == 1) {
@@ -214,7 +225,7 @@ write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/H
 
 dz_ain <- geom_AIN$riverbed$median_dz[1] - geom_AIN$riverbed$median_dz[2]
 
-Z0_Ain <- 3.20181611511985
+Z0_Ain <- 3.202
 Y0_Ain <- 184
 
 
@@ -266,9 +277,9 @@ interpolate_kp <- function(kp_query, positions_interface) {
         slope <- Cross_sections_boundary$So
 
         # Calculate the interpolated values
-        x <- x0
-        y <- kp_query
-        z <- z0 + (y0 - y) * slope
+        x <- round(x0, digits = 3)
+        y <- round(kp_query, digits = 3)
+        z <- round(z0 + (y0 - y) * slope, digits = 3)
 
         # Add the interpolated results to the matrix
         if (i == 1) {
