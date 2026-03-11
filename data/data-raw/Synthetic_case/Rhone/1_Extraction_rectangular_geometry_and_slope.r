@@ -67,7 +67,7 @@ get_ST_fortran <- function(
     ))
 }
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr/_PAMHYR_/Rhone_PCH_Hautes_eaux/default-mage/net/")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/PamHyr_real_event_get_slope/_PAMHYR_/Rhone_PCH_Hautes_eaux/default-mage/net/")
 
 all_ST <- list.files()
 
@@ -105,8 +105,6 @@ for (group in names(Groupped_reaches)) {
 
     save(all_xyz_df, file = paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/rectangular_geometry/ST_read_XYZ_", group, ".RData"))
     save(all_header_info, file = paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/rectangular_geometry/ST_read_headers", group, ".RData"))
-
-
 
     all_xyz_df_based <- data.frame(
         all_xyz_df %>%
@@ -247,7 +245,7 @@ for (group in names(Groupped_reaches)) {
 # Extract from a simulation of the real model with a high discharge to obtain the energy slope which could be assumed as similar to the slope of the friction and slope of the bathymetry (manning assumption)
 #################################################
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr/_PAMHYR_/Rhone_PCH_Hautes_eaux/default-mage/")
+setwd("//home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/PamHyr_real_event_get_slope/_PAMHYR_/Rhone_PCH_Hautes_eaux/default-mage/")
 
 library(readr)
 
