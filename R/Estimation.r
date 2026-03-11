@@ -457,8 +457,18 @@ Estimation_Mage <- function(
             doExpKmoy = FALSE
         )
     )
+    ############################################
+    # Multi factor Q inflows
+    ############################################
+    multi_Qinflows <- lapply(mult_factor, function(event) {
+        lapply(event, function(node) node)
+    })
 
-    theta_param <- c(Kmin_prior, Kflood_prior)
+    # Aplatir la liste de listes en une seule liste
+    multi_Qinflows <- unlist(multi_Qinflows, recursive = FALSE)
+
+
+    theta_param <- c(Kmin_prior, Kflood_prior, multi_Qinflows)
 
     mod <- RBaM::model(
         ID = ID_model_BaM,
@@ -467,13 +477,26 @@ Estimation_Mage <- function(
         par = theta_param,
         xtra = xtra
     )
+
+    n_Kmin_prior <- get_init_prior(Kmin_prior)
+    n_Kmin_prior <- ifelse(length(n_Kmin_prior) == 0, 0, length(n_Kmin_prior))
+
+    n_Kflood_prior <- get_init_prior(Kflood_prior)
+    n_Kflood_prior <- ifelse(length(n_Kflood_prior) == 0, 0, length(n_Kflood_prior))
+
+    n_multi_Qinflows_prior <- get_init_prior(multi_Qinflows)
+    n_multi_Qinflows_prior <- ifelse(length(n_multi_Qinflows_prior) == 0, 0, length(n_multi_Qinflows_prior))
+
     prior_theta_param <- get_init_prior(theta_param)
 
     data <- RBaM::dataset(X = X, Y = Y, Yu = Yu, data.dir = file.path(paths$path_BaM_folder))
 
     jump_MCMC_theta_param <- ifelse(prior_theta_param != 0,
         prior_theta_param[(prior_theta_param != 0)] * 0.1,
-        jump_MCMC_theta_param_user
+        c(
+            rep(jump_MCMC_theta_param_user_regression, n_Kmin_prior + n_Kflood_prior),
+            rep(jump_MCMC_theta_param_user_coeff, n_multi_Qinflows_prior)
+        )
     )
 
     jump_MCMC_error_model <- list()

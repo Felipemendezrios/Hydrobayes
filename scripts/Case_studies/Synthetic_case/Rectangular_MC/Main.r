@@ -35,8 +35,9 @@ do_plot_calibration <- TRUE
 do_prediction <- TRUE
 
 
-# Setting jump standard deviation for MCMC sampling
-jump_MCMC_theta_param_user <- 8
+# Setting jump standard deviation for MCMC sampling if initial guess = 0
+jump_MCMC_theta_param_user_regression <- 5
+jump_MCMC_theta_param_user_coeff <- 0.1
 jump_MCMC_error_model_user <- 0.001
 threshold_jump_MCMC_error_model <- 0.5
 
@@ -54,24 +55,24 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_low_KMIN_high: WSE has low unc, KMin is overall distributed
 
 Experiment_id <- c(
-    # "2_WSE_KMIN_high" # ok
+    "2_WSE_KMIN_high" # ok
     # "2_WSE_low_KMIN_high" #ok
     # "2_WSE_KMIN_low" # ok
     # "2_WSE_high_KMIN_low" # ok
-    "2_WSE_high_KMIN_low_distributed" # ok only tested in piecewise function
+    # "2_WSE_high_KMIN_low_distributed" # ok only tested in piecewise function
     # "2_WSE_KMIN_low_distributed" # ok only tested in piecewise function
 )
 
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
-    # "Kmin_n_0_Kflood_n_0.r",
+    "Kmin_n_0_Kflood_n_0.r"
     # "Kmin_n_1_Kflood_n_0.r",
     # "Kmin_n_2_Kflood_n_0.r",
     # "Kmin_n_3_Kflood_n_0.r",
     # "Kmin_n_4_Kflood_n_0.r",
     # "Kmin_n_5_Kflood_n_0.r",
     # "Kmin_n_6_Kflood_n_0.r",
-    "Piecewise_Kmin_n_0_Kflood_n_0.r"
+    # "Piecewise_Kmin_n_0_Kflood_n_0.r"
 )
 
 

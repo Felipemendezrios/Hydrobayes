@@ -229,6 +229,17 @@ copy_folder <- function(source, destination) {
     # Create the destination directory if it doesn't exist
     if (!dir.exists(destination)) {
         dir.create(destination, recursive = TRUE)
+    } else {
+        # Clean the destination folder: delete all files and subdirectories
+        files_to_delete <- list.files(destination, full.names = TRUE, recursive = TRUE)
+        if (length(files_to_delete) > 0) {
+            file.remove(files_to_delete)
+        }
+        # Remove empty subdirectories (if any)
+        dirs_to_delete <- list.dirs(destination, full.names = TRUE, recursive = FALSE)
+        if (length(dirs_to_delete) > 0) {
+            unlink(dirs_to_delete, recursive = TRUE)
+        }
     }
 
     # List all files and subdirectories in the source
