@@ -328,6 +328,7 @@ Estimation_Mage <- function(
     nX_BaM,
     nY_BaM,
     dir_exe_BaM,
+    mage_projet_name,
     mcmcCooking = RBaM::mcmcCooking(),
     mcmcOptions = RBaM::mcmcOptions(),
     mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
