@@ -226,7 +226,7 @@ write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/H
 dz_ain <- geom_AIN$riverbed$median_dz[1] - geom_AIN$riverbed$median_dz[2]
 
 Z0_Ain <- 3.202
-Y0_Ain <- 184
+Y0_Ain <- 202
 
 
 points <- c(
