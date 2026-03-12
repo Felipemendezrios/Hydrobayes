@@ -90,7 +90,7 @@ set.seed(2026) # reproducibility
 # High uncertainty
 WSE_synthetic_temp <- WSE_synthetic_base
 
-WSE_synthetic_temp$Yu_WSE <- 0.1
+WSE_synthetic_temp$Yu_WSE <- 0.05
 WSE_synthetic_temp$WSE <-
     rnorm(
         n = nrow(WSE_synthetic_temp),
@@ -310,8 +310,6 @@ table_Z_thalweg <- rbind(table_Z_thalweg, data.frame(
 ########################
 # Add the thalweg to the data
 
-WSE_synthetic_simplified <- WSE_synthetic_temp %>% left_join(table_Z_thalweg %>% mutate(KP = round(KP, 2)), by = c("id_reach_CAL", "KP"))
-
 WSE_synthetic_simplified <- WSE_synthetic_temp %>%
     difference_left_join(
         table_Z_thalweg,
@@ -384,7 +382,7 @@ set.seed(2026) # reproducibility
 
 WSE_synthetic_low_unc <- WSE_synthetic_base
 
-WSE_synthetic_low_unc$Yu_WSE <- 0.03
+WSE_synthetic_low_unc$Yu_WSE <- 0.025
 WSE_synthetic_low_unc$WSE <-
     rnorm(
         n = nrow(WSE_synthetic_low_unc),
@@ -405,8 +403,18 @@ ggplot(
     facet_wrap(~ id_case + id_reach_CAL)
 
 
-WSE_synthetic_simplified <- WSE_synthetic_low_unc %>% left_join(table_Z_thalweg, by = c("id_reach_CAL", "KP"))
-
+WSE_synthetic_simplified <- WSE_synthetic_low_unc %>%
+    difference_left_join(
+        table_Z_thalweg,
+        by = c("id_reach_CAL", "KP"),
+        max_dist = 0.02
+    ) %>%
+    filter(id_reach_CAL.x == id_reach_CAL.y) %>%
+    select(-c("id_reach_CAL.y", "KP.x")) %>%
+    rename(
+        id_reach_CAL = id_reach_CAL.x,
+        KP = "KP.y"
+    )
 
 library(ggplot2)
 wse_obs_sim <- ggplot(WSE_synthetic_simplified, aes(x = KP, y = WSE)) +
