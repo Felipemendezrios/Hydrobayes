@@ -477,14 +477,14 @@ plot_DIC <- function(
     }
     min_local <- DIC_results[which.min(DIC_results$Value), ]
 
-    # Vérifier la présence des motifs
-    if (!all(str_detect(DIC_results$case, "Kmin_n_"))) {
-        stop("Erreur : certaines lignes n'ont pas 'Kmin_n_' !")
-    }
+    # # Vérifier la présence des motifs
+    # if (!all(str_detect(DIC_results$case, "Kmin_n_"))) {
+    #     stop("Erreur : certaines lignes n'ont pas 'Kmin_n_' !")
+    # }
 
-    if (!all(str_detect(DIC_results$case, "Kflood_n_"))) {
-        stop("Erreur : certaines lignes n'ont pas 'Kflood_n_' !")
-    }
+    # if (!all(str_detect(DIC_results$case, "Kflood_n_"))) {
+    #     stop("Erreur : certaines lignes n'ont pas 'Kflood_n_' !")
+    # }
 
     DIC_plot <- ggplot(DIC_results, aes(x = factor(case), y = Value, col = factor(Criteria))) +
         geom_point(size = 3) +
