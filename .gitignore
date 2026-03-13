@@ -27,6 +27,7 @@ scripts/Backup/
 
 data/data-raw/Rhone/WSE/QGIS/
 data/data-raw/Rhone/Local_files/
+data/data-raw/Rhone/PamHyr/
 
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/decoupage.png
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/network_synthetic_case.svg
