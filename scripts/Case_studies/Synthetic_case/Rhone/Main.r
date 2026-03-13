@@ -30,7 +30,7 @@ library(utils)
 ############################################
 
 # Logical
-do_calibration <- TRUE
+do_calibration <- FALSE
 do_plot_calibration <- TRUE
 do_prediction <- FALSE
 
@@ -58,13 +58,12 @@ Experiment_id <- c(
 
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
-    "Kmin_n_0_Kflood_n_0.r",
-    "Kmin_n_1_Kflood_n_0.r",
-    "Kmin_n_2_Kflood_n_0.r",
-    "Kmin_n_3_Kflood_n_0.r",
-    "Kmin_n_4_Kflood_n_0.r",
-    "Kmin_n_5_Kflood_n_0.r",
-    "Piecewise_Kmin_n_0_Kflood_n_0.r"
+    # "Kmin_n_0.r",
+    "Kmin_n_1.r",
+    "Kmin_n_2.r",
+    "Kmin_n_3.r",
+    "Kmin_n_4.r",
+    "Piecewise_Kmin_n_0.r"
 )
 
 
@@ -533,7 +532,7 @@ Kmin_literature <- data.frame(
     x_start = Real_Ks_simulated$KP_start,
     x_end = Real_Ks_simulated$KP_end,
     mean_value = Real_Ks_simulated$Kmin,
-    reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
+    reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 2, "MR", "TR")
 )
 
 Kmin_segment_layer <- segment_layer_reference(
@@ -551,9 +550,9 @@ Kmin_segment_layer <- segment_layer_reference(
 synthetic_case <- TRUE
 if (synthetic_case) {
     real_synt_data <- WSE_synthetic_simplified %>%
-        mutate(X1_obs = ifelse((id_reach_CAL == 1 | id_reach_CAL == 3) & id_case == "5_1",
+        mutate(X1_obs = ifelse((id_reach_CAL == 1 | id_reach_CAL == 2) & id_case == "Rhone_synt_Ev_1",
             1,
-            ifelse((id_reach_CAL == 2) & id_case == "3_2", 2, NA)
+            ifelse((id_reach_CAL == 3) & id_case == "Rhone_synt_Ev_2", 2, NA)
         )) %>%
         tidyr::drop_na(X1_obs)
 }
