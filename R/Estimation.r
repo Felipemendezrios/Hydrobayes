@@ -290,6 +290,9 @@ constructor_spatialization_matrix <- function(
 
     # Get the reaches of the Z file for all XR in Kmin
     reaches_Z_all_K_SU <- lapply(K_SU, function(channel) {
+        # Keep only elements that are lists with a Z component
+        SU_only <- channel[sapply(channel, function(x) is.list(x) && "Z" %in% names(x))]
+
         lapply(channel, function(SU) {
             SU$reach
         })
@@ -376,14 +379,18 @@ Estimation_Mage <- function(
     # Kmin environment (encapsulated in Kmin_SU)
     ############################################
 
+    # Check names between Input typology and Kmin Key SU_MR
+    if (any(names(Input_Typology) != names(Input_Kmin_Key_SU_MR))) stop(paste0("names of Input_Typology (", names(Input_Typology), ") do not match with the names of Input_Kmin_Key_SU_MR (", names(Input_Kmin_Key_SU_MR), ")"))
     # Check if size is respected between ID and Kmin
     if (length(Input_Typology) != length(Input_Kmin_Key_SU_MR)) stop("Size must be equal between Input_Kmin_Key_SU_MR and Input_Typology")
 
     # Assign properties of each SU in XR structure
-    Kmin_SU <- SU_constructor(
+    results_SU_constructor <- SU_constructor(
         SU_key_HM = Input_Kmin_Key_SU_MR,
         Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
     )
+    Kmin_SU <- results_SU_constructor$SU
+    summary_SU_Kmin <- results_SU_constructor$summary_SU
 
     Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
 
@@ -403,10 +410,12 @@ Estimation_Mage <- function(
     if (length(Input_Typology) != length(Input_Kflood_Key_SU_MR)) stop("Size must be equal between Input_Kflood_Key_SU_MR and Input_Typology")
 
     # Assign properties of each SU in XR structure
-    Kflood_SU <- SU_constructor(
+    results_SU_constructor <- SU_constructor(
         SU_key_HM = Input_Kflood_Key_SU_MR,
         Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach
     )
+    Kflood_SU <- results_SU_constructor$SU
+    summary_SU_Kflood <- results_SU_constructor$summary_SU
 
     Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
 
@@ -547,6 +556,8 @@ Estimation_Mage <- function(
         Kflood_prior = Kflood_prior,
         Kmin_SU = Kmin_SU,
         Kflood_SU = Kflood_SU,
+        summary_SU_Kmin = summary_SU_Kmin,
+        summary_SU_Kflood = summary_SU_Kflood,
         mod_polynomials = mod
     ))
 }
