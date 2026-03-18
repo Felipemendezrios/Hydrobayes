@@ -822,13 +822,13 @@ plot_obs_sim_unc <- function(
         # Add observations
         geom_point(
             data = data_output_var_clean %>% filter(id_pred == "Observations"),
-            aes(y = sim_value, col = id_pred, group = group_var)
+            aes(y = sim_value, col = id_pred, group = group_var), alpha = 0.3
         ) +
         geom_errorbar(
             data = data_output_var_clean %>% filter(id_pred == "Observations"),
             aes(
                 col = id_pred, group = group_var
-            ),
+            ), alpha = 0.3,
             na.rm = TRUE
         ) +
         scale_fill_manual(
