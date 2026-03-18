@@ -61,9 +61,9 @@ check_suffix_pred <- function(file, idx) {
 }
 
 check_data_unc <- function(data) {
-    required <- c("xaxis", "min", "max", "id_pred", "event", "sim_value", "reach", "SU")
+    required <- c("xaxis", "min", "max", "id_pred", "event", "sim_value", "reach", "typology", "id_SU_Kmin", "id_reach_SU_Kmin", "id_SU_Kflood", "id_reach_SU_Kflood")
 
-    if (any(!required %in% colnames(data))) stop("Column names must have xaxis, min, max, id_pred, event, sim_value, reach and SU")
+    if (any(!required %in% colnames(data))) stop("Column names must have xaxis, min, max, id_pred, event, sim_value, reach, typology, id_SU_Kmin, id_reach_SU_Kmin, id_SU_Kflood and id_reach_SU_Kflood")
 }
 
 check_experiment_exist <- function(path) {
