@@ -621,7 +621,7 @@ Kmin_literature <- data.frame(
     x_start = Real_Ks_simulated$KP_start,
     x_end = Real_Ks_simulated$KP_end,
     mean_value = Real_Ks_simulated$Kmin,
-    reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
+    typology_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 3, "MR", "TR")
 )
 
 Kmin_segment_layer <- segment_layer_reference(
