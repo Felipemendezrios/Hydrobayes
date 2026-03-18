@@ -304,23 +304,25 @@ K_plot <- function(
 
     k_estimated_MCMC$KP <- SU_reaches$KP
     k_estimated_MCMC$reaches_nb <- SU_reaches$reach
-    k_estimated_MCMC$reaches_SU <- SU_reaches$id_river
+    k_estimated_MCMC$typology <- SU_reaches$typology
+    k_estimated_MCMC$id_reach_SU <- SU_reaches$id_reach_SU
 
     # Convert to long format
     df_MCMC_sampling <- tidyr::pivot_longer(
         k_estimated_MCMC,
-        cols = -c(reaches_nb, reaches_SU, KP),
+        cols = -c(reaches_nb, typology, KP, id_reach_SU),
         values_to = "Value"
     ) %>%
-        select(reaches_nb, reaches_SU, KP, Value) %>%
+        select(reaches_nb, typology, id_reach_SU, KP, Value) %>%
         mutate(ID = "MCMC Sampling")
 
     k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_param_vector[indx]
 
     df_MAP <- data.frame(
         reaches_nb = SU_reaches$reach,
-        reaches_SU = SU_reaches$id_river,
+        typology = SU_reaches$typology,
         KP = SU_reaches$KP,
+        id_reach_SU = SU_reaches$id_reach_SU,
         Value = k_estimated_MAP,
         ID = "MAP"
     )
@@ -328,7 +330,7 @@ K_plot <- function(
     # Get 95% uncertainty for envelope curve : create ribbon data from MCMC
     df_envelope <- df_MCMC_sampling %>%
         filter(ID == "MCMC Sampling") %>%
-        group_by(KP, reaches_SU, reaches_nb) %>%
+        group_by(KP, typology, reaches_nb, id_reach_SU) %>%
         summarise(
             ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
             ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
@@ -340,11 +342,11 @@ K_plot <- function(
         ggplot() +
         geom_ribbon(
             data = df_envelope,
-            aes(x = KP, ymin = ymin, ymax = ymax, fill = ID)
+            aes(x = KP, ymin = ymin, ymax = ymax, fill = ID, group = interaction(id_reach_SU, ID))
         ) +
         geom_line(
             data = df_MAP,
-            aes(x = KP, y = Value, color = ID)
+            aes(x = KP, y = Value, color = ID, group = interaction(id_reach_SU, ID))
         ) +
         scale_fill_manual(values = c("Parametric\nuncertainty" = "pink")) +
         scale_color_manual(values = c("MAP" = "black")) +
@@ -363,8 +365,7 @@ K_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         ) +
-        facet_wrap(~reaches_SU, scales = "free", ncol = 1)
-
+        facet_wrap(~typology, scales = "free", ncol = 1)
 
     return(list(df_MAP, K_plot, df_envelope))
 }
@@ -378,9 +379,9 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
     n_Y <- sum(grepl("^Y\\d+_obs$", colnames(all_obs_simulations)))
 
     if (type == "dx") {
-        base_plot <- ggplot(all_obs_simulations, aes(x = X3_obs))
+        base_plot <- ggplot(all_obs_simulations, aes(x = X3_obs, group = X2_obs))
     } else if (type == "dt") {
-        base_plot <- ggplot(all_obs_simulations, aes(x = X4_obs))
+        base_plot <- ggplot(all_obs_simulations, aes(x = X4_obs, group = X2_obs))
     }
 
     base_plot <- base_plot +
@@ -518,7 +519,7 @@ segment_layer_reference <- function(
     max_col = NULL) {
     # ---- CHECK REQUIRED BASE COLUMNS ----
 
-    required_cols <- c("x_start", "x_end", "reaches_SU")
+    required_cols <- c("x_start", "x_end", "typology")
 
     missing_required <- setdiff(required_cols, names(K_literature))
 
@@ -593,7 +594,7 @@ segment_layer_reference <- function(
                 x_start = row$x_start,
                 x_end = row$x_end,
                 y_value = row[[mean_col]],
-                reaches_SU = row$reaches_SU,
+                typology = row$typology,
                 line_type = "mean"
             )
         )
@@ -607,7 +608,7 @@ segment_layer_reference <- function(
                     x_start = row$x_start,
                     x_end = row$x_end,
                     y_value = row[[min_col]],
-                    reaches_SU = row$reaches_SU,
+                    typology = row$typology,
                     line_type = "min"
                 )
             )
@@ -622,7 +623,7 @@ segment_layer_reference <- function(
                     x_start = row$x_start,
                     x_end = row$x_end,
                     y_value = row[[max_col]],
-                    reaches_SU = row$reaches_SU,
+                    typology = row$typology,
                     line_type = "max"
                 )
             )
@@ -739,6 +740,7 @@ plot_K_and_ref <- function(
 plot_obs_sim_unc <- function(
     data_output_var,
     any_obs_Y,
+    col_Y_obs,
     wrap = "event_SU" # event_reach_HM
     ) {
     check_data_unc(data_output_var)
@@ -747,8 +749,35 @@ plot_obs_sim_unc <- function(
         data_output_var <- data_output_var %>%
             filter(id_pred != "Total")
     }
-    all_data_unc_obs <- data_output_var %>%
+
+    codename_obs <- switch(col_Y_obs,
+        "Kmin" = 1,
+        "Kflood" = 2,
+        3
+    )
+    data_output_var_clean <- data_output_var %>%
+        mutate(
+            group_var = case_when(
+                codename_obs == 1 ~ interaction(id_reach_SU_Kmin, id_pred),
+                codename_obs == 2 ~ interaction(id_reach_SU_Kflood, id_pred),
+                codename_obs == 3 ~ interaction(reach, id_pred)
+            )
+        ) %>%
+        arrange(group_var, xaxis)
+
+    logical_duplicated <-
+        duplicated(data_output_var_clean %>%
+            select(-c(reach, sim_value, min, max)))
+
+    # Remove right duplicated values in the middle in piecewise function:
+    if (any(logical_duplicated)) {
+        idx <- which(logical_duplicated)
+        data_output_var_clean <- data_output_var_clean[-c(idx, idx - 1), ]
+    }
+
+    all_data_unc_obs <- data_output_var_clean %>%
         filter(!id_pred %in% c("Maxpost", "Prior", "Observations"))
+
     # Plot simulation uncertainties ribbons
     sim_obs_plot <-
         ggplot(
@@ -756,11 +785,14 @@ plot_obs_sim_unc <- function(
             aes(
                 x = xaxis,
                 ymin = min,
-                ymax = max,
-            ), alpha = 0.65
+                ymax = max
+            )
         ) +
         geom_ribbon(
-            aes(fill = id_pred),
+            aes(
+                fill = id_pred,
+                group = group_var
+            ),
             alpha = 0.65
         ) +
         theme_bw() +
@@ -777,11 +809,11 @@ plot_obs_sim_unc <- function(
         )
 
     # Check if Maxpost is available
-    if (any(levels(data_output_var$id_pred) == "Maxpost")) {
+    if (any(levels(data_output_var_clean$id_pred) == "Maxpost")) {
         sim_obs_plot <- sim_obs_plot +
             geom_line(
-                data = data_output_var %>% filter(id_pred == "Maxpost"),
-                aes(y = sim_value, color = id_pred)
+                data = data_output_var_clean %>% filter(id_pred == "Maxpost"),
+                aes(y = sim_value, color = id_pred, group = group_var)
             )
     }
 
@@ -789,13 +821,13 @@ plot_obs_sim_unc <- function(
     sim_obs_plot <- sim_obs_plot +
         # Add observations
         geom_point(
-            data = data_output_var %>% filter(id_pred == "Observations"),
-            aes(y = sim_value, col = id_pred)
+            data = data_output_var_clean %>% filter(id_pred == "Observations"),
+            aes(y = sim_value, col = id_pred, group = group_var)
         ) +
         geom_errorbar(
-            data = data_output_var %>% filter(id_pred == "Observations"),
+            data = data_output_var_clean %>% filter(id_pred == "Observations"),
             aes(
-                col = id_pred
+                col = id_pred, group = group_var
             ),
             na.rm = TRUE
         ) +
@@ -814,7 +846,7 @@ plot_obs_sim_unc <- function(
 
     if (wrap == "event_SU") {
         sim_obs_plot <- sim_obs_plot +
-            facet_wrap(~ event + SU,
+            facet_wrap(~ event + typology,
                 scales = "free",
                 ncol = 1
             )
