@@ -58,13 +58,15 @@ compute_K <- function(
     n_param_Kmin_to_estimate,
     n_param_Kflood_to_estimate,
     do_main_channel) {
+    ## missing a level to search [[1]] ? fixed? only SU_1
     SU <- do.call(
         rbind,
-        lapply(names(K_SU), function(river) {
+        lapply(names(K_SU), function(typology) {
             data.frame(
-                KP = K_SU[[river]][[1]]$KP,
-                reach = K_SU[[river]][[1]]$reach,
-                id_river = river
+                KP = K_SU[[typology]][[1]]$KP,
+                reach = K_SU[[typology]][[1]]$reach,
+                typology = typology,
+                id_reach_SU = K_SU[[typology]][[1]]$id_reach_SU
             )
         })
     ) %>% arrange(reach)
@@ -255,6 +257,9 @@ postprocess_calibration <- function(
     Kflood_SU,
     Z_MatrixKmin,
     Z_MatrixKflood,
+    Key_Info_Typology_Model_Reach,
+    summary_SU_Kmin,
+    summary_SU_Kflood,
     mod_polynomials = NULL,
     Kmin_segment_layer = NULL,
     Kflood_segment_layer = NULL,
@@ -287,38 +292,43 @@ postprocess_calibration <- function(
     )
 
     CalData <- convert_9999_to_NA(cbind(X_input, Y_observations, Yu_observations))
+
+    summary_HM <- do.call(
+        rbind,
+        lapply(names(Key_Info_Typology_Model_Reach), function(typology) {
+            nodes_HM <- Key_Info_Typology_Model_Reach[[typology]]$Model_Reach_nodes
+            reach_HM <- unique(Key_Info_Typology_Model_Reach[[typology]]$reach)
+            # each segment is from MR_nodes[i] to MR_nodes[i+1]
+            data.frame(
+                typology = typology,
+                id_reach_HM = reach_HM
+            )
+        })
+    )
+    CalData_HM <- CalData %>%
+        left_join(summary_HM, by = c("reach" = "id_reach_HM"))
+
+    CalData_updated <- CalData_HM %>%
+        left_join(summary_SU_Kmin, by = "typology", relationship = "many-to-many") %>%
+        filter(x >= KP_min_SU & x <= KP_max_SU) %>%
+        distinct(event, reach, x, .keep_all = TRUE) %>%
+        select(-c(KP_max_SU, KP_min_SU)) %>%
+        rename(
+            id_SU_Kmin = id_SU,
+            id_reach_SU_Kmin = id_reach_SU,
+        )
+
+    CalData_updated <- CalData_updated %>%
+        left_join(summary_SU_Kflood, by = "typology", relationship = "many-to-many") %>%
+        filter(x >= KP_min_SU & x <= KP_max_SU) %>%
+        distinct(event, reach, x, .keep_all = TRUE) %>%
+        select(-c(KP_max_SU, KP_min_SU)) %>%
+        rename(
+            id_SU_Kflood = id_SU,
+            id_reach_SU_Kflood = id_reach_SU,
+        )
     # Kmin
     if (n_param_Kmin_to_estimate != 0) {
-        res_summary <- do.call(
-            rbind,
-            lapply(names(Kmin_SU), function(section_name) {
-                section <- Kmin_SU[[section_name]]
-
-                do.call(
-                    rbind,
-                    lapply(names(section), function(su_name) {
-                        SU <- section[[su_name]]
-
-                        data.frame(
-                            section = section_name,
-                            SU      = su_name,
-                            reach   = unique(SU$reach),
-                            KP_min  = tapply(SU$KP, SU$reach, min),
-                            KP_max  = tapply(SU$KP, SU$reach, max)
-                        )
-                    })
-                )
-            })
-        )
-        CalData_updated <- CalData %>%
-            left_join(res_summary, by = "reach") %>%
-            mutate(
-                match_interval = x >= KP_min & x <= KP_max,
-                reaches_SU = ifelse(match_interval, section, NA),
-                id_SU = ifelse(match_interval, SU, NA)
-            ) %>%
-            select(-c(match_interval, KP_min, KP_max, section, SU))
-
         Kmin <- compute_K(
             Z_MatrixK = Z_MatrixKmin,
             mcmc = mcmc,
