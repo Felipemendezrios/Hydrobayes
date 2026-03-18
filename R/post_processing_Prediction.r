@@ -110,6 +110,8 @@ postprocess_prediction <- function(
     Y_observations,
     Yu_observations,
     conf_level = 0.95,
+    summary_SU_Kmin,
+    summary_SU_Kflood,
     grid,
     Input_Typology,
     suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
@@ -137,10 +139,28 @@ postprocess_prediction <- function(
     colnames(all_CalData_pred)[1:ncol(grid)] <- colnames(grid)
 
     all_data <- rbind(all_data_pred, all_CalData_pred)
-    all_data$SU <- NA
+    all_data$typology <- NA
     for (i in seq_along(Input_Typology)) {
-        all_data$SU[all_data$reach %in% Input_Typology[[i]]] <- names(Input_Typology)[i]
+        all_data$typology[all_data$reach %in% Input_Typology[[i]]] <- names(Input_Typology)[i]
     }
+
+    all_data <- all_data %>%
+        left_join(summary_SU_Kmin, by = "typology", relationship = "many-to-many") %>%
+        filter(x >= KP_min_SU & x <= KP_max_SU) %>%
+        distinct(event, reach, x, t, variable, id_pred, .keep_all = TRUE) %>%
+        select(-c(KP_max_SU, KP_min_SU)) %>%
+        rename(
+            id_SU_Kmin = id_SU,
+            id_reach_SU_Kmin = id_reach_SU,
+        ) %>%
+        left_join(summary_SU_Kflood, by = "typology", relationship = "many-to-many") %>%
+        filter(x >= KP_min_SU & x <= KP_max_SU) %>%
+        distinct(event, reach, x, t, variable, id_pred, .keep_all = TRUE) %>%
+        select(-c(KP_max_SU, KP_min_SU)) %>%
+        rename(
+            id_SU_Kflood = id_SU,
+            id_reach_SU_Kflood = id_reach_SU,
+        )
 
     # Get actual levels present in the data
     present_levels <- intersect(
@@ -167,6 +187,7 @@ postprocess_prediction <- function(
         # Flag to indicate if calibration data is presented of each output variable to plot total or parametric uncertainty. Particular case for Kmin and Kflood, they are not really structural error model, but only parametric.
         any_obs_Y <- any(!is.na(convert_9999_to_NA(Y_observations[i])) & !colnames(Y_observations)[i] %in% c("Kmin", "Kflood"))
 
+
         all_data_output <- all_data %>%
             # Get information of each output
             filter(variable == clean_suffix_patterns[i]) %>%
@@ -180,6 +201,7 @@ postprocess_prediction <- function(
         plot_unc_by_SU <- plot_obs_sim_unc(
             data_output_var = all_data_output,
             any_obs_Y = any_obs_Y,
+            col_Y_obs = colnames(Y_observations)[i],
             wrap = "event_SU"
         )
 
@@ -213,6 +235,7 @@ postprocess_prediction <- function(
         plot_unc_by_reach <- plot_obs_sim_unc(
             data_output_var = all_data_output,
             any_obs_Y = any_obs_Y,
+            col_Y_obs = colnames(Y_observations)[i],
             wrap = "event_reach_HM"
         )
         plot_unc_by_reach <- plot_unc_by_reach +
@@ -268,6 +291,7 @@ postprocess_prediction <- function(
         plot_unc_res_by_SU <- plot_obs_sim_unc(
             data_output_var = var_output_data_res,
             any_obs_Y = any_obs_Y,
+            col_Y_obs = colnames(Y_observations)[i],
             wrap = "event_SU"
         )
 
@@ -305,6 +329,7 @@ postprocess_prediction <- function(
         plot_unc_res_by_reach <- plot_obs_sim_unc(
             data_output_var = var_output_data_res,
             any_obs_Y = any_obs_Y,
+            col_Y_obs = colnames(Y_observations)[i],
             wrap = "event_reach_HM"
         )
         plot_unc_res_by_reach <- plot_unc_res_by_reach +
