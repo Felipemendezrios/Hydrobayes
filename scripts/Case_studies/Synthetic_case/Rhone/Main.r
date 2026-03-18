@@ -52,18 +52,19 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_u_high: all CalData has high unc, prior KMIN is overall distributed
 
 Experiment_id <- c(
-    "2_WSE_u_low"
-    # "2_WSE_u_high"
+    # "2_WSE_u_low" # Calibration done n=5 + piecewise
+    "2_WSE_u_high" # Calibration done n=2 + piecewise in process n=3
 )
 
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
-    # "Kmin_n_0.r",
+    "Kmin_n_0.r",
     "Kmin_n_1.r",
     "Kmin_n_2.r",
     "Kmin_n_3.r",
-    "Kmin_n_4.r",
+    # "Kmin_n_4.r",
     "Piecewise_Kmin_n_0.r"
+    # "Piecewise_Kmin_n_0_Q0.r"
 )
 
 
@@ -107,8 +108,8 @@ Input_Model_Reach <- data.frame(
 
 # Must be careful with the order of the reaches, it must be given upstream to downstream
 Input_Typology <- list(
-    Main_Reach = c(1, 2),
-    Tributary = c(3)
+    MR = c(1, 2),
+    TR = c(3)
 )
 
 ############################################
@@ -435,7 +436,7 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
-list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list()
+list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list_summary_SU_Kflood <- list_summary_SU_Kmin <- list()
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -492,6 +493,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
     list_Kmin_SU[[id_cal_case]] <- results_estimation$Kmin_SU
     list_Kflood_SU[[id_cal_case]] <- results_estimation$Kflood_SU
     list_mod_polynomials[[id_cal_case]] <- results_estimation$mod
+    list_summary_SU_Kmin[[id_cal_case]] <- results_estimation$summary_SU_Kmin
+    list_summary_SU_Kflood[[id_cal_case]] <- results_estimation$summary_SU_Kflood
 }
 
 # Plot DIC
@@ -532,7 +535,7 @@ Kmin_literature <- data.frame(
     x_start = Real_Ks_simulated$KP_start,
     x_end = Real_Ks_simulated$KP_end,
     mean_value = Real_Ks_simulated$Kmin,
-    reaches_SU = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 2, "MR", "TR")
+    typology = ifelse(Real_Ks_simulated$id_reach == 1 | Real_Ks_simulated$id_reach == 2, "MR", "TR")
 )
 
 Kmin_segment_layer <- segment_layer_reference(
@@ -578,6 +581,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
         Yu_observations = Yu,
         type = "dx",
         final_calibration = final_calibration,
+        Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
+        summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
+        summary_SU_Kflood = list_summary_SU_Kflood[[id_cal_case]],
         Kmin_prior = list_Kmin_prior[[id_cal_case]],
         Kflood_prior = list_Kflood_prior[[id_cal_case]],
         Kmin_SU = list_Kmin_SU[[id_cal_case]],
@@ -596,17 +602,20 @@ for (id_cal_case in 1:length(all_cal_case)) {
     plot_Kmin_without_obs <- results_postprocess$plots_param$Kmin$plot_without_obs
 
     plot_Kmin_with_obs <- results_postprocess$plots_param$Kmin$plot_with_obs
+
     if (any(!is.na(CalData_updated[, c("Kmin")]))) {
-        plot_Kmin_with_obs <- plot_Kmin_with_obs +
+        plot_Kmin_with_obs <-
+            plot_Kmin_with_obs +
             geom_point(
                 data = CalData_updated,
-                aes(x = x, y = Kmin, col = "Pseudo \nobs"),
-                alpha = 0.3
+                aes(x = x, y = Kmin, col = "Pseudo \nobs", group = id_reach_SU_Kmin),
+                alpha = 0.2
+                # inherit.aes = FALSE
             ) +
             geom_errorbar(
                 data = CalData_updated,
-                aes(x = x, ymin = Kmin - 1.96 * Yu_Kmin, ymax = Kmin + 1.96 * Yu_Kmin, col = "Pseudo \nobs"),
-                alpha = 0.3
+                aes(x = x, ymin = Kmin - 1.96 * Yu_Kmin, ymax = Kmin + 1.96 * Yu_Kmin, col = "Pseudo \nobs", group = id_reach_SU_Kmin),
+                alpha = 0.2
             ) +
             scale_color_manual(values = c(
                 "MAP" = "black",
@@ -619,9 +628,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
     if (any(!is.na(CalData_updated[, c("Kflood")]))) {
         plot_Kflood_with_obs <- plot_Kflood_with_obs +
             geom_point(
-                data = CalData_updated, aes(x = x, y = Kflood, col = "Pseudo \nobs"), alpha = 0.3
+                data = CalData_updated, aes(x = x, y = Kflood, col = "Pseudo \nobs", group = "id_reach_SU_Kflood"), alpha = 0.2,
             ) +
-            geom_errorbar(data = CalData_updated, aes(x = x, ymin = Kflood - 1.96 * Yu_Kflood, ymax = Kflood + 1.96 * Yu_Kflood, col = "Pseudo \nobs"), alpha = 0.3) +
+            geom_errorbar(data = CalData_updated, aes(x = x, ymin = Kflood - 1.96 * Yu_Kflood, ymax = Kflood + 1.96 * Yu_Kflood, col = "Pseudo \nobs", group = "id_reach_SU_Kflood"), alpha = 0.2) +
             scale_color_manual(values = c(
                 "MAP" = "black",
                 "Pseudo \nobs" = "blue"
@@ -679,7 +688,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
                 plots_MAP_output_variables[[1]] +
                 geom_point(
                     data = real_synt_data,
-                    aes(x = KP, y = WSE_real_obs, col = "synthetic data"), alpha = 0.7, shape = 2
+                    aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), alpha = 0.7, shape = 2
                 ) +
                 scale_color_manual(
                     values =
@@ -738,9 +747,9 @@ info_events_reaches <- list(
         type = "ZdX",
         SU1 = data.frame(
             event = c(1),
-            reach = c(1, 3),
-            xmin = c(0, 18),
-            xmax = c(18, 25),
+            reach = c(1, 2),
+            xmin = c(55900, 34500),
+            xmax = c(34500, 26750),
             tmin = c(10800, 10800),
             tmax = c(10800, 10800),
             nb_discretization = c(100, 100)
@@ -751,9 +760,9 @@ info_events_reaches <- list(
         type = "ZdX",
         SU2 = data.frame(
             event = c(2),
-            reach = c(2),
-            xmin = (0),
-            xmax = c(20),
+            reach = c(3),
+            xmin = (19330),
+            xmax = c(202),
             tmin = c(10800),
             tmax = c(10800),
             nb_discretization = c(100)
@@ -850,6 +859,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         Y_observations = Y,
         Yu_observations = Yu,
         conf_level = 0.95,
+        summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
+        summary_SU_Kflood = list_summary_SU_Kflood[[id_cal_case]],
         grid = X_pred_grid[[id_cal_case]],
         Input_Typology = Input_Typology,
         suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
