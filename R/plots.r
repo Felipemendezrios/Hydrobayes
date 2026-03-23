@@ -391,7 +391,7 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
     plot <- list()
     for (i in 1:n_Y) {
         plot[[i]] <- base_plot + labs(
-            title = paste0("Variable Y", i),
+            title = paste0("MAP Simulation : Variable Y", i),
             x = type,
             y = paste0("Y", i)
         )
@@ -413,7 +413,7 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
                 geom_point(aes(
                     y = .data[[obs_col]],
                     color = "obs"
-                ), size = 2)
+                ), alpha = 0.2)
         }
 
         # simulations
@@ -434,11 +434,16 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
                         ymax = .data[[obs_col]] + qnorm(0.975) * .data[[yu_col]],
                         color = "obs"
                     ),
-                    width = 0.2
+                    width = 0.2, alpha = 0.2
                 )
         }
         plot[[i]] <- plot[[i]] +
-            scale_color_manual(values = c("sim" = "blue", "obs" = "red")) +
+            scale_color_manual(
+                values = c(
+                    "sim" = "black",
+                    "obs" = "blue"
+                )
+            ) +
             labs(colour = NULL) +
             facet_wrap(~X1_obs, ncol = 2, scales = "free")
     }
@@ -450,11 +455,11 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
 plot_DIC <- function(
     dir_polynomial,
     DIC_criterion = "DIC3") {
-    all_files <- list.files(
-        file.path(
-            dir_polynomial
-        ),
-        recursive = TRUE
+    all_files <- unlist(
+        lapply(dir_polynomial, list.files,
+            recursive = TRUE,
+            full.names = TRUE
+        )
     )
 
     DIC_path_Files <- all_files[grep(all_files, pattern = "Results_DIC.txt")]
@@ -463,11 +468,11 @@ plot_DIC <- function(
 
 
     for (i in 1:length(DIC_path_Files)) {
-        DIC_by_degree <- read.table(file.path(dir_polynomial, DIC_path_Files[i]), col.names = c("Criteria", "Value"))
+        DIC_by_degree <- read.table(DIC_path_Files[i], col.names = c("Criteria", "Value"))
         # Match the criterion chosen
         DIC_by_degree <- DIC_by_degree[which(DIC_by_degree[, 1] == DIC_criterion), ]
         # Assign the polynomial degree
-        extraction <- strsplit(DIC_path_Files[i], "/")[[1]][1]
+        extraction <- strsplit(DIC_path_Files[i], "/")[[1]][15]
         # # Extraire le chiffre après le underscore
         # chiffre <- sub(".*_(\\d+)", "\\1", extraction)
 
@@ -640,7 +645,7 @@ segment_layer_reference <- function(
             yend = y_value,
             linetype = line_type
         ),
-        color = "gray"
+        color = "purple"
     )
 
     return(K_segment_layer)
