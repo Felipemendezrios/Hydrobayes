@@ -86,29 +86,6 @@ WSE_synthetic_base <- rbind(data_case_1, data_case_2) %>%
     filter(time == 10800)
 
 # Perturb the simulated data to used it afterward as observations
-set.seed(2026) # reproducibility
-# High uncertainty
-WSE_synthetic_temp <- WSE_synthetic_base
-
-WSE_synthetic_temp$Yu_WSE <- 0.05
-WSE_synthetic_temp$WSE <-
-    rnorm(
-        n = nrow(WSE_synthetic_temp),
-        mean = WSE_synthetic_temp$WSE_real_obs,
-        sd = WSE_synthetic_temp$Yu_WSE
-    )
-
-library(ggplot2)
-
-ggplot(
-    WSE_synthetic_temp,
-    aes(x = KP)
-) +
-    geom_point(aes(y = WSE_real_obs, col = "real")) +
-    geom_point(aes(y = WSE, col = "perturbed")) +
-    geom_errorbar(aes(ymin = WSE - 1.96 * Yu_WSE, ymax = WSE + 1.96 * Yu_WSE, col = "perturbed")) +
-    theme_bw() +
-    facet_wrap(~ id_case + id_reach_CAL, scales = "free")
 
 # Get thalweg
 ##################################
@@ -306,72 +283,6 @@ table_Z_thalweg <- rbind(table_Z_thalweg, data.frame(
         ) %>%
         mutate(id_reach_CAL = 3)
 ))
-
-########################
-# Add the thalweg to the data
-
-WSE_synthetic_simplified <- WSE_synthetic_temp %>%
-    difference_left_join(
-        table_Z_thalweg,
-        by = c("id_reach_CAL", "KP"),
-        max_dist = 0.02
-    ) %>%
-    filter(id_reach_CAL.x == id_reach_CAL.y) %>%
-    select(-c("id_reach_CAL.y", "KP.x")) %>%
-    rename(
-        id_reach_CAL = id_reach_CAL.x,
-        KP = "KP.y"
-    )
-
-library(ggplot2)
-wse_obs_sim <- ggplot(WSE_synthetic_simplified, aes(x = KP, y = WSE)) +
-    # Calibration data
-    geom_point(aes(color = "Calibration Data")) +
-    # Real observations
-    geom_point(aes(x = KP, y = WSE_real_obs, color = "real obs")) +
-    # Error bars
-    geom_errorbar(aes(
-        ymin = WSE - 1.96 * Yu_WSE, ymax = WSE + 1.96 * Yu_WSE,
-        color = "Calibration Data"
-    )) +
-    scale_color_manual(
-        values = c(
-            "Calibration Data" = "#1b9e77",
-            "real obs" = "black",
-            "riverbed" = "brown"
-        ),
-        breaks = c("real obs", "Calibration Data", "riverbed"),
-        labels = c(
-            "Real observations",
-            "Calibration Data",
-            "Riverbed"
-        )
-    ) +
-    facet_wrap(~ id_case + id_reach_CAL,
-        scales = "free_x",
-        labeller = labeller(
-            id_case = c(
-                "100_70" = "MC 100 TR 70",
-                "120_40" = "MC 120 TR 40"
-            ),
-            reach = c(
-                "1" = "Upstream main reach",
-                "2" = "Upstream tributary reach",
-                "3" = "Downstream main reach"
-            )
-        )
-    ) +
-    labs(x = "Kilometer point (km)", y = "Water surface elevation (meters)", color = "Reach") +
-    theme_bw()
-wse_obs_sim
-
-wse_obs_sim +
-    # Riverbed
-    geom_line(aes(y = Z_thalweg, color = "riverbed"))
-
-# Save data frame
-save(WSE_synthetic_simplified, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Synthetic_case/Rhone/High_uncertainty/WSE_synthetic_Rhone.RData")
-
 
 #############################################################################
 # Low uncertainty
