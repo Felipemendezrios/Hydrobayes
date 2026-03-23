@@ -31,7 +31,7 @@ library(utils)
 
 # Logical
 do_calibration <- FALSE
-do_plot_calibration <- TRUE
+do_plot_calibration <- FALSE
 do_prediction <- FALSE
 
 
@@ -52,18 +52,26 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_u_high: all CalData has high unc, prior KMIN is overall distributed
 
 Experiment_id <- c(
-    # "2_WSE_u_low" # Calibration done n=5 + piecewise
-    "2_WSE_u_high" # Calibration done n=2 + piecewise in process n=3
+    "2_WSE_u_low" # Done
 )
 
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
-    "Kmin_n_0.r",
-    "Kmin_n_1.r",
-    "Kmin_n_2.r",
-    "Kmin_n_3.r",
+    # "Kmin_n_0.r",
+    # "Kmin_n_1.r",
+    # "Kmin_n_2.r",
+    # "Kmin_n_3.r",
     # "Kmin_n_4.r",
-    "Piecewise_Kmin_n_0.r"
+    # "Kmin_n_0_Q0.r",
+    # "Kmin_n_1_Q0.r",
+    # "Kmin_n_2_Q0.r",
+    # "Kmin_n_3_Q0.r",
+    # "Kmin_n_4_Q0.r",
+    # "Kmin_n_5_Q0.r",
+    # "Kmin_n_6_Q0.r",
+    "Kmin_n_7_Q0.r",
+    "Kmin_n_8_Q0.r"
+    # "Piecewise_Kmin_n_0.r",
     # "Piecewise_Kmin_n_0_Q0.r"
 )
 
@@ -104,7 +112,7 @@ Input_Model_Reach <- data.frame(
 
 # First layer: Typology
 # ###########################################
-# All reaches in the model (Model_Reach) defined within the same coordinate reference. Useful to separate main channel to tributary or even a diversion channel
+# All reaches in the model (Model_Reach) defined within the same coordinate reference. Useful to separate main reach to tributary or even a diversion channel
 
 # Must be careful with the order of the reaches, it must be given upstream to downstream
 Input_Typology <- list(
@@ -121,9 +129,7 @@ Input_Typology <- list(
 # Module 3: calibration data
 ############################################
 # Processed data
-if (Experiment_id %in% c("2_WSE_u_high")) {
-    load("data/processed_data/Synthetic_case/Rhone/High_uncertainty/WSE_synthetic_Rhone.RData")
-} else if (Experiment_id %in% c("2_WSE_u_low")) {
+if (Experiment_id %in% c("2_WSE_u_low")) {
     load("data/processed_data/Synthetic_case/Rhone/Low_uncertainty/WSE_synthetic_Rhone.RData")
 } else {
     stop("Experiment id in not correct")
@@ -499,7 +505,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
 # Plot DIC
 if (do_plot_calibration) {
-    plotDIC <- plot_DIC(path_experiment)
+    plotDIC <- plot_DIC(dir_polynomial = c(file.path(
+        path_experiment, sub("\\.r$", "", all_cal_case)
+    )))
     ggsave(
         file.path(
             path_experiment,
@@ -688,14 +696,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
                 plots_MAP_output_variables[[1]] +
                 geom_point(
                     data = real_synt_data,
-                    aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), alpha = 0.7, shape = 2
+                    aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), shape = 2
                 ) +
                 scale_color_manual(
                     values =
                         c(
-                            "sim" = "blue",
-                            "obs" = "red",
-                            "synthetic data" = "black"
+                            "sim" = "black",
+                            "obs" = "blue",
+                            "synthetic data" = "purple"
                         )
                 ) +
                 facet_wrap(
