@@ -20,9 +20,11 @@ scripts/Case_studies/Synthetic_case/Rectangular_MC/PamHyr/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Synthese.html
 
-scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/
-scripts/Case_studies/Synthetic_case/Rhone/PamHyr
-scripts/Case_studies/Synthetic_case/Rhone/Synthese_backup.html
+scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low
+scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_K_Legendre
+scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/Backup
+scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Piecewise/
+scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Legendre/
 scripts/Case_studies/Synthetic_case/Rhone/Synthese.html
 
 scripts/Backup/
@@ -40,7 +42,7 @@ data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_dz_Rhone.png
 data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_width_AIN.png
 data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_width_Rhone.png
 data/data-raw/Synthetic_case/Rhone/Local_files/
-data/data-raw/Synthetic_case/Rhone/Calibration/
-data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/
+data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/
+data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/
 
 nohup.out
