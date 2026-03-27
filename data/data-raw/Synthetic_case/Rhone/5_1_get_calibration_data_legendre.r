@@ -4,7 +4,7 @@ graphics.off()
 library(dplyr)
 library(fuzzyjoin)
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/extraction_sim")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/extraction_sim")
 
 case_1 <- c("Rhone_synt_Ev_1")
 case_2 <- c("Rhone_synt_Ev_2")
@@ -91,7 +91,7 @@ WSE_synthetic_base <- rbind(data_case_1, data_case_2) %>%
 ##################################
 ## MAIN REACH UPSTREAM
 ##################################
-file_bathy <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/PamHYR_synthetic/_PAMHYR_/Rhone_synt_Ev_1/default-mage/net/"
+file_bathy <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/PamHYR_synthetic_legendre/_PAMHYR_/Rhone_synt_Ev_1/default-mage/net/"
 Bathy_ST1 <- readLines(file.path(file_bathy, "Reach_001.ST"))
 Bathy_ST1 <- Bathy_ST1[-1]
 
@@ -374,4 +374,4 @@ wse_obs_sim +
     geom_line(aes(y = Z_thalweg, color = "riverbed"))
 
 # Save data frame
-save(WSE_synthetic_simplified, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Synthetic_case/Rhone/piecewise/WSE_synthetic_Rhone.RData")
+save(WSE_synthetic_simplified, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Synthetic_case/Rhone/Legendre/WSE_synthetic_Rhone.RData")

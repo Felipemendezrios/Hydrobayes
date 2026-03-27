@@ -4,8 +4,15 @@ import numpy as np
 import sys
 import shutil
 
-# Base path
-path = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/_PAMHYR_/"
+do_piecewise = False
+
+if do_piecewise:
+    # Base path
+    path = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/PamHYR_synthetic/_PAMHYR_/"
+    output_path = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/extraction_sim/"
+else:
+    path = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/PamHYR_synthetic_legendre/_PAMHYR_/"
+    output_path = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/extraction_sim/"
 
 mes_variables = ["Z"]
 mes_derive = "X"
@@ -52,13 +59,7 @@ for mes_case in mes_case_options:
         os.chdir(workdir)
 
         # Destination path
-        path_destination = (
-            str(
-                "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Calibration/extraction_sim/"
-            )
-            + str(mes_case)
-            + str("/")
-        )
+        path_destination = str(output_path) + str(mes_case) + str("/")
         # Create destination directory if it doesn't exist
         os.makedirs(path_destination, exist_ok=True)
 

@@ -124,7 +124,7 @@ for (i in seq_along(points_cross_sections)) {
 
 
 # File path for output
-file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/ST_created/Rhone_basic.ST"
+file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/ST_created/Rhone_basic.ST"
 
 # Open the file for writing
 file_conn <- file(file_path, open = "wt")
@@ -216,7 +216,7 @@ colnames(df) <- c("X", "Y", "Z", "Label")[1:ncol(df)]
 
 head(df)
 
-write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/ST_created/extraction_XYZ_Rhone.csv", row.names = FALSE, col.names = TRUE, sep = ";")
+write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/ST_created/extraction_XYZ_Rhone.csv", row.names = FALSE, col.names = TRUE, sep = ";")
 
 
 #######################
@@ -324,7 +324,7 @@ for (i in seq_along(points_cross_sections)) {
 
 
 # File path for output
-file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/ST_created/AIN_basic.ST"
+file_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/ST_created/AIN_basic.ST"
 
 # Open the file for writing
 file_conn <- file(file_path, open = "wt")
@@ -409,4 +409,4 @@ colnames(df) <- c("X", "Y", "Z", "Label")[1:ncol(df)]
 
 head(df)
 
-write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHYR_synthetic/ST_created/extraction_XYZ_AIN.csv", row.names = FALSE, col.names = TRUE, sep = ";")
+write.table(df, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/Local_files/ST_created/extraction_XYZ_AIN.csv", row.names = FALSE, col.names = TRUE, sep = ";")

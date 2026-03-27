@@ -71,7 +71,7 @@ for (i in seq_along(Key_Info_XR_MR)) {
     # Grid from interpolation passing by MR_nodes
     # KP_MR_nodes is defined by XR
     KP_MR_nodes <- interpolation_specific_points(
-        total_points = 20,
+        total_points = 15,
         specific_nodes = MR_nodes
     )
 
@@ -114,8 +114,8 @@ for (i in seq_along(Key_Info_XR_MR)) {
 
 ##########
 kmin_spat <- list(
-    MR = c(40, 30, 21),
-    TR = c(31, 24)
+    MR = c(35, -0.5, 4, 3),
+    TR = c(30, -1.1, -3, 3.5)
 )
 
 kflood_spat <- list(
@@ -124,20 +124,24 @@ kflood_spat <- list(
 )
 
 
-toto <- list()
-toto[[1]] <- getCovariate_piecewise(
-    KP_grid = Key_Info_XR_MR[[1]]$KP_grid,
-    shiftPoints = c(47000, 34500)
-)
+# toto <- list()
+# toto[[1]] <- getCovariate_piecewise(
+#     KP_grid = Key_Info_XR_MR[[1]]$KP_grid,
+#     shiftPoints = c(47000, 34500)
+# )
 
-toto[[2]] <- getCovariate_piecewise(
-    KP_grid = Key_Info_XR_MR[[2]]$KP_grid,
-    shiftPoints = c(12500)
-)
+# toto[[2]] <- getCovariate_piecewise(
+#     KP_grid = Key_Info_XR_MR[[2]]$KP_grid,
+#     shiftPoints = c(12500)
+# )
 
 HM_Ks_results <- spatialisation_results <- list()
 for (i in 1:length(Key_Info_XR_MR)) {
-    Z <- toto[[i]]
+    Z <- getCovariate_Legendre(
+        max_polynomial_degree = 3,
+        covariate_discretization = Key_Info_XR_MR[[i]]$KP_grid
+    )
+
     Zflood <- getCovariate_Legendre(
         max_polynomial_degree = 0,
         covariate_discretization = Key_Info_XR_MR[[i]]$KP_grid
@@ -158,7 +162,7 @@ for (i in 1:length(Key_Info_XR_MR)) {
         K_covariate = Key_Info_XR_MR[[i]]$KP_grid
     )
     # # SU:
-    # RUG_path <- paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/RUGFiles/RUGFile_spatialized_SU_", i, ".RUG")
+    # RUG_path <- paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/RUGFiles/RUGFile_spatialized_SU_", i, ".RUG")
 
     # write_RUGFile(
     #     RUG_path = RUG_path,
@@ -167,7 +171,7 @@ for (i in 1:length(Key_Info_XR_MR)) {
     # )
 
     # MAGE:
-    RUG_path_HM <- paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/RUGFiles/RUGFile_spatialized_SU_by_HM_reach_", i, ".RUG")
+    RUG_path_HM <- paste0("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/RUGFiles/RUGFile_spatialized_SU_by_HM_reach_", i, ".RUG")
 
     HM_Ks_results[[i]] <- data.frame(
         id_reach = Key_Info_XR_MR[[i]]$RUGFile$id_reach,
@@ -187,7 +191,7 @@ for (i in 1:length(Key_Info_XR_MR)) {
 
 RUGFile_data <- do.call(rbind, spatialisation_results)
 
-RUG_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/RUGFiles/RUGFile_spatialized_SU.RUG"
+RUG_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/RUGFiles/RUGFile_spatialized_SU.RUG"
 
 
 write_RUGFile(
@@ -199,7 +203,7 @@ write_RUGFile(
 
 RUGFile_data <- do.call(rbind, HM_Ks_results)
 
-RUG_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/Calibration/RUGFiles/RUGFile_spatialized_HM.RUG"
+RUG_path <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/Calibration/RUGFiles/RUGFile_spatialized_HM.RUG"
 
 
 write_RUGFile(
