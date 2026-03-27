@@ -454,6 +454,7 @@ plot_obs_sim_MAP <- function(all_obs_simulations, type) {
 
 plot_DIC <- function(
     dir_polynomial,
+    case_levels = NULL,
     DIC_criterion = "DIC3") {
     all_files <- unlist(
         lapply(dir_polynomial, list.files,
@@ -472,7 +473,8 @@ plot_DIC <- function(
         # Match the criterion chosen
         DIC_by_degree <- DIC_by_degree[which(DIC_by_degree[, 1] == DIC_criterion), ]
         # Assign the polynomial degree
-        extraction <- strsplit(DIC_path_Files[i], "/")[[1]][15]
+        split_path <- strsplit(DIC_path_Files[i], "/")[[1]]
+        extraction <- split_path[length(split_path) - 2]
         # # Extraire le chiffre après le underscore
         # chiffre <- sub(".*_(\\d+)", "\\1", extraction)
 
@@ -491,6 +493,9 @@ plot_DIC <- function(
     # if (!all(str_detect(DIC_results$case, "Kflood_n_"))) {
     #     stop("Erreur : certaines lignes n'ont pas 'Kflood_n_' !")
     # }
+    if (!is.null(case_levels)) {
+        DIC_results$case <- factor(DIC_results$case, levels = case_levels)
+    }
 
     DIC_plot <- ggplot(DIC_results, aes(x = factor(case), y = Value, col = factor(Criteria))) +
         geom_point(size = 3) +
