@@ -2,7 +2,7 @@ rm(list = ls())
 graphics.off()
 
 # Set directory (root of the repository)
-dir_workspace <- here::here()
+dir_workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/"
 setwd(dir_workspace)
 
 function_list <- list.files("R", full.names = TRUE)
@@ -52,7 +52,8 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_u_high: all CalData has high unc, prior KMIN is overall distributed
 
 Experiment_id <- c(
-    "2_WSE_u_low" # Done
+    # "2_WSE_u_low" # Piecewise spatial friction
+    "2_WSE_K_Legendre" # Legendre spatial friction
 )
 
 # Experiments input data to be used during calibration setting
@@ -62,15 +63,18 @@ all_cal_case <- c(
     # "Kmin_n_2.r",
     # "Kmin_n_3.r",
     # "Kmin_n_4.r",
-    # "Kmin_n_0_Q0.r",
-    # "Kmin_n_1_Q0.r",
-    # "Kmin_n_2_Q0.r",
-    # "Kmin_n_3_Q0.r",
-    # "Kmin_n_4_Q0.r",
-    # "Kmin_n_5_Q0.r",
+
+    "Kmin_n_0_Q0.r",
+    "Kmin_n_1_Q0.r",
+    "Kmin_n_2_Q0.r",
+    "Kmin_n_3_Q0.r",
+    "Kmin_n_4_Q0.r",
+    "Kmin_n_5_Q0.r"
+
     # "Kmin_n_6_Q0.r",
-    "Kmin_n_7_Q0.r",
-    "Kmin_n_8_Q0.r"
+    # "Kmin_n_7_Q0.r",
+    # "Kmin_n_8_Q0.r",
+    # "Kmin_n_7_Kmin_3_Q0.r"
     # "Piecewise_Kmin_n_0.r",
     # "Piecewise_Kmin_n_0_Q0.r"
 )
@@ -85,7 +89,14 @@ all_events <- c(
 
 command_line_MAGE <- ""
 file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments")
-MAGE_main_folder <- file.path(dir_workspace, "scripts/Case_studies/Synthetic_case/Rhone/model_mage")
+if (Experiment_id == "2_WSE_u_low") {
+    folder_mage_base <- "model_mage_Piecewise"
+} else if (Experiment_id == "2_WSE_K_Legendre") {
+    folder_mage_base <- "model_mage_Legendre"
+} else {
+    stop("Experiment_id does not exist")
+}
+MAGE_main_folder <- file.path(dir_workspace, "scripts/Case_studies/Synthetic_case/Rhone", folder_mage_base)
 mage_projet_name <- "Rhone_synt"
 
 
@@ -130,7 +141,9 @@ Input_Typology <- list(
 ############################################
 # Processed data
 if (Experiment_id %in% c("2_WSE_u_low")) {
-    load("data/processed_data/Synthetic_case/Rhone/Low_uncertainty/WSE_synthetic_Rhone.RData")
+    load("data/processed_data/Synthetic_case/Rhone/piecewise/WSE_synthetic_Rhone.RData")
+} else if (Experiment_id %in% c("2_WSE_K_Legendre")) {
+    load("data/processed_data/Synthetic_case/Rhone/Legendre/WSE_synthetic_Rhone.RData")
 } else {
     stop("Experiment id in not correct")
 }
@@ -489,6 +502,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         system2(
             "nohup",
             args = c("bash", script_path),
+            stdout = FALSE,
+            stderr = FALSE,
             wait = FALSE
         )
     }
@@ -532,7 +547,13 @@ if (do_plot_calibration) {
 ###############
 # Theoretical values
 ####################
-file_RUGFILE_synt_obs <- "data/processed_data/Synthetic_case/Rhone/TRUE_RUGFile.RUG"
+if (Experiment_id %in% c("2_WSE_u_low")) {
+    file_RUGFILE_synt_obs <- "data/processed_data/Synthetic_case/Rhone/piecewise/TRUE_RUGFile.RUG"
+} else if (Experiment_id %in% c("2_WSE_K_Legendre")) {
+    file_RUGFILE_synt_obs <- "data/processed_data/Synthetic_case/Rhone/Legendre/TRUE_RUGFile.RUG"
+} else {
+    stop("Experiment id in not correct")
+}
 Real_Ks_simulated <- read_fortran_data(
     file_path = file_RUGFILE_synt_obs,
     col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
@@ -816,7 +837,11 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
         script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
         # write the bash script
-        lines <- c("#!/bin/bash", "") # start with bash header
+        lines <- c(
+            "#!/bin/bash", # start with bash header
+            "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
+            ""
+        )
 
         for (cf in cf_file) {
             # add a line for each BaM run
