@@ -1,0 +1,16 @@
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low/Kmin_n_2_Q0/BaM/X1.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low/Kmin_n_2_Q0/BaM/X2.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low/Kmin_n_2_Q0/BaM/X3.pred","/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low/Kmin_n_2_Q0/BaM/X4.pred" ! Files containing spaghettis for each input variable (size nX)
+489                                                        ! Nobs, number of observations per spaghetti (common to all files!)
+1,1,1,1                                                    ! Nspag, number of spaghettis for each input variable (size nX)
+.true.                                                     ! Propagate parametric uncertainty?
+.true.,.true.,.true.,.true.,.true.                         ! Propagate remnant uncertainty for each output variable? (size nY)
+-1                                                         ! Nsim[prior]. If <=0: posterior sampling (nsim is given by mcmc sample); if >0: sample nsim replicates from prior distribution
+"TotalU_WSE.spag","TotalU_Q.spag","TotalU_V.spag","TotalU_Kmin.spag","TotalU_Kflood.spag" ! Files containing spaghettis for each output variable (size nY)
+.true.,.true.,.true.,.true.,.true.                         ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nY)
+.true.,.true.,.true.,.true.,.true.                         ! Post-processing: create envelops? (size nY)
+"TotalU_WSE.env","TotalU_Q.env","TotalU_V.env","TotalU_Kmin.env","TotalU_Kflood.env" ! Post-processing: name of envelop files (size nY)
+.true.                                                     ! Print progress in console during computations?
+.false.                                                    ! Do state prediction? (size nState)
+                                                           !  Files containing spaghettis for each state variable (size nState)
+                                                           ! Post-processing: transpose spag file (so that each column is a spaghetti)? (size nState)
+.false.                                                    ! Post-processing: create envelops? (size nState)
+                                                           ! Post-processing: name of envelop files (size nState)
