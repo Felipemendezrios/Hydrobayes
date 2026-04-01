@@ -52,8 +52,9 @@ threshold_jump_MCMC_error_model <- 0.5
 # 2_WSE_u_high: all CalData has high unc, prior KMIN is overall distributed
 
 Experiment_id <- c(
-    # "2_WSE_u_low" # Piecewise spatial friction
-    "2_WSE_K_Legendre" # Legendre spatial friction
+    # "2_WSE_u_low" # Piecewise spatial friction: 2 obs: 1 WSE by SU
+    "4_WSE_u_low" # Piecewise spatial friction: 4 obs: 2 WSE by SU
+    # "2_WSE_K_Legendre" # Legendre spatial friction
 )
 
 # Experiments input data to be used during calibration setting
@@ -64,17 +65,16 @@ all_cal_case <- c(
     # "Kmin_n_3.r",
     # "Kmin_n_4.r",
 
-    "Kmin_n_0_Q0.r",
-    "Kmin_n_1_Q0.r",
-    "Kmin_n_2_Q0.r",
+    # "Kmin_n_0_Q0.r",
+    # "Kmin_n_1_Q0.r",
+    # "Kmin_n_2_Q0.r",
     "Kmin_n_3_Q0.r",
     "Kmin_n_4_Q0.r",
-    "Kmin_n_5_Q0.r"
-
-    # "Kmin_n_6_Q0.r",
-    # "Kmin_n_7_Q0.r",
-    # "Kmin_n_8_Q0.r",
-    # "Kmin_n_7_Kmin_3_Q0.r"
+    "Kmin_n_5_Q0.r",
+    "Kmin_n_6_Q0.r",
+    "Kmin_n_7_Q0.r",
+    "Kmin_n_8_Q0.r",
+    "Kmin_n_7_Kmin_3_Q0.r"
     # "Piecewise_Kmin_n_0.r",
     # "Piecewise_Kmin_n_0_Q0.r"
 )
@@ -89,7 +89,7 @@ all_events <- c(
 
 command_line_MAGE <- ""
 file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments")
-if (Experiment_id == "2_WSE_u_low") {
+if (Experiment_id %in% c("2_WSE_u_low", "4_WSE_u_low")) {
     folder_mage_base <- "model_mage_Piecewise"
 } else if (Experiment_id == "2_WSE_K_Legendre") {
     folder_mage_base <- "model_mage_Legendre"
@@ -140,7 +140,7 @@ Input_Typology <- list(
 # Module 3: calibration data
 ############################################
 # Processed data
-if (Experiment_id %in% c("2_WSE_u_low")) {
+if (Experiment_id %in% c("2_WSE_u_low", "4_WSE_u_low")) {
     load("data/processed_data/Synthetic_case/Rhone/piecewise/WSE_synthetic_Rhone.RData")
 } else if (Experiment_id %in% c("2_WSE_K_Legendre")) {
     load("data/processed_data/Synthetic_case/Rhone/Legendre/WSE_synthetic_Rhone.RData")
@@ -152,137 +152,300 @@ if (Experiment_id %in% c("2_WSE_u_low")) {
 # Measurements for calibration by event!
 
 # Read key information of event
-#####################################################################
-# Event 1: WSE in the main reach 5 m3/s
-#####################################################################
+
+if (Experiment_id %in% c("2_WSE_u_low", "2_WSE_K_Legendre")) {
+    id_case_obs <- list(
+        obs_1 = data.frame(event = "Rhone_synt_Ev_1", reaches_typology = "MR"),
+        obs_2 = data.frame(event = "Rhone_synt_Ev_2", reaches_typology = "TR")
+    )
+    #####################################################################
+    # Event 1: Q(MR) = 143 m3/s Q(TR) = 4.4 m3/s
+    #####################################################################
+    idx_obs <- 1
+    WSE_synthetic_simplified_raw_obs_1 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 1,
+            name_event = "Ev_1"
+        )
+
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_1,
+        event = all_events[1] # Manual modification to check
+    )
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_1 <- WSE_synthetic_simplified_raw_obs_1 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.8) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
 
 
-WSE_synthetic_simplified_raw_event_1 <- WSE_synthetic_simplified %>%
-    filter(id_case == "Rhone_synt_Ev_1", id_reach_CAL %in% Input_Typology[[1]]) %>%
-    mutate(
-        id_reach = case_when(
-            id_reach_CAL == 1 ~ "Main reach upstream",
-            id_reach_CAL == 2 ~ "Main reach downstream",
-            id_reach_CAL == 3 ~ "Tributary"
-        ),
-        event = 1,
-        name_event = "Ev_1"
+    WSE_obs_1 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_1,
+        All_observations = WSE_synthetic_simplified_raw_obs_1
     )
 
-check_simulation_time(
-    MAGE_main_folder = MAGE_main_folder,
-    mage_projet_name = mage_projet_name,
-    Observations = WSE_synthetic_simplified_raw_event_1,
-    event = all_events[1]
-)
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set
-WSE_synthetic_simplified_Cal_event_1 <- WSE_synthetic_simplified_raw_event_1 %>%
-    group_by(id_reach_CAL) %>%
-    # slice_sample(prop = 0.8) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
-    mutate(Reach_groupped_Cal = NA_character_)
+    CalData_obs_1 <- WSE_obs_1 %>% filter(set == "calibration")
 
+    #####################################################################
+    # Event 2: Q(MR) = 219 m3/s Q(TR) = 20 m3/s
+    #####################################################################
+    idx_obs <- 2
+    WSE_synthetic_simplified_raw_obs_2 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 2,
+            name_event = "Ev_2"
+        )
+    #################################
 
-WSE_Event_1 <- assign_calibration_and_validation_data(
-    Input_Typology = Input_Typology,
-    Input_Model_Reach = Input_Model_Reach,
-    CalData = WSE_synthetic_simplified_Cal_event_1,
-    All_observations = WSE_synthetic_simplified_raw_event_1
-)
-
-CalData_event_1 <- WSE_Event_1 %>% filter(set == "calibration")
-
-ggplot(WSE_Event_1, aes(x = KP, y = WSE, col = set)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu_WSE,
-        ymax = WSE + qnorm(0.975) * Yu_WSE
-    )) +
-    facet_wrap(~id_reach_CAL)
-
-ggplot(WSE_Event_1, aes(x = KP, y = WSE, col = factor(id_reach_CAL))) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu_WSE,
-        ymax = WSE + qnorm(0.975) * Yu_WSE
-    ))
-
-
-
-#####################################################################
-# Event 2: WSE in the tributary
-#####################################################################
-
-WSE_synthetic_simplified_raw_event_2 <- WSE_synthetic_simplified %>%
-    filter(id_case == "Rhone_synt_Ev_2", id_reach_CAL %in% Input_Typology[[2]]) %>%
-    mutate(
-        id_reach = case_when(
-            id_reach_CAL == 1 ~ "Main reach upstream",
-            id_reach_CAL == 2 ~ "Main reach downstream",
-            id_reach_CAL == 3 ~ "Tributary"
-        ),
-        event = 2,
-        name_event = "Ev_2"
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_2,
+        event = all_events[2]
     )
-#################################
 
-check_simulation_time(
-    MAGE_main_folder = MAGE_main_folder,
-    mage_projet_name = mage_projet_name,
-    Observations = WSE_synthetic_simplified_raw_event_2,
-    event = all_events[2]
-)
-
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set
-WSE_synthetic_simplified_Cal_event_2 <- WSE_synthetic_simplified_raw_event_2 %>%
-    group_by(id_reach_CAL) %>%
-    # slice_sample(prop = 0.7) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
-    mutate(Reach_groupped_Cal = NA_character_)
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_2 <- WSE_synthetic_simplified_raw_obs_2 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.7) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
 
 
-WSE_Event_2 <- assign_calibration_and_validation_data(
-    Input_Typology = Input_Typology,
-    Input_Model_Reach = Input_Model_Reach,
-    CalData = WSE_synthetic_simplified_Cal_event_2,
-    All_observations = WSE_synthetic_simplified_raw_event_2
-)
+    WSE_obs_2 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_2,
+        All_observations = WSE_synthetic_simplified_raw_obs_2
+    )
 
-CalData_event_2 <- WSE_Event_2 %>% filter(set == "calibration")
+    CalData_obs_2 <- WSE_obs_2 %>% filter(set == "calibration")
 
-ggplot(WSE_Event_2, aes(x = KP, y = WSE, col = set)) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu_WSE,
-        ymax = WSE + qnorm(0.975) * Yu_WSE
-    )) +
-    facet_wrap(~id_reach_CAL)
+    # All calibration data
+    observed_data <- rbind(
+        CalData_obs_1,
+        CalData_obs_2
+    )
+} else if (Experiment_id %in% c("4_WSE_u_low")) {
+    id_case_obs <- list(
+        obs_1 = data.frame(event = "Rhone_synt_Ev_1", reaches_typology = "MR"),
+        obs_2 = data.frame(event = "Rhone_synt_Ev_1", reaches_typology = "TR"),
+        obs_3 = data.frame(event = "Rhone_synt_Ev_2", reaches_typology = "MR"),
+        obs_4 = data.frame(event = "Rhone_synt_Ev_2", reaches_typology = "TR")
+    )
+    #####################################################################
+    # Event 1: Q(MR) = 143 m3/s Q(TR) = 4.4 m3/s
+    #####################################################################
+    # First observations of Event 1
+    idx_obs <- 1
+    WSE_synthetic_simplified_raw_obs_1 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 1,
+            name_event = "Ev_1"
+        )
 
-ggplot(CalData_event_2, aes(x = KP, y = WSE, col = factor(set))) +
-    geom_point() +
-    geom_errorbar(aes(
-        ymin = WSE - qnorm(0.975) * Yu_WSE,
-        ymax = WSE + qnorm(0.975) * Yu_WSE
-    ))
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_1,
+        event = all_events[1] # Manual modification to check
+    )
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_1 <- WSE_synthetic_simplified_raw_obs_1 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.8) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
 
-# All available data
-WSE_data <- rbind(
-    WSE_Event_1,
-    WSE_Event_2
-)
-# All calibration data
-observed_data <- rbind(
-    CalData_event_1,
-    CalData_event_2
-)
+    WSE_obs_1 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_1,
+        All_observations = WSE_synthetic_simplified_raw_obs_1
+    )
+
+    CalData_obs_1 <- WSE_obs_1 %>% filter(set == "calibration")
+
+    #####################################################################
+    # Event 1: Q(MR) = 143 m3/s Q(TR) = 4.4 m3/s
+    #####################################################################
+    # Second observations of Event 1
+    idx_obs <- 2
+    WSE_synthetic_simplified_raw_obs_2 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 1,
+            name_event = "Ev_1"
+        )
+
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_2,
+        event = all_events[1]
+    )
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_2 <- WSE_synthetic_simplified_raw_obs_2 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.7) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
+
+
+    WSE_obs_2 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_2,
+        All_observations = WSE_synthetic_simplified_raw_obs_2
+    )
+
+    CalData_obs_2 <- WSE_obs_2 %>% filter(set == "calibration")
+
+    #####################################################################
+    # Event 2: Q(MR) = 219 m3/s Q(TR) = 20 m3/s
+    #####################################################################
+    # First observations of Event 2
+    idx_obs <- 3
+    WSE_synthetic_simplified_raw_obs_3 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 2,
+            name_event = "Ev_2"
+        )
+
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_3,
+        event = all_events[2]
+    )
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_3 <- WSE_synthetic_simplified_raw_obs_3 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.7) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
+
+
+    WSE_obs_3 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_3,
+        All_observations = WSE_synthetic_simplified_raw_obs_3
+    )
+
+    CalData_obs_3 <- WSE_obs_3 %>% filter(set == "calibration")
+
+    #####################################################################
+    # Event 2: Q(MR) = 219 m3/s Q(TR) = 20 m3/s
+    #####################################################################
+    # Second observations of Event 2
+    idx_obs <- 4
+    WSE_synthetic_simplified_raw_obs_4 <- WSE_synthetic_simplified %>%
+        filter(id_case == id_case_obs[[idx_obs]]$event, id_reach_CAL %in% Input_Typology[[id_case_obs[[idx_obs]]$reaches_typology]]) %>%
+        mutate(
+            id_reach = case_when(
+                id_reach_CAL == 1 ~ "Main reach upstream",
+                id_reach_CAL == 2 ~ "Main reach downstream",
+                id_reach_CAL == 3 ~ "Tributary"
+            ),
+            event = 2,
+            name_event = "Ev_2"
+        )
+
+    check_simulation_time(
+        MAGE_main_folder = MAGE_main_folder,
+        mage_projet_name = mage_projet_name,
+        Observations = WSE_synthetic_simplified_raw_obs_4,
+        event = all_events[2]
+    )
+
+    #################################
+    set.seed(2026) #  # for reproducibility
+    # 1. Calibration set
+    WSE_synthetic_simplified_Cal_obs_4 <- WSE_synthetic_simplified_raw_obs_4 %>%
+        group_by(id_reach_CAL) %>%
+        # slice_sample(prop = 0.7) %>%
+        ungroup() %>%
+        mutate(set = "calibration") %>%
+        arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
+        mutate(Reach_groupped_Cal = NA_character_)
+
+
+    WSE_obs_4 <- assign_calibration_and_validation_data(
+        Input_Typology = Input_Typology,
+        Input_Model_Reach = Input_Model_Reach,
+        CalData = WSE_synthetic_simplified_Cal_obs_4,
+        All_observations = WSE_synthetic_simplified_raw_obs_4
+    )
+
+    CalData_obs_4 <- WSE_obs_4 %>% filter(set == "calibration")
+
+    # All calibration data
+    observed_data <- rbind(
+        CalData_obs_1,
+        CalData_obs_2,
+        CalData_obs_3,
+        CalData_obs_4
+    )
+}
+
+if (idx_obs != length(id_case_obs)) stop("idx_obs is different to the id_case_obs")
 
 X <- observed_data[, c(
     "event",
@@ -333,48 +496,72 @@ if (do_plot_calibration) {
     # Customize the plot
     plots_CalData$plot_WSE <- plots_CalData$plot_WSE +
         facet_wrap(
-            ~event,
-            labeller = as_labeller(
-                c(
-                    "1" = "Event~1:~Main~reach:~discharge~of~143~m^3/s",
-                    "2" = "Event~2:~Tributary:~discharge~of~20~m^3/s"
+            ~ event + reach,
+            labeller = labeller(
+                event = as_labeller(
+                    c(
+                        "1" = "Event~1:~Q(MR):~143~m^3/s~Q(TR):~4.4~m^3/s",
+                        "2" = "Event~2:~Q(MR):~219~m^3/s~Q(TR):~20~m^3/s"
+                    ),
+                    label_parsed
                 ),
-                label_parsed
+                reach = as_labeller(c(
+                    "1" = "Reach~1:~upstream",
+                    "2" = "Reach~2:~downstream",
+                    "3" = "Reach~3:~tributary"
+                ), label_parsed)
             ),
             scales = "free",
-            ncol = 1
+            ncol = 3
         )
 
     plots_CalData$plot_Kmin <- plots_CalData$plot_Kmin +
         facet_wrap(
-            ~event,
-            labeller = as_labeller(
-                c(
-                    "1" = "Event~1:~Main~reach:~discharge~of~143~m^3/s",
-                    "2" = "Event~2:~Tributary:~discharge~of~20~m^3/s"
+            ~ event + reach,
+            labeller = labeller(
+                event = as_labeller(
+                    c(
+                        "1" = "Event~1:~Q(MR):~143~m^3/s~Q(TR):~4.4~m^3/s",
+                        "2" = "Event~2:~Q(MR):~219~m^3/s~Q(TR):~20~m^3/s"
+                    ),
+                    label_parsed
                 ),
-                label_parsed
+                reach = as_labeller(c(
+                    "1" = "Reach~1:~upstream",
+                    "2" = "Reach~2:~downstream",
+                    "3" = "Reach~3:~tributary"
+                ), label_parsed)
             ),
             scales = "free",
-            ncol = 1
+            ncol = 3
         )
 
     plots_CalData$plot_Kflood <- plots_CalData$plot_Kflood +
         facet_wrap(
-            ~event,
-            labeller = as_labeller(
-                c(
-                    "1" = "Event~1:~Main~reach:~discharge~of~143~m^3/s",
-                    "2" = "Event~2:~Tributary:~discharge~of~20~m^3/s"
+            ~ event + reach,
+            labeller = labeller(
+                event = as_labeller(
+                    c(
+                        "1" = "Event~1:~Q(MR):~143~m^3/s~Q(TR):~4.4~m^3/s",
+                        "2" = "Event~2:~Q(MR):~219~m^3/s~Q(TR):~20~m^3/s"
+                    ),
+                    label_parsed
                 ),
-                label_parsed
+                reach = as_labeller(c(
+                    "1" = "Reach~1:~upstream",
+                    "2" = "Reach~2:~downstream",
+                    "3" = "Reach~3:~tributary"
+                ), label_parsed)
             ),
             scales = "free",
-            ncol = 1
+            ncol = 3
         )
 
+    obs_adapted <- observed_data %>%
+        rename("reach" = "id_reach_CAL")
+
     plot_WSE_Thalweg <- plots_CalData$plot_WSE +
-        geom_line(data = observed_data, aes(x = KP, y = Z_thalweg), color = "black")
+        geom_line(data = obs_adapted, aes(x = KP, y = Z_thalweg), color = "black")
 
     plots_CalData$plot_WSE_Thalweg <- plot_WSE_Thalweg
 
@@ -387,7 +574,7 @@ if (do_plot_calibration) {
         if (!is.null(plot)) {
             ggsave(file.path(path_experiment, paste0(name, ".png")),
                 plot = plot,
-                width = 30,
+                width = 35,
                 height = 20,
                 units = "cm"
             )
