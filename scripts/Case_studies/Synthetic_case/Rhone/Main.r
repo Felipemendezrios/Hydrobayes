@@ -2,7 +2,7 @@ rm(list = ls())
 graphics.off()
 
 # Set directory (root of the repository)
-dir_workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/"
+dir_workspace <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git"
 setwd(dir_workspace)
 
 function_list <- list.files("R", full.names = TRUE)
