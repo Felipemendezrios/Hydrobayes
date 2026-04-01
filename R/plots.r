@@ -11,7 +11,7 @@ plot_CalData <- function(
             ggplot(data = CalData, aes(
                 x = x,
                 y = WSE,
-                col = factor(reach)
+                col = "obs"
             ))
 
         if (any(CalData$Yu_WSE != 0)) {
@@ -27,7 +27,8 @@ plot_CalData <- function(
             labs(
                 x = "Streamwise position (m)",
                 y = "Water surface elevation (m)",
-                col = "Reaches in the \nhydraulic model"
+                col = NULL,
+                title = "WSE observations"
             ) +
             theme_bw() +
             theme(
@@ -37,7 +38,7 @@ plot_CalData <- function(
 
         if (wrap) {
             plot_WSE <- plot_WSE +
-                facet_wrap(~event, scales = scales_free, ncol = 1)
+                facet_wrap(~ event + reach, scales = scales_free, ncol = 2)
         }
 
         plot_WSE <- plot_WSE +
@@ -62,7 +63,7 @@ plot_CalData <- function(
             ggplot(data = CalData, aes(
                 x = x,
                 y = Q,
-                col = factor(reach)
+                col = "obs"
             ))
 
         if (any(CalData$Yu_Q != 0)) {
@@ -81,7 +82,8 @@ plot_CalData <- function(
                     {
                         3
                     } * "/s)"),
-                col = "Reaches in the \nhydraulic model"
+                col = NULL,
+                title = "Discharge observations"
             ) +
             theme_bw() +
             theme(
@@ -90,7 +92,7 @@ plot_CalData <- function(
             )
         if (wrap) {
             plot_Q <- plot_Q +
-                facet_wrap(~event, scales = scales_free, ncol = 1)
+                facet_wrap(~ event + reach, scales = scales_free, ncol = 2)
         }
 
         plot_Q <- plot_Q +
@@ -118,7 +120,7 @@ plot_CalData <- function(
             ggplot(data = CalData, aes(
                 x = x,
                 y = V,
-                col = factor(reach)
+                col = "obs"
             ))
 
         if (any(CalData$Yu_V != 0)) {
@@ -134,7 +136,8 @@ plot_CalData <- function(
             labs(
                 x = "Streamwise position (m)",
                 y = "Velocity (m/s)",
-                col = "Reaches in the \nhydraulic model"
+                col = NULL,
+                title = "Velocity observations"
             ) +
             theme_bw() +
             theme(
@@ -143,7 +146,7 @@ plot_CalData <- function(
             )
         if (wrap) {
             plot_V <- plot_V +
-                facet_wrap(~event, scales = scales_free, ncol = 1)
+                facet_wrap(~ event + reach, scales = scales_free, ncol = 2)
         }
 
         plot_V <- plot_V +
@@ -171,7 +174,7 @@ plot_CalData <- function(
             ggplot(data = CalData, aes(
                 x = x,
                 y = Kmin,
-                col = factor(reach)
+                col = "obs"
             ))
 
         if (any(CalData$Yu_Kmin != 0)) {
@@ -190,7 +193,8 @@ plot_CalData <- function(
                     {
                         1 / 3
                     } * "/s)"),
-                col = "Reaches in the \nhydraulic model"
+                col = NULL,
+                title = "Kmin pseudo-observations"
             ) +
             theme_bw() +
             theme(
@@ -200,7 +204,7 @@ plot_CalData <- function(
 
         if (wrap) {
             plot_Kmin <- plot_Kmin +
-                facet_wrap(~event, scales = scales_free, ncol = 1)
+                facet_wrap(~ event + reach, scales = scales_free, ncol = 2)
         }
 
         plot_Kmin <- plot_Kmin +
@@ -227,7 +231,7 @@ plot_CalData <- function(
             ggplot(data = CalData, aes(
                 x = x,
                 y = Kflood,
-                col = factor(reach)
+                col = "obs"
             ))
 
         if (any(CalData$Yu_Kflood != 0)) {
@@ -246,7 +250,8 @@ plot_CalData <- function(
                     {
                         1 / 3
                     } * "/s)"),
-                col = "Reaches in the \nhydraulic model"
+                col = NULL,
+                title = "Kflood pseudo-observations"
             ) +
             theme_bw() +
             theme(
@@ -255,7 +260,7 @@ plot_CalData <- function(
             )
         if (wrap) {
             plot_Kflood <- plot_Kflood +
-                facet_wrap(~event, scales = scales_free, ncol = 1)
+                facet_wrap(~ event + reach, scales = scales_free, ncol = 2)
         }
 
         plot_Kflood <- plot_Kflood +
@@ -365,7 +370,7 @@ K_plot <- function(
             plot.title = element_text(hjust = 0.5),
             legend.title = element_text(hjust = 0.5)
         ) +
-        facet_wrap(~typology, scales = "free", ncol = 1)
+        facet_wrap(~typology, scales = "free", ncol = 2)
 
     return(list(df_MAP, K_plot, df_envelope))
 }
