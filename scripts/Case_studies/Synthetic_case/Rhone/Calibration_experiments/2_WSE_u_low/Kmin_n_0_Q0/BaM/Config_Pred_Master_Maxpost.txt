@@ -1,2 +1,0 @@
-1                                                          ! Number of prediction experiments
-"Config_Pred_Maxpost.txt"                                  ! Config file for experiment 1
