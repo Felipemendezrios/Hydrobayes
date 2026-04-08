@@ -734,7 +734,7 @@ if (do_plot_calibration) {
 ###############
 # Theoretical values
 ####################
-if (Experiment_id %in% c("2_WSE_u_low")) {
+if (Experiment_id %in% c("2_WSE_u_low", "4_WSE_u_low")) {
     file_RUGFILE_synt_obs <- "data/processed_data/Synthetic_case/Rhone/piecewise/TRUE_RUGFile.RUG"
 } else if (Experiment_id %in% c("2_WSE_K_Legendre")) {
     file_RUGFILE_synt_obs <- "data/processed_data/Synthetic_case/Rhone/Legendre/TRUE_RUGFile.RUG"
@@ -769,9 +769,9 @@ Kmin_segment_layer <- segment_layer_reference(
 synthetic_case <- TRUE
 if (synthetic_case) {
     real_synt_data <- WSE_synthetic_simplified %>%
-        mutate(X1_obs = ifelse((id_reach_CAL == 1 | id_reach_CAL == 2) & id_case == "Rhone_synt_Ev_1",
+        mutate(X1_obs = ifelse(id_case == "Rhone_synt_Ev_1",
             1,
-            ifelse((id_reach_CAL == 3) & id_case == "Rhone_synt_Ev_2", 2, NA)
+            ifelse(id_case == "Rhone_synt_Ev_2", 2, NA)
         )) %>%
         tidyr::drop_na(X1_obs)
 }
