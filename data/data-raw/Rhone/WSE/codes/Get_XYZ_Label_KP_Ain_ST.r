@@ -3,9 +3,9 @@ graphics.off()
 cat("\014")
 
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE/")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE")
 
-file_bathy_Ain <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/Case_studies/Rhone/Mage_models/Rhone_Ain_PCH/default-mage/net/"
+file_bathy_Ain <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/Local_files/modelisation/Bathy_Rhone_Ain_model/reel"
 bathymetry_Ain <- readLines(file.path(file_bathy_Ain, "Reach_014.ST"))
 bathymetry_Ain <- bathymetry_Ain[-1]
 
