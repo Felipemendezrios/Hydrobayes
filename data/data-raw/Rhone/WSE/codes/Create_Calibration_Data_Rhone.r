@@ -6,7 +6,7 @@ library(dplyr)
 library(tidyr)
 library(lubridate)
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE/")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE")
 
 observation_data <- "Lignes_deau_Rhone.csv"
 
@@ -139,8 +139,7 @@ obs_assigned_KP_model <-
     filter(!KP %in% KP_to_remove) %>%
     rename(
         id_case = ID_Cal,
-        WSE = Cote,
-        time = Date_time
+        WSE = Cote
     )
 
 ggplot(
@@ -157,7 +156,7 @@ all_WSE_Rhone <-
         obs_assigned_KP_model,
         by = "KP"
     ) %>%
-    select(profile_id, KP, Z_thalweg, id_case, WSE, time, id_reach)
+    select(profile_id, KP, Z_thalweg, id_case, WSE, Date_time, id_reach)
 
 ggplot(
     all_WSE_Rhone,

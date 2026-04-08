@@ -6,7 +6,7 @@ library(dplyr)
 library(tidyr)
 library(lubridate)
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE/")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/WSE")
 
 reach_name <- "model_ST_PCH_PGA_with_observations.csv"
 
@@ -176,7 +176,7 @@ aligned <- ref_data %>%
 aligned_filtered <- aligned %>% filter(all_within_tolerance)
 
 
-# Step 1: Create intervals ±7 days around each aligned timestamp
+# Step 1: Create intervals ±10 days around each aligned timestamp
 intervals <- aligned_filtered %>%
     mutate(
         start = Date - days(10),
@@ -242,7 +242,7 @@ obs_PCH_PGA <- data.frame(obs_reach %>%
     ) %>%
     rename(
         WSE = WSE,
-        time = Date
+        Date_time = Date
     )) %>%
     mutate(
         id_reach = "PCH_PGA"
@@ -252,7 +252,7 @@ ggplot(obs_PCH_PGA, aes(x = KP, y = WSE, col = id_case)) +
     geom_point() +
     geom_line(aes(x = KP, y = Z_thalweg))
 
-ggplot(obs_PCH_PGA, aes(x = time, y = WSE, col = id_case)) +
+ggplot(obs_PCH_PGA, aes(x = Date_time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
@@ -332,7 +332,7 @@ obs_PGA_CAIN <- data.frame(obs_reach %>%
     ) %>%
     rename(
         WSE = WSE,
-        time = Date
+        Date_time = Date
     )) %>%
     mutate(
         id_reach = "PGA_CAIN"
@@ -342,7 +342,7 @@ ggplot(obs_PGA_CAIN, aes(x = KP, y = WSE, col = id_case)) +
     geom_point() +
     geom_line(aes(x = KP, y = Z_thalweg))
 
-ggplot(obs_PGA_CAIN, aes(x = time, y = WSE, col = id_case)) +
+ggplot(obs_PGA_CAIN, aes(x = Date_time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
@@ -423,7 +423,7 @@ obs_CAIN_Confluence <- data.frame(obs_reach %>%
     ) %>%
     rename(
         WSE = WSE,
-        time = Date
+        Date_time = Date
     )) %>%
     mutate(
         id_reach = "CAIN_Confluence"
@@ -433,7 +433,7 @@ ggplot(obs_CAIN_Confluence, aes(x = KP, y = WSE, col = id_case)) +
     geom_point() +
     geom_line(aes(x = KP, y = Z_thalweg))
 
-ggplot(obs_CAIN_Confluence, aes(x = time, y = WSE, col = id_case)) +
+ggplot(obs_CAIN_Confluence, aes(x = Date_time, y = WSE, col = id_case)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
@@ -447,11 +447,12 @@ all_WSE_Ain <- rbind(
 )
 
 all_WSE_Ain <- all_WSE_Ain[-which(is.na(all_WSE_Ain$WSE)), ]
+
 ggplot(all_WSE_Ain, aes(x = KP, y = WSE, col = id_reach)) +
     geom_point() +
     facet_wrap(~id_case)
 
-ggplot(all_WSE_Ain, aes(x = time, y = WSE, col = id_reach)) +
+ggplot(all_WSE_Ain, aes(x = Date_time, y = WSE, col = id_reach)) +
     geom_point() +
     facet_wrap(~id_case, scales = "free_x")
 
