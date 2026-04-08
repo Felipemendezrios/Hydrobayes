@@ -28,7 +28,9 @@ scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Piecewise/
 scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Legendre/
 scripts/Case_studies/Synthetic_case/Rhone/Synthese.html
 
-scripts/Backup/
+/scripts/Case_studies/Durance_Thiercelin/PamHyr
+/scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01_without_rg_rd
+/scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01
 
 data/data-raw/Rhone/WSE/QGIS/
 data/data-raw/Rhone/Local_files/
@@ -46,4 +48,6 @@ data/data-raw/Synthetic_case/Rhone/Local_files/
 data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/
 data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/
 
-nohup.out
+data/data-raw/Durance_Thiercelin/PMRiver_Durance_Vincent.pamhyr.backup
+data/data-raw/Durance_Thiercelin/PMRiver_Durance_Vincent.pamhyr
+data/data-raw/Durance_Thiercelin/_PAMHYR_/PMRiver/default-mage/output
