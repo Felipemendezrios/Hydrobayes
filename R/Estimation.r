@@ -248,10 +248,23 @@ constructor_RUGFile_covariate_grid <- function(
     ########################
     # Get discretization of the covariate, same in Kmin or Kflood
     ########################
-    covariate_grid_lists <- lapply(Key_Info_Typology_Model_Reach, function(SU) {
-        SU$KP_grid
+    covariate_grid_lists <- lapply(Key_Info_Typology_Model_Reach, function(Typology) {
+        Typology$KP_grid
     })
-    covariate_grid <- data.frame(covariate = unlist(covariate_grid_lists))
+
+    # Get the reaches of the KP_grid
+    reaches_covariate_grid_lists <- lapply(Key_Info_Typology_Model_Reach, function(Typology) {
+        Typology$reach
+    })
+
+
+    KP_flat_grid <- cbind(unlist(unlist(covariate_grid_lists, recursive = FALSE)))
+    reaches_flat_grid <- cbind(unlist(unlist(reaches_covariate_grid_lists, recursive = FALSE)))
+
+    rownames(KP_flat_grid) <- rownames(reaches_flat_grid) <- NULL
+
+    covariate_grid <- data.frame(cbind(reaches_flat_grid, KP_flat_grid)) %>%
+        arrange(X1)
     rownames(covariate_grid) <- NULL
 
     ########################
