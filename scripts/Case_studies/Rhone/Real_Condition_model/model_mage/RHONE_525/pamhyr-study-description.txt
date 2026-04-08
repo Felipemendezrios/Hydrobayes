@@ -9,31 +9,28 @@ Then, from PGA to Pont Chazey (PCH), digital elevation model (DEM) was used to g
 ## Case
 WSE at Rhone: discharge 525 m/s
 
-## Simulation time period:
-2009-03-24 15:00:00 to 2009-03-24 15:00:00
-
-
 ## Date of measurements:
-2009-03-19 15:00:00	to 2009-03-29 15:00:00
-
-First measurement at 432000 seconds from the beginning of the simulation. Last measurement at 432000 seconds.
+2009-03-24 15:00:00. First and last measurements at 259200 seconds from the beginning of the simulation.
 
 # Boundary conditions:
 - All data were taken from time series available either Hydroportail or OSR.
 
 # Initial conditions:
-A first run was made with a high Strickler coefficient (smooth) overall reaches: Rhone (45) and Ain (28). Boundaries conditions (BC) are the 3rd day from the beginning of the simulations. For initial conditions, internal mage initiailization is advised, if not, try to put a pool at the beggining to have a lot of water, it is the easier way for mage.
+A first run was made with a high Strickler coefficient (smooth) overall reaches: Rhone (45) and Ain (30) until steady flow appears. Values beyond 35 for Strickler at Ain tributary will have problems with the internal initialization. Boundaries conditions (BC) are fixed at the same values of Q and Z around the measured.
+Second run has the same BC, but a low Strickler coefficient (roughness) to estimate the warn-up necessary to dissipate the internal initial conditions : Rhone (15) and Ain (15) at the same values of Q and Z estimated previously.
 
-Results of this experiment were taken as initial conditions for the next run. So, it is necessary to desactivate the internal mage initialization of the previous case. Second run has the same BC, but a low Strickler coefficient (roughness) to estimate the warn-up necessary to dissipate the initial conditions : Rhone (15) and Ain (15).
-According to the warn-up duration, first assumption need to be modified (3rd day) and maybe start earlier.
+## Warn-up time:
+IC -> smooth. End of simulation: 00:02:37:52 
 
-# Warn-up time:
-IC -> smooth -> rough: Fin de la simulation à  01:22:45:00 
+IC -> rough. End of simulation: 00:13:30:00 
 
-IC -> rough -> smooth: Fin de la simulation à  00:13:44:09,90
+## Simulation time period:
+Data from 2009-03-21 15:00:00 until 2009-03-24 15:00:00. Simulated data is from  2009-03-22 15:00:00 until 2009-03-24 15:00:00 (2 days before measurement)
 
-
-
+# Remarks to run model
+- Constant Ks on the Ain tributary cannot be higher than 30.
+- Minimal timestep: 1secs. Higher values crushes calculations.
+- Reduction factor of time to ensure convergence fixed to 5.
 
 ## Change log
 

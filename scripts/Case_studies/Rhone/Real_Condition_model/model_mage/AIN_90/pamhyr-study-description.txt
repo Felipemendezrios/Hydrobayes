@@ -5,33 +5,37 @@ Rhône bathymetry was obtained from Léa Kieffer in OSR6.
 Ain tributary was composed in two parts:
 From Port Galland (PGA) until the confluence with the Rhône, information was obtained from OSR6 with a reservoir compartment. 
 Then, from PGA to Pont Chazey (PCH), digital elevation model (DEM) was used to get the cross sections and set up the model.
+A step for checking geometry was impletemented (only for DEM part) to reduce the number of cross sections if it lead to a torrential flow.
 
 ## Case
 WSE at Ain tributary : discharge 90 m/s
 
-## Simulation time period:
-2016-04-07 11:57:47 to 2016-04-17 13:38:01
-
 ## Date of measurements:
-2016-04-12 11:57:47	to 2016-04-12 13:38:01
-First measurement at 432000 seconds from the beginning of the simulation. Last measurement at 438014 seconds.
+2016-04-12 11:57:47 to 2016-04-12 13:38:01. First measurement at 259200 seconds from the beginning of the simulation. Last measurement at 265214 seconds.
 
 # Boundary conditions:
 - All data were taken from time series available either Hydroportail or OSR.
 
 # Initial conditions:
-A first run was made with a high Strickler coefficient (smooth) overall reaches: Rhone (45) and Ain (28). Boundaries conditions (BC) are the 3rd day from the beginning of the simulations. For initial conditions, internal mage initiailization is advised, if not, try to put a pool at the beggining to have a lot of water, it is the easier way for mage.
+Mage internal initialization is required for applying the calibration method.
 
-Results of this experiment were taken as initial conditions for the next run. So, it is necessary to desactivate the internal mage initialization of the previous case. Second run has the same BC, but a low Strickler coefficient (roughness) to estimate the warn-up necessary to dissipate the initial conditions : Rhone (15) and Ain (15).
-According to the warn-up duration, first assumption need to be modified (3rd day) and maybe start earlier.
+## Time simulation:
+A first run was made with a high Strickler coefficient (smooth) overall reaches: Rhone (45) and Ain (35) until steady flow appears. Values beyond 35 for Strickler at Ain tributary will have problems with the internal initialization. Boundaries conditions (BC) are fixed at the same values of Q and Z around the measured.
 
-# Warn-up time:
-IC -> smooth -> rough
- Fin de la simulation à  01:21:50:00  
-IC -> rough -> smooth
-Fin de la simulation à  00:13:28:13,68    
+Second run has the same BC, but a low Strickler coefficient (roughness) to estimate the warn-up necessary to dissipate the internal initial conditions : Rhone (15) and Ain (15) at the same values of Q and Z estimated previously. 
 
-To reduce the simulation time, initial condition will be taken from the results (.BIN) from smooth to rough. Indeed, BIN file has the last time step of the case, so final condition in rough riverbed.
+## Warn-up time:
+IC -> smooth. End of simulation: 00:02:47:20 
+
+IC -> rough. End of simulation: 00:15:40:00 
+
+## Simulation time period:
+Data from 2016-04-09 11:57:47 until 2016-04-12 18:38:01. Simulated data is from 2016-04-10 23:57:47 until 2016-04-12 18:38:01 (1.5 days before measurement)
+
+# Remarks to run model
+- Constant Ks on the Ain tributary cannot be higher than 35.
+- Minimal timestep: 2 secs. Higher values crushes calculations.
+- Reduction factor of time to ensure convergence fixed to 5.
 
 ## Change log
 
