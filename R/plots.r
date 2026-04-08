@@ -8,7 +8,8 @@ plot_CalData <- function(
     if (any(CalData$WSE != -9999)) {
         CalData$WSE <- convert_9999_to_NA(CalData$WSE)
         plot_WSE <-
-            ggplot(data = CalData, aes(
+            ggplot(data = CalData %>%
+                filter(!is.na(WSE)), aes(
                 x = x,
                 y = WSE,
                 col = "obs"
@@ -60,7 +61,8 @@ plot_CalData <- function(
     if (any(CalData$Q != -9999)) {
         CalData$Q <- convert_9999_to_NA(CalData$Q)
         plot_Q <-
-            ggplot(data = CalData, aes(
+            ggplot(data = CalData %>%
+                filter(!is.na(Q)), aes(
                 x = x,
                 y = Q,
                 col = "obs"
@@ -117,7 +119,8 @@ plot_CalData <- function(
     if (any(CalData$V != -9999)) {
         CalData$V <- convert_9999_to_NA(CalData$V)
         plot_V <-
-            ggplot(data = CalData, aes(
+            ggplot(data = CalData %>%
+                filter(!is.na(V)), aes(
                 x = x,
                 y = V,
                 col = "obs"
@@ -171,7 +174,8 @@ plot_CalData <- function(
     if (any(CalData$Kmin != -9999)) {
         CalData$Kmin <- convert_9999_to_NA(CalData$Kmin)
         plot_Kmin <-
-            ggplot(data = CalData, aes(
+            ggplot(data = CalData %>%
+                filter(!is.na(Kmin)), aes(
                 x = x,
                 y = Kmin,
                 col = "obs"
@@ -228,7 +232,8 @@ plot_CalData <- function(
     if (any(CalData$Kflood != -9999)) {
         CalData$Kflood <- convert_9999_to_NA(CalData$Kflood)
         plot_Kflood <-
-            ggplot(data = CalData, aes(
+            ggplot(data = CalData %>%
+                filter(!is.na(Kflood)), aes(
                 x = x,
                 y = Kflood,
                 col = "obs"
