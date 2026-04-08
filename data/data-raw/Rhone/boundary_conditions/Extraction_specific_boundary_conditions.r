@@ -9,7 +9,7 @@ metadata_modified <- data.frame(
     export_name = metadata$export_name
 )
 
-setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/Boundary_conditions/Specific_boundary_conditions/")
+setwd("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Rhone/Boundary_conditions/Specific_boundary_conditions")
 
 library(data.table)
 library(ggplot2)
@@ -111,7 +111,9 @@ range_dates_measures_RHONE <- all_WSE_Rhone %>%
 range_dates_measures <- rbind(range_dates_measures_AIN, range_dates_measures_RHONE)
 
 # Add extension of the time series to warn up the model
-extension_time <- days(5)
+extension_time_before <- days(3)
+extension_time_after <- hours(1)
+
 # Range of dates searched
 range_dates_measures <- range_dates_measures %>%
     rename(
@@ -120,8 +122,8 @@ range_dates_measures <- range_dates_measures %>%
     ) %>%
     mutate(
         # id_case = as.numeric(id_case),
-        model_start = measured_start - extension_time,
-        model_end = measured_end + extension_time,
+        model_start = measured_start - extension_time_before,
+        model_end = measured_end + extension_time_after,
     ) %>%
     arrange(id_case)
 
@@ -214,7 +216,15 @@ for (name_id in names(subsets_by_id_WSE_name_case)) {
 range_dates_measures <- range_dates_measures %>%
     mutate(
         diff_start = difftime(measured_start, model_start, units = "secs"),
-        diff_end   = difftime(measured_end,model_start, units = "secs")
+        diff_end = difftime(measured_end, model_start, units = "secs"),
+        diff_model_sec = as.numeric(difftime(model_end, model_start, units = "secs")),
+        diff_model_fmt = sprintf(
+            "%03d:%02d:%02d:%02d",
+            diff_model_sec %/% (24 * 3600),
+            (diff_model_sec %% (24 * 3600)) %/% 3600,
+            (diff_model_sec %% 3600) %/% 60,
+            diff_model_sec %% 60
+        )
     )
 
 write.csv(range_dates_measures,
