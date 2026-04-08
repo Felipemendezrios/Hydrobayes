@@ -1,0 +1,46 @@
+# Rhône with Ain tributary
+
+## Bathymetry
+Rhône bathymetry was obtained from Léa Kieffer in OSR6.
+Ain tributary was composed in two parts:
+From Port Galland (PGA) until the confluence with the Rhône, information was obtained from OSR6 with a reservoir compartment. 
+Then, from PGA to Pont Chazey (PCH), digital elevation model (DEM) was used to get the cross sections and set up the model.
+
+## Case
+WSE at Rhone: discharge 525 m/s
+
+## Date of measurements:
+2009-03-24 15:00:00. First and last measurements at 259200 seconds from the beginning of the simulation.
+
+# Boundary conditions:
+- All data were taken from time series available either Hydroportail or OSR.
+
+# Initial conditions:
+A first run was made with a high Strickler coefficient (smooth) overall reaches: Rhone (45) and Ain (30) until steady flow appears. Values beyond 35 for Strickler at Ain tributary will have problems with the internal initialization. Boundaries conditions (BC) are fixed at the same values of Q and Z around the measured.
+Second run has the same BC, but a low Strickler coefficient (roughness) to estimate the warn-up necessary to dissipate the internal initial conditions : Rhone (15) and Ain (15) at the same values of Q and Z estimated previously.
+
+## Warn-up time:
+IC -> smooth. End of simulation: 00:02:37:52 
+
+IC -> rough. End of simulation: 00:13:30:00 
+
+## Simulation time period:
+Data from 2009-03-21 15:00:00 until 2009-03-24 15:00:00. Simulated data is from  2009-03-22 15:00:00 until 2009-03-24 15:00:00 (2 days before measurement)
+
+# Remarks to run model
+- Constant Ks on the Ain tributary cannot be higher than 30.
+- Minimal timestep: 1secs. Higher values crushes calculations.
+- Reduction factor of time to ensure convergence fixed to 5.
+
+## Change log
+
+2025-07-16: Création du modèle
+
+---
+
+## Copyright
+
+© Dorian Hernandez - 2025 - INRAE
+© Felipe Méndez-Rios - 2025 - INRAE
+
+All right reserved.
