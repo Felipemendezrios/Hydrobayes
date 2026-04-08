@@ -32,7 +32,7 @@ SU_constructor <- function(
     SU_key_HM,
     Key_Info_Typology_Model_Reach) {
     # Initialize structure by fixing layer 1 : XR
-    # Layer 2 : Kmin or Kmoy is handle outside this function
+    # Layer 2 : Kmin or Kflood is handle outside this function
     SU <- vector(mode = "list", length = length(SU_key_HM))
     names(SU) <- names(SU_key_HM)
 
@@ -54,8 +54,8 @@ SU_constructor <- function(
 
         if (max(data_id_reach_HM) != max(unlist(SU_KP_boundaries_list))) stop("Min value of KP in the model (", max(data_id_reach_HM), ") is not presented in the boundaries of the spatialisation of the typology: ", names(SU_key_HM)[id_typology], ". Please verify the input Kmin or Kflood Key SU_MR")
 
-        RUG_min_boundary_KP <- min(Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_start)
-        RUG_max_boundary_KP <- max(Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_end)
+        RUG_min_boundary_KP <- min(Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_start, Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_end)
+        RUG_max_boundary_KP <- max(Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_start, Key_Info_Typology_Model_Reach[[id_typology]]$RUGFile$KP_end)
 
         # Check if KP boundaries of each SU respect the KP boundaries of XR
         if (min(unlist(SU_KP_boundaries_list)) != RUG_min_boundary_KP ||
@@ -248,8 +248,8 @@ SU_constructor <- function(
                         typology = section_name,
                         id_SU = su_name,
                         id_reach_SU = seq_len(length(id_vec) - 1),
-                        KP_max_SU = id_vec[-length(id_vec)],
-                        KP_min_SU = id_vec[-1]
+                        KP_max_SU = max(id_vec),
+                        KP_min_SU = min(id_vec)
                     )
                 })
             )
