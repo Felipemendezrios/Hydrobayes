@@ -114,7 +114,7 @@ SU_constructor <- function(
             SU[[id_typology]][[id_SU]]$reach <- data_reaches[position_match]
             SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries <- SU_KP_boundaries_list[[id_SU]]
 
-            # Add Z and priors
+            # Add Z
             if (identical(
                 SU_key_HM[[id_typology]][[id_SU]]$function_SU,
                 getCovariate_piecewise
@@ -172,54 +172,66 @@ SU_constructor <- function(
             all_boundaries <- SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries
 
             # Add id_reach_SU
-            SU[[id_typology]][[id_SU]]$id_reach_SU <- sapply(
-                SU[[id_typology]][[id_SU]]$KP,
-                function(x) {
-                    bounds <- all_boundaries
-                    n <- length(bounds) - 1
+            if (identical(
+                SU_key_HM[[id_typology]][[id_SU]]$function_SU,
+                getCovariate_piecewise
+            )) {
+                SU[[id_typology]][[id_SU]]$id_reach_SU <- sapply(
+                    SU[[id_typology]][[id_SU]]$KP,
+                    function(x) {
+                        bounds <- all_boundaries
+                        n <- length(bounds) - 1
 
-                    idx <- sapply(seq_len(n), function(i) {
-                        left <- bounds[i]
-                        right <- bounds[i + 1]
-                        # Decreasing
-                        if (Key_Info_Typology_Model_Reach[[id_typology]]$Logical_decreasing) {
-                            # Case 1: first interval → closed both sides
-                            if (i == 1) {
-                                cond <- x <= left & x >= right
+                        idx <- sapply(seq_len(n), function(i) {
+                            left <- bounds[i]
+                            right <- bounds[i + 1]
+                            # Decreasing
+                            if (Key_Info_Typology_Model_Reach[[id_typology]]$Logical_decreasing) {
+                                # Case 1: first interval → closed both sides
+                                if (i == 1) {
+                                    cond <- x <= left & x >= right
 
-                                # Case 2: open left, closed right
+                                    # Case 2: open left, closed right
+                                } else {
+                                    cond <- x < left & x >= right
+                                }
                             } else {
-                                cond <- x < left & x >= right
-                            }
-                        } else {
-                            # Case 1: first interval → closed both sides
-                            if (i == 1) {
-                                cond <- x >= left & x <= right
+                                # Case 1: first interval → closed both sides
+                                if (i == 1) {
+                                    cond <- x >= left & x <= right
 
-                                # Case 2: open left, closed right
-                            } else {
-                                cond <- x > left & x <= right
+                                    # Case 2: open left, closed right
+                                } else {
+                                    cond <- x > left & x <= right
+                                }
                             }
+
+                            cond
+                        })
+
+                        idx <- which(idx)
+                        if (length(idx) == 0) {
+                            print(list(x = x, bounds = bounds))
+                            stop("No interval match for KP = ", x)
                         }
-
-                        cond
-                    })
-
-                    idx <- which(idx)
-                    if (length(idx) == 0) {
-                        print(list(x = x, bounds = bounds))
-                        stop("No interval match for KP = ", x)
+                        # Safety checks
+                        if (length(idx) == 0) {
+                            stop("No interval match for KP = ", x)
+                        } else if (length(idx) > 1) {
+                            stop("KP belongs to multiple intervals: ", x)
+                        } else {
+                            idx
+                        }
                     }
-                    # Safety checks
-                    if (length(idx) == 0) {
-                        stop("No interval match for KP = ", x)
-                    } else if (length(idx) > 1) {
-                        stop("KP belongs to multiple intervals: ", x)
-                    } else {
-                        idx
-                    }
-                }
-            )
+                )
+            } else if (identical(
+                SU_key_HM[[id_typology]][[id_SU]]$function_SU,
+                getCovariate_Legendre
+            )) {
+                SU[[id_typology]][[id_SU]]$id_reach_SU <- rep(id_SU, length(SU[[id_typology]][[id_SU]]$KP))
+            } else {
+                return(stop("function_SU given in input is not supported. Please select either getCovariate_Legendre or getCovariate_piecewise"))
+            }
 
             # Add priors
             SU[[id_typology]][[id_SU]]$prior <- SU_key_HM[[id_typology]][[id_SU]]$prior
