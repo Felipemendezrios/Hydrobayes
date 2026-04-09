@@ -297,20 +297,118 @@ plot_CalData <- function(
 K_plot <- function(
     matrix_spatialisation,
     mcmc,
-    n_param_Kmin,
-    n_param_Kflood,
     SU_reaches,
     MAP_param_vector,
+    dist_prior_Kmin,
+    init_guess_prior_Kmin,
+    dist_prior_Kflood,
+    init_guess_Kflood_Kmin,
     main_channel = TRUE) {
     if (main_channel) {
-        indx <- 1:n_param_Kmin
+        dist_prior <- dist_prior_Kmin
+        init_guess_prior <- init_guess_prior_Kmin
         label_title <- "Friction coefficient estimation in the main channel \nwith parametric uncertainty"
     } else {
-        indx <- (n_param_Kmin + 1):(n_param_Kmin + n_param_Kflood)
+        dist_prior <- dist_prior_Kflood
+        init_guess_prior <- init_guess_Kflood_Kmin
         label_title <- "Friction coefficient estimation in the floodplain \nwith parametric uncertainty"
     }
 
-    k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc[, indx])))
+
+    # Get index of the estimated parameters
+    id_param_estimated <- which(dist_prior != "FIX")
+    Fix_dist_positions <- which(dist_prior == "FIX")
+
+    # Case 1: all parameters are fixed
+    if (length(id_param_estimated) == 0) {
+        MAP_all_param <- init_guess_prior[Fix_dist_positions]
+
+        # Create the data frame
+        mcmc_all_param <- as.data.frame(
+            lapply(MAP_all_param, function(v) rep(v, nrow(mcmc)))
+        )
+        # Name columns
+        names(mcmc_all_param) <- paste0("param_", Fix_dist_positions)
+    } else if (
+        # Case 2: No one is fixed
+        length(Fix_dist_positions) == 0) {
+        MAP_all_param <- init_guess_prior
+
+        # Create the data frame
+        mcmc_all_param <- as.data.frame(
+            lapply(MAP_all_param, function(v) rep(v, nrow(mcmc)))
+        )
+        # Name columns
+        names(mcmc_all_param) <- paste0("param_", seq(1:length(init_guess_prior)))
+    } else { # Case 3: mixted
+        # Extract only MCMC of the parameters theta (estimated)
+        mcmc_extraction <- mcmc[
+            ,
+            id_param_estimated
+        ]
+        values <- mcmc_extraction[, id_param_estimated]
+
+        df_mcmc_estimated <- data.frame(
+            value = as.vector(as.matrix(values)),
+            id_param = rep(id_param_estimated, each = nrow(values))
+        )
+        MAP_estimated <- cbind(value = MAP_param_vector, id_param = id_param_estimated)
+
+        # Get values constant value of the fix distributions
+        vals <- init_guess_prior[Fix_dist_positions]
+        # I need to add these values at the MCMC and MAP
+        for (i in seq_along(Fix_dist_positions)) {
+            new_col <- data.frame(
+                value = rep(
+                    vals[i],
+                    nrow(mcmc_extraction)
+                ),
+                id_param = Fix_dist_positions[i]
+            )
+
+            df_mcmc_estimated <- rbind(
+                df_mcmc_estimated,
+                new_col
+            )
+
+            MAP_estimated <- rbind(
+                MAP_estimated,
+                data.frame(
+                    value = vals[i],
+                    id_param = Fix_dist_positions[i]
+                )
+            )
+        }
+        df_mcmc_estimated$row_id <- ave(df_mcmc_estimated$id_param,
+            df_mcmc_estimated$id_param,
+            FUN = seq_along
+        )
+        MAP_estimated$row_id <- ave(MAP_estimated$id_param,
+            MAP_estimated$id_param,
+            FUN = seq_along
+        )
+
+        mcmc_all_param <- df_mcmc_estimated %>%
+            pivot_wider(
+                id_cols = row_id,
+                names_from = id_param,
+                values_from = value,
+                names_prefix = "param_"
+            ) %>%
+            select(-row_id)
+        MAP_all_param <- as.vector(unlist(MAP_estimated %>%
+            pivot_wider(
+                id_cols = row_id,
+                names_from = id_param,
+                values_from = value
+            ) %>%
+            select(-row_id)))
+    }
+
+    # Check multiplication possibility
+    if (ncol(matrix_spatialisation) != nrow(t(mcmc_all_param))) stop("number of columns in matrix_spatialisation must have the same as the number of columns of mcmc_all_param")
+
+    k_estimated_MCMC <- as.data.frame(as.matrix(matrix_spatialisation) %*% as.matrix(t(mcmc_all_param)))
 
     k_estimated_MCMC$KP <- SU_reaches$KP
     k_estimated_MCMC$reaches_nb <- SU_reaches$reach
@@ -326,7 +424,7 @@ K_plot <- function(
         select(reaches_nb, typology, id_reach_SU, KP, Value) %>%
         mutate(ID = "MCMC Sampling")
 
-    k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_param_vector[indx]
+    k_estimated_MAP <- as.matrix(matrix_spatialisation) %*% MAP_all_param
 
     df_MAP <- data.frame(
         reaches_nb = SU_reaches$reach,

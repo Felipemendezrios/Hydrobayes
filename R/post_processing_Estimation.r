@@ -55,41 +55,34 @@ compute_K <- function(
     Kflood_prior,
     K_SU,
     MAP,
-    n_param_Kmin_to_estimate,
-    n_param_Kflood_to_estimate,
     do_main_channel) {
     ## missing a level to search [[1]] ? fixed? only SU_1
     SU <- do.call(
         rbind,
         lapply(names(K_SU), function(typology) {
-            data.frame(
-                KP = K_SU[[typology]][[1]]$KP,
-                reach = K_SU[[typology]][[1]]$reach,
-                typology = typology,
-                id_reach_SU = K_SU[[typology]][[1]]$id_reach_SU
+            do.call(
+                rbind,
+                lapply(names(K_SU[[typology]]), function(SU) {
+                    data.frame(
+                        KP = K_SU[[typology]][[SU]]$KP,
+                        reach = K_SU[[typology]][[SU]]$reach,
+                        typology = typology,
+                        id_reach_SU = K_SU[[typology]][[SU]]$id_reach_SU
+                    )
+                })
             )
         })
     ) %>% arrange(reach)
 
-    if (do_main_channel) {
-        if (n_param_Kmin_to_estimate == 0) {
-            return(stop("Any parameter is estimated in the main channel. Please verify the parameters in the main channel"))
-        }
-    } else {
-        if (n_param_Kflood_to_estimate == 0) {
-            return(
-                stop("Any parameter is estimated in the floodplain. Please verify the parameters in the floodplain")
-            )
-        }
-    }
-
     res <- K_plot(
         matrix_spatialisation = Z_MatrixK,
         mcmc = mcmc,
-        n_param_Kmin = length(Kmin_prior),
-        n_param_Kflood = length(Kflood_prior),
         SU_reaches = SU,
         MAP_param_vector = MAP,
+        dist_prior_Kmin = get_prior_distribution(Kmin_prior),
+        init_guess_prior_Kmin = get_all_init_prior_theta(Kmin_prior),
+        dist_prior_Kflood = get_prior_distribution(Kflood_prior),
+        init_guess_Kflood_Kmin = get_all_init_prior_theta(Kflood_prior),
         main_channel = do_main_channel
     )
 
@@ -274,15 +267,6 @@ postprocess_calibration <- function(
         final_calibration = final_calibration
     )
 
-    # Count number of parameters different to FIX distribution
-    n_param_Kmin_to_estimate <- sum(
-        get_prior_distribution(Kmin_prior) != "FIX"
-    )
-
-    n_param_Kflood_to_estimate <- sum(
-        get_prior_distribution(Kflood_prior) != "FIX"
-    )
-
     # MAP
     MAP <- extract_MAP_parameters(
         path_BaM_folder = paths$path_BaM_folder,
@@ -327,110 +311,100 @@ postprocess_calibration <- function(
             id_SU_Kflood = id_SU,
             id_reach_SU_Kflood = id_reach_SU,
         )
+
     # Kmin
-    if (n_param_Kmin_to_estimate != 0) {
-        Kmin <- compute_K(
-            Z_MatrixK = Z_MatrixKmin,
-            mcmc = mcmc,
-            Kmin_prior = Kmin_prior,
-            Kflood_prior = Kflood_prior,
-            K_SU = Kmin_SU,
-            MAP = MAP,
-            do_main_channel = TRUE,
-            n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
-            n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
-        )
+    Kmin <- compute_K(
+        Z_MatrixK = Z_MatrixKmin,
+        mcmc = mcmc,
+        Kmin_prior = Kmin_prior,
+        Kflood_prior = Kflood_prior,
+        K_SU = Kmin_SU,
+        MAP = MAP,
+        do_main_channel = TRUE
+    )
 
-        ls_spatial_friction_Kmin <- list(
-            df_envelope = Kmin[[3]],
-            df_MAP = Kmin[[1]]
-        )
-        save(ls_spatial_friction_Kmin,
-            file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
-        )
+    ls_spatial_friction_Kmin <- list(
+        df_envelope = Kmin[[3]],
+        df_MAP = Kmin[[1]]
+    )
+    save(ls_spatial_friction_Kmin,
+        file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kmin.RData")
+    )
 
-        if (!is.null(Kmin_segment_layer)) {
-            final_plot_Kmin <- plot_K_and_ref(
-                K_results = Kmin,
-                K_segment_layer = Kmin_segment_layer,
-                path_plot_folder = paths$path_plot_folder,
-                path_RData = paths$path_RData
-            )
-        } else {
-            final_plot_Kmin <- Kmin$plot
-        }
-
-        ggplot2::ggsave(
-            file.path(paths$path_plot_folder, "Kmin.png"),
-            final_plot_Kmin,
-            width = 20,
-            height = 20,
-            units = "cm"
-        )
-
-        save(
-            final_plot_Kmin,
-            file = file.path(
-                paths$path_RData,
-                "Plot_friction_estimation_plot_Kmin_plot.RData"
-            )
+    if (!is.null(Kmin_segment_layer)) {
+        final_plot_Kmin <- plot_K_and_ref(
+            K_results = Kmin,
+            K_segment_layer = Kmin_segment_layer,
+            path_plot_folder = paths$path_plot_folder,
+            path_RData = paths$path_RData
         )
     } else {
-        final_plot_Kmin <- Kmin <- NULL
-        warning("Any parameter is estimated in the main channel. Kmin returned is NULL")
+        final_plot_Kmin <- Kmin$plot
     }
+
+    ggplot2::ggsave(
+        file.path(paths$path_plot_folder, "Kmin.png"),
+        final_plot_Kmin,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
+    save(
+        final_plot_Kmin,
+        file = file.path(
+            paths$path_RData,
+            "Plot_friction_estimation_plot_Kmin_plot.RData"
+        )
+    )
+
     # Kflood
-    if (n_param_Kflood_to_estimate != 0) {
-        Kflood <- compute_K(
-            Z_MatrixK = Z_MatrixKflood,
-            mcmc = mcmc,
-            Kmin_prior = Kmin_prior,
-            Kflood_prior = Kflood_prior,
-            K_SU = Kflood_SU,
-            MAP = MAP,
-            do_main_channel = FALSE,
-            n_param_Kmin_to_estimate = n_param_Kmin_to_estimate,
-            n_param_Kflood_to_estimate = n_param_Kflood_to_estimate
-        )
 
-        ls_spatial_friction_Kflood <- list(
-            df_envelope = Kflood[[3]],
-            df_MAP = Kflood[[1]]
-        )
-        save(ls_spatial_friction_Kflood,
-            file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
-        )
+    Kflood <- compute_K(
+        Z_MatrixK = Z_MatrixKflood,
+        mcmc = mcmc,
+        Kmin_prior = Kmin_prior,
+        Kflood_prior = Kflood_prior,
+        K_SU = Kflood_SU,
+        MAP = MAP,
+        do_main_channel = FALSE
+    )
 
-        if (!is.null(Kflood_segment_layer)) {
-            final_plot_Kflood <- plot_K_and_ref(
-                K_results = Kflood,
-                K_segment_layer = Kflood_segment_layer,
-                path_plot_folder = paths$path_plot_folder,
-                path_RData = paths$path_RData
-            )
-        } else {
-            final_plot_Kflood <- Kflood$plot
-        }
+    ls_spatial_friction_Kflood <- list(
+        df_envelope = Kflood[[3]],
+        df_MAP = Kflood[[1]]
+    )
+    save(ls_spatial_friction_Kflood,
+        file = file.path(paths$path_RData, "Data_friction_estimation_ls_spatial_friction_Kflood.RData")
+    )
 
-        ggplot2::ggsave(
-            file.path(paths$path_plot_folder, "Kflood.png"),
-            final_plot_Kflood,
-            width = 20,
-            height = 20,
-            units = "cm"
-        )
-
-        save(
-            final_plot_Kflood,
-            file = file.path(
-                paths$path_RData,
-                "Plot_friction_estimation_plot_Kflood_plot.RData"
-            )
+    if (!is.null(Kflood_segment_layer)) {
+        final_plot_Kflood <- plot_K_and_ref(
+            K_results = Kflood,
+            K_segment_layer = Kflood_segment_layer,
+            path_plot_folder = paths$path_plot_folder,
+            path_RData = paths$path_RData
         )
     } else {
-        final_plot_Kflood <- Kflood <- NULL
-        warning("Any parameter is estimated in the floodplain. Kflood returned is NULL")
+        final_plot_Kflood <- Kflood$plot
     }
+
+    ggplot2::ggsave(
+        file.path(paths$path_plot_folder, "Kflood.png"),
+        final_plot_Kflood,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
+    save(
+        final_plot_Kflood,
+        file = file.path(
+            paths$path_RData,
+            "Plot_friction_estimation_plot_Kflood_plot.RData"
+        )
+    )
+
 
     # Residuals
     residuals <- compute_residuals(
