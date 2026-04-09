@@ -197,6 +197,14 @@ get_init_prior <- function(parameter, FIX_dist = FALSE) {
     return(init_priors)
 }
 
+get_all_init_prior_theta <- function(parameter) {
+    init_priors <- numeric(0)
+    for (i in parameter) {
+        param <- i
+        init_priors <- c(init_priors, param$init)
+    }
+    return(init_priors)
+}
 
 write_RUGFile <- function(RUG_path,
                           RUGFile_data,
