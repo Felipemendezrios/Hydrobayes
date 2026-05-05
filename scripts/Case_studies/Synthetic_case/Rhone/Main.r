@@ -983,6 +983,19 @@ info_events_reaches <- list(
             tmax = c(10800),
             nb_discretization = c(100)
         )
+    ),
+    # 3rd event: WSE
+    event_3 = list(
+        type = "ZdX",
+        SU2 = data.frame(
+            event = c(3),
+            reach = c(3),
+            xmin = (19330),
+            xmax = c(202),
+            tmin = c(10800),
+            tmax = c(10800),
+            nb_discretization = c(100)
+        )
     )
 )
 
