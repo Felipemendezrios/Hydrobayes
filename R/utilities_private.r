@@ -399,3 +399,116 @@ load_experiment <- function(file_main_path, cal_case, path_experiment, all_event
         path_model_HM = path_model_HM
     ))
 }
+
+RUGFile_post_estimation <- function(
+    RUGFile_structure,
+    Z_MatrixKmin,
+    Z_MatrixKflood,
+    MAP_Kmin_Kflood,
+    init_guess_prior_Kmin,
+    dist_prior_Kmin,
+    init_guess_prior_Kflood,
+    dist_prior_Kflood) {
+    # Check RUGFile structure
+    if (any(colnames(RUGFile_structure) != c("id_reach", "KP_start", "KP_end", "Kmin", "Kflood"))) stop('RUGFILE_structure must have this information: "id_reach" "KP_start" "KP_end"   "Kmin"     "Kflood"  ')
+    # Check MAP is a vector
+    if (!is.vector(MAP_Kmin_Kflood)) stop("MAP_Kmin_Kflood must be vectors")
+
+    # Check size of MAP and Z_Matrix
+    ncol_Z_Kmin <- switch(as.character(ncol(Z_MatrixKmin)),
+        "1" = 0,
+        ncol(Z_MatrixKmin)
+    )
+
+    ncol_Z_Kflood <- switch(as.character(ncol(Z_MatrixKflood)),
+        "1" = 0,
+        ncol(Z_MatrixKflood)
+    )
+
+    if ((ncol_Z_Kmin + ncol_Z_Kflood) != length(MAP_Kmin_Kflood)) stop(" Summing number of columns between Z_MatrixKmin and Z_MatrixKflood, the result must have the same number of columns than length of MAP_Kmin_Kflood")
+
+    # Kmin
+
+    # Get index of the estimated parameters
+    id_param_estimated_Kmin <- which(dist_prior_Kmin != "FIX")
+    Fix_dist_positions_Kmin <- which(dist_prior_Kmin == "FIX")
+
+    # Case 1: all parameters are fixed
+    if (length(id_param_estimated_Kmin) == 0) {
+        MAP_all_param_Kmin <- init_guess_prior_Kmin
+    } else if (
+        # Case 2: No one is fixed
+        length(Fix_dist_positions_Kmin) == 0) {
+        MAP_all_param_Kmin <- MAP[1:ncol(Z_MatrixKmin)]
+    } else { # Case 3: mixted
+        # Extract only MCMC of the parameters theta (estimated)
+        MAP_estimated <- cbind(value = MAP[1:ncol(Z_MatrixKmin)], id_param = id_param_estimated_Kmin)
+        # Get values constant value of the fix distributions
+        vals <- init_guess_prior_Kmin[Fix_dist_positions_Kmin]
+
+        for (i in seq_along(Fix_dist_positions_Kmin)) {
+            MAP_estimated <- rbind(
+                MAP_estimated,
+                data.frame(
+                    value = vals[i],
+                    id_param = Fix_dist_positions_Kmin[i]
+                )
+            )
+        }
+        MAP_estimated$row_id <- ave(MAP_estimated$id_param,
+            MAP_estimated$id_param,
+            FUN = seq_along
+        )
+        MAP_all_param_Kmin <- as.vector(unlist(MAP_estimated %>%
+            pivot_wider(
+                id_cols = row_id,
+                names_from = id_param,
+                values_from = value
+            ) %>%
+            select(-row_id)))
+    }
+
+    # Kflood
+    # Get index of the estimated parameters
+    id_param_estimated_Kflood <- which(dist_prior_Kflood != "FIX")
+    Fix_dist_positions_Kflood <- which(dist_prior_Kflood == "FIX")
+
+    # Case 1: all parameters are fixed
+    if (length(id_param_estimated_Kflood) == 0) {
+        MAP_all_param_Kflood <- init_guess_prior_Kflood
+    } else if (
+        # Case 2: No one is fixed
+        length(Fix_dist_positions_Kflood) == 0) {
+        MAP_all_param_Kflood <- MAP[1:ncol(Z_MatrixKflood)]
+    } else { # Case 3: mixted
+        # Extract only MCMC of the parameters theta (estimated)
+        MAP_estimated <- cbind(value = MAP[1:ncol(Z_MatrixKflood)], id_param = id_param_estimated_Kflood)
+        # Get values constant value of the fix distributions
+        vals <- init_guess_prior_Kflood[Fix_dist_positions_Kflood]
+
+        for (i in seq_along(Fix_dist_positions_Kflood)) {
+            MAP_estimated <- rbind(
+                MAP_estimated,
+                data.frame(
+                    value = vals[i],
+                    id_param = Fix_dist_positions_Kflood[i]
+                )
+            )
+        }
+        MAP_estimated$row_id <- ave(MAP_estimated$id_param,
+            MAP_estimated$id_param,
+            FUN = seq_along
+        )
+        MAP_all_param_Kflood <- as.vector(unlist(MAP_estimated %>%
+            pivot_wider(
+                id_cols = row_id,
+                names_from = id_param,
+                values_from = value
+            ) %>%
+            select(-row_id)))
+    }
+
+    RUGFile_structure$Kmin <- Z_MatrixKmin %*% MAP_all_param_Kmin
+    RUGFile_structure$Kflood <- Z_MatrixKflood %*% MAP_all_param_Kflood
+    return(RUGFile_structure)
+}
