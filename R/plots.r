@@ -302,7 +302,7 @@ K_plot <- function(
     dist_prior_Kmin,
     init_guess_prior_Kmin,
     dist_prior_Kflood,
-    init_guess_Kflood_Kmin,
+    init_guess_prior_Kflood,
     main_channel = TRUE) {
     if (main_channel) {
         dist_prior <- dist_prior_Kmin
@@ -310,7 +310,7 @@ K_plot <- function(
         label_title <- "Friction coefficient estimation in the main channel \nwith parametric uncertainty"
     } else {
         dist_prior <- dist_prior_Kflood
-        init_guess_prior <- init_guess_Kflood_Kmin
+        init_guess_prior <- init_guess_prior_Kflood
         label_title <- "Friction coefficient estimation in the floodplain \nwith parametric uncertainty"
     }
 
