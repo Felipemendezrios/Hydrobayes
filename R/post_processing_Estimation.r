@@ -82,7 +82,7 @@ compute_K <- function(
         dist_prior_Kmin = get_prior_distribution(Kmin_prior),
         init_guess_prior_Kmin = get_all_init_prior_theta(Kmin_prior),
         dist_prior_Kflood = get_prior_distribution(Kflood_prior),
-        init_guess_Kflood_Kmin = get_all_init_prior_theta(Kflood_prior),
+        init_guess_prior_Kflood = get_all_init_prior_theta(Kflood_prior),
         main_channel = do_main_channel
     )
 
@@ -444,6 +444,32 @@ postprocess_calibration <- function(
     plots <- plot_obs_sim_MAP(
         all_obs_simulations = obs_sim_residuals,
         type = type
+    )
+
+    # Generate the RUGFile for MAP estimation
+    RUGFile_all <- do.call(
+        rbind,
+        lapply(names(Key_Info_Typology_Model_Reach), function(typology) {
+            Key_Info_Typology_Model_Reach[[typology]]$RUGFile
+        })
+    )
+
+
+    RUGFile_Kmin_MAP <- RUGFile_post_estimation(
+        RUGFile_structure = RUGFile_all,
+        Z_MatrixKmin = Z_MatrixKmin,
+        Z_MatrixKflood = Z_MatrixKflood,
+        MAP_Kmin_Kflood = MAP,
+        init_guess_prior_Kmin = get_all_init_prior_theta(Kmin_prior),
+        dist_prior_Kmin = get_prior_distribution(Kmin_prior),
+        init_guess_prior_Kflood = get_all_init_prior_theta(Kflood_prior),
+        dist_prior_Kflood = get_prior_distribution(Kflood_prior)
+    )
+
+    write_RUGFile(
+        RUG_path = file.path(paths$path_RData, "RUGFile_MAP.RUG"),
+        RUGFile_data = RUGFile_Kmin_MAP,
+        RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
     )
 
     return(
