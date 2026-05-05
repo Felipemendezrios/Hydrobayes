@@ -50,24 +50,41 @@ threshold_jump_MCMC_error_model <- 0.5
 
 # Common for observation and calibration folders: names of the experiment
 Experiment_id <- c(
-    "1_WSE_AIN_90_2_WSE_RHONE_525_750"
+    # "1_WSE_AIN_90_2_WSE_RHONE_525_750"
+    "1_WSE_AIN_90_1_WSE_RHONE_525"
 )
 
 
 # Experiments input data to be used during calibration setting
-all_cal_case <- c(
-    "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0.r",
-    "Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4.r",
-    "Kmin_Rh_SU1_n4_SU2_n0_Ain_SU1_n5.r"
-)
+if (Experiment_id == "1_WSE_AIN_90_2_WSE_RHONE_525_750") {
+    all_cal_case <- c(
+        "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0.r" # In cours
+        # "Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4.r"
+        # "Kmin_Rh_SU1_n4_SU2_n0_Ain_SU1_n5.r"
+        # "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1.r" # Not possible, take a lot of time
+    )
+} else {
+    all_cal_case <- c(
+        # "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0_2WSE.r" #In cours
+        "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1_2WSE.r" # In cours
+    )
+}
+
 
 # Folder related to the observations (careful with the order!)
 
-all_events <- c(
-    "AIN_90",
-    "RHONE_525",
-    "RHONE_750"
-)
+if (Experiment_id == "1_WSE_AIN_90_2_WSE_RHONE_525_750") {
+    all_events <- c(
+        "AIN_90",
+        "RHONE_525",
+        "RHONE_750"
+    )
+} else {
+    all_events <- c(
+        "AIN_90",
+        "RHONE_525"
+    )
+}
 
 command_line_MAGE <- "-fp=2 -LC=0 -eps=5"
 file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Rhone/Real_Condition_model/Calibration_experiments")
@@ -116,12 +133,16 @@ Input_Typology <- list(
 ############################################
 
 # Processed data
-if (Experiment_id %in% c("1_WSE_AIN_90_2_WSE_RHONE_525_750")) {
+if (Experiment_id %in% c("1_WSE_AIN_90_2_WSE_RHONE_525_750", "1_WSE_AIN_90_1_WSE_RHONE_525")) {
     load("data/processed_data/Rhone/Ain_90_RH_525_750/observed_data.RData")
 } else {
     stop("Experiment id in not correct")
 }
 
+if (Experiment_id == "1_WSE_AIN_90_1_WSE_RHONE_525") {
+    observed_data <- observed_data %>%
+        filter(name_event != "RHONE_750")
+}
 
 ######################################## UNTIL HERE
 
@@ -325,7 +346,7 @@ remant_error_list <- list(
         funk = "Constant",
         par = list(parameter(
             name = "intercept",
-            init = 0.0005,
+            init = 0.1,
             prior.dist = "FlatPrior"
         ))
     ),
@@ -356,7 +377,7 @@ prior_error_model <- get_init_prior(remant_error_list)
 Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
     Input_Typology = Input_Typology,
     Input_Model_Reach = Input_Model_Reach,
-    total_points_discretization = 100
+    total_points_discretization = 200
 )
 
 ############################################
@@ -385,7 +406,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
         mcmcCooking = RBaM::mcmcCooking(burn = 0, nSlim = 1),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 20, nCycles = 10),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 50, nCycles = 60),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
@@ -454,7 +475,7 @@ if (do_plot_calibration) {
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- TRUE
+final_calibration <- FALSE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -615,4 +636,153 @@ for (id_cal_case in 1:length(all_cal_case)) {
             )
         }
     }
+}
+################################
+# Prediction
+################################
+
+# Define the calculation grid:
+# It must respect the information in the ST File for the space and Time simulation for the time
+
+# ZdX: t fixed and x variable (SWOT, measure wse, drone, etc)
+# QdXT: t fixed and x fixed (gaugings)
+# VdXT: t fixed and x fixed (radar)
+# ZdT: t variable, x fixed (hydrometric stations)
+
+# Grid is possible to be spatial and temporal, in prediction step, this is not a problem.
+# But i need to fixed time or space to vary the other one ! (could be improved in the future)
+
+# In this case, prediction will be performed only at the time and space of calibration data
+
+# A grid by Typology !
+info_events_reaches <- list(
+    # 1st event: WSE (AIN)
+    AIN = list(
+        type = "ZdX",
+        INFO = data.frame(
+            event = c(1),
+            reach = c(8, 4, 5),
+            xmin = c(22334, 37491, 41211),
+            xmax = c(37491, 41211, 41461),
+            tmin = c(259230),
+            tmax = c(259230),
+            nb_discretization = c(200, 80, 10)
+        )
+    ),
+    # 2nd event: WSE (RHONE)
+    RHONE = list(
+        type = "ZdX",
+        INFO = data.frame(
+            event = c(2),
+            reach = c(1, 2, 3),
+            xmin = c(55899, 36250, 34500),
+            xmax = c(36250, 34500, 26750),
+            tmin = c(259200),
+            tmax = c(259200),
+            nb_discretization = c(500, 50, 150)
+        )
+    )
+)
+
+X_pred <- grid_user(info_events_reaches)
+X_pred_grid <- list()
+
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
+
+    # Load data and model used during calibration
+    load(file.path(paths$path_RData, "BaM_objects.RData"))
+
+    # Run prediction
+    return_prediction <- prediction_MAGE(
+        cal_case = all_cal_case[[id_cal_case]],
+        paths = paths,
+        prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
+        data = data,
+        do_prediction = do_prediction,
+        X_pred = X_pred,
+        mod = list_mod_polynomials[[id_cal_case]],
+        remant_error_list = remant_error_list,
+        mcmcOptions = mcmcOptions,
+        mcmcCooking = mcmcCooking,
+        mcmcSummary = mcmcSummary,
+        nsim_prior = 500
+    )
+    X_pred_grid[[id_cal_case]] <- return_prediction$X_pred_grid
+
+
+    if (do_prediction) {
+        cf_file <- return_prediction$cf_file
+
+        script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
+        # write the bash script
+        lines <- c(
+            "#!/bin/bash", # start with bash header
+            "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
+            ""
+        )
+
+        for (cf in cf_file) {
+            # add a line for each BaM run
+            lines <- c(
+                lines,
+                paste(
+                    "nohup", # run in background
+                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                    "-cf",
+                    shQuote(cf),
+                    ">",
+                    shQuote(paste0(cf, ".log")),
+                    "2>&1",
+                    "&"
+                )
+            )
+        }
+        writeLines(lines, script_path_pred)
+
+        Sys.chmod(script_path_pred, "0755")
+        # Run outside of Vscodium. To kill a job: pkill -f BaM
+        # See if the runs are in parallel: pgrep -af BaM
+        system2(
+            "bash",
+            args = script_path_pred,
+            wait = FALSE
+        )
+    }
+}
+
+
+##########################################
+### Plots
+##########################################
+
+for (id_cal_case in 1:length(all_cal_case)) {
+    # Load experiment
+    paths <- load_experiment(
+        file_main_path = file_main_path,
+        cal_case = all_cal_case[[id_cal_case]],
+        path_experiment = path_experiment,
+        all_events = all_events
+    )
+
+    results_postprocess <- postprocess_prediction(
+        paths = paths,
+        type = "dX",
+        X_input = X,
+        Y_observations = Y,
+        Yu_observations = Yu,
+        conf_level = 0.95,
+        summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
+        summary_SU_Kflood = list_summary_SU_Kflood[[id_cal_case]],
+        grid = X_pred_grid[[id_cal_case]],
+        Input_Typology = Input_Typology,
+        suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
+        desired_order = c("Total", "Parametric", "Maxpost", "Observations")
+    )
 }

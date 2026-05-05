@@ -232,28 +232,6 @@ mult_factor <- list(
             init = 1,
             prior.dist = "FIX"
         )
-    ),
-    event_3 = list(
-        node_1 = RBaM::parameter(
-            name = "Q_e3_CAIN",
-            init = 1,
-            prior.dist = "FIX"
-        ),
-        node_2 = RBaM::parameter(
-            name = "Q_e3_PCH",
-            init = 1,
-            prior.dist = "FIX"
-        ),
-        node_3 = RBaM::parameter(
-            name = "Q_e3_LGN",
-            init = 1,
-            prior.dist = "FIX"
-        ),
-        node_4 = RBaM::parameter(
-            name = "Q_e3_BOU",
-            init = 1,
-            prior.dist = "FIX"
-        )
     )
 )
 ############################################

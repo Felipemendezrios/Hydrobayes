@@ -30,12 +30,28 @@ Input_Kmin_Key_SU_MR <- list(
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 4,
                 prior = list(
                     RBaM::parameter(
                         name = "Km_SU1_Rh_a0",
                         init = 36,
                         prior.dist = "FlatPrior+"
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Rh_a1",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Rh_a2",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Rh_a3",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Rh_a4",
+                        init = 0
                     )
                 )
             ),
@@ -45,12 +61,16 @@ Input_Kmin_Key_SU_MR <- list(
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 1,
                 prior = list(
                     RBaM::parameter(
                         name = "Km_SU2_Rh_a0",
-                        init = 31,
+                        init = 33,
                         prior.dist = "FlatPrior+"
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU2_Rh_a1",
+                        init = 0
                     )
                 )
             )
@@ -60,16 +80,51 @@ Input_Kmin_Key_SU_MR <- list(
         list(
             SU1 = list(
                 # KP boundary points
-                KP_boundaries_points = c(22333, 41461),
+                KP_boundaries_points = c(22333, 41211),
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 4,
                 prior = list(
                     RBaM::parameter(
                         name = "Km_SU1_Ai_a0",
                         init = 19,
                         prior.dist = "FlatPrior+"
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Ai_a1",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Ai_a2",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Ai_a3",
+                        init = 0
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU1_Ai_a4",
+                        init = 0
+                    )
+                )
+            ),
+            SU2 = list(
+                # KP boundary points
+                KP_boundaries_points = c(41211, 41461),
+                # Function to apply at this SU
+                function_SU = getCovariate_Legendre,
+                # Arguments of this SU
+                max_polynomial_degree = 1,
+                prior = list(
+                    RBaM::parameter(
+                        name = "Km_SU2_Ai_a0",
+                        init = 15,
+                        prior.dist = "FlatPrior+"
+                    ),
+                    RBaM::parameter(
+                        name = "Km_SU2_Ai_a1",
+                        init = 0
                     )
                 )
             )
