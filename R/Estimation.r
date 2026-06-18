@@ -404,6 +404,35 @@ Estimation_Mage <- function(
     )
     Kmin_SU <- results_SU_constructor$SU
     summary_SU_Kmin <- results_SU_constructor$summary_SU
+    spatial_values_prior_SU_Kmin <- results_SU_constructor$spatial_values_prior
+
+    # Create a data frame to export to link with prior correlation matrix
+    df_spatial_values_prior_SU_Kmin <- do.call(
+        rbind,
+        lapply(names(spatial_values_prior_SU_Kmin), function(dep) {
+            do.call(
+                rbind,
+                lapply(names(spatial_values_prior_SU_Kmin[[dep]]), function(su) {
+                    data.frame(
+                        id = paste("Kmin_", dep, su, sep = "_"),
+                        value = spatial_values_prior_SU_Kmin[[dep]][[su]]
+                    )
+                })
+            )
+        })
+    )
+
+    rownames(df_spatial_values_prior_SU_Kmin) <- NULL
+
+    # Prior correlation matrix
+    matrix_prior_correlation_SU_Kmin <- results_SU_constructor$prior_correlation_SU
+
+    all_blocks <- unlist(
+        matrix_prior_correlation_SU_Kmin,
+        recursive = FALSE
+    )
+
+    Matrix_prior_correlation_Kmin <- blocDiag(all_blocks)
 
     Z_MatrixKmin <- constructor_spatialization_matrix(K_SU = Kmin_SU)
 
@@ -429,6 +458,35 @@ Estimation_Mage <- function(
     )
     Kflood_SU <- results_SU_constructor$SU
     summary_SU_Kflood <- results_SU_constructor$summary_SU
+    spatial_values_prior_SU_Kflood <- results_SU_constructor$spatial_values_prior
+
+    # Create a data frame to export to link with prior correlation matrix
+    df_spatial_values_prior_SU_Kflood <- do.call(
+        rbind,
+        lapply(names(spatial_values_prior_SU_Kflood), function(dep) {
+            do.call(
+                rbind,
+                lapply(names(spatial_values_prior_SU_Kflood[[dep]]), function(su) {
+                    data.frame(
+                        id = paste("Kflood_", dep, su, sep = "_"),
+                        value = spatial_values_prior_SU_Kflood[[dep]][[su]]
+                    )
+                })
+            )
+        })
+    )
+
+    rownames(df_spatial_values_prior_SU_Kflood) <- NULL
+
+    # Prior correlation matrix
+    matrix_prior_correlation_SU_Kflood <- results_SU_constructor$prior_correlation_SU
+
+    all_blocks <- unlist(
+        matrix_prior_correlation_SU_Kflood,
+        recursive = FALSE
+    )
+
+    Matrix_prior_correlation_Kflood <- blocDiag(all_blocks)
 
     Z_MatrixKflood <- constructor_spatialization_matrix(K_SU = Kflood_SU)
 
@@ -440,6 +498,92 @@ Estimation_Mage <- function(
     ############################################
     # End Kflood environment
     ############################################
+
+    ############################################
+    # Qin environment (prior treatment)
+    ############################################
+    df_Qin <- data.frame(
+        id = unlist(
+            lapply(names(mult_factor), function(ev) {
+                paste(
+                    "Qin_",
+                    ev,
+                    sapply(mult_factor[[ev]], `[[`, "name"),
+                    sep = "_"
+                )
+            }),
+            use.names = FALSE
+        ),
+        value = 1
+    )
+    Matrix_prior_correlation_Qin <- rep(1, nrow(df_Qin))
+
+    ############################################
+    # Structural error (gamma) (prior treatment)
+    ############################################
+    funk <- sapply(remant_error_list, `[[`, "funk")
+
+    if (any(!funk %in% c("Constant", "Linear"))) {
+        stop("Remnant error must be either Constant or Linear")
+    }
+
+    df_gamma <- data.frame(
+        id = funk,
+        value = 1
+    )
+
+    pos <- which(df_gamma$id == "Linear")
+
+    if (length(pos) > 0) {
+        # construire les lignes à dupliquer
+        linear_rows <- df_gamma[pos, , drop = FALSE]
+
+        # insertion après chaque Linear (en ordre inversé pour ne pas casser les indices)
+        for (i in rev(pos)) {
+            df_gamma <- rbind(
+                df_gamma[1:i, ],
+                df_gamma[i, , drop = FALSE],
+                df_gamma[(i + 1):nrow(df_gamma), ]
+            )
+        }
+    }
+    df_gamma$id <- paste0("gamma_", seq(df_gamma$id), "_", df_gamma$id)
+
+    Matrix_prior_correlation_gamma <- rep(1, nrow(df_gamma))
+    ########################################################
+    # Prior correlation matrix
+    ########################################################
+
+    Matrix_Prior_Correlation <- blocDiag(
+        c(
+            list(
+                Matrix_prior_correlation_Kmin,
+                Matrix_prior_correlation_Kflood
+            ),
+            Matrix_prior_correlation_Qin,
+            Matrix_prior_correlation_gamma
+        )
+    )
+
+    ref_Matrix_Prior_Correlation <- cbind(
+        rbind(
+            df_spatial_values_prior_SU_Kmin,
+            df_spatial_values_prior_SU_Kflood,
+            df_Qin,
+            df_gamma
+        ),
+        Matrix_Prior_Correlation
+    )
+
+    write.table(ref_Matrix_Prior_Correlation,
+        file = file.path(paths$path_BaM_folder, "ref_Prior_Correlation_Matrix.txt"),
+        row.names = FALSE, col.names = FALSE
+    )
+    write.table(Matrix_Prior_Correlation,
+        file = file.path(paths$path_BaM_folder, "PriorCorrelation.txt"),
+        row.names = FALSE, col.names = FALSE
+    )
+    ########################################################
 
     if (!(nrow(covariate_grid) == nrow(Z_MatrixKmin) && nrow(covariate_grid) == nrow(Z_MatrixKflood))) {
         stop("Number of rows of covariate_grid must be equal to both Z_MatrixKmin and Z_MatrixKflood")
