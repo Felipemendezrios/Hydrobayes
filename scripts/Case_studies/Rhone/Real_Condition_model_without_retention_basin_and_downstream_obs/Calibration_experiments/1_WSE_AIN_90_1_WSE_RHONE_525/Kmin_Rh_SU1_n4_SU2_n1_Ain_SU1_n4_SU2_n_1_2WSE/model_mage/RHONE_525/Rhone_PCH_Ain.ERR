@@ -1,0 +1,1539 @@
+ Err010 à  01:00:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  6.298 Largeur =   75.092 Section =    89.68 Hauteur =  2.370
+ Err010 à  01:00:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.736 Largeur =   46.472 Section =    26.13 Hauteur =  1.177
+ Err010 à  01:00:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35642.86 du Bief 002
+       Vitesse =  4.333 Largeur =   99.266 Section =    80.91 Hauteur =  1.462
+ Err010 à  01:00:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37000.00 du Bief 001
+       Vitesse =  5.098 Largeur =  109.875 Section =    94.73 Hauteur =  1.526
+ Err010 à  01:00:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37100.00 du Bief 001
+       Vitesse =  5.309 Largeur =  105.619 Section =    97.28 Hauteur =  1.919
+ Err010 à  01:01:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  4.034 Largeur =   45.656 Section =    24.67 Hauteur =  1.145
+ Err010 à  01:01:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   37800.00 du Bief 001
+       Vitesse =  6.118 Largeur =   93.528 Section =    79.78 Hauteur =  1.721
+ Err010 à  01:01:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.913 Largeur =   46.354 Section =    25.91 Hauteur =  1.172
+ Err010 à  01:01:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35678.57 du Bief 002
+       Vitesse =  4.415 Largeur =  107.165 Section =    79.12 Hauteur =  1.362
+ Err010 à  01:01:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   39416.00 du Bief 004
+       Vitesse =  7.637 Largeur =  106.566 Section =   145.52 Hauteur =  2.561
+ Err010 à  01:01:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38116.00 du Bief 004
+       Vitesse =  5.491 Largeur =   83.759 Section =    92.32 Hauteur =  2.441
+ Err010 à  01:02:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34708.33 du Bief 002
+       Vitesse =  4.901 Largeur =  100.939 Section =    93.02 Hauteur =  1.987
+ Err010 à  01:02:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  5.680 Largeur =   95.623 Section =    96.76 Hauteur =  2.446
+ Err010 à  01:02:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   37999.00 du Bief 004
+       Vitesse =  5.009 Largeur =   92.469 Section =    92.06 Hauteur =  2.483
+ Err010 à  01:02:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.889 Largeur =   46.010 Section =    25.30 Hauteur =  1.159
+ Err010 à  01:02:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  4.950 Largeur =  118.565 Section =   106.33 Hauteur =  2.535
+ Err010 à  01:02:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   39586.00 du Bief 004
+       Vitesse =  7.161 Largeur =   87.445 Section =   171.42 Hauteur =  3.989
+ Err010 à  01:03:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  4.164 Largeur =  117.720 Section =    88.03 Hauteur =  1.368
+ Err010 à  01:03:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38057.00 du Bief 004
+       Vitesse =  5.564 Largeur =   89.303 Section =    87.78 Hauteur =  2.411
+ Err010 à  01:03:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  5.174 Largeur =  104.301 Section =    96.40 Hauteur =  2.286
+ Err010 à  01:03:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37850.00 du Bief 001
+       Vitesse =  5.464 Largeur =   91.984 Section =    94.61 Hauteur =  1.973
+ Err010 à  01:03:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.25E+01 au Pm   34875.00 du Bief 002
+       Vitesse =  7.362 Largeur =   78.602 Section =    70.14 Hauteur =  1.844
+ Err010 à  01:03:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  5.503 Largeur =   78.464 Section =    94.27 Hauteur =  2.461
+ Err010 à  01:04:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   39416.00 du Bief 004
+       Vitesse =  7.609 Largeur =  106.566 Section =   148.12 Hauteur =  2.585
+ Err010 à  01:04:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   39646.00 du Bief 004
+       Vitesse =  7.909 Largeur =   81.680 Section =   157.36 Hauteur =  4.210
+ Err010 à  01:04:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.36E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 11.681 Largeur =  102.367 Section =   107.88 Hauteur =  2.202
+ Err010 à  01:04:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.26E+01 au Pm   35833.33 du Bief 002
+       Vitesse =  6.676 Largeur =  106.689 Section =    71.93 Hauteur =  1.667
+ Err010 à  01:04:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.27E+01 au Pm   35791.67 du Bief 002
+       Vitesse =  6.538 Largeur =  108.386 Section =    65.45 Hauteur =  1.299
+ Err010 à  01:05:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.619 Largeur =   46.826 Section =    26.76 Hauteur =  1.190
+ Err010 à  01:05:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.765 Largeur =   46.289 Section =    25.80 Hauteur =  1.170
+ Err010 à  01:05:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38116.00 du Bief 004
+       Vitesse =  5.489 Largeur =   83.668 Section =    91.72 Hauteur =  2.434
+ Err010 à  01:05:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  5.756 Largeur =   91.719 Section =    95.41 Hauteur =  2.432
+ Err010 à  01:05:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38291.00 du Bief 004
+       Vitesse =  5.122 Largeur =  138.258 Section =   110.30 Hauteur =  2.475
+ Err010 à  01:05:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38291.00 du Bief 004
+       Vitesse =  4.407 Largeur =  157.597 Section =   123.10 Hauteur =  2.561
+ Err010 à  01:06:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38791.00 du Bief 004
+       Vitesse =  5.890 Largeur =  108.098 Section =   161.05 Hauteur =  3.120
+ Err010 à  01:06:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38841.00 du Bief 004
+       Vitesse =  6.087 Largeur =  106.499 Section =   160.87 Hauteur =  3.276
+ Err010 à  01:06:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38841.00 du Bief 004
+       Vitesse =  5.996 Largeur =  106.808 Section =   162.43 Hauteur =  3.291
+ Err010 à  01:06:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38841.00 du Bief 004
+       Vitesse =  5.934 Largeur =  106.986 Section =   163.53 Hauteur =  3.301
+ Err010 à  01:06:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38891.00 du Bief 004
+       Vitesse =  6.061 Largeur =  103.569 Section =   165.21 Hauteur =  3.454
+ Err010 à  01:06:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   39049.00 du Bief 004
+       Vitesse =  6.737 Largeur =   99.236 Section =   161.70 Hauteur =  3.460
+ Err010 à  01:07:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.31E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 10.397 Largeur =  104.152 Section =   121.32 Hauteur =  2.332
+ Err010 à  01:07:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37100.00 du Bief 001
+       Vitesse =  6.537 Largeur =  101.529 Section =    83.56 Hauteur =  1.786
+ Err010 à  01:07:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  5.399 Largeur =   78.624 Section =    95.30 Hauteur =  2.475
+ Err010 à  01:07:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.36E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 11.713 Largeur =  102.604 Section =   109.51 Hauteur =  2.217
+ Err010 à  01:07:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38941.00 du Bief 004
+       Vitesse =  6.206 Largeur =  101.898 Section =   164.92 Hauteur =  3.577
+ Err010 à  01:08:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  4.409 Largeur =  116.585 Section =    84.05 Hauteur =  1.334
+ Err010 à  01:08:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38291.00 du Bief 004
+       Vitesse =  5.043 Largeur =  140.226 Section =   111.48 Hauteur =  2.483
+ Err010 à  01:08:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  4.925 Largeur =   75.128 Section =    72.62 Hauteur =  1.663
+ Err010 à  01:08:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37100.00 du Bief 001
+       Vitesse =  5.203 Largeur =  106.191 Section =    99.10 Hauteur =  1.936
+ Err010 à  01:08:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   39049.00 du Bief 004
+       Vitesse =  6.825 Largeur =   98.434 Section =   160.20 Hauteur =  3.444
+ Err010 à  01:08:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  7.483 Largeur =   74.936 Section =    85.24 Hauteur =  2.128
+ Err010 à  01:09:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   39646.00 du Bief 004
+       Vitesse =  7.387 Largeur =   86.735 Section =   164.30 Hauteur =  4.292
+ Err010 à  01:09:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   39166.00 du Bief 004
+       Vitesse =  6.241 Largeur =  113.549 Section =   176.87 Hauteur =  2.806
+ Err010 à  01:09:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37750.00 du Bief 001
+       Vitesse =  5.238 Largeur =   99.093 Section =    84.05 Hauteur =  1.752
+ Err001 à  01:09:20:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.116230E+00 ; écart en DQ = 0.208042E+01
+       Itération 08 : écart en DZ = 0.383156E+00 ; écart en DQ = 0.584888E+01
+       Z : Pm   41311.00 du bief   5 ; Q : Pm   41211.00 du bief   5
+ Err010 à  01:09:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  5.474 Largeur =  102.847 Section =    92.08 Hauteur =  2.244
+ Err010 à  01:09:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.44E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 13.617 Largeur =  101.016 Section =    98.67 Hauteur =  2.111
+ Err010 à  01:10:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   37999.00 du Bief 004
+       Vitesse =  5.734 Largeur =   90.792 Section =    82.71 Hauteur =  2.380
+ Err010 à  01:10:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35714.29 du Bief 002
+       Vitesse =  4.071 Largeur =  115.174 Section =    85.80 Hauteur =  1.368
+ Err010 à  01:10:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   35833.33 du Bief 002
+       Vitesse =  5.617 Largeur =  110.402 Section =    82.16 Hauteur =  1.761
+ Err010 à  01:10:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   35833.33 du Bief 002
+       Vitesse =  5.562 Largeur =  110.611 Section =    82.75 Hauteur =  1.766
+ Err010 à  01:10:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  4.780 Largeur =   72.517 Section =    71.28 Hauteur =  1.681
+ Err010 à  01:10:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   39646.00 du Bief 004
+       Vitesse =  6.972 Largeur =   91.024 Section =   170.77 Hauteur =  4.365
+ Err010 à  01:11:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.35E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 11.445 Largeur =  103.173 Section =   113.61 Hauteur =  2.257
+ Err010 à  01:11:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   37050.00 du Bief 001
+       Vitesse =  5.786 Largeur =  107.029 Section =    87.38 Hauteur =  1.575
+ Err010 à  01:11:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   39646.00 du Bief 004
+       Vitesse =  8.274 Largeur =   67.527 Section =   140.62 Hauteur =  3.980
+ Err010 à  01:11:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.31E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 10.502 Largeur =  104.265 Section =   122.22 Hauteur =  2.340
+ Err010 à  01:11:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  7.378 Largeur =   74.945 Section =    85.27 Hauteur =  2.128
+ Err010 à  01:11:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.25E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  8.198 Largeur =   72.692 Section =    79.17 Hauteur =  2.046
+ Err010 à  01:12:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35791.67 du Bief 002
+       Vitesse =  4.708 Largeur =  115.670 Section =    84.62 Hauteur =  1.469
+ Err010 à  01:12:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.104 Largeur =   71.538 Section =    67.44 Hauteur =  1.628
+ Err010 à  01:12:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.188 Largeur =   74.041 Section =    68.28 Hauteur =  1.605
+ Err010 à  01:12:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.999 Largeur =   70.845 Section =    59.89 Hauteur =  1.490
+ Err010 à  01:12:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.426 Largeur =   73.322 Section =    65.45 Hauteur =  1.567
+ Err010 à  01:12:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34875.00 du Bief 002
+       Vitesse =  4.967 Largeur =   94.229 Section =    93.53 Hauteur =  2.114
+ Err010 à  01:13:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.964 Largeur =   66.352 Section =    58.73 Hauteur =  1.562
+ Err010 à  01:13:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  4.949 Largeur =   71.879 Section =    68.77 Hauteur =  1.646
+ Err010 à  01:13:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.369 Largeur =   69.316 Section =    64.17 Hauteur =  1.642
+ Err010 à  01:13:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  4.977 Largeur =   74.377 Section =    69.62 Hauteur =  1.623
+ Err010 à  01:13:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.30E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  6.795 Largeur =  102.681 Section =    55.48 Hauteur =  1.075
+ Err010 à  01:13:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34875.00 du Bief 002
+       Vitesse =  5.113 Largeur =   92.042 Section =    90.31 Hauteur =  2.080
+ Err010 à  01:14:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  6.229 Largeur =   64.626 Section =    55.68 Hauteur =  1.515
+ Err010 à  01:14:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.008 Largeur =   71.466 Section =    67.16 Hauteur =  1.624
+ Err010 à  01:14:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.303 Largeur =   70.536 Section =    63.55 Hauteur =  1.573
+ Err010 à  01:14:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.331 Largeur =   70.435 Section =    63.16 Hauteur =  1.567
+ Err010 à  01:14:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.307 Largeur =   69.232 Section =    64.01 Hauteur =  1.640
+ Err010 à  01:14:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  4.843 Largeur =   71.063 Section =    69.48 Hauteur =  1.717
+ Err010 à  01:15:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.392 Largeur =   68.631 Section =    62.91 Hauteur =  1.624
+ Err010 à  01:15:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.792 Largeur =   66.407 Section =    58.83 Hauteur =  1.563
+ Err010 à  01:15:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.430 Largeur =   68.307 Section =    62.32 Hauteur =  1.615
+ Err010 à  01:15:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  4.791 Largeur =   71.127 Section =    69.73 Hauteur =  1.721
+ Err010 à  01:15:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  6.447 Largeur =   99.636 Section =    71.27 Hauteur =  1.805
+ Err001 à  01:15:40:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.629913E-01 ; écart en DQ = 0.112662E+01
+       Itération 08 : écart en DZ = 0.870536E+00 ; écart en DQ = 0.495666E+02
+       Z : Pm   40811.00 du bief   4 ; Q : Pm   40936.00 du bief   4
+ Err010 à  01:16:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   39166.00 du Bief 004
+       Vitesse =  5.942 Largeur =  120.165 Section =   186.99 Hauteur =  2.894
+ Err010 à  01:16:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35642.86 du Bief 002
+       Vitesse =  4.342 Largeur =   97.510 Section =    76.48 Hauteur =  1.417
+ Err010 à  01:16:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   36250.00 du Bief 001
+       Vitesse =  5.917 Largeur =   94.935 Section =    92.08 Hauteur =  1.590
+ Err010 à  01:16:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  4.380 Largeur =   38.204 Section =    15.71 Hauteur =  1.429
+ Err010 à  01:16:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   40628.00 du Bief 004
+       Vitesse =  8.028 Largeur =  134.631 Section =   244.91 Hauteur =  2.985
+ Err010 à  01:17:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.28E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  7.461 Largeur =   92.505 Section =    69.02 Hauteur =  2.010
+ Err010 à  01:17:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   37050.00 du Bief 001
+       Vitesse =  5.879 Largeur =  106.115 Section =    82.42 Hauteur =  1.528
+ Err010 à  01:17:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   39166.00 du Bief 004
+       Vitesse =  6.287 Largeur =  114.390 Section =   179.45 Hauteur =  2.829
+ Err010 à  01:17:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38291.00 du Bief 004
+       Vitesse =  4.762 Largeur =  142.362 Section =   112.82 Hauteur =  2.493
+ Err010 à  01:17:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  5.608 Largeur =   77.912 Section =    90.73 Hauteur =  2.416
+ Err010 à  01:17:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.485 Largeur =   44.966 Section =    23.54 Hauteur =  1.120
+ Err010 à  01:18:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.488 Largeur =   45.323 Section =    24.09 Hauteur =  1.132
+ Err010 à  01:18:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.939 Largeur =   43.439 Section =    22.14 Hauteur =  1.088
+ Err010 à  01:18:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.819 Largeur =   44.878 Section =    23.44 Hauteur =  1.118
+ Err010 à  01:18:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  5.707 Largeur =   77.973 Section =    91.12 Hauteur =  2.421
+ Err010 à  01:18:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38941.00 du Bief 004
+       Vitesse =  6.072 Largeur =  102.193 Section =   167.27 Hauteur =  3.600
+ Err010 à  01:18:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  4.764 Largeur =   70.281 Section =    66.43 Hauteur =  1.674
+ Err010 à  01:19:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.78E+08 au Pm   37168.00 du Bief 006
+       Vitesse = ****** Largeur =    0.045 Section =     0.00 Hauteur =  0.001
+ Err010 à  01:19:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.33E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  7.270 Largeur =   98.982 Section =    50.09 Hauteur =  1.022
+ Err010 à  01:19:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.25E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  6.869 Largeur =   94.973 Section =    72.57 Hauteur =  2.048
+ Err010 à  01:19:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  5.638 Largeur =   79.900 Section =    99.10 Hauteur =  2.307
+ Err010 à  01:19:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37100.00 du Bief 001
+       Vitesse =  6.374 Largeur =  100.053 Section =    79.52 Hauteur =  1.746
+ Err010 à  01:19:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.25E+01 au Pm   37800.00 du Bief 001
+       Vitesse =  7.163 Largeur =   82.188 Section =    66.14 Hauteur =  1.563
+ Err010 à  01:20:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   39416.00 du Bief 004
+       Vitesse =  9.929 Largeur =  104.060 Section =   120.59 Hauteur =  2.325
+ Err010 à  01:20:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38991.00 du Bief 004
+       Vitesse =  6.343 Largeur =  101.397 Section =   169.19 Hauteur =  3.742
+ Err010 à  01:20:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  6.134 Largeur =   77.675 Section =    89.23 Hauteur =  2.397
+ Err010 à  01:20:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  4.413 Largeur =   45.973 Section =    25.24 Hauteur =  1.157
+ Err010 à  01:20:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.94E+01 au Pm   37261.00 du Bief 006
+       Vitesse = 16.155 Largeur =   24.886 Section =     7.44 Hauteur =  0.637
+ Err010 à  01:20:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  5.062 Largeur =   44.235 Section =    22.81 Hauteur =  1.104
+ Err010 à  01:21:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  4.647 Largeur =  106.895 Section =   103.84 Hauteur =  2.357
+ Err010 à  01:21:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   37800.00 du Bief 001
+       Vitesse =  6.996 Largeur =   85.903 Section =    73.09 Hauteur =  1.646
+ Err010 à  01:21:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38841.00 du Bief 004
+       Vitesse =  6.197 Largeur =  106.380 Section =   160.28 Hauteur =  3.270
+ Err010 à  01:21:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.26E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  5.519 Largeur =   51.667 Section =    23.58 Hauteur =  1.597
+ Err010 à  01:21:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   37750.00 du Bief 001
+       Vitesse =  6.763 Largeur =   88.540 Section =    72.93 Hauteur =  1.636
+ Err010 à  01:21:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.93E+08 au Pm   37168.00 du Bief 006
+       Vitesse = ****** Largeur =    0.045 Section =     0.00 Hauteur =  0.001
+ Err010 à  01:22:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.034 Largeur =   76.455 Section =    78.00 Hauteur =  1.734
+ Err010 à  01:22:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  5.807 Largeur =  103.228 Section =    90.94 Hauteur =  1.999
+ Err010 à  01:22:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.26E+01 au Pm   37168.00 du Bief 006
+       Vitesse =  6.734 Largeur =   29.810 Section =    20.03 Hauteur =  0.992
+ Err010 à  01:22:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.55E+01 au Pm   36944.00 du Bief 006
+       Vitesse =  9.177 Largeur =   66.986 Section =    18.91 Hauteur =  0.537
+ Err010 à  01:22:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.50E+01 au Pm   37261.00 du Bief 006
+       Vitesse = 10.326 Largeur =   30.724 Section =    13.44 Hauteur =  0.852
+ Err010 à  01:22:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37115.50 du Bief 006
+       Vitesse =  4.439 Largeur =   37.449 Section =    33.29 Hauteur =  1.356
+ Err010 à  01:23:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   34541.67 du Bief 002
+       Vitesse =  5.521 Largeur =   79.319 Section =   106.46 Hauteur =  2.575
+ Err010 à  01:23:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.13E+02 au Pm   37261.00 du Bief 006
+       Vitesse = 21.802 Largeur =   25.174 Section =     7.68 Hauteur =  0.646
+ Err010 à  01:23:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  6.308 Largeur =   73.046 Section =    73.38 Hauteur =  1.710
+ Err010 à  01:23:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.32E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  7.038 Largeur =   42.951 Section =    21.73 Hauteur =  1.079
+ Err010 à  01:23:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+02 au Pm   37261.00 du Bief 006
+       Vitesse = 27.855 Largeur =   22.968 Section =     5.91 Hauteur =  0.572
+ Err010 à  01:23:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.26E+01 au Pm   37003.50 du Bief 006
+       Vitesse =  6.581 Largeur =   44.624 Section =    29.98 Hauteur =  1.095
+ Err001 à  01:23:50:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 12 : écart en DZ = 0.414611E-01 ; écart en DQ = 0.296077E+00
+       Itération 13 : écart en DZ = 0.707513E-01 ; écart en DQ = 0.323361E+00
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   40936.00 du bief   4
+ Err001 à  02:00:00:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.655521E-01 ; écart en DQ = 0.813126E-01
+       Itération 08 : écart en DZ = 0.901490E-01 ; écart en DQ = 0.113104E+00
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:00:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.105217E-03 ; écart en DQ = 0.623240E-03
+       Itération 08 : écart en DZ = 0.108924E-03 ; écart en DQ = 0.422294E-03
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:12:00 + 480 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.300324E-01 ; écart en DQ = 0.458232E-01
+       Itération 08 : écart en DZ = 0.438489E-01 ; écart en DQ = 0.655995E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:20:00 + 480 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.530751E-01 ; écart en DQ = 0.799648E-01
+       Itération 08 : écart en DZ = 0.870537E-01 ; écart en DQ = 0.129259E+00
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err002 à  02:00:21:36 + 96.000 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.369365E-03 ; écart en DQ = 0.198136E-02
+       Itération 99 : écart en DZ = 0.367527E-03 ; écart en DQ = 0.197150E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+       Residu : 0.165031E+00(004: 39366.00)
+ Err001 à  02:00:23:11 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.352224E-03 ; écart en DQ = 0.196041E-02
+       Itération 08 : écart en DZ = 0.364725E-03 ; écart en DQ = 0.191363E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:24:46 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.385934E-03 ; écart en DQ = 0.213247E-02
+       Itération 08 : écart en DZ = 0.403141E-03 ; écart en DQ = 0.211988E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:26:21 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.413064E-03 ; écart en DQ = 0.227317E-02
+       Itération 08 : écart en DZ = 0.435489E-03 ; écart en DQ = 0.228988E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:27:56 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.448330E-03 ; écart en DQ = 0.245727E-02
+       Itération 08 : écart en DZ = 0.477361E-03 ; écart en DQ = 0.250827E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:30:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.481140E-03 ; écart en DQ = 0.262702E-02
+       Itération 08 : écart en DZ = 0.519434E-03 ; écart en DQ = 0.272555E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:31:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.506357E-03 ; écart en DQ = 0.275294E-02
+       Itération 08 : écart en DZ = 0.551496E-03 ; écart en DQ = 0.289189E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:33:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.541169E-03 ; écart en DQ = 0.293111E-02
+       Itération 08 : écart en DZ = 0.595268E-03 ; écart en DQ = 0.311867E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:34:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.566510E-03 ; écart en DQ = 0.305806E-02
+       Itération 08 : écart en DZ = 0.629100E-03 ; écart en DQ = 0.329216E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:36:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.593579E-03 ; écart en DQ = 0.319359E-02
+       Itération 08 : écart en DZ = 0.665395E-03 ; écart en DQ = 0.347783E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:37:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.621123E-03 ; écart en DQ = 0.333114E-02
+       Itération 08 : écart en DZ = 0.702738E-03 ; écart en DQ = 0.366818E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:40:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.715406E-03 ; écart en DQ = 0.382014E-02
+       Itération 08 : écart en DZ = 0.818102E-03 ; écart en DQ = 0.426474E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:41:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.674747E-03 ; écart en DQ = 0.359524E-02
+       Itération 08 : écart en DZ = 0.779443E-03 ; écart en DQ = 0.405549E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:43:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.701626E-03 ; écart en DQ = 0.372711E-02
+       Itération 08 : écart en DZ = 0.817587E-03 ; écart en DQ = 0.424904E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:44:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.721911E-03 ; écart en DQ = 0.382539E-02
+       Itération 08 : écart en DZ = 0.848217E-03 ; écart en DQ = 0.440296E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:46:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.741719E-03 ; écart en DQ = 0.392021E-02
+       Itération 08 : écart en DZ = 0.878620E-03 ; écart en DQ = 0.455464E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:47:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.765870E-03 ; écart en DQ = 0.403708E-02
+       Itération 08 : écart en DZ = 0.914413E-03 ; écart en DQ = 0.473260E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:50:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.874875E-03 ; écart en DQ = 0.459420E-02
+       Itération 08 : écart en DZ = 0.105386E-02 ; écart en DQ = 0.544455E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:51:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.797966E-03 ; écart en DQ = 0.418256E-02
+       Itération 08 : écart en DZ = 0.969700E-03 ; écart en DQ = 0.499938E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:53:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.822573E-03 ; écart en DQ = 0.429962E-02
+       Itération 08 : écart en DZ = 0.100682E-02 ; écart en DQ = 0.518310E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:54:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.838450E-03 ; écart en DQ = 0.437226E-02
+       Itération 08 : écart en DZ = 0.103349E-02 ; écart en DQ = 0.531189E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:56:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.850262E-03 ; écart en DQ = 0.442374E-02
+       Itération 08 : écart en DZ = 0.105543E-02 ; écart en DQ = 0.541553E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:00:57:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.866961E-03 ; écart en DQ = 0.449982E-02
+       Itération 08 : écart en DZ = 0.108324E-02 ; écart en DQ = 0.554923E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:00:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.992843E-03 ; écart en DQ = 0.513611E-02
+       Itération 08 : écart en DZ = 0.124959E-02 ; écart en DQ = 0.638955E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:01:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.877282E-03 ; écart en DQ = 0.453168E-02
+       Itération 08 : écart en DZ = 0.111265E-02 ; écart en DQ = 0.567777E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:03:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.897607E-03 ; écart en DQ = 0.462541E-02
+       Itération 08 : écart en DZ = 0.114507E-02 ; écart en DQ = 0.583447E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:04:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.885438E-03 ; écart en DQ = 0.455379E-02
+       Itération 08 : écart en DZ = 0.113628E-02 ; écart en DQ = 0.578015E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:06:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.897484E-03 ; écart en DQ = 0.460588E-02
+       Itération 08 : écart en DZ = 0.115796E-02 ; écart en DQ = 0.588115E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:07:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.876132E-03 ; écart en DQ = 0.448793E-02
+       Itération 08 : écart en DZ = 0.113673E-02 ; écart en DQ = 0.576378E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:10:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.100216E-02 ; écart en DQ = 0.511781E-02
+       Itération 08 : écart en DZ = 0.130714E-02 ; écart en DQ = 0.661604E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:11:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.863816E-03 ; écart en DQ = 0.440543E-02
+       Itération 08 : écart en DZ = 0.113344E-02 ; écart en DQ = 0.572582E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:13:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.846317E-03 ; écart en DQ = 0.430759E-02
+       Itération 08 : écart en DZ = 0.111537E-02 ; écart en DQ = 0.562611E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:14:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.826660E-03 ; écart en DQ = 0.420004E-02
+       Itération 08 : écart en DZ = 0.109411E-02 ; écart en DQ = 0.551035E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:16:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.786305E-03 ; écart en DQ = 0.398853E-02
+       Itération 08 : écart en DZ = 0.104513E-02 ; écart en DQ = 0.525510E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:17:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.756287E-03 ; écart en DQ = 0.382962E-02
+       Itération 08 : écart en DZ = 0.100898E-02 ; écart en DQ = 0.506536E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:20:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.841220E-03 ; écart en DQ = 0.424756E-02
+       Itération 08 : écart en DZ = 0.112607E-02 ; écart en DQ = 0.564392E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:21:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.685582E-03 ; écart en DQ = 0.345833E-02
+       Itération 08 : écart en DZ = 0.921814E-03 ; écart en DQ = 0.461148E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:23:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.670276E-03 ; écart en DQ = 0.337508E-02
+       Itération 08 : écart en DZ = 0.903545E-03 ; écart en DQ = 0.451394E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:24:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.631377E-03 ; écart en DQ = 0.317429E-02
+       Itération 08 : écart en DZ = 0.853399E-03 ; écart en DQ = 0.425714E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:26:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.586355E-03 ; écart en DQ = 0.294345E-02
+       Itération 08 : écart en DZ = 0.794461E-03 ; écart en DQ = 0.395734E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:27:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.538534E-03 ; écart en DQ = 0.269934E-02
+       Itération 08 : écart en DZ = 0.731234E-03 ; écart en DQ = 0.363710E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:30:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.544647E-03 ; écart en DQ = 0.272339E-02
+       Itération 08 : écart en DZ = 0.740808E-03 ; écart en DQ = 0.367895E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:31:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.420601E-03 ; écart en DQ = 0.210154E-02
+       Itération 08 : écart en DZ = 0.573423E-03 ; écart en DQ = 0.284256E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:33:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.363280E-03 ; écart en DQ = 0.181256E-02
+       Itération 08 : écart en DZ = 0.495886E-03 ; écart en DQ = 0.245475E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:36:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.262767E-02 ; écart en DQ = 0.130070E-01
+       Itération 08 : écart en DZ = 0.354437E-02 ; écart en DQ = 0.175518E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:40:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.947597E-03 ; écart en DQ = 0.467937E-02
+       Itération 08 : écart en DZ = 0.130790E-02 ; écart en DQ = 0.647405E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:44:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.124393E-02 ; écart en DQ = 0.611479E-02
+       Itération 08 : écart en DZ = 0.168813E-02 ; écart en DQ = 0.830654E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:47:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.484588E-03 ; écart en DQ = 0.238067E-02
+       Itération 08 : écart en DZ = 0.660370E-03 ; écart en DQ = 0.323806E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:51:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.251272E-02 ; écart en DQ = 0.122982E-01
+       Itération 08 : écart en DZ = 0.343564E-02 ; écart en DQ = 0.168194E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:53:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.442174E-03 ; écart en DQ = 0.217163E-02
+       Itération 08 : écart en DZ = 0.598285E-03 ; écart en DQ = 0.291671E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:54:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.374533E-03 ; écart en DQ = 0.183597E-02
+       Itération 08 : écart en DZ = 0.506182E-03 ; écart en DQ = 0.246559E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:56:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.448715E-03 ; écart en DQ = 0.219725E-02
+       Itération 08 : écart en DZ = 0.604844E-03 ; écart en DQ = 0.294283E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:01:57:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.479275E-03 ; écart en DQ = 0.234457E-02
+       Itération 08 : écart en DZ = 0.644194E-03 ; écart en DQ = 0.313064E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:00:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.610289E-03 ; écart en DQ = 0.298105E-02
+       Itération 08 : écart en DZ = 0.817253E-03 ; écart en DQ = 0.396682E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:01:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.588899E-03 ; écart en DQ = 0.287509E-02
+       Itération 08 : écart en DZ = 0.785637E-03 ; écart en DQ = 0.380797E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:03:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.617728E-03 ; écart en DQ = 0.301313E-02
+       Itération 08 : écart en DZ = 0.821035E-03 ; écart en DQ = 0.397529E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:04:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.652331E-03 ; écart en DQ = 0.317920E-02
+       Itération 08 : écart en DZ = 0.863531E-03 ; écart en DQ = 0.417655E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:06:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.682571E-03 ; écart en DQ = 0.332391E-02
+       Itération 08 : écart en DZ = 0.899651E-03 ; écart en DQ = 0.434651E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:07:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.708579E-03 ; écart en DQ = 0.344794E-02
+       Itération 08 : écart en DZ = 0.929632E-03 ; écart en DQ = 0.448648E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:10:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.827013E-03 ; écart en DQ = 0.401888E-02
+       Itération 08 : écart en DZ = 0.107845E-02 ; écart en DQ = 0.519916E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:11:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.753622E-03 ; écart en DQ = 0.366141E-02
+       Itération 08 : écart en DZ = 0.977202E-03 ; écart en DQ = 0.470402E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:13:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.761411E-03 ; écart en DQ = 0.369665E-02
+       Itération 08 : écart en DZ = 0.981935E-03 ; écart en DQ = 0.472202E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:14:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.768295E-03 ; écart en DQ = 0.372768E-02
+       Itération 08 : écart en DZ = 0.985199E-03 ; écart en DQ = 0.473282E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:16:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.771489E-03 ; écart en DQ = 0.374096E-02
+       Itération 08 : écart en DZ = 0.983486E-03 ; écart en DQ = 0.471962E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:17:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.771407E-03 ; écart en DQ = 0.373857E-02
+       Itération 08 : écart en DZ = 0.977390E-03 ; écart en DQ = 0.468539E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:20:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.840277E-03 ; écart en DQ = 0.406814E-02
+       Itération 08 : écart en DZ = 0.105631E-02 ; écart en DQ = 0.505862E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:21:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.737643E-03 ; écart en DQ = 0.357163E-02
+       Itération 08 : écart en DZ = 0.920961E-03 ; écart en DQ = 0.440377E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:23:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.690621E-03 ; écart en DQ = 0.334280E-02
+       Itération 08 : écart en DZ = 0.856688E-03 ; écart en DQ = 0.409157E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:24:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.704744E-03 ; écart en DQ = 0.340905E-02
+       Itération 08 : écart en DZ = 0.868753E-03 ; écart en DQ = 0.414604E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:26:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.680297E-03 ; écart en DQ = 0.328991E-02
+       Itération 08 : écart en DZ = 0.832967E-03 ; écart en DQ = 0.397054E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:27:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.681505E-03 ; écart en DQ = 0.329443E-02
+       Itération 08 : écart en DZ = 0.828556E-03 ; écart en DQ = 0.394546E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:30:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.758190E-03 ; écart en DQ = 0.366194E-02
+       Itération 08 : écart en DZ = 0.913258E-03 ; écart en DQ = 0.434536E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:31:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.671360E-03 ; écart en DQ = 0.324353E-02
+       Itération 08 : écart en DZ = 0.801951E-03 ; écart en DQ = 0.380950E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:33:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.645892E-03 ; écart en DQ = 0.312076E-02
+       Itération 08 : écart en DZ = 0.765384E-03 ; écart en DQ = 0.363117E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:34:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.630150E-03 ; écart en DQ = 0.304415E-02
+       Itération 08 : écart en DZ = 0.740751E-03 ; écart en DQ = 0.351059E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:36:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.593878E-03 ; écart en DQ = 0.286966E-02
+       Itération 08 : écart en DZ = 0.692488E-03 ; écart en DQ = 0.327727E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:37:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.556365E-03 ; écart en DQ = 0.268864E-02
+       Itération 08 : écart en DZ = 0.643742E-03 ; écart en DQ = 0.304291E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:40:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.581963E-03 ; écart en DQ = 0.281088E-02
+       Itération 08 : écart en DZ = 0.666887E-03 ; écart en DQ = 0.314950E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:41:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.534745E-03 ; écart en DQ = 0.258389E-02
+       Itération 08 : écart en DZ = 0.607730E-03 ; écart en DQ = 0.286523E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:43:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.530271E-03 ; écart en DQ = 0.256265E-02
+       Itération 08 : écart en DZ = 0.597229E-03 ; écart en DQ = 0.281224E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:44:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.511207E-03 ; écart en DQ = 0.247202E-02
+       Itération 08 : écart en DZ = 0.570558E-03 ; écart en DQ = 0.268244E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:46:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.488137E-03 ; écart en DQ = 0.236180E-02
+       Itération 08 : écart en DZ = 0.539831E-03 ; écart en DQ = 0.253401E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:47:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.465928E-03 ; écart en DQ = 0.225595E-02
+       Itération 08 : écart en DZ = 0.510562E-03 ; écart en DQ = 0.239265E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:50:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.469286E-03 ; écart en DQ = 0.227360E-02
+       Itération 08 : écart en DZ = 0.508115E-03 ; écart en DQ = 0.237739E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:51:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.409832E-03 ; écart en DQ = 0.198852E-02
+       Itération 08 : écart en DZ = 0.439630E-03 ; écart en DQ = 0.205140E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:53:10 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.390072E-03 ; écart en DQ = 0.189439E-02
+       Itération 08 : écart en DZ = 0.414471E-03 ; écart en DQ = 0.193060E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:54:45 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.369924E-03 ; écart en DQ = 0.179845E-02
+       Itération 08 : écart en DZ = 0.389413E-03 ; écart en DQ = 0.181029E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:56:20 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.350858E-03 ; écart en DQ = 0.170801E-02
+       Itération 08 : écart en DZ = 0.365899E-03 ; écart en DQ = 0.169732E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:02:57:55 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.331599E-03 ; écart en DQ = 0.161639E-02
+       Itération 08 : écart en DZ = 0.342573E-03 ; écart en DQ = 0.158561E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:00:00 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.327324E-03 ; écart en DQ = 0.159853E-02
+       Itération 08 : écart en DZ = 0.334007E-03 ; écart en DQ = 0.154226E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:01:35 + 95.000 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.287377E-03 ; écart en DQ = 0.140728E-02
+       Itération 08 : écart en DZ = 0.290658E-03 ; écart en DQ = 0.133664E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:10:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.293993E-01 ; écart en DQ = 0.390736E-01
+       Itération 08 : écart en DZ = 0.428044E-01 ; écart en DQ = 0.557935E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:20:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.115112E-01 ; écart en DQ = 0.155180E-01
+       Itération 08 : écart en DZ = 0.152766E-01 ; écart en DQ = 0.195318E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:30:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.137912E-01 ; écart en DQ = 0.186591E-01
+       Itération 08 : écart en DZ = 0.172245E-01 ; écart en DQ = 0.219188E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:40:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.717054E-02 ; écart en DQ = 0.997171E-02
+       Itération 08 : écart en DZ = 0.826605E-02 ; écart en DQ = 0.102090E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:03:50:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 08 : écart en DZ = 0.438223E-02 ; écart en DQ = 0.514799E-02
+       Itération 09 : écart en DZ = 0.444293E-02 ; écart en DQ = 0.624279E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:04:00:00 + 475 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 08 : écart en DZ = 0.229786E-02 ; écart en DQ = 0.241266E-02
+       Itération 09 : écart en DZ = 0.207957E-02 ; écart en DQ = 0.317185E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err010 à  02:04:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38057.00 du Bief 004
+       Vitesse =  5.072 Largeur =   91.094 Section =    99.83 Hauteur =  2.545
+ Err010 à  02:04:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.11E+02 au Pm   37168.00 du Bief 006
+       Vitesse = 19.440 Largeur =   23.490 Section =     7.02 Hauteur =  0.504
+ Err010 à  02:05:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   37115.50 du Bief 006
+       Vitesse =  5.022 Largeur =   35.446 Section =    26.39 Hauteur =  1.167
+ Err010 à  02:05:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.31E+01 au Pm   39416.00 du Bief 004
+       Vitesse =  9.458 Largeur =  100.832 Section =    97.43 Hauteur =  2.099
+ Err010 à  02:05:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+02 au Pm   37261.00 du Bief 006
+       Vitesse = 24.535 Largeur =   22.261 Section =     5.41 Hauteur =  0.550
+ Err010 à  02:05:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37063.00 du Bief 006
+       Vitesse =  4.746 Largeur =   36.044 Section =    29.38 Hauteur =  1.212
+ Err010 à  02:05:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34666.67 du Bief 002
+       Vitesse =  5.865 Largeur =  101.516 Section =   134.90 Hauteur =  2.511
+ Err010 à  02:05:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.294 Largeur =  104.002 Section =   126.88 Hauteur =  2.355
+ Err010 à  02:06:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  5.135 Largeur =  132.872 Section =   136.04 Hauteur =  1.753
+ Err010 à  02:06:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   36481.00 du Bief 006
+       Vitesse =  3.588 Largeur =   81.030 Section =    34.55 Hauteur =  1.028
+ Err010 à  02:06:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35714.29 du Bief 002
+       Vitesse =  5.253 Largeur =  129.941 Section =   130.20 Hauteur =  1.732
+ Err010 à  02:06:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.31E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 10.171 Largeur =  102.632 Section =   109.70 Hauteur =  2.219
+ Err010 à  02:06:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.32E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  6.378 Largeur =   43.201 Section =    17.44 Hauteur =  1.473
+ Err010 à  02:06:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.39E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  8.106 Largeur =   30.866 Section =    13.62 Hauteur =  0.857
+ Err010 à  02:07:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  3.938 Largeur =   53.459 Section =    26.88 Hauteur =  1.660
+ Err010 à  02:07:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35833.33 du Bief 002
+       Vitesse =  5.012 Largeur =  133.256 Section =   151.35 Hauteur =  2.339
+ Err010 à  02:07:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38000.00 du Bief 001
+       Vitesse =  6.242 Largeur =   91.404 Section =   147.64 Hauteur =  3.195
+ Err010 à  02:07:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  6.456 Largeur =  102.145 Section =   103.81 Hauteur =  2.082
+ Err010 à  02:07:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  6.406 Largeur =  108.729 Section =   125.95 Hauteur =  2.329
+ Err010 à  02:07:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  6.637 Largeur =  108.228 Section =   121.97 Hauteur =  2.292
+ Err010 à  02:08:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  5.644 Largeur =  110.342 Section =   138.57 Hauteur =  2.444
+ Err010 à  02:08:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   34625.00 du Bief 002
+       Vitesse =  5.603 Largeur =   95.645 Section =   135.81 Hauteur =  2.673
+ Err010 à  02:08:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35833.33 du Bief 002
+       Vitesse =  5.315 Largeur =  127.162 Section =   141.82 Hauteur =  2.267
+ Err010 à  02:08:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  7.528 Largeur =  110.155 Section =   113.54 Hauteur =  2.446
+ Err010 à  02:08:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37150.00 du Bief 001
+       Vitesse =  5.720 Largeur =  110.285 Section =   155.75 Hauteur =  2.723
+ Err010 à  02:08:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   38291.00 du Bief 004
+       Vitesse =  4.370 Largeur =  157.816 Section =   123.26 Hauteur =  2.562
+ Err010 à  02:09:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+02 au Pm   37115.50 du Bief 006
+       Vitesse = 23.038 Largeur =   21.716 Section =     4.66 Hauteur =  0.417
+ Err010 à  02:09:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38174.00 du Bief 004
+       Vitesse =  5.832 Largeur =   77.756 Section =    89.74 Hauteur =  2.404
+ Err010 à  02:09:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  6.239 Largeur =   75.092 Section =    89.24 Hauteur =  2.364
+ Err010 à  02:09:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  6.417 Largeur =   97.850 Section =    99.01 Hauteur =  2.079
+ Err010 à  02:09:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.140 Largeur =  106.835 Section =   121.12 Hauteur =  2.203
+ Err010 à  02:09:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35714.29 du Bief 002
+       Vitesse =  5.389 Largeur =  125.254 Section =   117.65 Hauteur =  1.634
+ Err010 à  02:10:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35678.57 du Bief 002
+       Vitesse =  5.202 Largeur =  123.657 Section =   119.30 Hauteur =  1.711
+ Err010 à  02:10:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  6.524 Largeur =  107.320 Section =   114.78 Hauteur =  2.225
+ Err010 à  02:10:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.651 Largeur =  102.523 Section =   105.56 Hauteur =  2.099
+ Err010 à  02:10:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  6.428 Largeur =   91.005 Section =    95.66 Hauteur =  1.954
+ Err010 à  02:10:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35571.43 du Bief 002
+       Vitesse =  5.454 Largeur =  107.394 Section =   110.96 Hauteur =  1.997
+ Err010 à  02:10:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35571.43 du Bief 002
+       Vitesse =  5.067 Largeur =  108.757 Section =   117.27 Hauteur =  2.055
+ Err010 à  02:11:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.27E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  8.272 Largeur =   72.770 Section =    72.29 Hauteur =  1.695
+ Err010 à  02:11:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  7.639 Largeur =   74.005 Section =    77.23 Hauteur =  1.762
+ Err010 à  02:11:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.642 Largeur =   97.809 Section =   100.12 Hauteur =  2.046
+ Err010 à  02:11:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.25E+01 au Pm   34875.00 du Bief 002
+       Vitesse =  7.948 Largeur =   94.573 Section =    94.03 Hauteur =  2.119
+ Err010 à  02:11:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34875.00 du Bief 002
+       Vitesse =  5.425 Largeur =  107.627 Section =   127.31 Hauteur =  2.442
+ Err010 à  02:11:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  6.495 Largeur =  106.275 Section =   106.61 Hauteur =  2.149
+ Err001 à  02:11:50:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.218212E-01 ; écart en DQ = 0.328363E+00
+       Itération 08 : écart en DZ = 0.316934E+00 ; écart en DQ = 0.523816E+01
+       Z : Pm   34500.00 du bief   2 ; Q : Pm   40936.00 du bief   4
+ Err010 à  02:12:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  3.451 Largeur =   49.578 Section =    20.07 Hauteur =  1.528
+ Err010 à  02:12:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.78E+01 au Pm   37261.00 du Bief 006
+       Vitesse = 12.552 Largeur =   23.267 Section =     6.14 Hauteur =  0.582
+ Err010 à  02:12:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35916.67 du Bief 002
+       Vitesse =  5.330 Largeur =  105.229 Section =   133.55 Hauteur =  3.040
+ Err010 à  02:12:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   39107.00 du Bief 004
+       Vitesse =  6.564 Largeur =  107.079 Section =   170.19 Hauteur =  3.051
+ Err010 à  02:12:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.38E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  7.327 Largeur =   28.653 Section =    11.05 Hauteur =  0.771
+ Err010 à  02:13:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.41E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  7.905 Largeur =   28.410 Section =    10.78 Hauteur =  0.762
+ Err010 à  02:13:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.31E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  6.529 Largeur =   30.764 Section =    13.49 Hauteur =  0.853
+ Err010 à  02:13:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   40904.00 du Bief 004
+       Vitesse =  9.048 Largeur =  133.331 Section =   203.95 Hauteur =  3.344
+ Err010 à  02:13:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  5.864 Largeur =   79.053 Section =    87.16 Hauteur =  1.852
+ Err010 à  02:13:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35875.00 du Bief 002
+       Vitesse =  5.229 Largeur =  111.819 Section =   121.05 Hauteur =  2.514
+ Err010 à  02:13:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   36250.00 du Bief 001
+       Vitesse =  5.772 Largeur =  100.561 Section =   121.35 Hauteur =  1.889
+ Err010 à  02:14:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   37750.00 du Bief 001
+       Vitesse =  5.728 Largeur =  106.625 Section =   103.35 Hauteur =  1.938
+ Err010 à  02:14:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.36E+01 au Pm   39416.00 du Bief 004
+       Vitesse = 11.666 Largeur =  102.824 Section =   111.02 Hauteur =  2.232
+ Err010 à  02:14:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  5.236 Largeur =  112.132 Section =   103.43 Hauteur =  2.510
+ Err010 à  02:14:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37941.00 du Bief 004
+       Vitesse =  5.486 Largeur =   94.343 Section =    85.10 Hauteur =  2.434
+ Err010 à  02:14:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  6.264 Largeur =   38.527 Section =    18.29 Hauteur =  0.995
+ Err010 à  02:14:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  5.028 Largeur =   44.240 Section =    22.82 Hauteur =  1.104
+ Err010 à  02:15:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   39107.00 du Bief 004
+       Vitesse =  6.099 Largeur =  107.357 Section =   170.93 Hauteur =  3.058
+ Err010 à  02:15:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.38E+01 au Pm   35791.67 du Bief 002
+       Vitesse =  9.087 Largeur =  105.536 Section =    60.87 Hauteur =  1.256
+ Err010 à  02:15:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  7.873 Largeur =   78.182 Section =    94.75 Hauteur =  2.252
+ Err010 à  02:15:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37850.00 du Bief 001
+       Vitesse =  6.004 Largeur =   95.337 Section =   104.47 Hauteur =  2.079
+ Err010 à  02:15:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   39416.00 du Bief 004
+       Vitesse =  7.317 Largeur =  106.566 Section =   141.13 Hauteur =  2.520
+ Err010 à  02:15:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   38232.00 du Bief 004
+       Vitesse =  4.880 Largeur =  127.929 Section =   111.25 Hauteur =  2.575
+ Err010 à  02:16:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.57E+01 au Pm   37261.00 du Bief 006
+       Vitesse = 11.216 Largeur =   28.981 Section =    11.42 Hauteur =  0.784
+ Err010 à  02:16:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37115.50 du Bief 006
+       Vitesse =  4.357 Largeur =   36.525 Section =    30.03 Hauteur =  1.268
+ Err010 à  02:16:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   36350.00 du Bief 001
+       Vitesse =  8.103 Largeur =   76.919 Section =    90.96 Hauteur =  2.203
+ Err010 à  02:16:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.32E+01 au Pm   37003.50 du Bief 006
+       Vitesse =  7.399 Largeur =   35.796 Section =    19.39 Hauteur =  0.830
+ Err010 à  02:16:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   35714.29 du Bief 002
+       Vitesse =  5.539 Largeur =  113.032 Section =    79.22 Hauteur =  1.311
+ Err010 à  02:16:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  6.541 Largeur =   71.095 Section =    65.71 Hauteur =  1.603
+ Err010 à  02:17:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.22E+01 au Pm   36849.00 du Bief 006
+       Vitesse =  4.760 Largeur =   74.338 Section =    36.08 Hauteur =  0.784
+ Err010 à  02:17:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   35535.71 du Bief 002
+       Vitesse =  4.971 Largeur =   78.824 Section =    86.58 Hauteur =  1.845
+ Err010 à  02:17:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.24E+01 au Pm   36944.00 du Bief 006
+       Vitesse =  4.762 Largeur =   77.212 Section =    30.79 Hauteur =  0.700
+ Err010 à  02:17:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.29E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  8.278 Largeur =   65.785 Section =    53.50 Hauteur =  1.426
+ Err010 à  02:17:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.28E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  8.039 Largeur =   66.841 Section =    55.25 Hauteur =  1.453
+ Err010 à  02:17:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   35450.00 du Bief 002
+       Vitesse =  5.708 Largeur =   73.318 Section =    76.92 Hauteur =  1.821
+ Err010 à  02:18:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.42E+01 au Pm   36944.00 du Bief 006
+       Vitesse =  7.289 Largeur =   69.510 Section =    21.13 Hauteur =  0.569
+ Err010 à  02:18:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  5.180 Largeur =  118.584 Section =    91.09 Hauteur =  1.394
+ Err010 à  02:18:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.42E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  9.531 Largeur =  101.355 Section =    53.42 Hauteur =  1.055
+ Err010 à  02:18:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.28E+01 au Pm   35750.00 du Bief 002
+       Vitesse =  7.080 Largeur =  111.390 Section =    70.30 Hauteur =  1.214
+ Err010 à  02:18:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   35714.29 du Bief 002
+       Vitesse =  4.711 Largeur =  118.681 Section =    97.21 Hauteur =  1.466
+ Err010 à  02:18:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.47E+01 au Pm   37115.50 du Bief 006
+       Vitesse = 10.174 Largeur =   28.731 Section =    13.87 Hauteur =  0.786
+ Err010 à  02:19:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  5.233 Largeur =   76.619 Section =    86.96 Hauteur =  1.891
+ Err010 à  02:19:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   37891.00 du Bief 004
+       Vitesse =  5.245 Largeur =   85.380 Section =    90.48 Hauteur =  2.462
+ Err010 à  02:19:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.14E+02 au Pm   37261.00 du Bief 006
+       Vitesse = 21.733 Largeur =   23.264 Section =     6.14 Hauteur =  0.582
+ Err010 à  02:19:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   37261.00 du Bief 006
+       Vitesse =  3.853 Largeur =   49.261 Section =    31.53 Hauteur =  1.290
+ Err010 à  02:19:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34812.50 du Bief 002
+       Vitesse =  5.187 Largeur =  107.498 Section =   116.19 Hauteur =  2.238
+ Err010 à  02:19:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.15E+01 au Pm   34500.00 du Bief 002
+       Vitesse =  5.737 Largeur =   78.276 Section =   109.62 Hauteur =  2.648
+ Err010 à  02:20:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.20E+01 au Pm   34750.00 du Bief 002
+       Vitesse =  6.250 Largeur =  104.521 Section =   100.60 Hauteur =  2.019
+ Err010 à  02:20:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   35500.00 du Bief 002
+       Vitesse =  6.276 Largeur =   74.968 Section =    81.14 Hauteur =  1.815
+ Err010 à  02:20:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.40E+03 au Pm   37168.00 du Bief 006
+       Vitesse = ****** Largeur =    9.985 Section =     0.51 Hauteur =  0.130
+ Err010 à  02:20:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.17E+01 au Pm   34708.33 du Bief 002
+       Vitesse =  5.627 Largeur =  103.852 Section =   111.76 Hauteur =  2.170
+ Err010 à  02:20:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.37E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  7.318 Largeur =   47.414 Section =    18.44 Hauteur =  1.495
+ Err010 à  02:20:50:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.45E+01 au Pm   37115.50 du Bief 006
+       Vitesse = 10.080 Largeur =   30.506 Section =    15.31 Hauteur =  0.835
+ Err010 à  02:21:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.75E+01 au Pm   37215.00 du Bief 006
+       Vitesse = 13.148 Largeur =   34.589 Section =    10.87 Hauteur =  1.295
+ Err010 à  02:21:10:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.16E+01 au Pm   34583.33 du Bief 002
+       Vitesse =  5.646 Largeur =   88.080 Section =   117.91 Hauteur =  2.624
+ Err010 à  02:21:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.37E+02 au Pm   39416.00 du Bief 004
+       Vitesse = 77.982 Largeur =   29.837 Section =    13.78 Hauteur =  0.942
+ Err010 à  02:21:30:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.19E+01 au Pm   37115.50 du Bief 006
+       Vitesse =  5.388 Largeur =   36.146 Section =    28.71 Hauteur =  1.232
+ Err010 à  02:21:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.18E+01 au Pm   37115.50 du Bief 006
+       Vitesse =  5.076 Largeur =   36.791 Section =    30.96 Hauteur =  1.293
+ Err001 à  02:21:40:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 11 : écart en DZ = 0.976185E-02 ; écart en DQ = 0.474879E-01
+       Itération 12 : écart en DZ = 0.118290E-01 ; écart en DQ = 0.528820E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   40936.00 du bief   4
+ Err010 à  02:22:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.52E+01 au Pm   37215.00 du Bief 006
+       Vitesse = 10.310 Largeur =   37.826 Section =    15.26 Hauteur =  1.417
+ Err001 à  02:22:00:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 14 : écart en DZ = 0.373791E-02 ; écart en DQ = 0.405266E-02
+       Itération 15 : écart en DZ = 0.390490E-02 ; écart en DQ = 0.342344E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:22:10:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 09 : écart en DZ = 0.447066E-02 ; écart en DQ = 0.541257E-02
+       Itération 10 : écart en DZ = 0.468225E-02 ; écart en DQ = 0.511261E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:22:20:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 09 : écart en DZ = 0.444879E-02 ; écart en DQ = 0.537929E-02
+       Itération 10 : écart en DZ = 0.495455E-02 ; écart en DQ = 0.527223E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:22:28:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.124804E+00 ; écart en DQ = 0.321373E+00
+       Itération 08 : écart en DZ = 0.277124E+00 ; écart en DQ = 0.594643E+00
+       Z : Pm   37115.50 du bief   6 ; Q : Pm   37215.00 du bief   6
+ Err001 à  02:22:38:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.399952E-04 ; écart en DQ = 0.238701E-03
+       Itération 08 : écart en DZ = 0.405703E-04 ; écart en DQ = 0.143783E-03
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   40936.00 du bief   4
+ Err001 à  02:22:50:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.228249E-01 ; écart en DQ = 0.256942E-01
+       Itération 08 : écart en DZ = 0.305948E-01 ; écart en DQ = 0.330855E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:00:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.273590E-01 ; écart en DQ = 0.303251E-01
+       Itération 08 : écart en DZ = 0.379500E-01 ; écart en DQ = 0.407132E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:10:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.380000E-01 ; écart en DQ = 0.414453E-01
+       Itération 08 : écart en DZ = 0.555122E-01 ; écart en DQ = 0.593376E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:18:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.539555E-03 ; écart en DQ = 0.227699E-02
+       Itération 08 : écart en DZ = 0.552821E-03 ; écart en DQ = 0.222726E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:22:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.650431E-03 ; écart en DQ = 0.270771E-02
+       Itération 08 : écart en DZ = 0.666787E-03 ; écart en DQ = 0.270725E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:26:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.788446E-03 ; écart en DQ = 0.325963E-02
+       Itération 08 : écart en DZ = 0.818894E-03 ; écart en DQ = 0.331951E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:28:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.330152E-03 ; écart en DQ = 0.138707E-02
+       Itération 08 : écart en DZ = 0.353632E-03 ; écart en DQ = 0.140933E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:30:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.335863E-03 ; écart en DQ = 0.140733E-02
+       Itération 08 : écart en DZ = 0.362215E-03 ; écart en DQ = 0.144086E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:32:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.338075E-03 ; écart en DQ = 0.141329E-02
+       Itération 08 : écart en DZ = 0.367264E-03 ; écart en DQ = 0.145889E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:34:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.335845E-03 ; écart en DQ = 0.140054E-02
+       Itération 08 : écart en DZ = 0.367311E-03 ; écart en DQ = 0.145724E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:36:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.346650E-03 ; écart en DQ = 0.144052E-02
+       Itération 08 : écart en DZ = 0.381330E-03 ; écart en DQ = 0.151211E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:38:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.365034E-03 ; écart en DQ = 0.151174E-02
+       Itération 08 : écart en DZ = 0.403796E-03 ; écart en DQ = 0.160037E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:40:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.375936E-03 ; écart en DQ = 0.155238E-02
+       Itération 08 : écart en DZ = 0.418529E-03 ; écart en DQ = 0.165736E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:42:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.420702E-03 ; écart en DQ = 0.173123E-02
+       Itération 08 : écart en DZ = 0.471144E-03 ; écart en DQ = 0.186475E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:44:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.449680E-03 ; écart en DQ = 0.184513E-02
+       Itération 08 : écart en DZ = 0.507207E-03 ; écart en DQ = 0.200614E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:46:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.474286E-03 ; écart en DQ = 0.194122E-02
+       Itération 08 : écart en DZ = 0.538843E-03 ; écart en DQ = 0.212893E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:48:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.498516E-03 ; écart en DQ = 0.203510E-02
+       Itération 08 : écart en DZ = 0.570471E-03 ; écart en DQ = 0.225199E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:50:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.521236E-03 ; écart en DQ = 0.212189E-02
+       Itération 08 : écart en DZ = 0.600679E-03 ; écart en DQ = 0.236898E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:52:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.522531E-03 ; écart en DQ = 0.212263E-02
+       Itération 08 : écart en DZ = 0.606817E-03 ; écart en DQ = 0.239004E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:54:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.559099E-03 ; écart en DQ = 0.226423E-02
+       Itération 08 : écart en DZ = 0.653356E-03 ; écart en DQ = 0.257118E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:56:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.560754E-03 ; écart en DQ = 0.226618E-02
+       Itération 08 : écart en DZ = 0.660164E-03 ; écart en DQ = 0.259452E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  02:23:58:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.604636E-03 ; écart en DQ = 0.243626E-02
+       Itération 08 : écart en DZ = 0.716196E-03 ; écart en DQ = 0.281215E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:00:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.612767E-03 ; écart en DQ = 0.246381E-02
+       Itération 08 : écart en DZ = 0.731160E-03 ; écart en DQ = 0.286713E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:02:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.679840E-03 ; écart en DQ = 0.272535E-02
+       Itération 08 : écart en DZ = 0.816251E-03 ; écart en DQ = 0.319790E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:04:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.728146E-03 ; écart en DQ = 0.291204E-02
+       Itération 08 : écart en DZ = 0.880621E-03 ; écart en DQ = 0.344598E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:06:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.773548E-03 ; écart en DQ = 0.308644E-02
+       Itération 08 : écart en DZ = 0.942491E-03 ; écart en DQ = 0.368355E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:08:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.787707E-03 ; écart en DQ = 0.313699E-02
+       Itération 08 : écart en DZ = 0.967672E-03 ; écart en DQ = 0.377685E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:10:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.872937E-03 ; écart en DQ = 0.346688E-02
+       Itération 08 : écart en DZ = 0.107974E-02 ; écart en DQ = 0.420992E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:12:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.930201E-03 ; écart en DQ = 0.368645E-02
+       Itération 08 : écart en DZ = 0.115952E-02 ; écart en DQ = 0.451541E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:14:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.951657E-03 ; écart en DQ = 0.376355E-02
+       Itération 08 : écart en DZ = 0.119609E-02 ; écart en DQ = 0.465166E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:16:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.105334E-02 ; écart en DQ = 0.415610E-02
+       Itération 08 : écart en DZ = 0.133371E-02 ; écart en DQ = 0.518103E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:18:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.107296E-02 ; écart en DQ = 0.422537E-02
+       Itération 08 : écart en DZ = 0.137022E-02 ; écart en DQ = 0.531576E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:20:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.113796E-02 ; écart en DQ = 0.447244E-02
+       Itération 08 : écart en DZ = 0.146498E-02 ; écart en DQ = 0.567580E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:22:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.120716E-02 ; écart en DQ = 0.473422E-02
+       Itération 08 : écart en DZ = 0.156669E-02 ; écart en DQ = 0.606245E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:24:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.127676E-02 ; écart en DQ = 0.499696E-02
+       Itération 08 : écart en DZ = 0.167062E-02 ; écart en DQ = 0.645641E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:26:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.134527E-02 ; écart en DQ = 0.525463E-02
+       Itération 08 : écart en DZ = 0.177474E-02 ; écart en DQ = 0.684994E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:28:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.141822E-02 ; écart en DQ = 0.552860E-02
+       Itération 08 : écart en DZ = 0.188629E-02 ; écart en DQ = 0.727102E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:30:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.148406E-02 ; écart en DQ = 0.577467E-02
+       Itération 08 : écart en DZ = 0.199055E-02 ; écart en DQ = 0.766283E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:32:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.158056E-02 ; écart en DQ = 0.613745E-02
+       Itération 08 : écart en DZ = 0.213686E-02 ; écart en DQ = 0.821534E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:34:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.168352E-02 ; écart en DQ = 0.652486E-02
+       Itération 08 : écart en DZ = 0.229508E-02 ; écart en DQ = 0.881192E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:36:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.180274E-02 ; écart en DQ = 0.697348E-02
+       Itération 08 : écart en DZ = 0.247813E-02 ; écart en DQ = 0.950212E-02
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:38:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.188798E-02 ; écart en DQ = 0.729095E-02
+       Itération 08 : écart en DZ = 0.261837E-02 ; écart en DQ = 0.100270E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:40:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.204326E-02 ; écart en DQ = 0.787514E-02
+       Itération 08 : écart en DZ = 0.285784E-02 ; écart en DQ = 0.109296E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:42:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.214907E-02 ; écart en DQ = 0.826930E-02
+       Itération 08 : écart en DZ = 0.303333E-02 ; écart en DQ = 0.115854E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:44:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.228197E-02 ; écart en DQ = 0.876535E-02
+       Itération 08 : écart en DZ = 0.324972E-02 ; écart en DQ = 0.123961E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:46:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.256372E-02 ; écart en DQ = 0.982635E-02
+       Itération 08 : écart en DZ = 0.367941E-02 ; écart en DQ = 0.140172E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:48:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.256562E-02 ; écart en DQ = 0.982140E-02
+       Itération 08 : écart en DZ = 0.371950E-02 ; écart en DQ = 0.141514E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:50:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.289356E-02 ; écart en DQ = 0.110531E-01
+       Itération 08 : écart en DZ = 0.422738E-02 ; écart en DQ = 0.160626E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:52:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.308125E-02 ; écart en DQ = 0.117507E-01
+       Itération 08 : écart en DZ = 0.454235E-02 ; écart en DQ = 0.172370E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:54:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.326872E-02 ; écart en DQ = 0.124452E-01
+       Itération 08 : écart en DZ = 0.486200E-02 ; écart en DQ = 0.184258E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:56:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.322267E-02 ; écart en DQ = 0.122555E-01
+       Itération 08 : écart en DZ = 0.484363E-02 ; écart en DQ = 0.183320E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
+ Err001 à  03:00:58:00 + 120 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.365421E-02 ; écart en DQ = 0.138700E-01
+       Itération 08 : écart en DZ = 0.553485E-02 ; écart en DQ = 0.209238E-01
+       Z : Pm   39416.00 du bief   4 ; Q : Pm   39366.00 du bief   4
