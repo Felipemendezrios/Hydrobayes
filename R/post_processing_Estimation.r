@@ -459,10 +459,10 @@ postprocess_calibration <- function(
         RUGFile_structure = RUGFile_all,
         Z_MatrixKmin = Z_MatrixKmin,
         Z_MatrixKflood = Z_MatrixKflood,
+        Kmin_SU = Kmin_SU,
+        Kflood_SU = Kflood_SU,
         MAP_Kmin_Kflood = MAP,
-        init_guess_prior_Kmin = get_all_init_prior_theta(Kmin_prior),
         dist_prior_Kmin = get_prior_distribution(Kmin_prior),
-        init_guess_prior_Kflood = get_all_init_prior_theta(Kflood_prior),
         dist_prior_Kflood = get_prior_distribution(Kflood_prior)
     )
 
