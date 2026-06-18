@@ -3,34 +3,35 @@ getlegendre <- function(
     polynomial_degree,
     covariate_discretization) {
     if (length(unique(covariate_discretization)) == 1) {
-        stop("covariate_discretization must contain more than one unique value")
-    }
-    normalized_values <- 2 * (covariate_discretization - min(covariate_discretization)) / (max(covariate_discretization) - min(covariate_discretization)) - 1
+        Pn <- 1
+    } else {
+        normalized_values <- 2 * (covariate_discretization - min(covariate_discretization)) / (max(covariate_discretization) - min(covariate_discretization)) - 1
 
-    # Write co variant matrix for main channel
-    # Create an empty data frame and fill it with polynomial values
-    legendre_df_covariate <- data.frame(x = normalized_values) # Start with x values
-    legendre_df <- legendre_df_covariate
+        # Write co variant matrix for main channel
+        # Create an empty data frame and fill it with polynomial values
+        legendre_df_covariate <- data.frame(x = normalized_values) # Start with x values
+        legendre_df <- legendre_df_covariate
 
-    if (polynomial_degree < 0) stop("The polynomial degree must be positive")
-    if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normalized_values should be between [-1,1]")
+        if (polynomial_degree < 0) stop("The polynomial degree must be positive")
+        if (any(!dplyr::between(normalized_values, -1, 1))) stop("Range of normalized_values should be between [-1,1]")
 
-    if (polynomial_degree == 0) {
-        return(rep(1, length(normalized_values)))
-    }
-    if (polynomial_degree == 1) {
-        return(normalized_values)
-    }
+        if (polynomial_degree == 0) {
+            return(rep(1, length(normalized_values)))
+        }
+        if (polynomial_degree == 1) {
+            return(normalized_values)
+        }
 
-    # P_0(normalized_values) = 1
-    Pn_1 <- rep(1, length(normalized_values))
-    # P_1(normalized_values) = normalized_values
-    Pn <- normalized_values
+        # P_0(normalized_values) = 1
+        Pn_1 <- rep(1, length(normalized_values))
+        # P_1(normalized_values) = normalized_values
+        Pn <- normalized_values
 
-    for (k in 1:(polynomial_degree - 1)) {
-        P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
-        Pn_1 <- Pn
-        Pn <- P_next
+        for (k in 1:(polynomial_degree - 1)) {
+            P_next <- ((2 * k + 1) * normalized_values * Pn - k * Pn_1) / (k + 1)
+            Pn_1 <- Pn
+            Pn <- P_next
+        }
     }
     return(Pn)
 }
