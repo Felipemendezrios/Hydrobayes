@@ -1,0 +1,16 @@
+"Kmin__Rhone_SU1" 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+"Kmin__Rhone_SU2" 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+"Kmin__Ain_SU1" 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+"Kflood__Rhone_SU1" 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+"Kflood__Ain_SU1" 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+"Qin__event_1_Q_e1_PCH" 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0
+"Qin__event_1_Q_e1_LGN" 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+"Qin__event_1_Q_e1_BOU" 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+"Qin__event_2_Q_e2_PCH" 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0
+"Qin__event_2_Q_e2_LGN" 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+"Qin__event_2_Q_e2_BOU" 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0
+"gamma_1_Constant" 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
+"gamma_2_Constant" 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0
+"gamma_3_Constant" 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+"gamma_4_Constant" 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+"gamma_5_Constant" 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1

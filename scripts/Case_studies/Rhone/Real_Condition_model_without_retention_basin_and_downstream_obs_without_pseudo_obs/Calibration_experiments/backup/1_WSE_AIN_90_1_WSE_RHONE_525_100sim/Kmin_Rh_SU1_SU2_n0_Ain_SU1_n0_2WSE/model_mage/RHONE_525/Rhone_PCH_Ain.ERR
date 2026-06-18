@@ -1,0 +1,20 @@
+ Err002 à  01:23:00:00 + 600 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.260938E-02 ; écart en DQ = 0.370434E-02
+       Itération 99 : écart en DZ = 0.285341E-02 ; écart en DQ = 0.409775E-02
+       Z : Pm   33375.00 du bief   6 ; Q : Pm   33664.00 du bief   6
+       Residu : 0.396287E+01(006: 33492.00)
+ Err010 à  02:05:00:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.39E+01 au Pm   37168.00 du Bief 006
+       Vitesse =  8.737 Largeur =   26.769 Section =    13.54 Hauteur =  0.762
+ Err001 à  02:21:00:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.958229E-01 ; écart en DQ = 0.669637E-01
+       Itération 08 : écart en DZ = 0.217590E+00 ; écart en DQ = 0.148478E+00
+       Z : Pm   37261.00 du bief   6 ; Q : Pm   37328.00 du bief   6
+ Err002 à  02:21:40:00 + 600 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.411383E-02 ; écart en DQ = 0.567891E-02
+       Itération 99 : écart en DZ = 0.358330E-02 ; écart en DQ = 0.490007E-02
+       Z : Pm   33375.00 du bief   6 ; Q : Pm   33664.00 du bief   6
+       Residu : 0.468844E+01(006: 33492.00)
