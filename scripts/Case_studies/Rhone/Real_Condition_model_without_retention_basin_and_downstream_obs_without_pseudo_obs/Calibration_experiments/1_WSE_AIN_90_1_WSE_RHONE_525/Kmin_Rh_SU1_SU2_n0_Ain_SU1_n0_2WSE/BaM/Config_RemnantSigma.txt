@@ -3,4 +3,4 @@
 "intercept"                                                ! Parameter name
 0.1                                                        ! Initial guess
 "Uniform"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
--1,1                                                       ! Prior parameters
+-10,10                                                       ! Prior parameters

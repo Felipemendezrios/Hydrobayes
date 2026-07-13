@@ -293,7 +293,8 @@ remant_error_list <- list(
         par = list(parameter(
             name = "intercept",
             init = 0.1,
-            prior.dist = "FlatPrior"
+            prior.dist = "Uniform",
+            prior.par = c(-10, 10)
         ))
     ),
     # Q
