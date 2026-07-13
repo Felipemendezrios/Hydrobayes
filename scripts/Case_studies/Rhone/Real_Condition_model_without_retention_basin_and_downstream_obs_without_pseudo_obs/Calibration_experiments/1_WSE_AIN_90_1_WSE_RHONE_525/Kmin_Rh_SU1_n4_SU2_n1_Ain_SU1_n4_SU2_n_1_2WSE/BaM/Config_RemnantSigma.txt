@@ -2,5 +2,5 @@
 1                                                          ! Number of parameters gamma for the function f above
 "intercept"                                                ! Parameter name
 0.1                                                        ! Initial guess
-"FlatPrior"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
-""                                                         ! Prior parameters
+"Uniform"                                                ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+-10,10                                                          ! Prior parameters
