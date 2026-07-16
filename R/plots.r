@@ -330,16 +330,17 @@ K_plot <- function(
         # Name columns
         names(mcmc_all_param) <- paste0("param_", Fix_dist_positions)
     } else if (
-        # Case 2: No one is fixed
+        # Case 2: No one is fixed, all estimated
         length(Fix_dist_positions) == 0) {
-        MAP_all_param <- init_guess_prior
+        MAP_all_param <- MAP_param_vector
 
         # Create the data frame
-        mcmc_all_param <- as.data.frame(
-            lapply(MAP_all_param, function(v) rep(v, nrow(mcmc)))
-        )
+        mcmc_all_param <- mcmc[
+            ,
+            id_param_estimated
+        ]
         # Name columns
-        names(mcmc_all_param) <- paste0("param_", seq(1:length(init_guess_prior)))
+        names(mcmc_all_param) <- paste0("param_", seq(1:length(MAP_param_vector)))
     } else { # Case 3: mixted
         # Extract only MCMC of the parameters theta (estimated)
         mcmc_extraction <- mcmc[
@@ -978,4 +979,25 @@ plot_obs_sim_unc <- function(
             )
     }
     return(sim_obs_plot)
+}
+
+Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
+    plot_conflicts <- ggplot() +
+        geom_density(
+            data = subset(DF_prior_posterior_MAP, Distributions != "MAP"), aes(x = value, fill = Distributions),
+            alpha = 0.4, show.legend = TRUE
+        ) +
+        geom_vline(
+            data = subset(DF_prior_posterior_MAP, Distributions == "MAP"),
+            aes(xintercept = value),
+            colour = "red",
+            linetype = "dashed",
+            linewidth = 0.8
+        ) +
+        facet_wrap(~id, scales = "free", ncol = 3) +
+        theme_bw() +
+        theme(legend.position = "top", legend.key.size = unit(0.7, "cm")) +
+        scale_y_continuous(name = "Probability density function")
+
+    return(plot_conflicts)
 }
