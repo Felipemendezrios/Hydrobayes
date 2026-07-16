@@ -12,8 +12,8 @@ scripts/Case_studies/HHLab/Compound_channel_single_friction/Calibration/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/PamHyr/_PAMHYR_/
 
 scripts/Case_studies/Rhone/A jeter/
-
-
+scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5/PamHyr
+scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/PamHyr
 
 scripts/Case_studies/Synthetic_case/Rectangular_MC/PamHyr/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments/
@@ -27,9 +27,9 @@ scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Piecewise/
 scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Legendre/
 scripts/Case_studies/Synthetic_case/Rhone/Synthese.html
 
-/scripts/Case_studies/Durance_Thiercelin/PamHyr
-/scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01_without_rg_rd
-/scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01
+scripts/Case_studies/Durance_Thiercelin/PamHyr
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01_without_rg_rd
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01
 scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/Backup
 
 data/data-raw/Rhone/WSE/QGIS/
