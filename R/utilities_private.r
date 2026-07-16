@@ -443,3 +443,84 @@ RUGFile_post_estimation <- function(
 
     return(RUGFile_structure_ordered)
 }
+
+prior_distributions <- function(distribution,
+                                param1,
+                                param2) {
+    if (distribution != "Gaussian" & distribution != "LogNormal" &
+        distribution != "Uniform" & distribution != "FIX") {
+        stop("Prior distribution is not supported. \nPlease ensure that distribution is Gaussian, \n LogNormal, Uniform or FIX")
+    }
+
+    if (distribution == "Gaussian") {
+        prior_realization <- stats::rnorm(1000,
+            mean = as.numeric(param1),
+            sd = as.numeric(param2)
+        )
+    } else if (distribution == "LogNormal") {
+        prior_realization <- stats::rlnorm(1000,
+            meanlog = as.numeric(param1),
+            sdlog = as.numeric(param2)
+        )
+    } else if (distribution == "Uniform") {
+        if (param1 <= param2) stop("To use Uniform distribution, \nfirst value introduce must be lower than second value in the vector")
+        prior_realization <- stats::runif(1000,
+            min = as.numeric(param1),
+            max = as.numeric(param2)
+        )
+    }
+    return(prior_realization)
+}
+
+# Generate prior realizations
+get_prior_density <- function(prior_list) {
+    prior_list <- Filter(function(x) x$prior$dist != "FIX", prior_list)
+
+    priors_realization <- lapply(prior_list, function(x) {
+        prior_distributions(
+            distribution = x$prior$dist,
+            param1 = x$prior$par[1],
+            param2 = x$prior$par[2]
+        )
+    })
+
+    names(priors_realization) <- vapply(prior_list, `[[`, "", "name")
+
+    as.data.frame(priors_realization)
+}
+
+# Combine prior and posterior
+combine_prior_posterior_MAP <- function(prior_density, mcmc, MAP) {
+    if (length(prior_density) == 0) {
+        return(NULL)
+    }
+    mcmc_extracted <- mcmc[, names(prior_density), drop = FALSE]
+
+    if (any(length(MAP) != ncol(mcmc_extracted) | ncol(mcmc_extracted) != length(prior_density))) stop("Inconsistency of the number of estimated parameters")
+
+    names(MAP) <- colnames(mcmc_extracted)
+
+    if (length(mcmc_extracted) != 0) {
+        do.call(rbind, lapply(names(prior_density), function(nm) {
+            rbind(
+                data.frame(
+                    value = prior_density[[nm]],
+                    Distributions = "Prior",
+                    id = nm
+                ),
+                data.frame(
+                    value = mcmc_extracted[[nm]],
+                    Distributions = "Posterior",
+                    id = nm
+                ),
+                data.frame(
+                    value = MAP[[nm]],
+                    Distributions = "MAP",
+                    id = nm
+                )
+            )
+        }))
+    } else {
+        NULL
+    }
+}
