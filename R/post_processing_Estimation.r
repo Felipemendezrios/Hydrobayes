@@ -454,7 +454,6 @@ postprocess_calibration <- function(
         })
     )
 
-
     RUGFile_Kmin_MAP <- RUGFile_post_estimation(
         RUGFile_structure = RUGFile_all,
         Z_MatrixKmin = Z_MatrixKmin,
@@ -472,6 +471,26 @@ postprocess_calibration <- function(
         RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
     )
 
+    # Kmin
+    prior_density <- get_prior_density(Kmin_prior)
+    prior_vs_posterior_Kmin <- combine_prior_posterior_MAP(prior_density, mcmc, MAP)
+
+    # Kflood
+    prior_density <- get_prior_density(Kflood_prior)
+    prior_vs_posterior_Kflood <- combine_prior_posterior_MAP(prior_density, mcmc, MAP)
+
+    # Plots
+    if (is.null(prior_vs_posterior_Kmin)) {
+        Plot_Prior_Post_Kmin <- NULL
+    } else {
+        Plot_Prior_Post_Kmin <- Plot_prior_posterior(prior_vs_posterior_Kmin)
+    }
+
+    if (is.null(prior_vs_posterior_Kflood)) {
+        Plot_Prior_Post_Kflood <- NULL
+    } else {
+        Plot_Prior_Post_Kflood <- Plot_prior_posterior(prior_vs_posterior_Kflood)
+    }
     return(
         list(
             data_param = list(
@@ -482,6 +501,10 @@ postprocess_calibration <- function(
                 Kflood = list(
                     df_MAP = Kflood[[1]],
                     envelop = Kflood[[3]]
+                ),
+                prior_posterior = list(
+                    Kmin = prior_vs_posterior_Kmin,
+                    Kflood = prior_vs_posterior_Kflood
                 )
             ),
             residuals = residuals,
@@ -496,7 +519,11 @@ postprocess_calibration <- function(
                 )
             ),
             plots_MAP_output_variables = plots,
-            CalData_updated = CalData_updated
+            CalData_updated = CalData_updated,
+            plots_prior_vs_posterior = list(
+                Kmin = Plot_Prior_Post_Kmin,
+                Kflood = Plot_Prior_Post_Kflood
+            )
         )
     )
 }
