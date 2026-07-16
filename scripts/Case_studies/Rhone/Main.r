@@ -57,7 +57,7 @@ Experiment_id <- c(
 # Experiments input data to be used during calibration setting
 
 all_cal_case <- c(
-    "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0_2WSE.r",
+    # "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0_2WSE.r",
     "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1_2WSE.r"
 )
 
@@ -73,8 +73,8 @@ all_events <- c(
 command_line_MAGE <- "-fp=2 -LC=0 -eps=5"
 
 
-file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Rhone/Real_Condition_model_without_retention_basin_and_downstream_obs_without_pseudo_obs/Calibration_experiments")
-MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Rhone/Real_Condition_model_without_retention_basin_and_downstream_obs_without_pseudo_obs/model_mage"
+file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/Calibration_experiments")
+MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/model_mage"
 
 mage_projet_name <- "Rhone_PCH_Ain"
 
@@ -540,6 +540,33 @@ for (id_cal_case in 1:length(all_cal_case)) {
         save(plots_MAP_output_variables,
             file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
         )
+
+        # Plot prior vs posterior
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$Kmin)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kmin.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$Kmin,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$Kflood)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kflood.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$Kflood,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+
 
         # Specific case of synthetic case
         if (synthetic_case) {
