@@ -53,12 +53,21 @@ Experiment_id <- c(
     "1_WSE_AIN_90_1_WSE_RHONE_525"
 )
 
+# Calibration case: SU distribution
+# SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5 # Done
+# SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5 # In cours
+
+SU_distribution <- "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5"
+
 
 # Experiments input data to be used during calibration setting
-
-all_cal_case <- c(
-    # "Kmin_Rh_SU1_SU2_n0_Ain_SU1_n0_2WSE.r",
-    "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1_2WSE.r"
+all_cal_case <- ifelse(
+    SU_distribution == "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5",
+    "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1_2WSE.r",
+    ifelse(SU_distribution == "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5",
+        "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_0_2WSE.r",
+        stop("SU_distribution is not supported")
+    )
 )
 
 
@@ -73,8 +82,8 @@ all_events <- c(
 command_line_MAGE <- "-fp=2 -LC=0 -eps=5"
 
 
-file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/Calibration_experiments")
-MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/model_mage"
+file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Rhone", SU_distribution, "Calibration_experiments")
+MAGE_main_folder <- file.path(dir_workspace, "scripts/Case_studies/Rhone", SU_distribution, "model_mage")
 
 mage_projet_name <- "Rhone_PCH_Ain"
 
@@ -352,8 +361,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0, nSlim = 1),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 1, nCycles = 10),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.2, nSlim = 2),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 15, nCycles = 50),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )

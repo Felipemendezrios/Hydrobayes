@@ -30,14 +30,21 @@ Input_Kmin_Key_SU_MR <- list(
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 4,
                 prior = list(
                     name_init = data.frame(
+                        # Name to appear into calculations
                         name = c(
-                            "Km_SU1_Rh_a0"
+                            "Km_SU1_Rh_a0",
+                            "Km_SU1_Rh_a1",
+                            "Km_SU1_Rh_a2",
+                            "Km_SU1_Rh_a3",
+                            "Km_SU1_Rh_a4"
                         ),
+                        # Initial guess
                         init = c(
-                            30
+                            30,
+                            rep(0, 4)
                         )
                     ),
                     config = list(
@@ -47,7 +54,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial.. If not, it must has the same size of x_spatial.
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30
@@ -65,14 +72,18 @@ Input_Kmin_Key_SU_MR <- list(
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 1,
                 prior = list(
                     name_init = data.frame(
+                        # Name to appear into calculations
                         name = c(
-                            "Km_SU2_Rh_a0"
+                            "Km_SU2_Rh_a0",
+                            "Km_SU2_Rh_a1"
                         ),
+                        # Initial guess
                         init = c(
-                            30
+                            30,
+                            rep(0, 1)
                         )
                     ),
                     config = list(
@@ -82,7 +93,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial.. If not, it must has the same size of x_spatial.
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30
@@ -100,17 +111,26 @@ Input_Kmin_Key_SU_MR <- list(
         list(
             SU1 = list(
                 # KP boundary points
-                KP_boundaries_points = c(22333, 41461),
+                KP_boundaries_points = c(22333, 37491),
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 0,
+                max_polynomial_degree = 4,
                 prior = list(
                     name_init = data.frame(
+                        # Name to appear into calculations
                         name = c(
-                            "Km_SU1_Ai_a0"
+                            "Km_SU1_Ai_a0",
+                            "Km_SU1_Ai_a1",
+                            "Km_SU1_Ai_a2",
+                            "Km_SU1_Ai_a3",
+                            "Km_SU1_Ai_a4"
                         ),
-                        init = c(19)
+                        # Initial guess
+                        init = c(
+                            19,
+                            rep(0, 4)
+                        )
                     ),
                     config = list(
                         # Prior distribution: either Gaussian or FIX
@@ -119,7 +139,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial.. If not, it must has the same size of x_spatial.
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 19
@@ -130,9 +150,47 @@ Input_Kmin_Key_SU_MR <- list(
                         )
                     )
                 )
+            ),
+            SU2 = list(
+                # KP boundary points
+                KP_boundaries_points = c(37491, 41461),
+                # Function to apply at this SU
+                function_SU = getCovariate_Legendre,
+                # Arguments of this SU
+                max_polynomial_degree = 0,
+                prior = list(
+                    name_init = data.frame(
+                        name = c(
+                            "Km_SU2_Ai_a0"
+                        ),
+                        init = c(
+                            15
+                        )
+                    ),
+                    config = list(
+                        # Prior distribution: either Gaussian or FIX
+                        distribution = "Gaussian",
+                        # Specific spatially coordinates from the SU to apply the prior information. NULL indicates that algorithm will be used to spread as best as possible
+                        x_spatial = c(
+                            NULL
+                        ),
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        param_values = data.frame(
+                            mu = c(
+                                15
+                            ),
+                            sigma = c(
+                                3
+                            )
+                        )
+                    )
+                )
             )
         )
 )
+
+
+
 
 ############################################
 # End Kmin environment
@@ -162,16 +220,16 @@ Input_Kflood_Key_SU_MR <- list(
                         name = c(
                             "Kf_SU1_Rh_a0"
                         ),
-                        init = c(20)
+                        init = 20
                     ),
                     config = list(
                         # Prior distribution: either Gaussian or FIX
-                        distribution = "FIX",
+                        distribution = "FIX", # FIX, no prior is given. All information below is skipped
                         # Specific spatially coordinates from the SU to apply the prior information. NULL indicates that algorithm will be used to spread as best as possible
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial.. If not, it must has the same size of x_spatial.
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 20
@@ -196,17 +254,19 @@ Input_Kflood_Key_SU_MR <- list(
                 max_polynomial_degree = 0,
                 prior = list(
                     name_init = data.frame(
-                        name = c("Kf_SU1_Ai_a0"),
-                        init = c(15)
+                        name = c(
+                            "Kf_SU1_Ai_a0"
+                        ),
+                        init = 15
                     ),
                     config = list(
                         # Prior distribution: either Gaussian or FIX
-                        distribution = "FIX",
+                        distribution = "FIX", # FIX, no prior is given. All information below is skipped
                         # Specific spatially coordinates from the SU to apply the prior information. NULL indicates that algorithm will be used to spread as best as possible
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial.. If not, it must has the same size of x_spatial.
+                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 15
