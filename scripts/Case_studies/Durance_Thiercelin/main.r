@@ -49,26 +49,12 @@ threshold_jump_MCMC_error_model <- 0.5
 # Name of the experiment. All scenarios will be used the same calibration data
 
 Experiment_id <- c(
-    # "1_WSE_cte_u_0.01" # With rg and rd
-    "1_WSE_cte_u_0.01_without_rg_rd" # Without rg and rd
+    "1_WSE_u_0.05" # Without rg and rd
 )
 
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
-    # "Kmin_n_0_Q0.r",
-    # "Kmin_n_1_Q0.r",
-    # "Kmin_n_2_Q0.r",
-    # "Kmin_n_3_Q0.r",
-    # "Kmin_n_4_Q0.r",
-    # "Kmin_n_5_Q0.r",
-    "Kmin_n_6_Q0.r",
-    "Kmin_n_7_Q0.r",
-    "Kmin_n_8_Q0.r",
-    "Kmin_n_9_Q0.r",
-    "Kmin_n_10_Q0.r",
-    "Kmin_n_11_Q0.r",
-    "Kmin_n_12_Q0.r",
-    "Kmin_n_13_Q0.r"
+    "Kmin_n_13.r"
 )
 
 # Folder related to the observations (careful with the order!)
@@ -123,8 +109,9 @@ Input_Typology <- list(
 # Module 3: calibration data
 ############################################
 # Processed data
-if (Experiment_id %in% c("1_WSE_cte_u_0.01", "1_WSE_cte_u_0.01_without_rg_rd")) {
+if (Experiment_id %in% c("1_WSE_u_0.05")) {
     load("data/processed_data/Durance_Thiercelin/WSE_Durance.RData")
+    load("data/processed_data/Durance_Thiercelin/Thalweg_Durance.RData")
 } else {
     stop("Experiment id in not correct")
 }
@@ -204,17 +191,6 @@ results_CalData <- constructor_CalData(
 Y <- results_CalData$Y
 Yu <- results_CalData$Yu
 
-##########################################
-# Specificities : add pseudo obs of friction
-# obs always has a gaussian distribution
-Kmin_prior_u_Yu <- c(35, 8)
-Kflood_prior_u_Yu <- c(25, 8)
-
-Y$Kmin <- Kmin_prior_u_Yu[1]
-Yu$Yu_Kmin <- Kmin_prior_u_Yu[2]
-Y$Kflood <- Kflood_prior_u_Yu[1]
-Yu$Yu_Kflood <- Kflood_prior_u_Yu[2]
-
 CalData <- cbind(X, Y, Yu)
 
 path_experiment <- file.path(file_main_path, Experiment_id)
@@ -225,14 +201,30 @@ if (do_plot_calibration) {
         scales_free = "free",
         wrap = TRUE
     )
+    # Customize the plot
+    plots_CalData$plot_WSE <- plots_CalData$plot_WSE +
+        facet_wrap(
+            ~ event + reach,
+            labeller = labeller(
+                event = as_labeller(
+                    c(
+                        "1" = "Event~1:~Q(Durance):~11.4~m^3/s"
+                    ),
+                    label_parsed
+                ),
+                reach = as_labeller(c(
+                    "1" = "Reach~1"
+                ), label_parsed)
+            ),
+            scales = "free",
+            ncol = 3
+        )
 
     obs_adapted <- observed_data %>%
         rename("reach" = "id_reach_CAL")
 
-    # plot_WSE_Thalweg <- plots_CalData$plot_WSE +
-    #     geom_line(data = obs_adapted, aes(x = KP, y = Z_thalweg), color = "black")
-
-    # plots_CalData$plot_WSE_Thalweg <- plot_WSE_Thalweg
+    plots_CalData$plot_WSE_Thalweg <- plots_CalData$plot_WSE +
+        geom_line(data = Thalweg_data, aes(x = KP, y = Z_thalweg), color = "black")
 
     if (!dir.exists(path_experiment)) {
         dir.create(path_experiment)
@@ -276,8 +268,9 @@ remant_error_list <- list(
         funk = "Constant",
         par = list(parameter(
             name = "intercept",
-            init = 0.0005,
-            prior.dist = "FlatPrior"
+            init = 0.01,
+            prior.dist = "Uniform",
+            prior.par = c(-10, 10)
         ))
     ),
     # Q
@@ -333,8 +326,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0.1, nSlim = 1),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 20, nCycles = 40),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.1, nSlim = 2),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 15, nCycles = 20),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
