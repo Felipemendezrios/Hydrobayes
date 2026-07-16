@@ -1,0 +1,12 @@
+ "ID":"MDL_MAGE_ZQV"
+ "nX":4
+ "nY":5
+ "parName":["Km_a0","Km_a1","Km_a2","Km_a3","Km_a4","Km_a5","Km_a6","Km_a7","Km_a8","Km_a9","Km_a10","Km_a11","Km_a12","Km_a13","Kf_SU1_Rh_a0","Q_mult_e1_n1"]
+ "parType":["STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","FIX","FIX"]
+ "dParName":[]
+ "stateName":[]
+ "structuralParName":[["intercept"],["intercept"],["intercept"],["intercept"],["intercept"]]
+ "estimatedX":[0,0,0,0]
+ "estimatedXbias":[0,0,0,0]
+ "estimatedYbias":[0,0,0,0,0]
+ "MCMCheaders":["Km_a0","Km_a1","Km_a2","Km_a3","Km_a4","Km_a5","Km_a6","Km_a7","Km_a8","Km_a9","Km_a10","Km_a11","Km_a12","Km_a13","Y1_intercept","Y2_intercept","Y3_intercept","Y4_intercept","Y5_intercept","LogPost"]
