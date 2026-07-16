@@ -219,40 +219,6 @@ if (do_plot_calibration) {
             ncol = 3
         )
 
-    plots_CalData$plot_Kmin <- plots_CalData$plot_Kmin +
-        facet_wrap(
-            ~reach,
-            labeller = labeller(
-                reach = as_labeller(c(
-                    "1" = "Reach~1:~Lagnieu~-~Bourbe",
-                    "2" = "Reach~2:~Bourbe~-~Anthon",
-                    "3" = "Reach~3:~Anthon~-~Jons",
-                    "4" = "Reach~4:~Port~Galland~-~reservoir",
-                    "5" = "Reach~5:~reservoir~-~Anthon",
-                    "6" = "Reach~6:~Pont~Chazey~-~Port~Galland"
-                ), label_parsed)
-            ),
-            scales = "free",
-            ncol = 3
-        )
-
-    plots_CalData$plot_Kflood <- plots_CalData$plot_Kflood +
-        facet_wrap(
-            ~reach,
-            labeller = labeller(
-                reach = as_labeller(c(
-                    "1" = "Reach~1:~Lagnieu~-~Bourbe",
-                    "2" = "Reach~2:~Bourbe~-~Anthon",
-                    "3" = "Reach~3:~Anthon~-~Jons",
-                    "4" = "Reach~4:~Port~Galland~-~reservoir",
-                    "5" = "Reach~5:~reservoir~-~Anthon",
-                    "6" = "Reach~6:~Pont~Chazey~-~Port~Galland"
-                ), label_parsed)
-            ),
-            scales = "free",
-            ncol = 3
-        )
-
     obs_adapted <- observed_data %>%
         rename("reach" = "id_reach_CAL")
 
