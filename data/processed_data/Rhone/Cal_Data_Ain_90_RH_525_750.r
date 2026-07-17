@@ -17,17 +17,17 @@ key_info_event_extraction <- read.table("data/processed_data/Rhone/Boundary_cond
 
 
 sd_WSE_fixed <- 0.025 # 2.5 cm
-MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Rhone/Real_Condition_model/model_mage"
+MAGE_main_folder <- "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Rhone/PamHyr/model_mage"
 
 Input_Typology <- list(
     Rhone = c(1, 2, 3),
-    Ain = c(8, 4, 5),
-    Cassier = c(6, 7)
+    Ain = c(6, 4, 5)
+    # Cassier = c(6, 7)
 )
 Input_Model_Reach <- data.frame(
-    reach = c(1, 2, 3, 4, 5, 6, 7, 8),
-    KP_start = c(55900, 36250, 34500, 37491, 41211, 0, 20, 22333),
-    KP_end = c(36250, 34500, 26750, 41211, 41461, 20, 40, 37491)
+    reach = c(1, 2, 3, 4, 5, 6),
+    KP_start = c(55900, 36250, 34500, 37491, 41211, 22333),
+    KP_end = c(36250, 34500, 26750, 41211, 41461, 37491)
 )
 
 all_events <- c(
@@ -53,7 +53,7 @@ WSE_Ain_90_raw <- all_WSE_Ain %>%
     filter(id_case == 90) %>%
     mutate(
         id_reach_CAL = case_when(
-            id_reach == "PCH_PGA" ~ 8,
+            id_reach == "PCH_PGA" ~ 6,
             id_reach == "PGA_CAIN" ~ 4,
             id_reach == "CAIN_Confluence" ~ 5
         ),
@@ -102,6 +102,8 @@ init_model_date <- as.POSIXct(
 )
 WSE_Rhone_525_raw <- all_WSE_Rhone %>%
     filter(id_case == 525) %>%
+    # Remove the nearest WSE observation to the downstream boundary condition, because it was used to set the condition
+    filter(KP != 27000) %>%
     mutate(
         id_reach_CAL = case_when(
             id_reach == "ANT_JNS" ~ 3,
@@ -139,7 +141,6 @@ WSE_obs_2 <- assign_calibration_and_validation_data(
 
 CalData_obs_2 <- WSE_obs_2 %>% filter(set == "calibration")
 
-
 #####################################################################
 # Event 3: WSE Q(Rhone) = 750 m3/s
 #####################################################################
@@ -154,6 +155,8 @@ init_model_date <- as.POSIXct(
 )
 WSE_Rhone_750_raw <- all_WSE_Rhone %>%
     filter(id_case == 750) %>%
+    # Remove the nearest WSE observation to the downstream boundary condition, because it was used to set the condition
+    filter(KP != 27000) %>%
     mutate(
         id_reach_CAL = case_when(
             id_reach == "ANT_JNS" ~ 3,

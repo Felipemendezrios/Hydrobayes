@@ -1,0 +1,12 @@
+ Err010 à  01:22:20:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.23E+01 au Pm   37215.00 du Bief 006
+       Vitesse =  4.836 Largeur =   51.966 Section =    24.15 Hauteur =  1.609
+ Err002 à  01:22:40:00 + 600 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.306784E-02 ; écart en DQ = 0.467678E-02
+       Itération 99 : écart en DZ = 0.358092E-02 ; écart en DQ = 0.553179E-02
+       Z : Pm   33375.00 du bief   6 ; Q : Pm   33664.00 du bief   6
+       Residu : 0.548883E+01(006: 33492.00)
+ Err010 à  02:15:40:00              : INSTABILITÉ NUMÉRIQUE (Froude grand)
+       Froude = 0.21E+01 au Pm   36849.00 du Bief 006
+       Vitesse =  4.526 Largeur =   73.332 Section =    34.31 Hauteur =  0.760

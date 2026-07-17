@@ -34,7 +34,10 @@ scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/Backup
 
 data/data-raw/Rhone/WSE/QGIS/
 data/data-raw/Rhone/Local_files/
-data/data-raw/Rhone/PamHyr/
+data/data-raw/Rhone/PamHyr/Rhone_PCH_750_Rhone.pamhyr
+data/data-raw/Rhone/PamHyr/Rhone_PCH_525_Rhone.pamhyr
+data/data-raw/Rhone/PamHyr/Rhone_PCH_90_Ain.pamhyr
+data/data-raw/Rhone/PamHyr/_PAMHYR_/
 
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/decoupage.png
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/network_synthetic_case.svg
