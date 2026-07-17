@@ -12,8 +12,7 @@ scripts/Case_studies/HHLab/Compound_channel_single_friction/Calibration/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/PamHyr/_PAMHYR_/
 
 scripts/Case_studies/Rhone/A jeter/
-scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5/PamHyr
-scripts/Case_studies/Rhone/SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5/PamHyr
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/PamHyr
 
 scripts/Case_studies/Synthetic_case/Rectangular_MC/PamHyr/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments/
