@@ -1,0 +1,10 @@
+ Err001 à  02:10:50:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.114711E-02 ; écart en DQ = 0.158439E-02
+       Itération 08 : écart en DZ = 0.118722E-02 ; écart en DQ = 0.165225E-02
+       Z : Pm   27429.00 du bief   6 ; Q : Pm   27694.33 du bief   6
+ Err001 à  02:16:10:00 + 600 : DIVERGENCE des itérations (Debord)
+       écart relatif (à Ymax et Qmax) croissant entre 2 itérées successives
+       Itération 07 : écart en DZ = 0.134204E-01 ; écart en DQ = 0.195462E-01
+       Itération 08 : écart en DZ = 0.153834E-01 ; écart en DQ = 0.220761E-01
+       Z : Pm   27429.00 du bief   6 ; Q : Pm   27694.33 du bief   6

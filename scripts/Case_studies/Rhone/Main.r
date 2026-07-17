@@ -54,22 +54,11 @@ Experiment_id <- c(
 )
 
 # Calibration case: SU distribution
-# SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5 # Done
-# SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5 # In cours
-
-SU_distribution <- "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5"
+SU_distribution <- "2SU_Rh_1SU_Ain"
 
 
 # Experiments input data to be used during calibration setting
-all_cal_case <- ifelse(
-    SU_distribution == "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_4_SU2_Ai_bief_5",
-    "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_1_2WSE.r",
-    ifelse(SU_distribution == "SU1_Rh_bief_1_2_SU2_Rh_bief_3_SU1_Ai_bief_6_SU2_Ai_bief_4_5",
-        "Kmin_Rh_SU1_n4_SU2_n1_Ain_SU1_n4_SU2_n_0_2WSE.r",
-        stop("SU_distribution is not supported")
-    )
-)
-
+all_cal_case <- "Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4_2WSE.r"
 
 
 # Folder related to the observations (careful with the order!)
@@ -130,27 +119,13 @@ Input_Typology <- list(
 ############################################
 
 # Processed data
-if (Experiment_id %in% c("1_WSE_AIN_90_2_WSE_RHONE_525_750", "1_WSE_AIN_90_1_WSE_RHONE_525")) {
-    load("data/processed_data/Rhone/Ain_90_RH_525_750/observed_data.RData")
-} else {
-    stop("Experiment id in not correct")
-}
+load("data/processed_data/Rhone/Ain_90_RH_525_750/observed_data.RData")
+
 
 if (Experiment_id == "1_WSE_AIN_90_1_WSE_RHONE_525") {
     observed_data <- observed_data %>%
         filter(name_event != "RHONE_750")
 }
-
-
-# Correction from imported CalData
-
-# Swap id_reach_CAL 8 by 6 if retension basin is not considered anymore
-observed_data$id_reach_CAL[which(observed_data$id_reach_CAL == 8)] <- 6
-
-
-# Remove observation from reach Port Galland to confluence
-observed_data <- observed_data %>%
-    filter(!id_reach_CAL %in% c(4, 5))
 
 X <- observed_data[, c(
     "event",
@@ -201,8 +176,7 @@ if (do_plot_calibration) {
                 event = as_labeller(
                     c(
                         "1" = "Event~1:~Q(Ain):~90~m^3/s",
-                        "2" = "Event~2:~Q(Rhone):~525~m^3/s",
-                        "3" = "Event~3:~Q(Rhone):~750~m^3/s"
+                        "2" = "Event~2:~Q(Rhone):~525~m^3/s"
                     ),
                     label_parsed
                 ),
@@ -328,7 +302,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
         mcmcCooking = RBaM::mcmcCooking(burn = 0.2, nSlim = 2),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 15, nCycles = 50),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 10, nCycles = 10),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
@@ -348,6 +322,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         )
 
         Sys.chmod(script_path, "0755")
+        # Find path pstree -ap | grep BaM
         # Run outside of Vscodium. To kill a job : pkill -f BaM
         system2(
             "nohup",
@@ -397,7 +372,7 @@ synthetic_case <- FALSE
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- TRUE
+final_calibration <- FALSE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment

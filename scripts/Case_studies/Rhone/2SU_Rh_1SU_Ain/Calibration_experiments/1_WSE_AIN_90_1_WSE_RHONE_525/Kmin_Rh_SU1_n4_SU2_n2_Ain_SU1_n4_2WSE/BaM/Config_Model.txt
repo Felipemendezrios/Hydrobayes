@@ -1,0 +1,88 @@
+"MAGE_ZQV"                                                 ! Model ID - type getCatalogue() in RBaM to see available models
+4                                                          ! nX: number of input variables
+5                                                          ! nY: number of output variables
+21                                                         ! nPar: number of parameters theta
+"Km_SU1_Rh_a0"                                             ! Parameter name
+30                                                         ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+30,1.68141621671351                                        ! Prior parameters
+"Km_SU1_Rh_a1"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.60341655863555                                         ! Prior parameters
+"Km_SU1_Rh_a2"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,3.70423276644531                                         ! Prior parameters
+"Km_SU1_Rh_a3"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.66666666666667                                         ! Prior parameters
+"Km_SU1_Rh_a4"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+-4.44089209850063e-15,4.03162104543176                     ! Prior parameters
+"Km_SU2_Rh_a0"                                             ! Parameter name
+30                                                         ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+30,2.23606797749979                                        ! Prior parameters
+"Km_SU2_Rh_a1"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.23606797749979                                         ! Prior parameters
+"Km_SU2_Rh_a2"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.58198889747161                                         ! Prior parameters
+"Km_SU1_Ai_a0"                                             ! Parameter name
+19                                                         ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+19,1.50390438361677                                        ! Prior parameters
+"Km_SU1_Ai_a1"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.32856655954306                                         ! Prior parameters
+"Km_SU1_Ai_a2"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,3.31316650810152                                         ! Prior parameters
+"Km_SU1_Ai_a3"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+0,2.38513917599978                                         ! Prior parameters
+"Km_SU1_Ai_a4"                                             ! Parameter name
+0                                                          ! Initial guess
+"Gaussian"                                                 ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+-3.5527136788005e-15,3.60599148684167                      ! Prior parameters
+"Kf_SU1_Rh_a0"                                             ! Parameter name
+20                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Kf_SU1_Ai_a0"                                             ! Parameter name
+15                                                         ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e1_PCH"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e1_LGN"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e1_BOU"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e2_PCH"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e2_LGN"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
+"Q_e2_BOU"                                                 ! Parameter name
+1                                                          ! Initial guess
+"FIX"                                                      ! Prior distribution - type getCatalogue() in RBaM to see available distributions
+""                                                         ! Prior parameters
