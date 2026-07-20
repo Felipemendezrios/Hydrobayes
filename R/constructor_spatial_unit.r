@@ -297,13 +297,14 @@ SU_constructor <- function(
                     max_polynomial_degree = max_polynomial_degree_i,
                     covariate_discretization = covariate_discretization_i
                 )
-
+                # Inverse
                 Pminus1 <- solve(Pmatrix)
 
+                # Variance on K parameter
                 SIGK <- if (length(sigK) == 1) {
-                    matrix(sigK, 1, 1)
+                    matrix(sigK^2, 1, 1)
                 } else {
-                    diag(sigK)
+                    diag(sigK^2)
                 }
 
                 # Resulting Gaussian prior on thetas
