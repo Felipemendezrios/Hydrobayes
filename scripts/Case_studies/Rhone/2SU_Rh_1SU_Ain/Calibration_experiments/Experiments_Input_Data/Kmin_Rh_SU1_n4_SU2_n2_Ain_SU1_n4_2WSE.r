@@ -54,7 +54,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30
@@ -94,7 +94,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30
@@ -140,7 +140,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 19
@@ -195,7 +195,7 @@ Input_Kflood_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 20
@@ -232,7 +232,7 @@ Input_Kflood_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 15
