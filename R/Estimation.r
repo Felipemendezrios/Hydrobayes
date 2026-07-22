@@ -404,31 +404,29 @@ Estimation_Mage <- function(
     )
     Kmin_SU <- results_SU_constructor$SU
     summary_SU_Kmin <- results_SU_constructor$summary_SU
-    spatial_values_prior_SU_Kmin <- results_SU_constructor$spatial_values_prior
 
     # Create a data frame to export to link with prior correlation matrix
-    df_spatial_values_prior_SU_Kmin <- do.call(
+    data_prior_info_to_plot_Kmin <- get_prior_info_plot_SU(Kmin_SU)
+
+    df_prior_summary_Kmin <- do.call(
         rbind,
-        lapply(names(spatial_values_prior_SU_Kmin), function(dep) {
+        lapply(data_prior_info_to_plot_Kmin, function(typology) {
             do.call(
                 rbind,
-                lapply(names(spatial_values_prior_SU_Kmin[[dep]]), function(su) {
-                    data.frame(
-                        id = paste("Kmin_", dep, su, sep = "_"),
-                        value = spatial_values_prior_SU_Kmin[[dep]][[su]]
-                    )
+                lapply(typology, function(su) {
+                    su$all_info
                 })
             )
         })
     )
 
-    rownames(df_spatial_values_prior_SU_Kmin) <- NULL
-
     # Prior correlation matrix
-    matrix_prior_correlation_SU_Kmin <- results_SU_constructor$prior_correlation_SU
-
     all_blocks <- unlist(
-        matrix_prior_correlation_SU_Kmin,
+        lapply(data_prior_info_to_plot_Kmin, function(typology) {
+            lapply(typology, function(SU) {
+                SU$prior_correlation_SU
+            })
+        }),
         recursive = FALSE
     )
 
@@ -458,31 +456,28 @@ Estimation_Mage <- function(
     )
     Kflood_SU <- results_SU_constructor$SU
     summary_SU_Kflood <- results_SU_constructor$summary_SU
-    spatial_values_prior_SU_Kflood <- results_SU_constructor$spatial_values_prior
 
     # Create a data frame to export to link with prior correlation matrix
-    df_spatial_values_prior_SU_Kflood <- do.call(
+    data_prior_info_to_plot_Kflood <- get_prior_info_plot_SU(Kflood_SU)
+
+    df_prior_summary_Kflood <- do.call(
         rbind,
-        lapply(names(spatial_values_prior_SU_Kflood), function(dep) {
+        lapply(data_prior_info_to_plot_Kflood, function(typology) {
             do.call(
                 rbind,
-                lapply(names(spatial_values_prior_SU_Kflood[[dep]]), function(su) {
-                    data.frame(
-                        id = paste("Kflood_", dep, su, sep = "_"),
-                        value = spatial_values_prior_SU_Kflood[[dep]][[su]]
-                    )
+                lapply(typology, function(su) {
+                    su$all_info
                 })
             )
         })
     )
-
-    rownames(df_spatial_values_prior_SU_Kflood) <- NULL
-
     # Prior correlation matrix
-    matrix_prior_correlation_SU_Kflood <- results_SU_constructor$prior_correlation_SU
-
     all_blocks <- unlist(
-        matrix_prior_correlation_SU_Kflood,
+        lapply(data_prior_info_to_plot_Kflood, function(typology) {
+            lapply(typology, function(SU) {
+                SU$prior_correlation_SU
+            })
+        }),
         recursive = FALSE
     )
 
@@ -499,24 +494,52 @@ Estimation_Mage <- function(
     # End Kflood environment
     ############################################
 
+    # Prior traitement
+    save(
+        data_prior_info_to_plot_Kmin,
+        data_prior_info_to_plot_Kflood,
+        file = file.path(paths$path_RData, "BaM_objects.RData")
+    )
+
     ############################################
     # Qin environment (prior treatment)
     ############################################
-    df_Qin <- data.frame(
-        id = unlist(
+
+    prior_summary_param_Qin <-
+        do.call(
+            rbind,
             lapply(names(mult_factor), function(ev) {
-                paste(
-                    "Qin_",
-                    ev,
-                    sapply(mult_factor[[ev]], `[[`, "name"),
-                    sep = "_"
+                do.call(
+                    rbind,
+                    lapply(names(mult_factor[[ev]]), function(node) {
+                        param <- mult_factor[[ev]][[node]]
+
+                        data.frame(
+                            Typology = ev,
+                            SU = node,
+                            param_name = param$name,
+                            prior.dist = param$prior$dist,
+                            par_1 = ifelse(is.null(
+                                param$prior$par[1]
+                            ),
+                            param$init,
+                            param$prior$par[1]
+                            ),
+                            par_2 = ifelse(is.null(
+                                param$prior$par[2]
+                            ),
+                            NA,
+                            param$prior$par[2]
+                            ),
+                            covariate = NA,
+                            scaled = NA
+                        )
+                    })
                 )
-            }),
-            use.names = FALSE
-        ),
-        value = 1
-    )
-    Matrix_prior_correlation_Qin <- rep(1, nrow(df_Qin))
+            })
+        )
+
+    Matrix_prior_correlation_Qin <- rep(1, nrow(prior_summary_param_Qin))
 
     ############################################
     # Structural error (gamma) (prior treatment)
@@ -527,29 +550,39 @@ Estimation_Mage <- function(
         stop("Remnant error must be either Constant or Linear")
     }
 
-    df_gamma <- data.frame(
-        id = funk,
-        value = 1
-    )
+    prior_summary_param_gamma <- do.call(
+        rbind,
+        lapply(seq_along(remant_error_list), function(id_obs) {
+            remant_model <- remant_error_list[[id_obs]]
 
-    pos <- which(df_gamma$id == "Linear")
+            do.call(
+                rbind,
+                lapply(remant_model$par, function(remant_config) {
+                    prior_par <- remant_config$prior$par
 
-    if (length(pos) > 0) {
-        # construire les lignes à dupliquer
-        linear_rows <- df_gamma[pos, , drop = FALSE]
-
-        # insertion après chaque Linear (en ordre inversé pour ne pas casser les indices)
-        for (i in rev(pos)) {
-            df_gamma <- rbind(
-                df_gamma[1:i, ],
-                df_gamma[i, , drop = FALSE],
-                df_gamma[(i + 1):nrow(df_gamma), ]
+                    data.frame(
+                        Typology = paste0("Y_", id_obs),
+                        SU = NA,
+                        param_name = remant_config$name,
+                        prior.dist = remant_config$prior$dist,
+                        par_1 = if (is.null(prior_par)) {
+                            remant_config$init
+                        } else {
+                            prior_par[1]
+                        },
+                        par_2 = if (is.null(prior_par)) {
+                            NA
+                        } else {
+                            prior_par[2]
+                        },
+                        covariate = NA,
+                        scaled = NA
+                    )
+                })
             )
-        }
-    }
-    df_gamma$id <- paste0("gamma_", seq(df_gamma$id), "_", df_gamma$id)
-
-    Matrix_prior_correlation_gamma <- rep(1, nrow(df_gamma))
+        })
+    )
+    Matrix_prior_correlation_gamma <- rep(1, nrow(prior_summary_param_gamma))
     ########################################################
     # Prior correlation matrix
     ########################################################
@@ -567,14 +600,15 @@ Estimation_Mage <- function(
 
     ref_Matrix_Prior_Correlation <- cbind(
         rbind(
-            df_spatial_values_prior_SU_Kmin,
-            df_spatial_values_prior_SU_Kflood,
-            df_Qin,
-            df_gamma
+            df_prior_summary_Kmin,
+            df_prior_summary_Kflood,
+            prior_summary_param_Qin,
+            prior_summary_param_gamma
         ),
         Matrix_Prior_Correlation
     )
 
+    rownames(ref_Matrix_Prior_Correlation) <- NULL
     write.table(ref_Matrix_Prior_Correlation,
         file = file.path(paths$path_BaM_folder, "ref_Prior_Correlation_Matrix.txt"),
         row.names = FALSE, col.names = FALSE
@@ -583,7 +617,6 @@ Estimation_Mage <- function(
         file = file.path(paths$path_BaM_folder, "PriorCorrelation.txt"),
         row.names = FALSE, col.names = FALSE
     )
-    ########################################################
 
     if (!(nrow(covariate_grid) == nrow(Z_MatrixKmin) && nrow(covariate_grid) == nrow(Z_MatrixKflood))) {
         stop("Number of rows of covariate_grid must be equal to both Z_MatrixKmin and Z_MatrixKflood")
@@ -715,6 +748,7 @@ Estimation_Mage <- function(
         Kflood_SU = Kflood_SU,
         summary_SU_Kmin = summary_SU_Kmin,
         summary_SU_Kflood = summary_SU_Kflood,
-        mod_polynomials = mod
+        mod_polynomials = mod,
+        ref_Matrix_Prior_Correlation = ref_Matrix_Prior_Correlation
     ))
 }
