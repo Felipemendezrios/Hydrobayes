@@ -138,7 +138,7 @@ extract_priors <- function(nested_list) {
     extract <- function(x) {
         if (is.list(x)) {
             if ("prior" %in% names(x)) {
-                priors <<- c(priors, list(x$prior))
+                priors <<- c(priors, list(x$prior$Config_Model))
             } else {
                 lapply(x, extract)
             }
@@ -204,6 +204,124 @@ get_all_init_prior_theta <- function(parameter) {
         init_priors <- c(init_priors, param$init)
     }
     return(init_priors)
+}
+
+get_prior_info_plot_SU <- function(K_SU) {
+    data_prior_info_to_plot <-
+        lapply(
+            names(K_SU),
+            function(typology) {
+                su_list <- lapply(
+                    names(K_SU[[typology]]),
+                    function(su) {
+                        plot_info <- K_SU[[typology]][[su]]$prior$plot
+
+                        prior_summary <- plot_info$prior_summary
+                        spatial <- plot_info$spatial_positions_prior
+                        correlation <- plot_info$prior_correlation_SU
+                        prior_spat <- plot_info$prior_spatialization_matrix
+                        variances <- plot_info$variances
+
+                        all_info <- data.frame(
+                            Typology = prior_summary$Typology,
+                            SU = prior_summary$SU,
+                            param_name = prior_summary$param_name,
+                            prior.dist = prior_summary$prior.dist,
+                            par_1 = prior_summary$par_1,
+                            par_2 = prior_summary$par_2,
+                            covariate = spatial$covariate,
+                            scaled = spatial$scaled
+                        )
+
+                        list(
+                            prior_summary = prior_summary,
+                            spatial_positions_prior = spatial,
+                            prior_correlation_SU = correlation,
+                            prior_spat = prior_spat,
+                            variances = variances,
+                            all_info = all_info
+                        )
+                    }
+                )
+
+                names(su_list) <- names(K_SU[[typology]])
+
+                su_list
+            }
+        )
+    names(data_prior_info_to_plot) <- names(K_SU)
+
+    return(data_prior_info_to_plot)
+}
+
+traitement_prior_vs_posterior_plot_kx <- function(data_prior_info_K) {
+    prior_envelope_all <- c()
+    for (Typology in names(data_prior_info_K)) {
+        for (SU in seq_along(data_prior_info_K[[Typology]])) {
+            data_prior_local <- data_prior_info_K[[Typology]][[SU]]$all_info
+
+            data_matrix_spatial_prior_local <- data_prior_info_K[[Typology]][[SU]]$prior_spat
+
+            data_variances_prior_local <- data_prior_info_K[[Typology]][[SU]]$variances
+
+            if (nrow(data_prior_local) == 1 & all(data_prior_local$prior.dist == "FIX")) {
+                prior_envelope_all <- rbind(
+                    prior_envelope_all,
+                    data.frame(
+                        x = NA,
+                        ymin = NA,
+                        ymax = NA,
+                        ID = "Prior",
+                        typology = Typology,
+                        id_reach_SU = SU
+                    )
+                )
+            } else {
+                # Simulate T replicates
+                simT <- t(mvtnorm::rmvnorm(
+                    1000,
+                    data_prior_local$par_1,
+                    data_variances_prior_local
+                ))
+                # Transform into K replicates
+                simK <- data_matrix_spatial_prior_local %*% simT
+                # Prior realization in K space
+                prior_realization <- data.frame(
+                    x = data_prior_local$scaled,
+                    Value = simK,
+                    ID = "Prior"
+                ) %>% tidyr::pivot_longer(
+                    cols = -c(x, ID),
+                    names_to = "Iteration",
+                    values_to = "Value"
+                )
+
+                # Quantify uncertainty at 95%
+                prior_envelope <- prior_realization %>%
+                    group_by(x) %>%
+                    summarise(
+                        ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
+                        ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
+                        ID = "Prior", # so we can map to fill
+                        .groups = "drop"
+                    ) %>%
+                    mutate(
+                        typology = Typology,
+                        id_reach_SU = SU
+                    )
+                # If n=0, add a point at the begging for plotting
+                if (nrow(prior_envelope) == 1) {
+                    prior_envelope <-
+                        rbind(
+                            prior_envelope %>% mutate(x = -1),
+                            prior_envelope
+                        )
+                }
+                prior_envelope_all <- rbind(prior_envelope_all, prior_envelope)
+            }
+        }
+    }
+    return(prior_envelope_all)
 }
 
 write_RUGFile <- function(RUG_path,
