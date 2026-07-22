@@ -279,7 +279,7 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
-list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list_summary_SU_Kflood <- list_summary_SU_Kmin <- list()
+list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list_ref_Matrix_Prior_Correlation <- list_summary_SU_Kflood <- list_summary_SU_Kmin <- list()
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -301,8 +301,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0.2, nSlim = 2),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 10, nCycles = 10),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0, nSlim = 1),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 2, nCycles = 6),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
@@ -341,6 +341,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     list_mod_polynomials[[id_cal_case]] <- results_estimation$mod
     list_summary_SU_Kmin[[id_cal_case]] <- results_estimation$summary_SU_Kmin
     list_summary_SU_Kflood[[id_cal_case]] <- results_estimation$summary_SU_Kflood
+    list_ref_Matrix_Prior_Correlation[[id_cal_case]] <- results_estimation$ref_Matrix_Prior_Correlation
 }
 
 # Plot DIC
@@ -372,7 +373,7 @@ synthetic_case <- FALSE
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- FALSE
+final_calibration <- TRUE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -492,31 +493,58 @@ for (id_cal_case in 1:length(all_cal_case)) {
         )
 
         # Plot prior vs posterior
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$Kmin)) {
+        # Parameter to parameter Kmin
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
             ggsave(
                 filename = file.path(
                     paths$path_plot_folder,
                     paste0("plot_prior_vs_posterior_Kmin.png")
                 ),
-                plot = results_postprocess$plots_prior_vs_posterior$Kmin,
+                plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
                 width = 20,
                 height = 20,
                 units = "cm"
             )
         }
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$Kflood)) {
+        # Parameter to parameter Kflood
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
             ggsave(
                 filename = file.path(
                     paths$path_plot_folder,
                     paste0("plot_prior_vs_posterior_Kflood.png")
                 ),
-                plot = results_postprocess$plots_prior_vs_posterior$Kflood,
+                plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
                 width = 20,
                 height = 20,
                 units = "cm"
             )
         }
-
+        # Parameter to parameter: K(x)
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kmin_KdX.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        # Parameter to parameter: K(x)
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kflood_KdX.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
 
         # Specific case of synthetic case
         if (synthetic_case) {
