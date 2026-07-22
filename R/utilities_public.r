@@ -116,3 +116,8 @@ block_diagonal_matrix <- function(...) {
     }
     return(ans)
 }
+
+normalized_minus1_1 <- function(values) {
+    normalized_values <- 2 * (values - min(values)) / (max(values) - min(values)) - 1
+    return(normalized_values)
+}
