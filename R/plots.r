@@ -339,8 +339,11 @@ K_plot <- function(
             ,
             id_param_estimated
         ]
+        if (!is.data.frame(mcmc_all_param)) {
+            mcmc_all_param <- data.frame(mcmc_all_param)
+        }
         # Name columns
-        names(mcmc_all_param) <- paste0("param_", seq(1:length(MAP_param_vector)))
+        names(mcmc_all_param) <- paste0("param_", seq(1:length(id_param_estimated)))
     } else { # Case 3: mixted
         # Extract only MCMC of the parameters theta (estimated)
         mcmc_extraction <- mcmc[
@@ -1000,4 +1003,46 @@ Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
         scale_y_continuous(name = "Probability density function")
 
     return(plot_conflicts)
+}
+
+plot_prior_posterior_Kx <- function(prior, map, posterior) {
+    ggplot() +
+        geom_ribbon(
+            data = prior,
+            aes(
+                x = x,
+                ymin = ymin,
+                ymax = ymax,
+                fill = ID
+            ), alpha = 0.2
+        ) +
+        geom_ribbon(
+            data = posterior,
+            aes(x = scaled_KP, ymin = ymin, ymax = ymax, fill = ID), alpha = 0.4
+        ) +
+        geom_line(
+            data = map,
+            aes(x = scaled_KP, y = Value, color = ID, group = interaction(id_reach_SU, ID))
+        ) +
+        labs(
+            x = "Dimensionless scaled streamwise position",
+            y = expression("Friction coefficient (m"^
+                {
+                    1 / 3
+                } * "/s)"),
+            col = NULL,
+            fill = "95% credibility\ninterval",
+            title = "Prior vs Posterior"
+        ) +
+        scale_fill_manual(values = c(
+            "Prior" = "green",
+            "Parametric\nuncertainty" = "pink"
+        )) +
+        scale_color_manual(values = c("MAP" = "black")) +
+        theme_bw() +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5)
+        ) +
+        facet_wrap(~ typology + id_reach_SU, scales = "free", ncol = 2)
 }
