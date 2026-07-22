@@ -33,8 +33,8 @@ SU_constructor <- function(
     Key_Info_Typology_Model_Reach) {
     # Initialize structure by fixing layer 1 : XR
     # Layer 2 : Kmin or Kflood is handle outside this function
-    SU <- spatial_values_prior <- prior_correlation_SU <- vector(mode = "list", length = length(SU_key_HM))
-    names(SU) <- names(spatial_values_prior) <- names(prior_correlation_SU) <- names(SU_key_HM)
+    SU <- vector(mode = "list", length = length(SU_key_HM))
+    names(SU) <- names(SU_key_HM)
 
     # Extract only KP boundaries points keeping the same structure of XR
     SU_KP_boundaries_structure <- lapply(SU_key_HM, function(element) {
@@ -73,8 +73,8 @@ SU_constructor <- function(
         data_reaches <- Key_Info_Typology_Model_Reach[[id_typology]]$reach
 
         # Adding layer 3 : declare all SUs into the structure
-        SU[[id_typology]] <- spatial_values_prior[[id_typology]] <- prior_correlation_SU[[id_typology]] <- vector("list", length(SU_KP_boundaries_list))
-        names(SU[[id_typology]]) <- names(spatial_values_prior[[id_typology]]) <- names(prior_correlation_SU[[id_typology]]) <- names(SU_KP_boundaries_list)
+        SU[[id_typology]] <- vector("list", length(SU_KP_boundaries_list))
+        names(SU[[id_typology]]) <- names(SU_KP_boundaries_list)
 
         # Loop through each SU
         for (id_SU in seq_along(SU_KP_boundaries_list)) {
@@ -237,8 +237,6 @@ SU_constructor <- function(
             # Priors traitment
             info_priors <- SU_key_HM[[id_typology]][[id_SU]]$prior
             max_polynomial_degree_i <- SU_key_HM[[id_typology]][[id_SU]]$max_polynomial_degree
-            SU[[id_typology]][[id_SU]]$prior <- list()
-
 
             # Check if prior is "FIX"
             if (info_priors$config$distribution == "FIX") {
@@ -246,12 +244,28 @@ SU_constructor <- function(
                 if (length(info_priors$name_init$name) != 1) stop("FIX distribution forces to have a constant friction value, so P0 is mandatory")
 
                 # Save the good prior to pass into Config_Model
-                SU[[id_typology]][[id_SU]]$prior <- list(RBaM::parameter(
+                SU[[id_typology]][[id_SU]]$prior$Config_Model <- list(RBaM::parameter(
                     name = info_priors$name_init$name,
                     init = info_priors$name_init$init,
                     prior.dist = "FIX"
                 ))
-                spatial_values_prior[[id_typology]][[id_SU]] <- prior_correlation_SU[[id_typology]][[id_SU]] <- 1
+                SU[[id_typology]][[id_SU]]$prior$plot <- list(
+                    prior_summary = data.frame(
+                        Typology = names(SU)[id_typology],
+                        SU = names(SU[[id_typology]])[[id_SU]],
+                        param_name = info_priors$name_init$name,
+                        prior.dist = "FIX",
+                        par_1 = info_priors$name_init$init,
+                        par_2 = NA
+                    ),
+                    spatial_positions_prior = data.frame(
+                        covariate = SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries[2],
+                        scaled = ifelse(match(SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries[2], SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries) == 1, -1, 1)
+                    ),
+                    prior_correlation_SU = 1,
+                    prior_spatialization_matrix = matrix(1),
+                    variances = matrix(1)
+                )
             } else {
                 # Default set
                 if (is.null(info_priors$config$x_spatial)) {
@@ -282,15 +296,10 @@ SU_constructor <- function(
                     covariate_discretization_i <- info_priors$config$x_spatial
                 }
 
-                if (nrow(info_priors$config$param_values) == 1) {
-                    # Gaussian priors on K
-                    muK <- rep(info_priors$config$param_values$mu, max_polynomial_degree_i + 1)
-                    sigK <- rep(info_priors$config$param_values$sigma, max_polynomial_degree_i + 1)
-                } else {
-                    # Gaussian priors on K
-                    muK <- info_priors$config$param_values$mu
-                    sigK <- info_priors$config$param_values$sigma
-                }
+                if (nrow(info_priors$config$param_values) != 1) stop("No more than one value is accepted in input data of prior data (param_values)")
+                # Gaussian priors on K
+                muK <- rep(info_priors$config$param_values$mu, max_polynomial_degree_i + 1)
+                sigK <- rep(info_priors$config$param_values$sigma, max_polynomial_degree_i + 1)
 
                 # Create P matrix
                 Pmatrix <- getCovariate_Legendre(
@@ -313,15 +322,28 @@ SU_constructor <- function(
 
                 # Get diagonal which is the variance of each parameters. Other values are the covariance
                 sdT <- sqrt(diag(SIGT))
-                # Estimate the corelation matrix to export into the workspace
-                prior_correlation_SU[[id_typology]][[id_SU]] <- stats::cov2cor(SIGT)
 
-                # Save spatial point
-                spatial_values_prior[[id_typology]][[id_SU]] <- covariate_discretization_i
+                SU[[id_typology]][[id_SU]]$prior$plot <- list(
+                    prior_summary = data.frame(
+                        Typology = names(SU)[id_typology],
+                        SU = names(SU[[id_typology]])[[id_SU]],
+                        param_name = info_priors$name_init$name,
+                        prior.dist = info_priors$config$distribution,
+                        par_1 = as.vector(muT),
+                        par_2 = sdT
+                    ),
+                    spatial_positions_prior = data.frame(
+                        covariate = covariate_discretization_i,
+                        scaled = 2 * (covariate_discretization_i - min(covariate_discretization_i)) / (max(covariate_discretization_i) - min(covariate_discretization_i)) - 1
+                    ),
+                    prior_correlation_SU = stats::cov2cor(SIGT),
+                    prior_spatialization_matrix = Pmatrix,
+                    variances = SIGT
+                )
 
                 for (id_theta in seq_len(nrow(info_priors$name_init))) {
                     # Save the good prior to pass into Config_Model
-                    SU[[id_typology]][[id_SU]]$prior[[id_theta]] <- RBaM::parameter(
+                    SU[[id_typology]][[id_SU]]$prior$Config_Model[[id_theta]] <- RBaM::parameter(
                         name = info_priors$name_init$name[id_theta],
                         init = info_priors$name_init$init[id_theta],
                         prior.dist = "Gaussian",
@@ -329,7 +351,7 @@ SU_constructor <- function(
                     )
                 }
                 # final step
-                if (dim(SU[[id_typology]][[id_SU]]$Z)[2] != length(SU[[id_typology]][[id_SU]]$prior)) {
+                if (dim(SU[[id_typology]][[id_SU]]$Z)[2] != length(SU[[id_typology]][[id_SU]]$prior$Config_Model)) {
                     stop(paste0(
                         "Error identified in XR = ", names(SU_key_HM)[[id_typology]], ", SU = ", names(SU_key_HM[[id_typology]])[[id_SU]], ". Number of columns of Z (", dim(SU[[id_typology]][[id_SU]]$Z)[2], ") must be equal to the length(prior) = ", length(SU[[id_typology]][[id_SU]]$prior)
                     ))
@@ -364,8 +386,6 @@ SU_constructor <- function(
 
     return(list(
         SU = SU,
-        summary_SU = summary_SU,
-        spatial_values_prior = spatial_values_prior,
-        prior_correlation_SU = prior_correlation_SU
+        summary_SU = summary_SU
     ))
 }
