@@ -57,6 +57,10 @@ compute_K <- function(
     MAP,
     do_main_channel) {
     ## missing a level to search [[1]] ? fixed? only SU_1
+
+    # Order of typologies from the first level of Kmin_SU
+    typology_levels <- names(K_SU)
+
     SU <- do.call(
         rbind,
         lapply(names(K_SU), function(typology) {
@@ -66,7 +70,10 @@ compute_K <- function(
                     data.frame(
                         KP = K_SU[[typology]][[SU]]$KP,
                         reach = K_SU[[typology]][[SU]]$reach,
-                        typology = typology,
+                        typology = factor(
+                            typology,
+                            levels = typology_levels
+                        ),
                         id_reach_SU = K_SU[[typology]][[SU]]$id_reach_SU
                     )
                 })
@@ -470,16 +477,19 @@ postprocess_calibration <- function(
         RUGFile_data = RUGFile_Kmin_MAP,
         RUG_format = "%1s%3d      %10.3f%10.3f%10.2f%10.2f"
     )
-
+    ##################################
+    # Prior vs Posterior traitement
+    ##################################
+    # Analyze parameter by parameter
     # Kmin
-    prior_density <- get_prior_density(Kmin_prior)
-    prior_vs_posterior_Kmin <- combine_prior_posterior_MAP(prior_density, mcmc, MAP)
+    prior_density_Kmin <- get_prior_density(Kmin_prior)
+    prior_vs_posterior_Kmin <- combine_prior_posterior_MAP(prior_density_Kmin, mcmc, MAP)
 
     # Kflood
-    prior_density <- get_prior_density(Kflood_prior)
-    prior_vs_posterior_Kflood <- combine_prior_posterior_MAP(prior_density, mcmc, MAP)
+    prior_density_Kflood <- get_prior_density(Kflood_prior)
+    prior_vs_posterior_Kflood <- combine_prior_posterior_MAP(prior_density_Kflood, mcmc, MAP)
 
-    # Plots
+    # Plots: parameter by parameter
     if (is.null(prior_vs_posterior_Kmin)) {
         Plot_Prior_Post_Kmin <- NULL
     } else {
@@ -491,6 +501,78 @@ postprocess_calibration <- function(
     } else {
         Plot_Prior_Post_Kflood <- Plot_prior_posterior(prior_vs_posterior_Kflood)
     }
+
+    ##################################
+    # Analyze linear combination of parameters: SU by SU
+    # Prior K(x) realization
+    # Kmin
+    data_prior_info_to_plot_Kmin <- get_prior_info_plot_SU(Kmin_SU)
+
+    prior_envelope_Kmin <- traitement_prior_vs_posterior_plot_kx(data_prior_info_K = data_prior_info_to_plot_Kmin)
+
+    Kmin[[1]] <-
+        Kmin[[1]] %>%
+        group_by(typology, id_reach_SU) %>%
+        mutate(
+            min_KP = min(KP, na.rm = TRUE),
+            max_KP = max(KP, na.rm = TRUE),
+            scaled_KP =
+                2 * (KP - min_KP) / (max_KP - min_KP) - 1
+        ) %>%
+        ungroup()
+
+    Kmin[[3]] <-
+        Kmin[[3]] %>%
+        group_by(typology, id_reach_SU) %>%
+        mutate(
+            min_KP = min(KP, na.rm = TRUE),
+            max_KP = max(KP, na.rm = TRUE),
+            scaled_KP =
+                2 * (KP - min_KP) / (max_KP - min_KP) - 1
+        ) %>%
+        ungroup()
+
+    plot_conflits_prior_posterior_Kmin <- plot_prior_posterior_Kx(
+        prior = prior_envelope_Kmin,
+        map = Kmin[[1]],
+        posterior = Kmin[[3]]
+    )
+
+    # Kflood
+    data_prior_info_to_plot_Kflood <- get_prior_info_plot_SU(Kflood_SU)
+
+    prior_envelope_Kflood <- traitement_prior_vs_posterior_plot_kx(data_prior_info_K = data_prior_info_to_plot_Kflood)
+
+
+    Kflood[[1]] <-
+        Kflood[[1]] %>%
+        group_by(typology, id_reach_SU) %>%
+        mutate(
+            min_KP = min(KP, na.rm = TRUE),
+            max_KP = max(KP, na.rm = TRUE),
+            scaled_KP =
+                2 * (KP - min_KP) / (max_KP - min_KP) - 1
+        ) %>%
+        ungroup()
+
+    Kflood[[3]] <-
+        Kflood[[3]] %>%
+        group_by(typology, id_reach_SU) %>%
+        mutate(
+            min_KP = min(KP, na.rm = TRUE),
+            max_KP = max(KP, na.rm = TRUE),
+            scaled_KP =
+                2 * (KP - min_KP) / (max_KP - min_KP) - 1
+        ) %>%
+        ungroup()
+
+    plot_conflits_prior_posterior_Kflood <- plot_prior_posterior_Kx(
+        prior = prior_envelope_Kflood,
+        map = Kflood[[1]],
+        posterior = Kflood[[3]]
+    )
+
+
     return(
         list(
             data_param = list(
@@ -521,8 +603,14 @@ postprocess_calibration <- function(
             plots_MAP_output_variables = plots,
             CalData_updated = CalData_updated,
             plots_prior_vs_posterior = list(
-                Kmin = Plot_Prior_Post_Kmin,
-                Kflood = Plot_Prior_Post_Kflood
+                param = list(
+                    Kmin = Plot_Prior_Post_Kmin,
+                    Kflood = Plot_Prior_Post_Kflood
+                ),
+                KdX = list(
+                    Kmin = plot_conflits_prior_posterior_Kmin,
+                    Kflood = plot_conflits_prior_posterior_Kflood
+                )
             )
         )
     )
