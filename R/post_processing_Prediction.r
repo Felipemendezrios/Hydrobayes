@@ -47,8 +47,8 @@ get_all_data_pred <- function(
                         q97.5 = NA_real_,
                         id_pred = prefix
                     )
-                } else if (prefix %in% c("ParamU", "TotalU")) {
-                    prefix_customized <- ifelse(prefix == "TotalU", "Total", "Parametric")
+                } else if (prefix %in% c("ParamU", "TotalU", "Prior")) {
+                    prefix_customized <- ifelse(prefix == "TotalU", "Total", ifelse(prefix == "ParamU", "Parametric", "Prior"))
                     # Read the file
                     df_temp <- read.table(file, header = TRUE, sep = "", stringsAsFactors = FALSE)
                     df <- df_temp %>%
