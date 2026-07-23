@@ -1005,9 +1005,11 @@ Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
     return(plot_conflicts)
 }
 
-plot_prior_posterior_Kx <- function(prior, map, posterior) {
-    ggplot() +
-        geom_ribbon(
+plot_prior_posterior_Kx <- function(prior = NULL, map = NULL, posterior = NULL) {
+    plot_ks <- ggplot()
+
+    if (!is.null(prior)) {
+        plot_ks <- plot_ks + geom_ribbon(
             data = prior,
             aes(
                 x = x,
@@ -1015,15 +1017,22 @@ plot_prior_posterior_Kx <- function(prior, map, posterior) {
                 ymax = ymax,
                 fill = ID
             ), alpha = 0.2
-        ) +
-        geom_ribbon(
+        )
+    }
+    if (!is.null(posterior)) {
+        plot_ks <- plot_ks + geom_ribbon(
             data = posterior,
             aes(x = scaled_KP, ymin = ymin, ymax = ymax, fill = ID), alpha = 0.4
-        ) +
-        geom_line(
+        )
+    }
+    if (!is.null(map)) {
+        plot_ks <- plot_ks + geom_line(
             data = map,
             aes(x = scaled_KP, y = Value, color = ID, group = interaction(id_reach_SU, ID))
-        ) +
+        )
+    }
+
+    plot_ks <- plot_ks +
         labs(
             x = "Dimensionless scaled streamwise position",
             y = expression("Friction coefficient (m"^
@@ -1045,4 +1054,130 @@ plot_prior_posterior_Kx <- function(prior, map, posterior) {
             legend.title = element_text(hjust = 0.5)
         ) +
         facet_wrap(~ typology + id_reach_SU, scales = "free", ncol = 2)
+
+    return(plot_ks)
+}
+
+plot_prior_input_gaussian <- function(param_values_df, nsim = 1000) {
+    rnorm_df <- data.frame()
+    uncertainty_df <- data.frame()
+
+    for (i in 1:nrow(param_values_df)) {
+        if (!is.na(param_values_df$mu[i]) &&
+            !is.na(param_values_df$sigma[i])) {
+            mu <- param_values_df$mu[i]
+            sigma <- param_values_df$sigma[i]
+
+            values <- rnorm(n = nsim, mean = mu, sd = sigma)
+
+            temp <- data.frame(
+                typology = param_values_df$typology[i],
+                SU = param_values_df$SU[i],
+                mu = mu,
+                sigma = sigma,
+                value = values,
+                Distributions = "Prior"
+            )
+
+            rnorm_df <- rbind(rnorm_df, temp)
+
+            lower_95 <- qnorm(0.025, mean = mu, sd = sigma)
+            upper_95 <- qnorm(0.975, mean = mu, sd = sigma)
+
+            density_mu <- dnorm(
+                mu,
+                mean = mu,
+                sd = sigma
+            )
+
+            density_lower <- dnorm(
+                lower_95,
+                mean = mu,
+                sd = sigma
+            )
+
+            density_upper <- dnorm(
+                upper_95,
+                mean = mu,
+                sd = sigma
+            )
+            temp_uncertainty <- data.frame(
+                typology = param_values_df$typology[i],
+                SU = param_values_df$SU[i],
+                mu = mu,
+                sigma = sigma,
+                lower_95 = lower_95,
+                upper_95 = upper_95,
+                density_mu = density_mu,
+                density_lower = density_lower,
+                density_upper = density_upper
+            )
+
+            uncertainty_df <- rbind(
+                uncertainty_df,
+                temp_uncertainty
+            )
+        }
+    }
+    if (length(rnorm_df) == 0) {
+        return(NULL)
+    }
+    ggplot(rnorm_df, aes(x = value, fill = Distributions)) +
+        geom_density(alpha = 0.4) +
+        geom_segment(
+            data = uncertainty_df,
+            aes(
+                x = mu,
+                xend = mu,
+                y = 0,
+                yend = density_mu
+            ),
+            linetype = "dashed",
+            linewidth = 0.8,
+            inherit.aes = FALSE
+        ) +
+        geom_segment(
+            data = uncertainty_df,
+            aes(
+                x = lower_95,
+                xend = lower_95,
+                y = 0,
+                yend = density_lower
+            ),
+            linetype = "dotted",
+            linewidth = 0.8,
+            inherit.aes = FALSE
+        ) +
+        geom_segment(
+            data = uncertainty_df,
+            aes(
+                x = upper_95,
+                xend = upper_95,
+                y = 0,
+                yend = density_upper
+            ),
+            linetype = "dotted",
+            linewidth = 0.8,
+            inherit.aes = FALSE
+        ) +
+        facet_wrap(typology ~ SU, scales = "free") +
+        theme_bw() +
+        theme(
+            legend.position = "top",
+            legend.key.size = unit(0.7, "cm"),
+            plot.title = element_text(hjust = 0.5),
+            legend.title = element_text(hjust = 0.5)
+        ) +
+        labs(
+            x = expression("Friction coefficient (m"^
+                {
+                    1 / 3
+                } * "/s)"),
+            y = "Probability density function",
+            col = NULL,
+            title = "Prior information on friction coefficient"
+        ) +
+        scale_fill_manual(values = c(
+            "Prior" = "green"
+        ))
 }
