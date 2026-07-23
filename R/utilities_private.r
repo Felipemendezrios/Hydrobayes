@@ -254,7 +254,7 @@ get_prior_info_plot_SU <- function(K_SU) {
     return(data_prior_info_to_plot)
 }
 
-traitement_prior_vs_posterior_plot_kx <- function(data_prior_info_K) {
+traitement_prior <- function(data_prior_info_K) {
     prior_envelope_all <- c()
     for (Typology in names(data_prior_info_K)) {
         for (SU in seq_along(data_prior_info_K[[Typology]])) {
@@ -641,4 +641,40 @@ combine_prior_posterior_MAP <- function(prior_density, mcmc, MAP) {
     } else {
         NULL
     }
+}
+extract_param_values <- function(Input_Key_SU_MR) {
+    param_values_df <- data.frame()
+
+    for (typology in names(Input_Key_SU_MR)) {
+        for (SU in names(Input_Key_SU_MR[[typology]])) {
+            if (Input_Key_SU_MR[[typology]][[SU]]$prior$config$distribution == "FIX") {
+                param_values_df <- rbind(
+                    param_values_df,
+                    data.frame(
+                        typology = typology,
+                        SU = SU,
+                        mu = NA,
+                        sigma = NA
+                    )
+                )
+            } else {
+                param_values <- Input_Key_SU_MR[[typology]][[SU]]$prior$config$param_values
+
+                # Valeurs NULL -> NA
+                mu <- if (!is.null(param_values$mu)) param_values$mu else NA_real_
+                sigma <- if (!is.null(param_values$sigma)) param_values$sigma else NA_real_
+
+                param_values_df <- rbind(
+                    param_values_df,
+                    data.frame(
+                        typology = typology,
+                        SU = SU,
+                        mu = mu,
+                        sigma = sigma
+                    )
+                )
+            }
+        }
+    }
+    return(param_values_df)
 }

@@ -508,7 +508,7 @@ postprocess_calibration <- function(
     # Kmin
     data_prior_info_to_plot_Kmin <- get_prior_info_plot_SU(Kmin_SU)
 
-    prior_envelope_Kmin <- traitement_prior_vs_posterior_plot_kx(data_prior_info_K = data_prior_info_to_plot_Kmin)
+    prior_envelope_Kmin <- traitement_prior(data_prior_info_K = data_prior_info_to_plot_Kmin)
 
     Kmin[[1]] <-
         Kmin[[1]] %>%
@@ -541,7 +541,7 @@ postprocess_calibration <- function(
     # Kflood
     data_prior_info_to_plot_Kflood <- get_prior_info_plot_SU(Kflood_SU)
 
-    prior_envelope_Kflood <- traitement_prior_vs_posterior_plot_kx(data_prior_info_K = data_prior_info_to_plot_Kflood)
+    prior_envelope_Kflood <- traitement_prior(data_prior_info_K = data_prior_info_to_plot_Kflood)
 
 
     Kflood[[1]] <-

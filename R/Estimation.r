@@ -397,6 +397,23 @@ Estimation_Mage <- function(
     # Check if size is respected between ID and Kmin
     if (length(Input_Typology) != length(Input_Kmin_Key_SU_MR)) stop("Size must be equal between Input_Kmin_Key_SU_MR and Input_Typology")
 
+    # Plot prior information given from input data
+    df_prior_input_Kmin <- extract_param_values(Input_Key_SU_MR = Input_Kmin_Key_SU_MR)
+    plot_prior_Gaussian_Kmin <- plot_prior_input_gaussian(param_values_df = df_prior_input_Kmin)
+
+    if (!is.null(plot_prior_Gaussian_Kmin)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("prior_information_gaussian_friction.png")
+            ),
+            plot = plot_prior_Gaussian_Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+
     # Assign properties of each SU in XR structure
     results_SU_constructor <- SU_constructor(
         SU_key_HM = Input_Kmin_Key_SU_MR,
@@ -448,6 +465,24 @@ Estimation_Mage <- function(
 
     # Check if size is respected between ID and Kflood
     if (length(Input_Typology) != length(Input_Kflood_Key_SU_MR)) stop("Size must be equal between Input_Kflood_Key_SU_MR and Input_Typology")
+
+    # Plot prior information given from input data
+    df_prior_input_Kflood <- extract_param_values(Input_Key_SU_MR = Input_Kflood_Key_SU_MR)
+    plot_prior_Gaussian_Kflood <- plot_prior_input_gaussian(param_values_df = df_prior_input_Kflood)
+
+    if (!is.null(plot_prior_Gaussian_Kflood)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("prior_information_gaussian_friction_Kflood.png")
+            ),
+            plot = plot_prior_Gaussian_Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+
 
     # Assign properties of each SU in XR structure
     results_SU_constructor <- SU_constructor(
