@@ -988,15 +988,19 @@ Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
     plot_conflicts <- ggplot() +
         geom_density(
             data = subset(DF_prior_posterior_MAP, Distributions != "MAP"), aes(x = value, fill = Distributions),
-            alpha = 0.4, show.legend = TRUE
+            alpha = 0.8
         ) +
         geom_vline(
             data = subset(DF_prior_posterior_MAP, Distributions == "MAP"),
             aes(xintercept = value),
-            colour = "red",
+            colour = "black",
             linetype = "dashed",
             linewidth = 0.8
         ) +
+        scale_fill_manual(values = c(
+            "Prior" = "green",
+            "Posterior" = "pink"
+        )) +
         facet_wrap(~id, scales = "free", ncol = 3) +
         theme_bw() +
         theme(legend.position = "top", legend.key.size = unit(0.7, "cm")) +
