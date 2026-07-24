@@ -510,6 +510,21 @@ postprocess_calibration <- function(
 
     prior_envelope_Kmin <- traitement_prior(data_prior_info_K = data_prior_info_to_plot_Kmin)
 
+    # Plot Prior only
+    only_prior_k_cov <- plot_prior_posterior_Kx(
+        prior = prior_envelope_Kmin
+    )
+    only_prior_k_cov <- only_prior_k_cov +
+        labs(title = "Prior distribution")
+
+    ggplot2::ggsave(
+        file.path(paths$path_plot_folder, "Prior_K(covariate).png"),
+        only_prior_k_cov,
+        width = 20,
+        height = 20,
+        units = "cm"
+    )
+
     Kmin[[1]] <-
         Kmin[[1]] %>%
         group_by(typology, id_reach_SU) %>%
