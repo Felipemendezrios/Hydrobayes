@@ -49,13 +49,25 @@ threshold_jump_MCMC_error_model <- 0.5
 # Name of the experiment. All scenarios will be used the same calibration data
 
 Experiment_id <- c(
-    "1_WSE_u_0.05" # Without rg and rd
+    "1_WSE_u_0.05"
 )
 
 # Experiments input data to be used during calibration setting
+
 all_cal_case <- c(
+    "Kmin_n_0.r",
+    "Kmin_n_1.r",
+    "Kmin_n_2.r",
+    "Kmin_n_3.r",
+    "Kmin_n_4.r",
+    "Kmin_n_5.r",
+    "Kmin_n_6.r",
+    "Kmin_n_7.r",
+    "Kmin_n_9.r",
+    "Kmin_n_10.r",
     "Kmin_n_13.r"
 )
+
 
 # Folder related to the observations (careful with the order!)
 all_events <- c(
@@ -97,7 +109,7 @@ Input_Model_Reach <- data.frame(
 
 # Must be careful with the order of the reaches, it must be given upstream to downstream
 Input_Typology <- list(
-    MR = c(1)
+    Ain = c(1)
 )
 
 ############################################
@@ -304,7 +316,7 @@ Key_Info_Typology_Model_Reach <- get_Key_Info_Typology_Model_Reach(
 ############################################
 # Module 6: Calibration
 ############################################
-list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list_summary_SU_Kflood <- list_summary_SU_Kmin <- list()
+list_mod_polynomials <- list_Z_MatrixKmin <- list_Z_MatrixKflood <- list_Kmin_prior <- list_Kflood_prior <- list_Kmin_SU <- list_Kflood_SU <- list_ref_Matrix_Prior_Correlation <- list_summary_SU_Kflood <- list_summary_SU_Kmin <- list()
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -326,28 +338,29 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0.1, nSlim = 2),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 15, nCycles = 20),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.5, nSlim = 10),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 60, nCycles = 80),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
+    script_path <- file.path(paths$path_BaM_folder, "run_BaM.sh")
+
+    writeLines(
+        c(
+            "#!/bin/bash",
+            paste(
+                shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                "-cf",
+                shQuote(file.path(paths$path_BaM_folder, "Config_BaM.txt"))
+            )
+        ),
+        script_path
+    )
+
+    Sys.chmod(script_path, "0755")
+    # Run outside of Vscodium. To kill a job : pkill -f BaM
+
     if (do_calibration) {
-        script_path <- file.path(paths$path_BaM_folder, "run_BaM.sh")
-
-        writeLines(
-            c(
-                "#!/bin/bash",
-                paste(
-                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
-                    "-cf",
-                    shQuote(file.path(paths$path_BaM_folder, "Config_BaM.txt"))
-                )
-            ),
-            script_path
-        )
-
-        Sys.chmod(script_path, "0755")
-        # Run outside of Vscodium. To kill a job : pkill -f BaM
         system2(
             "nohup",
             args = c("bash", script_path),
@@ -365,6 +378,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     list_mod_polynomials[[id_cal_case]] <- results_estimation$mod
     list_summary_SU_Kmin[[id_cal_case]] <- results_estimation$summary_SU_Kmin
     list_summary_SU_Kflood[[id_cal_case]] <- results_estimation$summary_SU_Kflood
+    list_ref_Matrix_Prior_Correlation[[id_cal_case]] <- results_estimation$ref_Matrix_Prior_Correlation
 }
 
 # Plot DIC
@@ -399,7 +413,7 @@ if (do_plot_calibration) {
 ###############
 # Theoretical values
 ####################
-if (Experiment_id %in% c("1_WSE_cte_u_0.01", "1_WSE_cte_u_0.01_without_rg_rd")) {
+if (Experiment_id %in% c("1_WSE_u_0.05")) {
     file_RUGFILE_synt_obs <- "data/processed_data/Durance_Thiercelin/Thiercelin_K_distribution.RUG"
 } else {
     stop("Experiment id in not correct")
@@ -557,7 +571,59 @@ for (id_cal_case in 1:length(all_cal_case)) {
         save(plots_MAP_output_variables,
             file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
         )
-
+        # Plot prior vs posterior
+        # Parameter to parameter Kmin
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kmin.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        # Parameter to parameter Kflood
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kflood.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        # Parameter to parameter: K(x)
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kmin_KdX.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
+        # Parameter to parameter: K(x)
+        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
+            ggsave(
+                filename = file.path(
+                    paths$path_plot_folder,
+                    paste0("plot_prior_vs_posterior_Kflood_KdX.png")
+                ),
+                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
+                width = 20,
+                height = 20,
+                units = "cm"
+            )
+        }
         # Specific case of synthetic case
         if (synthetic_case) {
             plot_output_with_synthetic_data <-
@@ -652,7 +718,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     return_prediction <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
-        prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
+        prediction_file = c("ParamU", "Maxpost", "TotalU"),
         data = data,
         do_prediction = do_prediction,
         X_pred = X_pred,
@@ -666,35 +732,36 @@ for (id_cal_case in 1:length(all_cal_case)) {
     X_pred_grid[[id_cal_case]] <- return_prediction$X_pred_grid
 
 
-    if (do_prediction) {
-        cf_file <- return_prediction$cf_file
 
-        script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
-        # write the bash script
+    cf_file <- return_prediction$cf_file
+
+    script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
+    # write the bash script
+    lines <- c(
+        "#!/bin/bash", # start with bash header
+        "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
+        ""
+    )
+
+    for (cf in cf_file) {
+        # add a line for each BaM run
         lines <- c(
-            "#!/bin/bash", # start with bash header
-            "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
-            ""
-        )
-
-        for (cf in cf_file) {
-            # add a line for each BaM run
-            lines <- c(
-                lines,
-                paste(
-                    "nohup", # run in background
-                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
-                    "-cf",
-                    shQuote(cf),
-                    "> /dev/null 2>&1 &"
-                )
+            lines,
+            paste(
+                "nohup", # run in background
+                shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                "-cf",
+                shQuote(cf),
+                "> /dev/null 2>&1 &"
             )
-        }
-        writeLines(lines, script_path_pred)
+        )
+    }
+    writeLines(lines, script_path_pred)
 
-        Sys.chmod(script_path_pred, "0755")
-        # Run outside of Vscodium. To kill a job: pkill -f BaM
-        # See if the runs are in parallel: pgrep -af BaM
+    Sys.chmod(script_path_pred, "0755")
+    # Run outside of Vscodium. To kill a job: pkill -f BaM
+    # See if the runs are in parallel: pgrep -af BaM
+    if (do_prediction) {
         system2(
             "bash",
             args = script_path_pred,
