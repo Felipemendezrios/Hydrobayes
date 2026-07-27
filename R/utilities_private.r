@@ -435,7 +435,7 @@ get_param_vector_MAP_values <- function(SU_Kmin, SU_Kflood, MAP) {
             param_temp <- get_init_prior(extract_priors(id_SU), FIX_dist = TRUE)
             # If prior distribution is FIX, then keep the initial value.
             # Otherwise, modify by the MAP value to calculate residuals
-            idx <- which(get_prior_distribution(id_SU$prior) != "FIX")
+            idx <- which(get_prior_distribution(id_SU$prior$Config_Model) != "FIX")
 
             # Get the number of distribution different to FIX distribution to move indicator in the MAP variable
             n <- length(idx)

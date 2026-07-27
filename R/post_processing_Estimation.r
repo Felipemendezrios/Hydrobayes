@@ -149,6 +149,10 @@ compute_residuals <- function(
             from = path_model_HM_events,
             to = temporal_dir, recursive = TRUE
         )
+        file.copy(
+            from = path_BaM_folder,
+            to = temporal_dir, recursive = TRUE
+        )
         temp_path <- file.path(temporal_dir, basename(path_model_HM_events))
 
         path_RUGFile <- file.path(
@@ -195,12 +199,17 @@ compute_residuals <- function(
             setwd(id_temp_path)
             system2(MAGE_executable,
                 args = c(
-                    file.path(REPFile),
-                    command_line_MAGE
+                    command_line_MAGE,
+                    file.path(REPFile)
                 ),
                 wait = TRUE
             )
         }
+
+        # Correct files to point to temporal directory
+        mod_polynomials$xtra$object$mageDir <- paste0(temp_path, "/")
+        mod_polynomials$xtra$object$zFileKmin <- file.path(temporal_dir, "BaM", "Zfile_Kmin.txt")
+        mod_polynomials$xtra$object$zFileKmoy <- file.path(temporal_dir, "BaM", "Zfile_Kflood.tx")
 
         runModel(
             workspace = temporal_dir,
