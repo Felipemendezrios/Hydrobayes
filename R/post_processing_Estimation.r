@@ -506,7 +506,7 @@ postprocess_calibration <- function(
     # Analyze linear combination of parameters: SU by SU
     # Prior K(x) realization
     # Kmin
-    data_prior_info_to_plot_Kmin <- get_prior_info_plot_SU(Kmin_SU)
+    data_prior_info_to_plot_Kmin <- get_prior_info_plot_SU(K_SU = Kmin_SU)
 
     prior_envelope_Kmin <- traitement_prior(data_prior_info_K = data_prior_info_to_plot_Kmin)
 

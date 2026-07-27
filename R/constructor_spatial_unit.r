@@ -323,6 +323,19 @@ SU_constructor <- function(
                 # Get diagonal which is the variance of each parameters. Other values are the covariance
                 sdT <- sqrt(diag(SIGT))
 
+                if (length(covariate_discretization_i) == 1) {
+                    scaled <- ifelse(
+                        match(
+                            SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries[2],
+                            SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries
+                        ) == 1,
+                        -1,
+                        1
+                    )
+                } else {
+                    scaled <- 2 * (covariate_discretization_i - min(covariate_discretization_i)) / (max(covariate_discretization_i) - min(covariate_discretization_i)) - 1
+                }
+
                 SU[[id_typology]][[id_SU]]$prior$plot <- list(
                     prior_summary = data.frame(
                         Typology = names(SU)[id_typology],
@@ -334,18 +347,7 @@ SU_constructor <- function(
                     ),
                     spatial_positions_prior = data.frame(
                         covariate = covariate_discretization_i,
-                        scaled = ifelse(
-                            length(covariate_discretization_i) == 1,
-                            ifelse(
-                                match(
-                                    SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries[2],
-                                    SU[[id_typology]][[id_SU]]$id_reach_SU_boundaries
-                                ) == 1,
-                                -1,
-                                1
-                            ),
-                            2 * (covariate_discretization_i - min(covariate_discretization_i)) / (max(covariate_discretization_i) - min(covariate_discretization_i)) - 1
-                        )
+                        scaled = scaled
                     ),
                     prior_correlation_SU = stats::cov2cor(SIGT),
                     prior_spatialization_matrix = Pmatrix,
