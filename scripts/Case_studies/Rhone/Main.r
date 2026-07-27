@@ -241,7 +241,7 @@ remant_error_list <- list(
         funk = "Constant",
         par = list(parameter(
             name = "intercept",
-            init = 0.1,
+            init = 0.3,
             prior.dist = "Uniform",
             prior.par = c(-10, 10)
         ))
@@ -301,29 +301,30 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0, nSlim = 1),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 2, nCycles = 6),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.25, nSlim = 10),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 50, nCycles = 60),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
+    script_path <- file.path(paths$path_BaM_folder, "run_BaM.sh")
+
+    writeLines(
+        c(
+            "#!/bin/bash",
+            paste(
+                shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                "-cf",
+                shQuote(file.path(paths$path_BaM_folder, "Config_BaM.txt"))
+            )
+        ),
+        script_path
+    )
+
+    Sys.chmod(script_path, "0755")
+    # Find path pstree -ap | grep BaM
+    # Run outside of Vscodium. To kill a job : pkill -f BaM
+
     if (do_calibration) {
-        script_path <- file.path(paths$path_BaM_folder, "run_BaM.sh")
-
-        writeLines(
-            c(
-                "#!/bin/bash",
-                paste(
-                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
-                    "-cf",
-                    shQuote(file.path(paths$path_BaM_folder, "Config_BaM.txt"))
-                )
-            ),
-            script_path
-        )
-
-        Sys.chmod(script_path, "0755")
-        # Find path pstree -ap | grep BaM
-        # Run outside of Vscodium. To kill a job : pkill -f BaM
         system2(
             "nohup",
             args = c("bash", script_path),
@@ -373,7 +374,7 @@ synthetic_case <- FALSE
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- TRUE
+final_calibration <- FALSE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -449,144 +450,142 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
 
-    if (do_plot_calibration) {
-        if (!is.null(plot_Kmin_with_obs)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_Kmin_with_true_values_generated_obs.png")
-                ),
-                plot = plot_Kmin_with_obs,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        if (!is.null(plot_Kflood_with_obs)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_Kflood_with_true_values_generated_obs.png")
-                ),
-                plot = plot_Kflood_with_obs,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-
-
-        for (i in seq_along(plots_MAP_output_variables)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_obs_sim_MAP_Y", i, ".png")
-                ),
-                plot = plots_MAP_output_variables[[i]],
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        save(plots_MAP_output_variables,
-            file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
+    if (!is.null(plot_Kmin_with_obs)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_Kmin_with_true_values_generated_obs.png")
+            ),
+            plot = plot_Kmin_with_obs,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
+    }
+    if (!is.null(plot_Kflood_with_obs)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_Kflood_with_true_values_generated_obs.png")
+            ),
+            plot = plot_Kflood_with_obs,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
 
-        # Plot prior vs posterior
-        # Parameter to parameter Kmin
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kmin.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter Kflood
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kflood.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter: K(x)
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kmin_KdX.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter: K(x)
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kflood_KdX.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
 
-        # Specific case of synthetic case
-        if (synthetic_case) {
-            plot_output_with_synthetic_data <-
-                plots_MAP_output_variables[[1]] +
-                geom_point(
-                    data = real_synt_data,
-                    aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), shape = 2
-                ) +
-                scale_color_manual(
-                    values =
-                        c(
-                            "sim" = "black",
-                            "obs" = "blue",
-                            "synthetic data" = "purple"
-                        )
-                ) +
-                facet_wrap(
-                    ~X1_obs,
-                    # labeller = labeller(
-                    #     X1_obs = c(
-                    #         "1" = "Main reach (MR)",
-                    #         "2" = "Tributary (TR)"
-                    #     )
-                    # ),
-                    scales = "free",
-                    ncol = 1
-                )
-            save(plot_output_with_synthetic_data,
-                file = file.path(paths$path_RData, "plot_output_with_synthetic_data.RData")
+    for (i in seq_along(plots_MAP_output_variables)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_obs_sim_MAP_Y", i, ".png")
+            ),
+            plot = plots_MAP_output_variables[[i]],
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    save(plots_MAP_output_variables,
+        file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
+    )
+
+    # Plot prior vs posterior
+    # Parameter to parameter Kmin
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kmin.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter Kflood
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kflood.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter: K(x)
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kmin_KdX.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter: K(x)
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kflood_KdX.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+
+    # Specific case of synthetic case
+    if (synthetic_case) {
+        plot_output_with_synthetic_data <-
+            plots_MAP_output_variables[[1]] +
+            geom_point(
+                data = real_synt_data,
+                aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), shape = 2
+            ) +
+            scale_color_manual(
+                values =
+                    c(
+                        "sim" = "black",
+                        "obs" = "blue",
+                        "synthetic data" = "purple"
+                    )
+            ) +
+            facet_wrap(
+                ~X1_obs,
+                # labeller = labeller(
+                #     X1_obs = c(
+                #         "1" = "Main reach (MR)",
+                #         "2" = "Tributary (TR)"
+                #     )
+                # ),
+                scales = "free",
+                ncol = 1
             )
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_output_with_synthetic_data_Y1.png")
-                ),
-                plot = plot_output_with_synthetic_data,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
+        save(plot_output_with_synthetic_data,
+            file = file.path(paths$path_RData, "plot_output_with_synthetic_data.RData")
+        )
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_output_with_synthetic_data_Y1.png")
+            ),
+            plot = plot_output_with_synthetic_data,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
     }
 }
 ################################
@@ -655,7 +654,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     return_prediction <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
-        prediction_file = c("Prior", "ParamU", "Maxpost", "TotalU"),
+        prediction_file = c("ParamU", "Maxpost", "TotalU"),
         data = data,
         do_prediction = do_prediction,
         X_pred = X_pred,
@@ -669,38 +668,39 @@ for (id_cal_case in 1:length(all_cal_case)) {
     X_pred_grid[[id_cal_case]] <- return_prediction$X_pred_grid
 
 
-    if (do_prediction) {
-        cf_file <- return_prediction$cf_file
+    cf_file <- return_prediction$cf_file
 
-        script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
-        # write the bash script
+    script_path_pred <- file.path(paths$path_BaM_folder, "run_pred_BaM.sh")
+    # write the bash script
+    lines <- c(
+        "#!/bin/bash", # start with bash header
+        "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
+        ""
+    )
+
+    for (cf in cf_file) {
+        # add a line for each BaM run
         lines <- c(
-            "#!/bin/bash", # start with bash header
-            "exec > /dev/null 2>&1", # From now on, send all output (stdout and stderr) to nowhere.
-            ""
-        )
-
-        for (cf in cf_file) {
-            # add a line for each BaM run
-            lines <- c(
-                lines,
-                paste(
-                    "nohup", # run in background
-                    shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
-                    "-cf",
-                    shQuote(cf),
-                    ">",
-                    shQuote(paste0(cf, ".log")),
-                    "2>&1",
-                    "&"
-                )
+            lines,
+            paste(
+                "nohup", # run in background
+                shQuote(file.path(RBaM::getPathToBaM(), "BaM")),
+                "-cf",
+                shQuote(cf),
+                ">",
+                shQuote(paste0(cf, ".log")),
+                "2>&1",
+                "&"
             )
-        }
-        writeLines(lines, script_path_pred)
+        )
+    }
+    writeLines(lines, script_path_pred)
 
-        Sys.chmod(script_path_pred, "0755")
-        # Run outside of Vscodium. To kill a job: pkill -f BaM
-        # See if the runs are in parallel: pgrep -af BaM
+    Sys.chmod(script_path_pred, "0755")
+    # Run outside of Vscodium. To kill a job: pkill -f BaM
+    # See if the runs are in parallel: pgrep -af BaM
+
+    if (do_prediction) {
         system2(
             "bash",
             args = script_path_pred,

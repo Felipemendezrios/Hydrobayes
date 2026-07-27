@@ -529,143 +529,143 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     plots_MAP_output_variables <- results_postprocess$plots_MAP_output_variables
 
-    if (do_plot_calibration) {
-        if (!is.null(plot_Kmin_with_obs)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_Kmin_with_true_values_generated_obs.png")
-                ),
-                plot = plot_Kmin_with_obs,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        if (!is.null(plot_Kflood_with_obs)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_Kflood_with_true_values_generated_obs.png")
-                ),
-                plot = plot_Kflood_with_obs,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-
-
-        for (i in seq_along(plots_MAP_output_variables)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_obs_sim_MAP_Y", i, ".png")
-                ),
-                plot = plots_MAP_output_variables[[i]],
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        save(plots_MAP_output_variables,
-            file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
+    # if (do_plot_calibration) {
+    if (!is.null(plot_Kmin_with_obs)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_Kmin_with_true_values_generated_obs.png")
+            ),
+            plot = plot_Kmin_with_obs,
+            width = 20,
+            height = 20,
+            units = "cm"
         )
-        # Plot prior vs posterior
-        # Parameter to parameter Kmin
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kmin.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter Kflood
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kflood.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter: K(x)
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kmin_KdX.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Parameter to parameter: K(x)
-        if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_prior_vs_posterior_Kflood_KdX.png")
-                ),
-                plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
-        # Specific case of synthetic case
-        if (synthetic_case) {
-            plot_output_with_synthetic_data <-
-                plots_MAP_output_variables[[1]] +
-                geom_point(
-                    data = real_synt_data,
-                    aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), shape = 2
-                ) +
-                scale_color_manual(
-                    values =
-                        c(
-                            "sim" = "black",
-                            "obs" = "blue",
-                            "synthetic data" = "purple"
-                        )
-                ) +
-                facet_wrap(
-                    ~X1_obs,
-                    # labeller = labeller(
-                    #     X1_obs = c(
-                    #         "1" = "Main reach (MR)",
-                    #         "2" = "Tributary (TR)"
-                    #     )
-                    # ),
-                    scales = "free",
-                    ncol = 1
-                )
-            save(plot_output_with_synthetic_data,
-                file = file.path(paths$path_RData, "plot_output_with_synthetic_data.RData")
-            )
-            ggsave(
-                filename = file.path(
-                    paths$path_plot_folder,
-                    paste0("plot_output_with_synthetic_data_Y1.png")
-                ),
-                plot = plot_output_with_synthetic_data,
-                width = 20,
-                height = 20,
-                units = "cm"
-            )
-        }
     }
+    if (!is.null(plot_Kflood_with_obs)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_Kflood_with_true_values_generated_obs.png")
+            ),
+            plot = plot_Kflood_with_obs,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+
+
+    for (i in seq_along(plots_MAP_output_variables)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_obs_sim_MAP_Y", i, ".png")
+            ),
+            plot = plots_MAP_output_variables[[i]],
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    save(plots_MAP_output_variables,
+        file = file.path(paths$path_RData, "plots_MAP_output_variables.RData")
+    )
+    # Plot prior vs posterior
+    # Parameter to parameter Kmin
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kmin.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter Kflood
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kflood.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter: K(x)
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kmin_KdX.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Parameter to parameter: K(x)
+    if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_prior_vs_posterior_Kflood_KdX.png")
+            ),
+            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # Specific case of synthetic case
+    if (synthetic_case) {
+        plot_output_with_synthetic_data <-
+            plots_MAP_output_variables[[1]] +
+            geom_point(
+                data = real_synt_data,
+                aes(x = KP, y = WSE_real_obs, col = "synthetic data", group = id_reach_CAL), shape = 2
+            ) +
+            scale_color_manual(
+                values =
+                    c(
+                        "sim" = "black",
+                        "obs" = "blue",
+                        "synthetic data" = "purple"
+                    )
+            ) +
+            facet_wrap(
+                ~X1_obs,
+                # labeller = labeller(
+                #     X1_obs = c(
+                #         "1" = "Main reach (MR)",
+                #         "2" = "Tributary (TR)"
+                #     )
+                # ),
+                scales = "free",
+                ncol = 1
+            )
+        save(plot_output_with_synthetic_data,
+            file = file.path(paths$path_RData, "plot_output_with_synthetic_data.RData")
+        )
+        ggsave(
+            filename = file.path(
+                paths$path_plot_folder,
+                paste0("plot_output_with_synthetic_data_Y1.png")
+            ),
+            plot = plot_output_with_synthetic_data,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+    # }
 }
 ################################
 # Prediction
