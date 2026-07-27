@@ -30,7 +30,7 @@ Input_Kmin_Key_SU_MR <- list(
                 # Function to apply at this SU
                 function_SU = getCovariate_Legendre,
                 # Arguments of this SU
-                max_polynomial_degree = 13,
+                max_polynomial_degree = 5,
                 prior = list(
                     name_init = data.frame(
                         # Name to appear into calculations
@@ -40,20 +40,12 @@ Input_Kmin_Key_SU_MR <- list(
                             "Km_a2",
                             "Km_a3",
                             "Km_a4",
-                            "Km_a5",
-                            "Km_a6",
-                            "Km_a7",
-                            "Km_a8",
-                            "Km_a9",
-                            "Km_a10",
-                            "Km_a11",
-                            "Km_a12",
-                            "Km_a13"
+                            "Km_a5"
                         ),
                         # Initial guess
                         init = c(
                             30,
-                            rep(0, 13)
+                            rep(0, 5)
                         )
                     ),
                     config = list(
@@ -63,7 +55,7 @@ Input_Kmin_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30
@@ -115,7 +107,7 @@ Input_Kflood_Key_SU_MR <- list(
                         x_spatial = c(
                             NULL
                         ),
-                        # If only a values is given, all prior will be the same for all x_spatial. If not, it must has the same size of x_spatial.
+                        # A only value is accepted and assigned to all the x_spatial.
                         param_values = data.frame(
                             mu = c(
                                 30

@@ -109,7 +109,7 @@ Input_Model_Reach <- data.frame(
 
 # Must be careful with the order of the reaches, it must be given upstream to downstream
 Input_Typology <- list(
-    Ain = c(1)
+    Durance = c(1)
 )
 
 ############################################
