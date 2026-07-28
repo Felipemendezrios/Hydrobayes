@@ -832,6 +832,45 @@ plot_mcmc_diagnostics <- function(
     pairs(mcmc)
     dev.off()
 
+    if (!final_calibration) {
+        mcmc <- mcmc %>%
+            slice((floor(n() * 0.3) + 1):n()) %>%
+            slice(seq(1, n(), by = 2))
+
+
+        trace <- patchwork::wrap_plots(
+            RBaM::tracePlot(mcmc),
+            ncol = 3
+        )
+
+        ggplot2::ggsave(
+            file.path(
+                path_plot_folder,
+                "MCMC_Partial_cooked.png"
+            ),
+            trace,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+
+        density <- patchwork::wrap_plots(
+            RBaM::densityPlot(mcmc),
+            ncol = 3
+        )
+
+        ggplot2::ggsave(
+            file.path(
+                path_plot_folder,
+                "Density_Partial_cooked.png"
+            ),
+            density,
+            width = 20,
+            height = 20,
+            units = "cm"
+        )
+    }
+
     return(mcmc)
 }
 

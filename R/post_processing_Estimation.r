@@ -1,6 +1,7 @@
 extract_MAP_parameters <- function(
     path_BaM_folder,
     final_calibration,
+    mcmc,
     Kmin_prior,
     Kflood_prior) {
     Fix_Kmin <- sum(
@@ -29,18 +30,9 @@ extract_MAP_parameters <- function(
             ]
         )
     } else {
-        res <- read.table(
-            file.path(
-                path_BaM_folder,
-                "Results_MCMC.txt"
-            ),
-            header = TRUE
-        )
-
-
         MAP <- as.numeric(
-            res[
-                which.max(res$LogPost),
+            mcmc[
+                which.max(mcmc$LogPost),
                 1:(length(Kmin_prior) - Fix_Kmin + length(Kflood_prior) - Fix_Kflood)
             ]
         )
@@ -287,6 +279,7 @@ postprocess_calibration <- function(
     MAP <- extract_MAP_parameters(
         path_BaM_folder = paths$path_BaM_folder,
         final_calibration = final_calibration,
+        mcmc = mcmc,
         Kmin_prior = Kmin_prior,
         Kflood_prior = Kflood_prior
     )
