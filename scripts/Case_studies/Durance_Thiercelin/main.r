@@ -369,6 +369,16 @@ for (id_cal_case in 1:length(all_cal_case)) {
             wait = FALSE
         )
     }
+
+    Kmin_SU_RData <- results_estimation$Kmin_SU
+    Kflood_SU_RData <- results_estimation$Kflood_SU
+    save(Kmin_SU_RData,
+        file = file.path(paths$path_RData, "Kmin_SU_RData.RData")
+    )
+    save(Kflood_SU_RData,
+        file = file.path(paths$path_RData, "Kflood_SU_RData.RData")
+    )
+
     list_Z_MatrixKmin[[id_cal_case]] <- results_estimation$Z_MatrixKmin
     list_Z_MatrixKflood[[id_cal_case]] <- results_estimation$Z_MatrixKflood
     list_Kmin_prior[[id_cal_case]] <- results_estimation$Kmin_prior
