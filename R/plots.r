@@ -1023,14 +1023,18 @@ plot_obs_sim_unc <- function(
     return(sim_obs_plot)
 }
 
-Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
+Plot_prior_posterior <- function(prior, posterior) {
     plot_conflicts <- ggplot() +
         geom_density(
-            data = subset(DF_prior_posterior_MAP, Distributions != "MAP"), aes(x = value, fill = Distributions),
+            data = prior, aes(x = value, fill = Distributions),
+            alpha = 0.8
+        ) +
+        geom_density(
+            data = subset(posterior, Distributions != "MAP"), aes(x = value, fill = Distributions),
             alpha = 0.8
         ) +
         geom_vline(
-            data = subset(DF_prior_posterior_MAP, Distributions == "MAP"),
+            data = subset(posterior, Distributions == "MAP"),
             aes(xintercept = value),
             colour = "black",
             linetype = "dashed",
@@ -1049,24 +1053,45 @@ Plot_prior_posterior <- function(DF_prior_posterior_MAP) {
 }
 
 plot_prior_posterior_Kx <- function(prior = NULL, map = NULL, posterior = NULL) {
+    if (any(is.na(prior$x))) {
+        return(NULL)
+    }
     plot_ks <- ggplot()
 
     if (!is.null(prior)) {
-        plot_ks <- plot_ks + geom_ribbon(
-            data = prior,
-            aes(
-                x = x,
-                ymin = ymin,
-                ymax = ymax,
-                fill = ID
-            ), alpha = 0.2
-        )
+        plot_ks <- plot_ks +
+            # geom_ribbon(
+            #     data = prior,
+            #     aes(
+            #         x = x,
+            #         ymin = ymin,
+            #         ymax = ymax,
+            #         fill = ID
+            #     ), alpha = 0.2
+            # ) +
+            geom_errorbar(
+                data = prior,
+                aes(
+                    x = x,
+                    ymin = ymin,
+                    ymax = ymax,
+                    color = ID
+                ), alpha = 0.7
+            )
     }
     if (!is.null(posterior)) {
         plot_ks <- plot_ks + geom_ribbon(
             data = posterior,
             aes(x = scaled_KP, ymin = ymin, ymax = ymax, fill = ID), alpha = 0.4
-        )
+        ) +
+            scale_fill_manual(
+                values = c(
+                    "Parametric\nuncertainty" = "pink"
+                )
+            ) +
+            labs(
+                fill = "95% credibility\ninterval"
+            )
     }
     if (!is.null(map)) {
         plot_ks <- plot_ks + geom_line(
@@ -1083,14 +1108,18 @@ plot_prior_posterior_Kx <- function(prior = NULL, map = NULL, posterior = NULL) 
                     1 / 3
                 } * "/s)"),
             col = NULL,
-            fill = "95% credibility\ninterval",
             title = "Prior vs Posterior"
         ) +
-        scale_fill_manual(values = c(
-            "Prior" = "green",
-            "Parametric\nuncertainty" = "pink"
-        )) +
-        scale_color_manual(values = c("MAP" = "black")) +
+        scale_color_manual(
+            values = c(
+                "MAP" = "black",
+                "Prior" = "green"
+            ),
+            labels = c(
+                "MAP" = "MAP",
+                "Prior" = "Prior"
+            ),
+        ) +
         theme_bw() +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -1101,107 +1130,81 @@ plot_prior_posterior_Kx <- function(prior = NULL, map = NULL, posterior = NULL) 
     return(plot_ks)
 }
 
-plot_prior_input_gaussian <- function(param_values_df, nsim = 1000) {
-    rnorm_df <- data.frame()
-    uncertainty_df <- data.frame()
-
-    for (i in 1:nrow(param_values_df)) {
-        if (!is.na(param_values_df$mu[i]) &&
-            !is.na(param_values_df$sigma[i])) {
-            mu <- param_values_df$mu[i]
-            sigma <- param_values_df$sigma[i]
-
-            values <- rnorm(n = nsim, mean = mu, sd = sigma)
-
-            temp <- data.frame(
-                typology = param_values_df$typology[i],
-                SU = param_values_df$SU[i],
-                mu = mu,
-                sigma = sigma,
-                value = values,
-                Distributions = "Prior"
-            )
-
-            rnorm_df <- rbind(rnorm_df, temp)
-
-            lower_95 <- qnorm(0.025, mean = mu, sd = sigma)
-            upper_95 <- qnorm(0.975, mean = mu, sd = sigma)
-
-            density_mu <- dnorm(
-                mu,
-                mean = mu,
-                sd = sigma
-            )
-
-            density_lower <- dnorm(
-                lower_95,
-                mean = mu,
-                sd = sigma
-            )
-
-            density_upper <- dnorm(
-                upper_95,
-                mean = mu,
-                sd = sigma
-            )
-            temp_uncertainty <- data.frame(
-                typology = param_values_df$typology[i],
-                SU = param_values_df$SU[i],
-                mu = mu,
-                sigma = sigma,
-                lower_95 = lower_95,
-                upper_95 = upper_95,
-                density_mu = density_mu,
-                density_lower = density_lower,
-                density_upper = density_upper
-            )
-
-            uncertainty_df <- rbind(
-                uncertainty_df,
-                temp_uncertainty
-            )
-        }
-    }
-    if (length(rnorm_df) == 0) {
+plot_prior_input_gaussian <- function(param_values_df) {
+    if (any(is.na(param_values_df$mu)) &&
+        any(is.na(param_values_df$sigma))) {
         return(NULL)
     }
-    ggplot(rnorm_df, aes(x = value, fill = Distributions)) +
-        geom_density(alpha = 0.4) +
+
+    # Add 95% limits
+    param_values_df <- param_values_df %>%
+        mutate(
+            lower_95 = mu - 1.96 * sigma,
+            upper_95 = mu + 1.96 * sigma
+        )
+
+    # Generate PDFs
+    pdf_df <- param_values_df %>%
+        rowwise() %>%
+        do({
+            x <- seq(.$mu - 3 * .$sigma, .$mu + 3 * .$sigma, length.out = 500)
+            data.frame(
+                typology = .$typology,
+                x = x,
+                density = dnorm(x, mean = .$mu, sd = .$sigma)
+            )
+        })
+
+    # Coordinates for vertical segments
+    vlines_df <- param_values_df %>%
+        mutate(
+            mu_density = dnorm(mu, mu, sigma),
+            lower_density = dnorm(lower_95, mu, sigma),
+            upper_density = dnorm(upper_95, mu, sigma)
+        )
+
+    # Plot
+    ggplot(pdf_df, aes(x = x, y = density)) +
+        geom_area(fill = "green", alpha = 0.3) +
+        geom_line(
+            color = "#0bb30b",
+            linewidth = 1,
+            show.legend = FALSE
+        ) +
+
+        # Mean vertical line (stops at curve)
         geom_segment(
-            data = uncertainty_df,
+            data = vlines_df,
             aes(
-                x = mu,
-                xend = mu,
-                y = 0,
-                yend = density_mu
+                x = mu, xend = mu,
+                y = 0, yend = mu_density
             ),
+            color = "black",
+            linewidth = 1,
+            linetype = "dotted",
+            show.legend = FALSE
+        ) +
+
+        # 95% interval limits (stops at curve)
+        geom_segment(
+            data = vlines_df,
+            aes(
+                x = lower_95, xend = lower_95,
+                y = 0, yend = lower_density
+            ),
+            color = "black",
             linetype = "dashed",
-            linewidth = 0.8,
-            inherit.aes = FALSE
+            show.legend = FALSE
         ) +
         geom_segment(
-            data = uncertainty_df,
+            data = vlines_df,
             aes(
-                x = lower_95,
-                xend = lower_95,
-                y = 0,
-                yend = density_lower
+                x = upper_95, xend = upper_95,
+                y = 0, yend = upper_density
             ),
-            linetype = "dotted",
-            linewidth = 0.8,
-            inherit.aes = FALSE
-        ) +
-        geom_segment(
-            data = uncertainty_df,
-            aes(
-                x = upper_95,
-                xend = upper_95,
-                y = 0,
-                yend = density_upper
-            ),
-            linetype = "dotted",
-            linewidth = 0.8,
-            inherit.aes = FALSE
+            color = "black",
+            linetype = "dashed",
+            show.legend = FALSE
         ) +
         facet_wrap(typology ~ SU, scales = "free") +
         theme_bw() +
@@ -1218,9 +1221,7 @@ plot_prior_input_gaussian <- function(param_values_df, nsim = 1000) {
                 } * "/s)"),
             y = "Probability density function",
             col = NULL,
-            title = "Prior information on friction coefficient"
-        ) +
-        scale_fill_manual(values = c(
-            "Prior" = "green"
-        ))
+            title = "Prior information on friction coefficient",
+            fill = NULL
+        )
 }
