@@ -283,39 +283,35 @@ traitement_prior <- function(data_prior_info_K) {
                     data_prior_local$par_1,
                     data_variances_prior_local
                 ))
+
                 # Transform into K replicates
                 simK <- data_matrix_spatial_prior_local %*% simT
-                # Prior realization in K space
-                prior_realization <- data.frame(
-                    x = data_prior_local$scaled,
-                    Value = simK,
-                    ID = "Prior"
-                ) %>% tidyr::pivot_longer(
-                    cols = -c(x, ID),
-                    names_to = "Iteration",
-                    values_to = "Value"
-                )
 
-                # Quantify uncertainty at 95%
-                prior_envelope <- prior_realization %>%
-                    group_by(x) %>%
-                    summarise(
-                        ymin = quantile(Value, probs = 0.025, na.rm = TRUE),
-                        ymax = quantile(Value, probs = 0.975, na.rm = TRUE),
-                        ID = "Prior", # so we can map to fill
-                        .groups = "drop"
-                    ) %>%
+                # Mean
+                K_mean <- data_matrix_spatial_prior_local %*% data_prior_local$par_1
+
+                # Covariance
+                K_cov <- data_matrix_spatial_prior_local %*%
+                    data_variances_prior_local %*%
+                    t(data_matrix_spatial_prior_local)
+
+                # Prior realization in K space and quantify uncertainty at 95%
+                prior_envelope <- data.frame(
+                    x = data_prior_local$scaled,
+                    ymin = K_mean - 1.96 * sqrt(diag(K_cov)),
+                    ymax = K_mean + 1.96 * sqrt(diag(K_cov)),
+                    ID = "Prior"
+                ) %>%
                     mutate(
                         typology = Typology,
                         id_reach_SU = SU
                     )
-                # If n=0, add a point at the begging for plotting
+
+                # If n=0, put the spatial point at the middle only for plotting
                 if (nrow(prior_envelope) == 1) {
                     prior_envelope <-
-                        rbind(
-                            prior_envelope %>% mutate(x = -1),
-                            prior_envelope
-                        )
+                        prior_envelope %>%
+                        mutate(x = 0)
                 }
                 prior_envelope_all <- rbind(prior_envelope_all, prior_envelope)
             }
@@ -594,38 +590,37 @@ prior_distributions <- function(distribution,
 get_prior_density <- function(prior_list) {
     prior_list <- Filter(function(x) x$prior$dist != "FIX", prior_list)
 
-    priors_realization <- lapply(prior_list, function(x) {
-        prior_distributions(
-            distribution = x$prior$dist,
-            param1 = x$prior$par[1],
-            param2 = x$prior$par[2]
-        )
-    })
 
-    names(priors_realization) <- vapply(prior_list, `[[`, "", "name")
+    if (length(prior_list) != 0) {
+        priors_par_structured <- lapply(prior_list, function(x) {
+            prior_distributions(
+                distribution = x$prior$dist,
+                param1 = x$prior$par[1],
+                param2 = x$prior$par[2]
+            )
+        })
 
-    as.data.frame(priors_realization)
+        names(priors_par_structured) <- vapply(prior_list, `[[`, "", "name")
+    } else {
+        priors_par_structured <- NULL
+    }
+    return(priors_par_structured)
 }
 
 # Combine prior and posterior
-combine_prior_posterior_MAP <- function(prior_density, mcmc, MAP) {
-    if (length(prior_density) == 0) {
+combine_prior_posterior_MAP <- function(param_to_extract, mcmc, MAP) {
+    if (length(param_to_extract) == 0) {
         return(NULL)
     }
-    mcmc_extracted <- mcmc[, names(prior_density), drop = FALSE]
+    mcmc_extracted <- mcmc[, param_to_extract, drop = FALSE]
 
-    if (any(length(MAP) != ncol(mcmc_extracted) | ncol(mcmc_extracted) != length(prior_density))) stop("Inconsistency of the number of estimated parameters")
+    if (any(length(MAP) != ncol(mcmc_extracted) | ncol(mcmc_extracted) != length(param_to_extract))) stop("Inconsistency of the number of estimated parameters")
 
     names(MAP) <- colnames(mcmc_extracted)
 
     if (length(mcmc_extracted) != 0) {
-        do.call(rbind, lapply(names(prior_density), function(nm) {
+        do.call(rbind, lapply(param_to_extract, function(nm) {
             rbind(
-                data.frame(
-                    value = prior_density[[nm]],
-                    Distributions = "Prior",
-                    id = nm
-                ),
                 data.frame(
                     value = mcmc_extracted[[nm]],
                     Distributions = "Posterior",
