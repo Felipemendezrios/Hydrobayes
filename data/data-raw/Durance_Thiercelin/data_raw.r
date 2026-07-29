@@ -13,8 +13,8 @@ ggplot(
     aes(
         x = KP,
         y = WSE,
-        ymin = WSE - 2 * Yu_WSE,
-        ymax = WSE + 2 * Yu_WSE
+        ymin = WSE - 1.96 * Yu_WSE,
+        ymax = WSE + 1.96 * Yu_WSE
     )
 ) +
     geom_point(size = 0.5) +
