@@ -485,23 +485,39 @@ postprocess_calibration <- function(
     # Analyze parameter by parameter
     # Kmin
     prior_density_Kmin <- get_prior_density(Kmin_prior)
-    prior_vs_posterior_Kmin <- combine_prior_posterior_MAP(prior_density_Kmin, mcmc, MAP)
 
     # Kflood
     prior_density_Kflood <- get_prior_density(Kflood_prior)
-    prior_vs_posterior_Kflood <- combine_prior_posterior_MAP(prior_density_Kflood, mcmc, MAP)
 
     # Plots: parameter by parameter
-    if (is.null(prior_vs_posterior_Kmin)) {
+    if (is.null(prior_density_Kmin)) {
+        posterior_Kmin <- NULL
         Plot_Prior_Post_Kmin <- NULL
     } else {
-        Plot_Prior_Post_Kmin <- Plot_prior_posterior(prior_vs_posterior_Kmin)
+        posterior_Kmin <- combine_prior_posterior_MAP(param_to_extract = names(prior_density_Kmin), mcmc, MAP)
+        prior_realization_Kmin <- do.call(rbind, lapply(names(prior_density_Kmin), function(nm) {
+            data.frame(
+                value = prior_density_Kmin[[nm]],
+                Distributions = "Prior",
+                id = nm
+            )
+        }))
+        Plot_Prior_Post_Kmin <- Plot_prior_posterior(prior = prior_realization_Kmin, posterior = posterior_Kmin)
     }
 
-    if (is.null(prior_vs_posterior_Kflood)) {
+    if (is.null(prior_density_Kflood)) {
+        posterior_Kflood <- NULL
         Plot_Prior_Post_Kflood <- NULL
     } else {
-        Plot_Prior_Post_Kflood <- Plot_prior_posterior(prior_vs_posterior_Kflood)
+        posterior_Kflood <- combine_prior_posterior_MAP(prior_density_Kflood, mcmc, MAP)
+        prior_realization_Kflood <- do.call(rbind, lapply(names(prior_density_Kflood), function(nm) {
+            data.frame(
+                value = prior_density_Kflood[[nm]],
+                Distributions = "Prior",
+                id = nm
+            )
+        }))
+        Plot_Prior_Post_Kflood <- Plot_prior_posterior(prior = prior_realization_Kflood, posterior = posterior_Kflood)
     }
 
     ##################################
@@ -602,8 +618,8 @@ postprocess_calibration <- function(
                     envelop = Kflood[[3]]
                 ),
                 prior_posterior = list(
-                    Kmin = prior_vs_posterior_Kmin,
-                    Kflood = prior_vs_posterior_Kflood
+                    Kmin = list(prior = prior_density_Kmin, posterior = posterior_Kmin),
+                    Kflood = list(prior = prior_density_Kflood, posterior = posterior_Kflood)
                 )
             ),
             residuals = residuals,
