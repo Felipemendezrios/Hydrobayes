@@ -1150,6 +1150,7 @@ plot_prior_input_gaussian <- function(param_values_df) {
             x <- seq(.$mu - 3 * .$sigma, .$mu + 3 * .$sigma, length.out = 500)
             data.frame(
                 typology = .$typology,
+                SU = .$SU,
                 x = x,
                 density = dnorm(x, mean = .$mu, sd = .$sigma)
             )

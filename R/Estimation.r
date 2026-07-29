@@ -646,7 +646,7 @@ Estimation_Mage <- function(
     rownames(ref_Matrix_Prior_Correlation) <- NULL
     write.table(ref_Matrix_Prior_Correlation,
         file = file.path(paths$path_BaM_folder, "ref_Prior_Correlation_Matrix.txt"),
-        row.names = FALSE, col.names = FALSE
+        row.names = FALSE, col.names = TRUE
     )
     write.table(Matrix_Prior_Correlation,
         file = file.path(paths$path_BaM_folder, "PriorCorrelation.txt"),
