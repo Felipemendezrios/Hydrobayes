@@ -384,7 +384,7 @@ synthetic_case <- FALSE
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- FALSE
+final_calibration <- TRUE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -622,7 +622,7 @@ info_events_reaches <- list(
         type = "ZdX",
         INFO = data.frame(
             event = c(1),
-            reach = c(8, 4, 5),
+            reach = c(6, 4, 5),
             xmin = c(22334, 37491, 41211),
             xmax = c(37491, 41211, 41461),
             tmin = c(259230),
