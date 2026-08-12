@@ -54,11 +54,11 @@ Experiment_id <- c(
 )
 
 # Calibration case: SU distribution
-SU_distribution <- "2SU_Rh_1SU_Ain"
+SU_distribution <- "2SU_Rh_1SU_Ain" # 2SU_Rh_1SU_Ain  1SU_Rh_1SU_Ain
 
 
 # Experiments input data to be used during calibration setting
-all_cal_case <- "Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4_2WSE.r"
+all_cal_case <- ifelse(SU_distribution == "1SU_Rh_1SU_Ain", "Kmin_Rh_SU1_n6_Ain_SU1_n4_2WSE.r", "Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4_2WSE.r")
 
 
 # Folder related to the observations (careful with the order!)
@@ -124,7 +124,14 @@ load("data/processed_data/Rhone/Ain_90_RH_525_750/observed_data.RData")
 
 if (Experiment_id == "1_WSE_AIN_90_1_WSE_RHONE_525") {
     observed_data <- observed_data %>%
-        filter(name_event != "RHONE_750")
+        filter(name_event != "RHONE_750") %>%
+        mutate(
+            Yu_WSE = case_when(
+                name_event == "RHONE_525" ~ 0.05,
+                name_event == "AIN_90" ~ 0.10,
+                TRUE ~ Yu_WSE
+            )
+        )
 }
 
 X <- observed_data[, c(
