@@ -1,0 +1,15 @@
+# Lower Seine
+Case transfered from Mascaret model to PamHyr2
+
+
+## Change log
+
+2026-08-10: Add a default bief
+
+---
+
+## Copyright
+
+© Felipe-Alberto Mendezrios - 2026
+
+All right reserved.
