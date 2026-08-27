@@ -54,7 +54,7 @@ Experiment_id <- c(
 )
 
 # Calibration case: SU distribution
-SU_distribution <- "2SU_Rh_1SU_Ain" # 2SU_Rh_1SU_Ain  1SU_Rh_1SU_Ain
+SU_distribution <- "1SU_Rh_1SU_Ain" # 2SU_Rh_1SU_Ain  1SU_Rh_1SU_Ain
 
 
 # Experiments input data to be used during calibration setting
