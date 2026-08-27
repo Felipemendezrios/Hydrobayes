@@ -1,7 +1,14 @@
+# General
 .vscode/*
 xtra/
 *.zip
 *.Rhistory
+Cluster/
+scripts/plots_toto.r
+scripts/toto.r
+
+
+# Case: HHLab
 scripts/Case_studies/HHLab/Rectangular_channel_1_event/Calibration_experiments/
 scripts/Case_studies/HHLab/Rectangular_channel_1_event/PamHyr/_PAMHYR_
 scripts/Case_studies/HHLab/Compound_channel_spatial_friction/Calibration_experiments/
@@ -11,14 +18,23 @@ scripts/Case_studies/HHLab/Rectangular_channel/PamHyr/_PAMHYR_/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/Calibration/
 scripts/Case_studies/HHLab/Compound_channel_single_friction/PamHyr/_PAMHYR_/
 
+# Case: Rhone
 scripts/Case_studies/Rhone/A jeter/
 scripts/Case_studies/Rhone/Backup/
+scripts/Case_studies/Rhone/1SU_Rh_1SU_Ain
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/Calibration_experiments/Backup
 scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/PamHyr
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/PamHyr/SU.svg
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/PamHyr/SU_typology.png
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/PamHyr/SU_vision.png
+scripts/Case_studies/Rhone/2SU_Rh_1SU_Ain/Calibration_experiments/1_WSE_AIN_90_1_WSE_RHONE_525/Kmin_Rh_SU1_n4_SU2_n2_Ain_SU1_n4_2WSE/BaM/post_traitement
 
+# Case: Synthetic Rectangular channel
 scripts/Case_studies/Synthetic_case/Rectangular_MC/PamHyr/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Calibration_experiments/
 scripts/Case_studies/Synthetic_case/Rectangular_MC/Synthese.html
 
+# Case: Synthetic Rhone
 scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_u_low
 scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/4_WSE_u_low
 scripts/Case_studies/Synthetic_case/Rhone/Calibration_experiments/2_WSE_K_Legendre
@@ -27,11 +43,22 @@ scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Piecewise/
 scripts/Case_studies/Synthetic_case/Rhone/PamHyr_Legendre/
 scripts/Case_studies/Synthetic_case/Rhone/Synthese.html
 
+# Case: Durance
 scripts/Case_studies/Durance_Thiercelin/PamHyr
-scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01_without_rg_rd
-scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_cte_u_0.01
 scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/Backup
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_13
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_9
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_8
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_7
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_6
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_5
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_4
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_3
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_2
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_1
+scripts/Case_studies/Durance_Thiercelin/Calibration_experiments/1_WSE_u_0.05/Kmin_n_0
 
+# Data: Rhone
 data/data-raw/Rhone/WSE/QGIS/
 data/data-raw/Rhone/Local_files/
 data/data-raw/Rhone/PamHyr/Rhone_PCH_750_Rhone.pamhyr
@@ -39,10 +66,12 @@ data/data-raw/Rhone/PamHyr/Rhone_PCH_525_Rhone.pamhyr
 data/data-raw/Rhone/PamHyr/Rhone_PCH_90_Ain.pamhyr
 data/data-raw/Rhone/PamHyr/_PAMHYR_/
 
+# Data: Synthetic Rectangular channel
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/decoupage.png
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/network_synthetic_case.svg
 data/data-raw/Synthetic_case/Rectangular_MC/model_PamHyr/plan.png
 
+# Data: Synthetic Rhone
 data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_dz_AIN.png
 data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_dz_Rhone.png
 data/data-raw/Synthetic_case/Rhone/rectangular_geometry/variation_width_AIN.png
@@ -51,6 +80,7 @@ data/data-raw/Synthetic_case/Rhone/Local_files/
 data/data-raw/Synthetic_case/Rhone/PamHyr_Piecewise/
 data/data-raw/Synthetic_case/Rhone/PamHyr_Legendre/
 
+# Data: Durance
 data/data-raw/Durance_Thiercelin/PMRiver_Durance_Vincent.pamhyr.backup
 data/data-raw/Durance_Thiercelin/PMRiver_Durance_Vincent.pamhyr
 data/data-raw/Durance_Thiercelin/_PAMHYR_/PMRiver/default-mage/output
@@ -70,6 +100,7 @@ data/data-raw/Durance_Thiercelin/Qgis/river.shp
 data/data-raw/Durance_Thiercelin/Qgis/river.shx
 data/data-raw/Durance_Thiercelin/_PAMHYR_/__old__/
 
-Cluster/
-scripts/plots_toto.r
-scripts/toto.r
+# Data: Lower Seine
+data/data-raw/Lower_Seine/1D_model_PamHyr/lower_seine.pamhyr
+data/data-raw/Lower_Seine/1D_model_PamHyr/lower_seine.pamhyr.backup
+
