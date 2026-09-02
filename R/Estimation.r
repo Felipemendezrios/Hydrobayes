@@ -54,6 +54,84 @@ assign_calibration_and_validation_data <- function(
     return(CalValData)
 }
 
+constructor_CalData_latest <- function(observed_data,
+                                       do_manual_uncertainty = FALSE,
+                                       variables = c("WSE", "Q", "V", "Kmin", "Kflood"),
+                                       sd_var_fixed = c(0.05, 8, 3, 5, 5)) {
+    Y_Yu <- observed_data %>%
+        ungroup() %>%
+        select(
+            event,
+            reach,
+            x,
+            t,
+            var,
+            variable,
+            uncertainty,
+            target_datetime
+        ) %>%
+        pivot_wider(
+            id_cols = c(event, reach, x, t, target_datetime),
+            names_from = var,
+            values_from = c(variable, uncertainty),
+            names_glue = "{ifelse(.value == 'variable', 'Y_', 'Yu_')}{var}",
+            values_fill = -9999
+        )
+
+    Y_temp <- Y_Yu %>%
+        select(
+            starts_with("Y_")
+        )
+
+    Yu_temp <- Y_Yu %>%
+        select(
+            starts_with("Yu_")
+        )
+    # Observed variables in the calibration data
+    var_observed <- sub("^Yu_", "", colnames(Yu_temp))
+    colnames(Y_temp) <- var_observed
+
+
+    # Replace observed uncertainties by fixed uncertainties if requested
+    if (do_manual_uncertainty) {
+        for (var_i in var_observed) {
+            Yu_temp[, paste0("Yu_", var_i)] <- sd_var_fixed[
+                match(var_i, variables)
+            ]
+        }
+    }
+    X <- Y_Yu %>%
+        select(
+            event,
+            reach,
+            x,
+            t,
+            target_datetime
+        )
+
+    # Add variables missing in the observed data to complet the observed dataset
+    missing_vars <- setdiff(variables, var_observed)
+
+    df_missing_Y <- df_missing_Yu <- as.data.frame(
+        matrix(-9999,
+            nrow = nrow(X), ncol = length(missing_vars),
+            dimnames = list(NULL, missing_vars)
+        )
+    )
+
+    colnames(df_missing_Yu) <- paste0("Yu_", colnames(df_missing_Yu))
+
+    Y <- cbind(Y_temp, df_missing_Y)
+    Yu <- cbind(Yu_temp, df_missing_Yu)
+
+    Y <- Y[, variables]
+    Yu <- Yu[, paste0("Yu_", variables)]
+    return(list(
+        X = X,
+        Y = Y,
+        Yu = Yu
+    ))
+}
 
 constructor_CalData <- function(
     observed_data,
