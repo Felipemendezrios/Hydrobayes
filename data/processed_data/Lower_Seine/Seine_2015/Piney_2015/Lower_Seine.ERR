@@ -1,0 +1,6 @@
+ Err002 à  01:00:45:00 + 300 : NON CONVERGENCE des itérations 
+       écart relatif (à Ymax et Qmax) trop grand après 99 itérations
+       Itération 98 : écart en DZ = 0.220398E-13 ; écart en DQ = 0.143561E-12
+       Itération 99 : écart en DZ = 0.272440E-15 ; écart en DQ = 0.143735E-14
+       Z : Pm    5064.00 du bief   1 ; Q : Pm   24486.50 du bief   2
+       Residu : 0.712462E-07(002: 24486.50)
