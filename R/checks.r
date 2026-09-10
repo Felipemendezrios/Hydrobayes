@@ -24,7 +24,7 @@ check_simulation_time <- function(
 }
 
 check_type_pred <- function(type) {
-    if (!any(type %in% c("ZdX", "QdXT", "VdXT", "ZdT"))) stop(paste0(type, " must be either ZdX, or QdXT, or VdXT, or ZdT"))
+    if (!any(type %in% c("ZdX", "QdT", "VdT", "ZdT"))) stop(paste0(type, " must be either ZdX, or QdT, or VdT, or ZdT"))
 }
 
 check_dX <- function(df_event) {
@@ -35,9 +35,9 @@ check_dT <- function(df_event) {
     if (!identical(df_event$xmin, df_event$xmax)) stop("xmin and xmax must be identical")
 }
 
-check_dXT <- function(df_event) {
-    if (!identical(df_event$xmin, df_event$xmax) | !identical(df_event$tmin, df_event$tmax)) stop("Both xmin, xmax and tmin, tmax must be identical")
-}
+# check_dXT <- function(df_event) {
+#     if (!identical(df_event$xmin, df_event$xmax) | !identical(df_event$tmin, df_event$tmax)) stop("Both xmin, xmax and tmin, tmax must be identical")
+# }
 
 check_calibration_case <- function(path) {
     if (!dir.exists(path)) stop(paste0("Calibration case is not performed yet: ", basename(path)))
@@ -61,9 +61,9 @@ check_suffix_pred <- function(file, idx) {
 }
 
 check_data_unc <- function(data) {
-    required <- c("xaxis", "min", "max", "id_pred", "event", "sim_value", "reach", "typology", "id_SU_Kmin", "id_reach_SU_Kmin", "id_SU_Kflood", "id_reach_SU_Kflood")
+    required <- c("min", "max", "id_pred", "event", "value", "reach", "typology", "id_SU_Kmin", "id_reach_SU_Kmin", "id_SU_Kflood", "id_reach_SU_Kflood")
 
-    if (any(!required %in% colnames(data))) stop("Column names must have xaxis, min, max, id_pred, event, sim_value, reach, typology, id_SU_Kmin, id_reach_SU_Kmin, id_SU_Kflood and id_reach_SU_Kflood")
+    if (any(!required %in% colnames(data))) stop("Column names must have min, max, id_pred, event, value, reach, typology, id_SU_Kmin, id_reach_SU_Kmin, id_SU_Kflood and id_reach_SU_Kflood")
 }
 
 check_experiment_exist <- function(path) {
