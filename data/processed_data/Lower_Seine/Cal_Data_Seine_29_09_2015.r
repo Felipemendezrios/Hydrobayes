@@ -93,22 +93,22 @@ check_WSE(id_station_var)
 extract_date_WSE <- list(
     "Piney_2015" = c(
         as.POSIXct(
-            "2015-09-29 10:00:00",
+            "2015-09-29 07:35:00",
             tz = "UTC",
             format = "%Y-%m-%d %H:%M:%S"
         ),
         as.POSIXct(
-            "2015-09-29 20:00:00",
+            "2015-09-30 00:15:00",
             tz = "UTC",
             format = "%Y-%m-%d %H:%M:%S"
         ),
         as.POSIXct(
-            "2015-09-30 06:00:00",
+            "2015-09-30 09:55:00",
             tz = "UTC",
             format = "%Y-%m-%d %H:%M:%S"
         ),
         as.POSIXct(
-            "2015-09-30 16:00:00",
+            "2015-09-30 14:10:00",
             tz = "UTC",
             format = "%Y-%m-%d %H:%M:%S"
         )
@@ -117,18 +117,38 @@ extract_date_WSE <- list(
     "Druine_2017" = NULL
 )
 
-# # Extract the visualize the WSE
-# toto <- all_H_obs %>%
-#     filter(datetime_TU %in% extract_date_WSE[[1]]) %>%
+# toto <-all_H_obs %>%
+#     filter(between(datetime_TU,as.POSIXct(
+#             "2015-09-30 13:20:00",
+#             tz = "UTC",
+#             format = "%Y-%m-%d %H:%M:%S"
+#         ),as.POSIXct(
+#             "2015-09-30 16:00:00",
+#             tz = "UTC",
+#             format = "%Y-%m-%d %H:%M:%S"
+#         )))%>%
 #     arrange(datetime_TU) %>%
 #     mutate(
 #         kp = station_KP$KP[match(station, station_KP$station)]
 #     )
 
-
-# ggplot(toto %>% arrange(datetime_TU), aes(y = value)) +
+# ggplot(toto %>% arrange(datetime_TU), aes(y = variable)) +
 #     geom_point(aes(x = kp)) +
 #     facet_wrap(~datetime_TU, scales = "free")
+
+
+# # Extract the visualize the WSE
+toto <- all_H_obs %>%
+    filter(datetime_TU %in% extract_date_WSE[[1]]) %>%
+    arrange(datetime_TU) %>%
+    mutate(
+        kp = station_KP$KP[match(station, station_KP$station)]
+    )
+
+
+ggplot(toto %>% arrange(datetime_TU), aes(y = variable)) +
+    geom_point(aes(x = kp)) +
+    facet_wrap(~datetime_TU, scales = "free")
 
 # model_start: list of dates of each event starts in the model. NULL means that experience is not simulated
 model_start <- list(
@@ -203,6 +223,12 @@ for (i in seq_along(all_available_events)) {
                         stations_var %>%
                             filter(!is.na(station)),
                         by = "station"
+                    ) %>%
+                    mutate(
+                        id_campaign = paste0(
+                            "campaign_Q_",
+                            row_number()
+                        )
                     )
                 measured <- rbind(measured, measured_temps)
             }
@@ -229,8 +255,11 @@ for (i in seq_along(all_available_events)) {
                     }) %>%
                     bind_rows() %>%
                     arrange(datetime_TU) %>%
-                    select(station, measured_start, measured_end, var)
-
+                    mutate(id_campaign = paste0(
+                        "campaign_WSE_",
+                        row_number()
+                    )) %>%
+                    select(station, measured_start, measured_end, var, id_campaign)
                 measured <- rbind(measured, measured_temps)
             }
         }
@@ -277,6 +306,7 @@ for (i in seq_along(all_available_events)) {
     )
 }
 
+save(key_info_event_extraction, file = "data/processed_data/Lower_Seine/metadata.RData")
 ################################################################
 # General settings: Methodology with hydraulic model (HM)
 ################################################################
@@ -331,9 +361,9 @@ init_model_date <- key_info_event_extraction %>%
         id_event,
         station,
         var,
-        model_start
+        model_start,
+        id_campaign
     )
-
 
 Q_obs <- all_Q_obs %>%
     # Filter the event to be considered in the calibration
@@ -449,7 +479,8 @@ init_model_date <- key_info_event_extraction %>%
         id_event,
         station,
         var,
-        model_start
+        model_start,
+        id_campaign
     )
 
 if (nrow(unique(key_info_event_extraction %>%
@@ -468,8 +499,10 @@ H_obs <-
         var == "WSE",
         id_event %in% all_events_cal
     ) %>%
-    select(id_event,
-        target_datetime = measured_start
+    select(
+        id_event,
+        target_datetime = measured_start,
+        id_campaign
     ) %>%
     distinct() %>%
     # Create every event × target_datetime × station combination
@@ -499,8 +532,39 @@ H_obs <-
     filter(abs_diff <= 10 * 60) %>%
     # Keep ONLY the closest observation
     group_by(id_event, target_datetime, station) %>%
-    slice_min(abs_diff, n = 1, with_ties = FALSE) %>%
-    ungroup() %>%
+    mutate(
+        has_exact = any(abs_diff == 0)
+    ) %>%
+    # If an exact observation exists, keep only that observation.
+    # Otherwise, use distance-weighted observations.
+    filter(
+        if_else(
+
+            has_exact,
+            abs_diff == 0,
+            TRUE
+        )
+    ) %>%
+    mutate(
+        weight = if_else(
+
+            has_exact,
+            1,
+            1 - abs_diff / (10 * 60)
+        )
+    ) %>%
+    # Calculate weighted WSE
+    summarise(
+        variable = weighted.mean(
+
+            variable,
+            w = weight,
+            na.rm = TRUE
+        ),
+        datetime_TU = first(target_datetime),
+        id_campaign = first(id_campaign),
+        .groups = "drop"
+    ) %>%
     # Add station information
     left_join(
         station_KP,
@@ -535,7 +599,6 @@ H_obs <-
         typology_lookup,
         by = "id_reach_CAL"
     ) %>%
-    select(-abs_diff) %>%
     select(
         datetime_TU,
         variable,
@@ -547,6 +610,7 @@ H_obs <-
         KP,
         id_reach_CAL,
         model_start,
+        id_campaign,
         target_datetime,
         time,
         event,
