@@ -60,8 +60,11 @@ SU_distribution <- "1SU"
 # Experiments input data to be used during calibration setting
 all_cal_case <- c(
     "Kmin_SU1_n6_4WSE_3Q.r",
+    "Kmin_SU1_n7_4WSE_3Q.r",
     "Kmin_SU1_n8_4WSE_3Q.r",
+    "Kmin_SU1_n9_4WSE_3Q.r",
     "Kmin_SU1_n10_4WSE_3Q.r",
+    "Kmin_SU1_n11_4WSE_3Q.r",
     "Kmin_SU1_n12_4WSE_3Q.r"
 )
 
@@ -70,7 +73,12 @@ all_cal_case <- c(
 all_events <- c(
     "Piney_2015"
 )
-
+# Date of reference
+date_ref <- as.POSIXct(
+    "2015-09-28 01:10:00",
+    format = "%Y-%m-%d %H:%M:%S",
+    tz = "UTC"
+)
 
 command_line_MAGE <- ""
 
@@ -126,13 +134,14 @@ load("data/processed_data/Lower_Seine/Seine_2015/observed_data.RData")
 
 results_CalData <- constructor_CalData_latest(
     observed_data = observed_data,
+    date_ref = date_ref,
     do_manual_uncertainty = FALSE,
     variables = c("WSE", "Q", "V", "Kmin", "Kflood")
 )
 
 X_plot <- data.frame(results_CalData$X)
 
-X <- X_plot[, !names(X_plot) %in% "target_datetime"]
+X <- X_plot[, !names(X_plot) %in% c("target_datetime", "var", "id_campaign", "date_time_format")]
 Y <- data.frame(results_CalData$Y)
 Yu <- data.frame(results_CalData$Yu)
 
@@ -200,7 +209,8 @@ if (do_plot_calibration) {
                     label_parsed
                 )
             )
-        )
+        ) +
+        scale_x_continuous(labels = scales::label_number())
 
     plots_CalData$plot_WSE_Thalweg <- plot_WSE_Thalweg
 
@@ -221,7 +231,7 @@ if (do_plot_calibration) {
             ),
             scales = "free",
             ncol = 2
-        )
+        ) + scale_x_continuous(labels = scales::label_number())
 
     # Customize the plot
     station_labeller <- function(labels) {
@@ -303,7 +313,7 @@ remant_error_list <- list(
         funk = "Constant",
         par = list(parameter(
             name = "intercept",
-            init = 0.5,
+            init = 0.25,
             prior.dist = "Uniform",
             prior.par = c(-10, 10)
         ))
@@ -314,7 +324,7 @@ remant_error_list <- list(
         funk = "Constant",
         par = list(parameter(
             name = "intercept",
-            init = 100,
+            init = 500,
             prior.dist = "Uniform",
             prior.par = c(-1000, 1000)
         ))
@@ -372,8 +382,8 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nX_BaM = nX_BaM,
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
-        mcmcCooking = RBaM::mcmcCooking(burn = 0.25, nSlim = 10),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 50, nCycles = 60),
+        mcmcCooking = RBaM::mcmcCooking(burn = 0.5, nSlim = 10),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 60, nCycles = 60),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
@@ -455,7 +465,7 @@ synthetic_case <- FALSE
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
 ################################
-final_calibration <- TRUE
+final_calibration <- FALSE
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -468,10 +478,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     results_postprocess <- postprocess_calibration(
         paths = paths,
-        X_input = X,
+        X_input = X_plot,
         Y_observations = Y,
         Yu_observations = Yu,
-        type = "dx",
         final_calibration = final_calibration,
         Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
         summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
@@ -686,38 +695,153 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
 # In this case, prediction will be performed only at the time and space of calibration data
 
+min_max_Q_event_1 <- CalData %>%
+    filter(
+        Q != -9999
+    ) %>%
+    group_by(x) %>%
+    summarise(
+        min = min(t),
+        max = max(t)
+    )
+
 # A grid by Typology !
-info_events_reaches <- list(
-    # 1st event: WSE (AIN)
-    AIN = list(
-        type = "ZdX",
-        INFO = data.frame(
-            event = c(1),
-            reach = c(6, 4, 5),
-            xmin = c(22334, 37491, 41211),
-            xmax = c(37491, 41211, 41461),
-            tmin = c(259230),
-            tmax = c(259230),
-            nb_discretization = c(200, 80, 10)
-        )
-    ),
-    # 2nd event: WSE (RHONE)
-    RHONE = list(
-        type = "ZdX",
-        INFO = data.frame(
-            event = c(2),
-            reach = c(1, 2, 3),
-            xmin = c(55899, 36250, 34500),
-            xmax = c(36250, 34500, 26750),
-            tmin = c(259200),
-            tmax = c(259200),
-            nb_discretization = c(500, 50, 150)
+info_events_reaches <-
+    list(
+        # 1st event: Seine 2015
+        Seine = list(
+            # Pred WSE
+            pred_WSE = list(
+                type = "ZdX",
+                INFO = list(
+                    # First prediction: WSE (2015-09-29 07:35:00)
+                    pred_1 = data.frame(
+                        event = c(1),
+                        reach = c(1, 2),
+                        xmin = c(0, 5064),
+                        xmax = c(5064, 137983),
+                        tmin = c(109500),
+                        tmax = c(109500),
+                        nb_discretization = c(10, 200),
+                        target_datetime = as.POSIXct(
+                            "2015-09-29 07:35:00",
+                            format = "%Y-%m-%d %H:%M:%S",
+                            tz = "UTC"
+                        ),
+                        id_campaign = "campaign_WSE_1"
+                    ),
+                    # Second prediction: WSE (2015-09-30 00:15:00)
+                    pred_2 = data.frame(
+                        event = c(1),
+                        reach = c(1, 2),
+                        xmin = c(0, 5064),
+                        xmax = c(5064, 137983),
+                        tmin = c(169500),
+                        tmax = c(169500),
+                        nb_discretization = c(10, 200),
+                        target_datetime = as.POSIXct(
+                            "2015-09-30 00:15:00",
+                            format = "%Y-%m-%d %H:%M:%S",
+                            tz = "UTC"
+                        ),
+                        id_campaign = "campaign_WSE_2"
+                    ),
+                    # Third prediction: WSE (2015-09-30 09:55:00)
+                    pred_3 = data.frame(
+                        event = c(1),
+                        reach = c(1, 2),
+                        xmin = c(0, 5064),
+                        xmax = c(5064, 137983),
+                        tmin = c(204300),
+                        tmax = c(204300),
+                        nb_discretization = c(10, 200),
+                        target_datetime = as.POSIXct(
+                            "2015-09-30 09:55:00",
+                            format = "%Y-%m-%d %H:%M:%S",
+                            tz = "UTC"
+                        ),
+                        id_campaign = "campaign_WSE_3"
+                    ),
+                    # Fourth prediction: WSE (2015-09-30 14:10:00)
+                    pred_4 = data.frame(
+                        event = c(1),
+                        reach = c(1, 2),
+                        xmin = c(0, 5064),
+                        xmax = c(5064, 137983),
+                        tmin = c(219600),
+                        tmax = c(219600),
+                        nb_discretization = c(10, 200),
+                        target_datetime = as.POSIXct(
+                            "2015-09-30 14:10:00",
+                            format = "%Y-%m-%d %H:%M:%S",
+                            tz = "UTC"
+                        ),
+                        id_campaign = "campaign_WSE_4"
+                    )
+                )
+            ),
+            # Pred Q
+            pred_Q = list(
+                type = "QdT",
+                INFO = list(
+                    # Prediction: Q (Rouen)
+                    pred_1 = data.frame(
+                        event = c(1),
+                        reach = c(2),
+                        xmin = c(41568),
+                        xmax = c(41568),
+                        tmin = floor(
+                            min_max_Q_event_1 %>% filter(x == 41568) %>% pull(min) - (60 * 5)
+                        ),
+                        tmax = ceiling(
+                            min_max_Q_event_1 %>% filter(x == 41568) %>% pull(max) + (60 * 5)
+                        ),
+                        nb_discretization = c(200),
+                        target_datetime = NA,
+                        id_campaign = "campaign_Q_3"
+                    ),
+                    # Prediction: Q (Heurteauville)
+                    pred_2 = data.frame(
+                        event = c(1),
+                        reach = c(2),
+                        xmin = c(97091),
+                        xmax = c(97091),
+                        tmin = floor(
+                            min_max_Q_event_1 %>% filter(x == 97091) %>% pull(min) - (60 * 5)
+                        ),
+                        tmax = ceiling(
+                            min_max_Q_event_1 %>% filter(x == 97091) %>% pull(max) + (60 * 5)
+                        ),
+                        nb_discretization = c(200),
+                        target_datetime = NA,
+                        id_campaign = "campaign_Q_2"
+                    ),
+                    # Prediction: Q (Aizier)
+                    pred_3 = data.frame(
+                        event = c(1),
+                        reach = c(2),
+                        xmin = c(123562),
+                        xmax = c(123562),
+                        tmin = floor(
+                            min_max_Q_event_1 %>% filter(x == 123562) %>% pull(min) - (60 * 5)
+                        ),
+                        tmax = ceiling(
+                            min_max_Q_event_1 %>% filter(x == 123562) %>% pull(max) + (60 * 5)
+                        ),
+                        nb_discretization = c(200),
+                        target_datetime = NA,
+                        id_campaign = "campaign_Q_1"
+                    )
+                )
+            )
         )
     )
-)
 
-X_pred <- grid_user(info_events_reaches)
-X_pred_grid <- list()
+X_pred <- grid_user_lastest(
+    info_events_reaches = info_events_reaches,
+    date_ref = date_ref,
+    X_Cal = X_plot
+)
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -735,8 +859,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
     return_prediction <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
+        BaM_data = data,
         prediction_file = c("ParamU", "Maxpost", "TotalU"),
-        data = data,
+        names_file_prediction = c("WSE", "Q", "V", "Kmin", "Kflood"),
         do_prediction = do_prediction,
         X_pred = X_pred,
         mod = list_mod_polynomials[[id_cal_case]],
@@ -746,8 +871,6 @@ for (id_cal_case in 1:length(all_cal_case)) {
         mcmcSummary = mcmcSummary,
         nsim_prior = 500
     )
-    X_pred_grid[[id_cal_case]] <- return_prediction$X_pred_grid
-
 
     cf_file <- return_prediction$cf_file
 
@@ -778,7 +901,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
     writeLines(lines, script_path_pred)
 
     Sys.chmod(script_path_pred, "0755")
-    # Run outside of Vscodium. To kill a job: pkill -f BaM
+    # Run outside of Vscodium. To kill a job: pkill -f '/Git/BaM/makefile/BaM'
     # See if the runs are in parallel: pgrep -af BaM
 
     if (do_prediction) {
@@ -806,14 +929,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     results_postprocess <- postprocess_prediction(
         paths = paths,
-        type = "dX",
-        X_input = X,
+        X_input = X_plot,
+        date_ref = date_ref,
         Y_observations = Y,
         Yu_observations = Yu,
         conf_level = 0.95,
         summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
         summary_SU_Kflood = list_summary_SU_Kflood[[id_cal_case]],
-        grid = X_pred_grid[[id_cal_case]],
+        grid = X_pred,
         Input_Typology = Input_Typology,
         suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
         desired_order = c("Total", "Parametric", "Maxpost", "Observations")
