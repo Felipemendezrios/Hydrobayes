@@ -54,10 +54,12 @@ assign_calibration_and_validation_data <- function(
     return(CalValData)
 }
 
-constructor_CalData_latest <- function(observed_data,
-                                       do_manual_uncertainty = FALSE,
-                                       variables = c("WSE", "Q", "V", "Kmin", "Kflood"),
-                                       sd_var_fixed = c(0.05, 8, 3, 5, 5)) {
+constructor_CalData_latest <- function(
+    observed_data,
+    date_ref,
+    do_manual_uncertainty = FALSE,
+    variables = c("WSE", "Q", "V", "Kmin", "Kflood"),
+    sd_var_fixed = c(0.05, 8, 3, 5, 5)) {
     Y_Yu <- observed_data %>%
         ungroup() %>%
         select(
@@ -68,10 +70,15 @@ constructor_CalData_latest <- function(observed_data,
             var,
             variable,
             uncertainty,
-            target_datetime
+            target_datetime,
+            id_campaign
+        ) %>%
+        mutate(
+            var_name = var,
+            date_time_format = date_ref + seconds(t)
         ) %>%
         pivot_wider(
-            id_cols = c(event, reach, x, t, target_datetime),
+            id_cols = c(event, reach, x, t, date_time_format, target_datetime, var_name, id_campaign),
             names_from = var,
             values_from = c(variable, uncertainty),
             names_glue = "{ifelse(.value == 'variable', 'Y_', 'Yu_')}{var}",
@@ -106,7 +113,10 @@ constructor_CalData_latest <- function(observed_data,
             reach,
             x,
             t,
-            target_datetime
+            date_time_format,
+            target_datetime,
+            var = var_name,
+            id_campaign
         )
 
     # Add variables missing in the observed data to complet the observed dataset
