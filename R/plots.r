@@ -776,6 +776,113 @@ K_plot <- function(
     return(list(df_MAP, K_plot, df_envelope))
 }
 
+# Plot for each output variable
+plot_obs_sim_MAP_lastest <- function(all_obs_simulations) {
+    # Replace -9999 by NA
+    all_obs_simulations <- convert_9999_to_NA(all_obs_simulations)
+
+    # Number of variables Y
+    n_Y <- sum(grepl("^Y\\d+_obs$", colnames(all_obs_simulations)))
+
+    plot <- list()
+    for (i in 1:n_Y) {
+        obs_col <- paste0("Y", i, "_obs")
+        sim_col <- paste0("Y", i, "_sim")
+        yu_col <- paste0("Yu", i, "_obs")
+
+        # Keep ONLY rows where both obs and sim exist
+        plot_data <- all_obs_simulations %>%
+            filter(
+                !is.na(.data[[obs_col]]),
+                !is.na(.data[[sim_col]])
+            )
+        # Nothing to plot
+        if (nrow(plot_data) == 0) next
+
+        # Select x-axis and facet variables
+        # 1 -> H; 4->Kmin; 5-> Kflood
+        if (i %in% c(1, 4, 5)) {
+            xlabel <- "Streamwise position (meters)"
+
+            base_plot <- ggplot(
+                plot_data,
+                aes(
+                    x = X3_obs,
+                    color = "obs",
+                    group = interaction(X1_obs, X2_obs)
+                )
+            ) +
+                scale_x_continuous(labels = scales::label_number())
+
+            facet_formula <- ~ X1_obs + X6_obs
+        } else if (i %in% c(2, 3)) { # 2 -> Q 3-> V
+            xlabel <- "Time"
+
+            base_plot <- ggplot(
+                plot_data,
+                aes(
+                    x = X4_obs,
+                    group = interaction(X1_obs, X2_obs),
+                    color = "obs"
+                )
+            )
+
+            facet_formula <- ~ X1_obs + X3_obs
+        } else {
+            stop("more output than expected in Y")
+        }
+
+        plot[[i]] <- base_plot +
+            theme_bw() +
+            theme(
+                plot.title = element_text(hjust = 0.5)
+            ) +
+            labs(
+                title = paste0("MAP Simulation : Variable Y", i),
+                x = xlabel,
+                y = paste0("Y", i)
+            ) +
+            # observations
+            geom_point(
+                aes(
+                    y = .data[[obs_col]],
+                    color = "obs"
+                ),
+                alpha = 0.7
+            ) +
+            geom_errorbar(
+                aes(
+                    ymin = .data[[obs_col]] - qnorm(0.975) * .data[[yu_col]],
+                    ymax = .data[[obs_col]] + qnorm(0.975) * .data[[yu_col]],
+                    color = "obs"
+                ),
+                width = 0.3, alpha = 0.5
+            ) +
+            # simulations
+            geom_point(
+                aes(
+                    y = .data[[sim_col]],
+                    color = "sim"
+                ),
+                alpha = 0.5
+            ) +
+            scale_color_manual(
+                values = c(
+                    "sim" = "black",
+                    "obs" = "blue"
+                )
+            ) +
+            labs(colour = NULL) +
+            facet_wrap(
+                facet_formula,
+                ncol = 2,
+                scales = "free"
+            )
+    }
+
+    return(plot)
+}
+
 # Plot the simulation of ZQdX
 plot_obs_sim_MAP <- function(all_obs_simulations, type) {
     # Replace -9999 by NA
@@ -1191,6 +1298,174 @@ plot_K_and_ref <- function(
     return(final_plot)
 }
 
+
+
+plot_obs_sim_unc_lastest <- function(
+    data_input,
+    wrap = "event_SU", # event_reach_HM
+    ncol = 2) {
+    check_data_unc(data_input)
+    var <- unique(data_input$variable)
+
+    if (wrap == "event_SU") {
+        facet_wrap_customized_essential <- c("event", "typology")
+    } else if (wrap == "event_reach_HM") {
+        facet_wrap_customized_essential <- c("event", "reach")
+    } else {
+        stop("wrap argument is not supported")
+    }
+
+    sim_obs_plot_by_SU <- list()
+    i_var_export <- c()
+    indx <- 1
+    for (i_var in var) {
+        # Flag to indicate if calibration data is presented of each output variable to plot total or parametric uncertainty. Particular case for Kmin and Kflood, they are not really structural error model, but only parametric.
+
+        any_obs_Y <- any(data_input$id_pred == "Observations" & data_input$variable == i_var & !i_var %in% c("Kmin", "Kflood"))
+
+        if (!any_obs_Y) {
+            data_input_filtered_1 <- data_input %>%
+                filter(id_pred != "Total")
+        } else {
+            data_input_filtered_1 <- data_input
+        }
+
+        if (i_var %in% c("WSE", "Kmin", "Kflood")) {
+            data_input_filtered_1$xaxis <- data_input_filtered_1$x
+            xlabel <- "Streamwise position (meters)"
+        } else {
+            data_input_filtered_1$xaxis <- data_input_filtered_1$date_time_format
+            xlabel <- "Time"
+        }
+
+        codename_obs <- switch(i_var,
+            "Kmin" = 1,
+            "Kflood" = 2,
+            3
+        )
+
+        data_input_filtered <- data_input_filtered_1 %>%
+            # Filter to obtain numerical grid for i_var in var and variable columns
+            filter(var == i_var & variable == i_var) %>%
+            mutate(
+                group_var = case_when(
+                    codename_obs == 1 ~ interaction(id_reach_SU_Kmin, id_pred),
+                    codename_obs == 2 ~ interaction(id_reach_SU_Kflood, id_pred),
+                    codename_obs == 3 ~ interaction(reach, id_pred)
+                )
+            ) %>%
+            arrange(group_var)
+
+        if (nrow(data_input_filtered) == 0) next
+
+        i_var_export <- c(i_var_export, i_var)
+
+        all_data_unc_obs <- data_input_filtered %>%
+            filter(!id_pred %in% c("Maxpost", "Prior", "Observations"))
+
+        # Plot simulation uncertainties ribbons
+        sim_obs_plot <-
+            ggplot(
+                data = all_data_unc_obs,
+                aes(
+                    x = xaxis,
+                    ymin = min,
+                    ymax = max
+                )
+            ) +
+            geom_ribbon(
+                aes(
+                    fill = id_pred,
+                    group = group_var
+                ),
+                alpha = 0.65
+            ) +
+            theme_bw() +
+            labs(
+                fill = "Uncertainties",
+                color = "Data",
+                y = i_var,
+                x = xlabel
+            ) +
+            theme(
+                strip.text = element_text(size = 12),
+                axis.text.x = element_text(angle = 45, hjust = 1),
+                plot.title = element_text(hjust = 0.5),
+                legend.title = element_text(hjust = 0.5),
+                legend.position = "bottom"
+            )
+
+        # Check if Maxpost is available
+        if (any(data_input_filtered %>% distinct(id_pred) == "Maxpost")) {
+            sim_obs_plot <- sim_obs_plot +
+                geom_line(
+                    data = data_input_filtered %>% filter(id_pred == "Maxpost"),
+                    aes(y = value, color = id_pred, group = group_var)
+                )
+        }
+
+        # Plot observations
+        sim_obs_plot <- sim_obs_plot +
+            # Add observations
+            geom_point(
+                data = data_input_filtered %>% filter(id_pred == "Observations"),
+                aes(y = value, col = id_pred, group = group_var), alpha = 0.3
+            ) +
+            geom_errorbar(
+                data = data_input_filtered %>% filter(id_pred == "Observations"),
+                aes(
+                    col = id_pred, group = group_var
+                ), alpha = 0.3,
+                na.rm = TRUE
+            ) +
+            scale_fill_manual(
+                values = c(
+                    "Parametric" = "pink",
+                    "Total" = "red"
+                )
+            ) +
+            scale_color_manual(
+                values = c(
+                    "Observations" = "black",
+                    "Maxpost" = "blue"
+                )
+            )
+
+        if (i_var %in% c("WSE", "Kmin", "Kflood")) {
+            facet_wrap_customized <- c(facet_wrap_customized_essential, "target_datetime")
+            sim_obs_plot <- sim_obs_plot +
+                scale_x_continuous(labels = scales::label_number()) +
+                labs(
+                    title = paste0("Comparison of simulations and observations by event and SU of:\n", i_var),
+                )
+            scale_x_datetime(date_labels = "%d/%m/%Y %H:%M")
+        } else if (i_var %in% c("Q", "V")) {
+            facet_wrap_customized <- c(facet_wrap_customized_essential, "x")
+            sim_obs_plot <- sim_obs_plot +
+                scale_x_datetime(date_labels = "%d/%m/%Y %H:%M") +
+                labs(
+                    title = paste0("Comparison of simulations and observations by event and reach of :\n", i_var),
+                )
+        } else {
+            stop("i_var is not recognized")
+        }
+
+        sim_obs_plot <- sim_obs_plot +
+            facet_wrap(
+                facet_wrap_customized,
+                scales = "free",
+                ncol = ncol
+            )
+        sim_obs_plot
+        sim_obs_plot_by_SU[[indx]] <- sim_obs_plot
+
+        indx <- indx + 1
+    }
+    return(list(
+        sim_obs_plot_by_SU,
+        i_var_export
+    ))
+}
 
 plot_obs_sim_unc <- function(
     data_output_var,
