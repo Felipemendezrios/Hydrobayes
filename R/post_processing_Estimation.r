@@ -250,7 +250,6 @@ postprocess_calibration <- function(
     X_input,
     Y_observations,
     Yu_observations,
-    type = "dx",
     final_calibration = TRUE,
     Kmin_prior,
     Kflood_prior,
@@ -284,7 +283,7 @@ postprocess_calibration <- function(
         Kflood_prior = Kflood_prior
     )
 
-    CalData <- convert_9999_to_NA(cbind(X_input, Y_observations, Yu_observations))
+    CalData_inter <- convert_9999_to_NA(cbind(X_input, Y_observations, Yu_observations))
 
     summary_HM <- do.call(
         rbind,
@@ -298,10 +297,10 @@ postprocess_calibration <- function(
             )
         })
     )
-    CalData_HM <- CalData %>%
+    CalData_HM <- CalData_inter %>%
         left_join(summary_HM, by = c("reach" = "id_reach_HM"))
 
-    CalData_updated <- CalData_HM %>%
+    CalData_updated_inter <- CalData_HM %>%
         left_join(summary_SU_Kmin, by = "typology", relationship = "many-to-many") %>%
         filter(x >= KP_min_SU & x <= KP_max_SU) %>%
         distinct(event, reach, x, .keep_all = TRUE) %>%
@@ -311,7 +310,7 @@ postprocess_calibration <- function(
             id_reach_SU_Kmin = id_reach_SU,
         )
 
-    CalData_updated <- CalData_updated %>%
+    CalData_updated_inter <- CalData_updated_inter %>%
         left_join(summary_SU_Kflood, by = "typology", relationship = "many-to-many") %>%
         filter(x >= KP_min_SU & x <= KP_max_SU) %>%
         distinct(event, reach, x, .keep_all = TRUE) %>%
@@ -414,7 +413,6 @@ postprocess_calibration <- function(
         )
     )
 
-
     # Residuals
     residuals <- compute_residuals(
         path_BaM_folder = paths$path_BaM_folder,
@@ -432,7 +430,7 @@ postprocess_calibration <- function(
         command_line_MAGE = command_line_MAGE
     )
 
-    colnames(X_input) <- paste0("X", 1:ncol(Y_observations), "_obs")
+    colnames(X_input) <- paste0("X", 1:ncol(X_input), "_obs")
     colnames(Y_observations) <- paste0("Y", 1:ncol(Y_observations), "_obs")
     colnames(Yu_observations) <- paste0("Yu", 1:ncol(Yu_observations), "_obs")
     obs_sim_residuals <- cbind(
@@ -449,10 +447,8 @@ postprocess_calibration <- function(
         )
     )
 
-    # Plot for each output variable
-    plots <- plot_obs_sim_MAP(
-        all_obs_simulations = obs_sim_residuals,
-        type = type
+    plots <- plot_obs_sim_MAP_lastest(
+        all_obs_simulations = obs_sim_residuals
     )
 
     # Generate the RUGFile for MAP estimation
@@ -634,7 +630,7 @@ postprocess_calibration <- function(
                 )
             ),
             plots_MAP_output_variables = plots,
-            CalData_updated = CalData_updated,
+            CalData_updated = CalData_updated_inter,
             plots_prior_vs_posterior = list(
                 param = list(
                     Kmin = Plot_Prior_Post_Kmin,

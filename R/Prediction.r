@@ -1,3 +1,130 @@
+grid_user_lastest <- function(
+    info_events_reaches,
+    date_ref,
+    X_Cal) {
+    grid_user <- c()
+    # Loop through each event
+    for (main_event in info_events_reaches) {
+        # Loop though each type of observation
+        for (type_pred in main_event) {
+            # Checks
+            check_type_pred(type_pred$type)
+
+            df_event <- bind_rows(type_pred$INFO)
+
+            if (type_pred$type == "ZdX") {
+                check_dX(df_event)
+
+                X_plot_WSE <- X_plot %>%
+                    filter(var == "WSE")
+                # Add coordinates used during calibration in prediction
+                check <- X_plot_WSE %>%
+                    distinct(event, reach, target_datetime, id_campaign) %>%
+                    anti_join(
+                        df_event %>%
+                            distinct(event, reach, target_datetime, id_campaign),
+                        by = c("event", "reach", "target_datetime", "id_campaign")
+                    )
+
+                if (nrow(check) > 0) {
+                    print(check)
+                    stop("X_plot contains campaign assignments that are missing or incorrectly located in df_event. Please verify that id_campaign are well assigned following X_plot information")
+                }
+
+                # Generate discretization for each row and expand into a long-format data frame
+                grid_temp <- do.call(rbind, lapply(1:nrow(df_event), function(i) {
+                    data.frame(
+                        event = df_event$event[i],
+                        reach = df_event$reach[i],
+                        x = seq(from = df_event$xmin[i], to = df_event$xmax[i], length.out = df_event$nb_discretization[i]),
+                        t = df_event$tmin[i],
+                        date_time_format = date_ref + seconds(df_event$tmin[i]),
+                        var = "WSE",
+                        target_datetime = df_event$target_datetime[i],
+                        id_campaign = df_event$id_campaign[i]
+                    )
+                })) %>%
+                    bind_rows(X_plot_WSE) %>%
+                    distinct() %>%
+                    arrange(event, target_datetime, id_campaign)
+            } else if (type_pred$type == "QdT") {
+                check_dT(df_event)
+
+                X_plot_Q <- X_plot %>%
+                    filter(var == "Q")
+                # Add coordinates used during calibration in prediction
+                check <- X_plot_Q %>%
+                    distinct(event, reach, x, id_campaign) %>%
+                    anti_join(
+                        df_event %>%
+                            distinct(event, reach, xmin, id_campaign),
+                        by = c("event", "reach", "x" = "xmin", "id_campaign")
+                    )
+
+                if (nrow(check) > 0) {
+                    print(check)
+                    stop("X_plot contains campaign assignments that are missing or incorrectly located in df_event. Please verify that id_campaign are well assigned following X_plot information")
+                }
+                # Generate discretization for each row and expand into a long-format data frame
+                grid_temp <- do.call(rbind, lapply(1:nrow(df_event), function(i) {
+                    data.frame(
+                        event = df_event$event[i],
+                        reach = df_event$reach[i],
+                        x = df_event$xmin[i],
+                        t = floor(seq(from = df_event$tmin[i], to = df_event$tmax[i], length.out = df_event$nb_discretization[i])),
+                        date_time_format = date_ref + seconds(floor(seq(from = df_event$tmin[i], to = df_event$tmax[i], length.out = df_event$nb_discretization[i]))),
+                        var = "Q",
+                        target_datetime = date_ref + seconds(floor(seq(from = df_event$tmin[i], to = df_event$tmax[i], length.out = df_event$nb_discretization[i]))),
+                        id_campaign = df_event$id_campaign[i]
+                    )
+                })) %>%
+                    bind_rows(X_plot_Q) %>%
+                    distinct() %>%
+                    arrange(event, x, id_campaign)
+            } else if (type_pred$type == "ZdT") {
+                check_dT(df_event)
+
+                X_plot_WSE_dt <- X_plot %>%
+                    filter(var == "WSE")
+                # Add coordinates used during calibration in prediction
+                check <- X_plot_WSE_dt %>%
+                    distinct(event, reach, x, id_campaign) %>%
+                    anti_join(
+                        df_event %>%
+                            distinct(event, reach, xmin, id_campaign),
+                        by = c("event", "reach", "x" = "xmin", "id_campaign")
+                    )
+
+                if (nrow(check) > 0) {
+                    print(check)
+                    stop("X_plot contains campaign assignments that are missing or incorrectly located in df_event. Please verify that id_campaign are well assigned following X_plot information")
+                }
+
+                # Generate discretization for each row and expand into a long-format data frame
+                grid_temp <- do.call(rbind, lapply(1:nrow(df_event), function(i) {
+                    data.frame(
+                        event = df_event$event[i],
+                        reach = df_event$reach[i],
+                        x = df_event$xmin[i],
+                        t = seq(from = df_event$tmin[i], to = df_event$tmin[i], length.out = df_event$nb_discretization[i]),
+                        date_time_format = date_ref + seconds(seq(from = df_event$tmin[i], to = df_event$tmin[i], length.out = df_event$nb_discretization[i])),
+                        var = "WSE",
+                        target_datetime = date_ref + seconds(seq(from = df_event$tmin[i], to = df_event$tmin[i], length.out = df_event$nb_discretization[i])),
+                        id_campaign = df_event$id_campaign[i]
+                    )
+                })) %>%
+                    bind_rows(X_plot_WSE_dt) %>%
+                    distinct() %>%
+                    arrange(event, x, id_campaign)
+            } else {
+                stop("Never arrive here, if not, a check must be created before")
+            }
+            grid_user <- rbind(grid_user, grid_temp)
+        }
+    }
+    return(grid_user = grid_user)
+}
+
 grid_user <- function(
     info_events_reaches) {
     grid_user <- c()
@@ -83,14 +210,17 @@ initialize_variables <- function() {
 # Function to load data and prepare X
 Add_calData_grid_user <- function(
     X_pred,
-    Caldata,
-    nX,
-    nY) {
-    X <- full_join(X_pred, Caldata[, 1:nX], by = c("event", "reach", "x", "t")) %>% arrange(event, reach, x)
+    Caldata) {
+    X <- full_join(
+        X_pred,
+        Caldata %>% distinct(event, reach, x, t, var),
+        by = c("event", "reach", "x", "t", "var")
+    ) %>% arrange(event, reach, x)
 
-    names_file_prediction <- colnames(Caldata[, (nX + 1):(nX + nY)])
+    # names_file_prediction <- colnames(Caldata[, (nX + 1):(nX + nY)])
 
-    list(X = X, names_file_prediction = names_file_prediction)
+    return(X)
+    # list(X = X, names_file_prediction = names_file_prediction)
 }
 
 
@@ -167,8 +297,9 @@ copy_model_directory <- function(mod, prediction_file, idx) {
 prediction_MAGE <- function(
     cal_case,
     paths,
-    prediction_file,
-    data,
+    BaM_data,
+    prediction_file = c("ParamU", "Maxpost", "TotalU"),
+    names_file_prediction = c("WSE", "Q", "V", "Kmin", "Kflood"),
     do_prediction,
     X_pred,
     mod,
@@ -187,15 +318,8 @@ prediction_MAGE <- function(
     nX <- mod$nX
     nY <- mod$nY
 
-    # Add calibration data to grid
-    data_to_add_grid <- Add_calData_grid_user(
-        X_pred = X_pred,
-        Caldata = data$data,
-        nX = nX,
-        nY = nY
-    )
-    X <- data_to_add_grid$X
-    names_file_prediction <- data_to_add_grid$names_file_prediction
+    X <- X_pred %>% select(-c(var, date_time_format, target_datetime, id_campaign))
+
 
     # Set prediction configs
     configs <- set_prediction_configs(
@@ -232,7 +356,7 @@ prediction_MAGE <- function(
 
         BaM(
             mod = vars$mod_list[[i]],
-            data = data,
+            data = BaM_data,
             remnant = remant_error_list,
             mcmc = mcmcOptions,
             cook = mcmcCooking,
@@ -270,7 +394,6 @@ prediction_MAGE <- function(
     }
     return(
         list(
-            X_pred_grid = X,
             cf_file = cf_file
         )
     )
