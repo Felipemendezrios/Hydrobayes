@@ -1,0 +1,12 @@
+ "ID":"MDL_MAGE_ZQV"
+ "nX":4
+ "nY":5
+ "parName":["Km_SU1_a0","Km_SU1_a1","Km_SU1_a2","Km_SU1_a3","Km_SU1_a4","Km_SU1_a5","Km_SU1_a6","Km_SU1_a7","Km_SU1_a8","Km_SU1_a9","Km_SU1_a10","Km_SU1_a11","Kf_SU1_a0","Q_e1_Poses","Q_e1_Eure"]
+ "parType":["STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","STD","FIX","FIX","FIX"]
+ "dParName":[]
+ "stateName":[]
+ "structuralParName":[["intercept"],["intercept"],["intercept"],["intercept"],["intercept"]]
+ "estimatedX":[0,0,0,0]
+ "estimatedXbias":[0,0,0,0]
+ "estimatedYbias":[0,0,0,0,0]
+ "MCMCheaders":["Km_SU1_a0","Km_SU1_a1","Km_SU1_a2","Km_SU1_a3","Km_SU1_a4","Km_SU1_a5","Km_SU1_a6","Km_SU1_a7","Km_SU1_a8","Km_SU1_a9","Km_SU1_a10","Km_SU1_a11","Y1_intercept","Y2_intercept","Y3_intercept","Y4_intercept","Y5_intercept","LogPost"]

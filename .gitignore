@@ -26,9 +26,13 @@ scripts/Case_studies/HHLab/Compound_channel_single_friction/compound_channel_sin
 # Case: Lower Seine
 scripts/Case_studies/Lower_Seine/1SU/PamHyr
 scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n12_4WSE_3Q/BaM/post_traitement
+scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n11_4WSE_3Q/BaM/post_traitement
 scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n10_4WSE_3Q/BaM/post_traitement
+scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n9_4WSE_3Q/BaM/post_traitement
 scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n8_4WSE_3Q/BaM/post_traitement
+scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n7_4WSE_3Q/BaM/post_traitement
 scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n6_4WSE_3Q/BaM/post_traitement
+scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/Backup
 
 # Case: Rhone
 scripts/Case_studies/Rhone/A jeter

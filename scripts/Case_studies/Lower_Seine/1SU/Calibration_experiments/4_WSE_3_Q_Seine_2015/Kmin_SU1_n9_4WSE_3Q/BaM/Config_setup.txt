@@ -1,0 +1,10 @@
+"/home/famendezrios/Documents/Git/mage/exe/mage "          ! Mage executable (full path)
+"8"                                                        ! MAGE version
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n9_4WSE_3Q/model_mage/Piney_2015/" ! MAGE Project directories (full path) - one per event
+"Lower_Seine.REP"                                          ! REP file (located in MAGE project directory - file name only, not full path)
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n9_4WSE_3Q/BaM/Zfile_Kmin.txt" ! Z file (full path) containing covariates for the regression Kmin(x)=a1Z1(x)+...+apZp(x). Leave empty for no regression
+10                                                         ! number of columns p in Z file
+.false.                                                    ! apply exponential transformation to computed Kmins to ensure positivity?
+"/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/scripts/Case_studies/Lower_Seine/1SU/Calibration_experiments/4_WSE_3_Q_Seine_2015/Kmin_SU1_n9_4WSE_3Q/BaM/Zfile_Kflood.txt" ! Z file (full path) containing covariates for the regression Kmoy(x)=a1Z1(x)+...+apZp(x). Leave empty for no regression
+1                                                          ! number of columns p in Z file
+.false.                                                    ! apply exponential transformation to computed Kmoys to ensure positivity?

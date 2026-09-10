@@ -1,0 +1,26 @@
+# Lower Seine
+Case transfered from Mascaret model to PamHyr2.
+
+Settings:
+
+- All conditions are in TU
+- Period of the run: 2015-09-28 01:10:00 - 2015-09-30 23:25:00 
+- Simulation time: 002:22:15:00
+- Donwstream boundary condition : Tancarville Z(t) (Piney)
+- Upstream boundary condition : Poses Q(t) (Mascaret model, station Vernon).
+- Upstream intermedial boundary condition : Eure Q(t) (Hydroportail, station Louviers).
+
+
+
+
+## Change log
+
+2026-08-10: Add a default bief
+
+---
+
+## Copyright
+
+© Felipe-Alberto Mendezrios - 2026
+
+All right reserved.
