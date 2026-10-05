@@ -1,0 +1,8 @@
+#!/home/famendezrios/Documents/papiers/Qmec/Data/Collecte_information_Raw_Data/Lower_Seine/Gaugings/Piney_2015/Codes/1_Open_transects/venv/bin/python3.10
+# -*- coding: UTF-8 -*-
+from __future__ import print_function, division, absolute_import
+
+from numba.misc.numba_entry import main
+
+if __name__ == "__main__":
+    main()

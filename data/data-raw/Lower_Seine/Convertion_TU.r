@@ -109,11 +109,10 @@ for (categorize in all_categorize) {
                 # Modify the lists
                 Q_gaugings <- lapply(Q_gaugings, function(df) {
                     df$source <- source
-
+                    # Correct time zone to stick to TU
+                    # Measurements of Piney and Druine need to be correct because they are TU+1
+                    df$time <- df$time - 3600
                     if (source == "Piney_2015") {
-                        # Correct time zone to stick to TU
-                        # Measurements of Piney need to be correct because they are TU+1
-                        df$time <- df$time - 3600
                         df$station <- sub(".*_", "", df$gauging_adcp)
                     } else {
                         df$station <- "Rouen"

@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' /home/famendezrios/Documents/papiers/Qmec/Data/Collecte_information_Raw_Data/Lower_Seine/Gaugings/Piney_2015/Codes/1_Open_transects/venv/bin/python3.10 "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from fontTools.merge import main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())
