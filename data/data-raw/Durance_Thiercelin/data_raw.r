@@ -1,28 +1,53 @@
 rm(list = ls())
 library(dplyr)
 
-WSE_Durance <- read.table("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Durance_Thiercelin/Ref_data.csv", sep = ",", header = TRUE)
+WSE_Durance_raw <- read.table("/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/data-raw/Durance_Thiercelin/Ref_data.csv", sep = ",", header = TRUE)
 
-colnames(WSE_Durance) <- c("KP", "WSE")
+colnames(WSE_Durance_raw) <- c("x", "variable")
 
-WSE_Durance$Yu_WSE <- 0.05
-WSE_Durance$id_reach_CAL <- 1
+WSE_Durance <- WSE_Durance_raw %>%
+    group_by(x) %>%
+    summarise(
+        variable = mean(variable, na.rm = TRUE),
+        .groups = "drop"
+    )
+
+if (nrow(WSE_Durance %>%
+    count(x) %>%
+    filter(n > 1)) != 0) {
+    stop("Duplicated values are detected")
+}
+
+
+WSE_Durance$uncertainty <- 0.05
+WSE_Durance$id_campaign <- "Campaign_WSE_1"
 library(ggplot2)
 ggplot(
     WSE_Durance,
     aes(
-        x = KP,
-        y = WSE,
-        ymin = WSE - 1.96 * Yu_WSE,
-        ymax = WSE + 1.96 * Yu_WSE
+        x = x,
+        y = variable,
+        ymin = variable - 1.96 * uncertainty,
+        ymax = variable + 1.96 * uncertainty
     )
 ) +
     geom_point(size = 0.5) +
     geom_errorbar() +
     theme_bw()
 
-WSE_Durance$time <- 43200
+WSE_Durance$t <- 43200
 WSE_Durance$id_case <- 1
+WSE_Durance$event <- 1
+WSE_Durance$reach <- 1
+WSE_Durance$var <- "WSE"
+WSE_Durance$target_datetime <- as.POSIXct(
+    "2025-07-15 15:00:00",
+    format = "%Y-%m-%d %H:%M:%S",
+    tz = "UTC"
+)
+
+
+
 
 save(WSE_Durance, file = "/home/famendezrios/Documents/These/VSCODE-R/HydroBayes/HydroBayes_git/data/processed_data/Durance_Thiercelin/WSE_Durance.RData")
 
@@ -86,7 +111,7 @@ xyz_df$id_reach <- "Reach_1"
 Thalweg_data <- xyz_df %>%
     group_by(profile_id, id_reach) %>%
     summarise(
-        KP = first(header_val),
+        x = first(header_val),
         Z_thalweg = min(Z),
         .groups = "drop"
     )
