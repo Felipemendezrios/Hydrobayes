@@ -52,20 +52,23 @@ Experiment_id <- c(
     "1_WSE_u_0.05"
 )
 
+# Calibration case: SU distribution
+SU_distribution <- "1SU"
+
+
 # Experiments input data to be used during calibration setting
 
 all_cal_case <- c(
-    "Kmin_n_0.r",
-    "Kmin_n_1.r",
-    "Kmin_n_2.r",
-    "Kmin_n_3.r",
-    "Kmin_n_4.r",
-    "Kmin_n_5.r",
-    "Kmin_n_6.r",
-    "Kmin_n_7.r",
     "Kmin_n_9.r",
     "Kmin_n_10.r",
-    "Kmin_n_13.r"
+    "Kmin_n_11.r",
+    "Kmin_n_12.r",
+    "Kmin_n_13.r",
+    "Kmin_n_14.r",
+    "Kmin_n_15.r",
+    "Kmin_n_16.r",
+    "Kmin_n_17.r",
+    "Kmin_n_18.r"
 )
 
 
@@ -74,11 +77,18 @@ all_events <- c(
     "Ev_1"
 )
 
-command_line_MAGE <- "-fp=2"
-file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Durance_Thiercelin/Calibration_experiments")
-folder_mage_base <- "model_mage"
+# Date of reference: date-time 00:00:00 of Mage hydraulic model
+date_ref <- as.POSIXct(
+    "2025-07-15 03:00:00",
+    format = "%Y-%m-%d %H:%M:%S",
+    tz = "UTC"
+)
 
-MAGE_main_folder <- file.path(dir_workspace, "scripts/Case_studies/Durance_Thiercelin", folder_mage_base)
+command_line_MAGE <- "-fp=2"
+file_main_path <- file.path(dir_workspace, "scripts/Case_studies/Durance_Thiercelin", SU_distribution, "Calibration_experiments")
+
+MAGE_main_folder <- file.path(dir_workspace, "scripts/Case_studies/Durance_Thiercelin", SU_distribution, "model_mage")
+
 mage_projet_name <- "PMRiver"
 
 
@@ -121,95 +131,31 @@ Input_Typology <- list(
 # Module 3: calibration data
 ############################################
 # Processed data
-if (Experiment_id %in% c("1_WSE_u_0.05")) {
-    load("data/processed_data/Durance_Thiercelin/WSE_Durance.RData")
-    load("data/processed_data/Durance_Thiercelin/Thalweg_Durance.RData")
-} else {
-    stop("Experiment id in not correct")
-}
-
-# Observations data input:
-# Measurements for calibration by event!
-
-# Read key information of event
-id_case_obs <- list(
-    obs_1 = data.frame(event = "Ev_1", reaches_typology = "MR")
-)
-#####################################################################
-# Event 1:
-#####################################################################
-idx_obs <- 1
-WSE_synthetic_simplified_raw_obs_1 <- WSE_Durance %>%
-    mutate(
-        id_reach = case_when(
-            id_reach_CAL == 1 ~ "Main reach"
-        ),
-        event = 1,
-        name_event = "Ev_1"
-    )
-
-check_simulation_time(
-    MAGE_main_folder = MAGE_main_folder,
-    mage_projet_name = mage_projet_name,
-    Observations = WSE_synthetic_simplified_raw_obs_1,
-    event = all_events[1] # Manual modification to check
-)
-#################################
-set.seed(2026) #  # for reproducibility
-# 1. Calibration set
-WSE_synthetic_simplified_Cal_obs_1 <- WSE_synthetic_simplified_raw_obs_1 %>%
-    group_by(id_reach_CAL) %>%
-    # slice_sample(prop = 0.8) %>%
-    ungroup() %>%
-    mutate(set = "calibration") %>%
-    arrange(KP + id_reach_CAL) %>% # Because order is upstream to downstream and KP is increasing
-    mutate(Reach_groupped_Cal = NA_character_)
+load("data/processed_data/Durance_Thiercelin/WSE_Durance.RData")
+load("data/processed_data/Durance_Thiercelin/Thalweg_Durance.RData")
 
 
-WSE_obs_1 <- assign_calibration_and_validation_data(
-    Input_Typology = Input_Typology,
-    Input_Model_Reach = Input_Model_Reach,
-    CalData = WSE_synthetic_simplified_Cal_obs_1,
-    All_observations = WSE_synthetic_simplified_raw_obs_1
-)
 
-# All calibration data
-observed_data <- WSE_obs_1 %>% filter(set == "calibration")
-
-if (idx_obs != length(id_case_obs)) stop("idx_obs is different to the id_case_obs")
-
-X <- observed_data[, c(
-    "event",
-    "id_reach_CAL",
-    "KP",
-    "time"
-)] %>%
-    rename(
-        "reach" = "id_reach_CAL",
-        "x" = "KP",
-        "t" = "time"
-    )
-
-results_CalData <- constructor_CalData(
-    observed_data = observed_data,
+results_CalData <- constructor_CalData_latest(
+    observed_data = WSE_Durance,
+    date_ref = date_ref,
     do_manual_uncertainty = FALSE,
-    sd_WSE_fixed = 0.05, # in meters
-    sd_Q_fixed = 8, # in %
-    sd_V_fixed = 3, # in %
-    sd_Kmin_fixed = 5, # in m1/3/s
-    sd_Kflood_fixed = 5 # in m1/3/s
+    variables = c("WSE", "Q", "V", "Kmin", "Kflood")
 )
 
-Y <- results_CalData$Y
-Yu <- results_CalData$Yu
+X_plot <- data.frame(results_CalData$X)
+X <- X_plot[, !names(X_plot) %in% c("target_datetime", "var", "id_campaign", "date_time_format")]
+Y <- data.frame(results_CalData$Y)
+Yu <- data.frame(results_CalData$Yu)
 
 CalData <- cbind(X, Y, Yu)
+CalData_plot <- cbind(X_plot, Y, Yu)
 
 path_experiment <- file.path(file_main_path, Experiment_id)
 
 if (do_plot_calibration) {
-    plots_CalData <- plot_CalData(
-        CalData = CalData,
+    plots_CalData <- plot_CalData_lastest(
+        CalData = CalData_plot,
         scales_free = "free",
         wrap = TRUE
     )
@@ -232,11 +178,8 @@ if (do_plot_calibration) {
             ncol = 3
         )
 
-    obs_adapted <- observed_data %>%
-        rename("reach" = "id_reach_CAL")
-
     plots_CalData$plot_WSE_Thalweg <- plots_CalData$plot_WSE +
-        geom_line(data = Thalweg_data, aes(x = KP, y = Z_thalweg), color = "black")
+        geom_line(data = Thalweg_data, aes(x = x, y = Z_thalweg), color = "black")
 
     if (!dir.exists(path_experiment)) {
         dir.create(path_experiment)
@@ -339,7 +282,7 @@ for (id_cal_case in 1:length(all_cal_case)) {
         nY_BaM = nY_BaM,
         mage_projet_name = mage_projet_name,
         mcmcCooking = RBaM::mcmcCooking(burn = 0.5, nSlim = 10),
-        mcmcOptions = RBaM::mcmcOptions(nAdapt = 60, nCycles = 80),
+        mcmcOptions = RBaM::mcmcOptions(nAdapt = 80, nCycles = 80),
         mcmcSummary = RBaM::mcmcSummary(xtendedMCMC.fname = "Results_xtendedMCMC.txt"),
         remant_error_list = remant_error_list
     )
@@ -423,11 +366,9 @@ if (do_plot_calibration) {
 ###############
 # Theoretical values
 ####################
-if (Experiment_id %in% c("1_WSE_u_0.05")) {
-    file_RUGFILE_synt_obs <- "data/processed_data/Durance_Thiercelin/Thiercelin_K_distribution.RUG"
-} else {
-    stop("Experiment id in not correct")
-}
+
+file_RUGFILE_synt_obs <- "data/processed_data/Durance_Thiercelin/Thiercelin_K_distribution.RUG"
+
 Real_Ks_simulated <- read_fortran_data(
     file_path = file_RUGFILE_synt_obs,
     col_widths_RUGFile = c(1, 3, 6, 10, 10, 10, 10),
@@ -454,11 +395,6 @@ Kmin_segment_layer <- segment_layer_reference(
 
 # Add synthetic data
 synthetic_case <- FALSE
-if (synthetic_case) {
-    real_synt_data <- WSE_synthetic_simplified %>%
-        mutate(X1_obs = 1) %>%
-        tidyr::drop_na(X1_obs)
-}
 
 ################################
 # POSTPROCESS CALIBRATION WORKFLOW
@@ -476,10 +412,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     results_postprocess <- postprocess_calibration(
         paths = paths,
-        X_input = X,
+        X_input = X_plot,
         Y_observations = Y,
         Yu_observations = Yu,
-        type = "dx",
         final_calibration = final_calibration,
         Key_Info_Typology_Model_Reach = Key_Info_Typology_Model_Reach,
         summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
@@ -584,54 +519,87 @@ for (id_cal_case in 1:length(all_cal_case)) {
     # Plot prior vs posterior
     # Parameter to parameter Kmin
     if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kmin)) {
+        plot_export <- results_postprocess$plots_prior_vs_posterior$param$Kmin
         ggsave(
             filename = file.path(
                 paths$path_plot_folder,
                 paste0("plot_prior_vs_posterior_Kmin.png")
             ),
-            plot = results_postprocess$plots_prior_vs_posterior$param$Kmin,
+            plot = plot_export,
             width = 20,
             height = 20,
             units = "cm"
         )
+
+        save(
+            plot_export,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_prior_vs_posterior_Kmin.RData")
+            )
+        )
     }
     # Parameter to parameter Kflood
     if (!is.null(results_postprocess$plots_prior_vs_posterior$param$Kflood)) {
+        plot_export <- results_postprocess$plots_prior_vs_posterior$param$Kflood
         ggsave(
             filename = file.path(
                 paths$path_plot_folder,
                 paste0("plot_prior_vs_posterior_Kflood.png")
             ),
-            plot = results_postprocess$plots_prior_vs_posterior$param$Kflood,
+            plot = plot_export,
             width = 20,
             height = 20,
             units = "cm"
         )
+        save(
+            plot_export,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_prior_vs_posterior_Kflood.RData")
+            )
+        )
     }
     # Parameter to parameter: K(x)
     if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kmin)) {
+        plot_export <- results_postprocess$plots_prior_vs_posterior$KdX$Kmin
         ggsave(
             filename = file.path(
                 paths$path_plot_folder,
                 paste0("plot_prior_vs_posterior_Kmin_KdX.png")
             ),
-            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kmin,
+            plot = plot_export,
             width = 20,
             height = 20,
             units = "cm"
         )
+        save(
+            plot_export,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_prior_vs_posterior_Kmin_KdX.RData")
+            )
+        )
     }
     # Parameter to parameter: K(x)
     if (!is.null(results_postprocess$plots_prior_vs_posterior$KdX$Kflood)) {
+        plot_export <- results_postprocess$plots_prior_vs_posterior$KdX$Kflood
         ggsave(
             filename = file.path(
                 paths$path_plot_folder,
                 paste0("plot_prior_vs_posterior_Kflood_KdX.png")
             ),
-            plot = results_postprocess$plots_prior_vs_posterior$KdX$Kflood,
+            plot = plot_export,
             width = 20,
             height = 20,
             units = "cm"
+        )
+        save(
+            plot_export,
+            file = file.path(
+                paths$path_RData,
+                paste0("plot_prior_vs_posterior_Kflood_KdX.RData")
+            )
         )
     }
     # Specific case of synthetic case
@@ -696,21 +664,36 @@ for (id_cal_case in 1:length(all_cal_case)) {
 info_events_reaches <- list(
     # 1st event: WSE.
     event_1 = list(
-        type = "ZdX",
-        SU1 = data.frame(
-            event = c(1),
-            reach = c(1),
-            xmin = c(0),
-            xmax = c(1079.063),
-            tmin = c(43200),
-            tmax = c(43200),
-            nb_discretization = c(100)
+        # Pred WSE
+        pred_WSE = list(
+            type = "ZdX",
+            INFO = list(
+                # First prediction: WSE
+                pred_1 = data.frame(
+                    event = c(1),
+                    reach = c(1),
+                    xmin = c(0),
+                    xmax = c(1079.063),
+                    tmin = c(43200),
+                    tmax = c(43200),
+                    nb_discretization = c(100),
+                    target_datetime = as.POSIXct(
+                        "2025-07-15 15:00:00",
+                        format = "%Y-%m-%d %H:%M:%S",
+                        tz = "UTC"
+                    ),
+                    id_campaign = "Campaign_WSE_1"
+                )
+            )
         )
     )
 )
 
-X_pred <- grid_user(info_events_reaches)
-X_pred_grid <- list()
+X_pred <- grid_user_lastest(
+    info_events_reaches = info_events_reaches,
+    date_ref = date_ref,
+    X_Cal = X_plot
+)
 
 for (id_cal_case in 1:length(all_cal_case)) {
     # Load experiment
@@ -728,8 +711,9 @@ for (id_cal_case in 1:length(all_cal_case)) {
     return_prediction <- prediction_MAGE(
         cal_case = all_cal_case[[id_cal_case]],
         paths = paths,
+        BaM_data = data,
         prediction_file = c("ParamU", "Maxpost", "TotalU"),
-        data = data,
+        names_file_prediction = c("WSE", "Q", "V", "Kmin", "Kflood"),
         do_prediction = do_prediction,
         X_pred = X_pred,
         mod = list_mod_polynomials[[id_cal_case]],
@@ -739,9 +723,6 @@ for (id_cal_case in 1:length(all_cal_case)) {
         mcmcSummary = mcmcSummary,
         nsim_prior = 500
     )
-    X_pred_grid[[id_cal_case]] <- return_prediction$X_pred_grid
-
-
 
     cf_file <- return_prediction$cf_file
 
@@ -795,14 +776,14 @@ for (id_cal_case in 1:length(all_cal_case)) {
 
     results_postprocess <- postprocess_prediction(
         paths = paths,
-        type = "dX",
-        X_input = X,
+        X_input = X_plot,
+        date_ref = date_ref,
         Y_observations = Y,
         Yu_observations = Yu,
         conf_level = 0.95,
         summary_SU_Kmin = list_summary_SU_Kmin[[id_cal_case]],
         summary_SU_Kflood = list_summary_SU_Kflood[[id_cal_case]],
-        grid = X_pred_grid[[id_cal_case]],
+        grid = X_pred,
         Input_Typology = Input_Typology,
         suffix_patterns = c("_WSE", "_Q", "_V", "_Kmin", "_Kflood"),
         desired_order = c("Total", "Parametric", "Maxpost", "Observations")
