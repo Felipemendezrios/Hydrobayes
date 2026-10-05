@@ -7,6 +7,9 @@ Cluster/
 scripts/plots_toto.r
 scripts/toto.r
 
+Codes_stables
+Documents/Oursin_uncertainty_analysis_corrected.pdf
+Documents/Structural_error
 
 # Case: HHLab
 Cluster/
@@ -134,8 +137,6 @@ data/data-raw/Durance_Thiercelin/_PAMHYR_/__old__
 
 # Data: Lower Seine
 data/data-raw/Lower_Seine/1D_model_PamHyr
-
-
 
 
 

@@ -81,8 +81,8 @@ constructor_CalData_latest <- function(
             id_cols = c(event, reach, x, t, date_time_format, target_datetime, var_name, id_campaign),
             names_from = var,
             values_from = c(variable, uncertainty),
-            names_glue = "{ifelse(.value == 'variable', 'Y_', 'Yu_')}{var}",
-            values_fill = -9999
+            names_glue = "{ifelse(.value == 'variable', 'Y_', 'Yu_')}{var}"
+            # values_fill = -9999
         )
 
     Y_temp <- Y_Yu %>%
@@ -97,7 +97,6 @@ constructor_CalData_latest <- function(
     # Observed variables in the calibration data
     var_observed <- sub("^Yu_", "", colnames(Yu_temp))
     colnames(Y_temp) <- var_observed
-
 
     # Replace observed uncertainties by fixed uncertainties if requested
     if (do_manual_uncertainty) {
